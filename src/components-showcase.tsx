@@ -33,25 +33,31 @@ import { AvakioRadioExample } from './examples/ui-controls/avakio-radio-example'
 import { AvakioMultitextExample } from './examples/ui-controls/avakio-multitext-example';
 import { AvakioDoubleListExample } from './examples/ui-controls/avakio-doublelist-example';
 import { AvakioFieldsetExample } from './examples/ui-controls/avakio-fieldset-example';
-import { AvakioTreeExample } from './examples/ui-widgets/avakio-tree-example';
+import { AvakioCalendarExample } from './examples/ui-controls/avakio-calendar-example';
+import { AvakioGridSuggestExample } from './examples/ui-controls/avakio-gridsuggest-example';
 import { AvakioAccordionExample } from './examples/ui-widgets/avakio-accordion-example';
 import { AvakioChartExample } from './examples/ui-widgets/avakio-chart-example';
 import { AvakioBulletGraphExample } from './examples/ui-widgets/avakio-bullet-graph-example';
-import { AvakioCommentExample } from './examples/ui-widgets/avakio-comment-example';
 import { AvakioFormExample } from './examples/ui-widgets/avakio-form-example';
 import { AvakioExcelViewerExample } from './examples/ui-widgets/avakio-excel-viewer-example';
 import { AvakioGageExample } from './examples/ui-widgets/avakio-gage-example';
 import { AvakioGoogleMapExample } from './examples/ui-widgets/avakio-googlemap-example';
 import { AvakioGroupListExample } from './examples/ui-widgets/avakio-grouplist-example';
 import { AvakioDashboardExample } from './examples/ui-widgets/avakio-dashboard-example';
+import { AvakioCommentExample } from './examples/data-presentation/avakio-comment-example';
+import { AvakioTimelineExample } from './examples/data-presentation/avakio-timeline-example';
+import { AvakioTreeExample } from './examples/data-presentation/avakio-tree-example';
+import { AvakioDataTableExample } from './examples/data-presentation/avakio-datatable-example';
+import { AvakioPropertyExample } from './examples/data-presentation/avakio-property-example';
 import { AvakioLabel } from './components/avakio/ui-controls/avakio-label/avakio-label';
 import { AvakioButton } from './components/avakio/ui-controls/avakio-button/avakio-button';
 import './components/avakio/views/avakio-view/avakio-view.css';
 import './components/avakio/layouts/avakio-layout/avakio-layout.css';
 import './components/avakio/avakio-sidebar/avakio-sidebar.css';
 import './components/avakio/views/avakio-multiview/avakio-multiview.css';
+import './components/avakio/themes/avakio-themes.css';
 import { AvakioTemplate } from './components/avakio/views/avakio-template/avakio-template';
-import { Layout, Layers, Box, AlignJustify, FileText, LayoutGrid, Grid3X3, Lightbulb, ImageIcon, Type, Tag, FolderTree, PanelTopClose, BarChart3, Gauge, Map, List, LayoutDashboard, Palette, Menu } from 'lucide-react';
+import { Layout, Layers, Box, AlignJustify, FileText, LayoutGrid, Grid3X3, Lightbulb, ImageIcon, Type, Tag, FolderTree, PanelTopClose, BarChart3, Gauge, Map, List, LayoutDashboard, Palette, Menu, Calendar, Clock, Table, Settings, MessageCircle } from 'lucide-react';
 
 export default function ComponentsShowcasePage() {
   const [selectedView, setSelectedView] = useState<string>(() => {
@@ -158,11 +164,6 @@ export default function ComponentsShowcasePage() {
           icon: <FileText size={16} />,
         },
         {
-          id: 'tree-example',
-          value: 'Tree',
-          icon: <FolderTree size={16} />,
-        },
-        {
           id: 'accordion-example',
           value: 'Accordion',
           icon: <PanelTopClose size={16} />,
@@ -176,11 +177,6 @@ export default function ComponentsShowcasePage() {
           id: 'bullet-graph-example',
           value: 'Bullet Graph',
           icon: <AlignJustify size={16} />,
-        },
-        {
-          id: 'comment-example',
-          value: 'Comment',
-          icon: <Box size={16} />,
         },
         {
           id: 'form-example',
@@ -206,6 +202,38 @@ export default function ComponentsShowcasePage() {
           id: 'grouplist-example',
           value: 'GroupList',
           icon: <List size={16} />,
+        },
+      ],
+    },
+    {
+      id: 'data-presentation',
+      value: 'Data Presentation',
+      icon: <BarChart3 size={18} />,
+      data: [
+        {
+          id: 'comment-example',
+          value: 'Comment',
+          icon: <MessageCircle size={16} />,
+        },
+        {
+          id: 'timeline-example',
+          value: 'Timeline',
+          icon: <Clock size={16} />,
+        },
+        {
+          id: 'tree-example',
+          value: 'Tree',
+          icon: <FolderTree size={16} />,
+        },
+        {
+          id: 'datatable-example',
+          value: 'DataTable',
+          icon: <Table size={16} />,
+        },
+        {
+          id: 'property-example',
+          value: 'Property',
+          icon: <Settings size={16} />,
         },
       ],
     },
@@ -313,6 +341,16 @@ export default function ComponentsShowcasePage() {
           id: 'fieldset-example',
           value: 'Fieldset',
           icon: <Box size={16} />,
+        },
+        {
+          id: 'calendar-example',
+          value: 'Calendar',
+          icon: <Calendar size={16} />,
+        },
+        {
+          id: 'gridsuggest-example',
+          value: 'GridSuggest',
+          icon: <Grid3X3 size={16} />,
         },
         {
           id: 'dashboard-example',
@@ -437,181 +475,210 @@ export default function ComponentsShowcasePage() {
   const mainContentCells = useMemo(() => [
     {
       id: 'layout-examples',
-      content: <AvakioLayoutExample />,
+      content: <div data-admin-theme={theme}><AvakioLayoutExample /></div>,
     },
     {
       id: 'absolute-layout-examples',
-      content: <AvakioAbsoluteLayoutExample />,
+      content: <div data-admin-theme={theme}><AvakioAbsoluteLayoutExample /></div>,
     },
     {
       id: 'resizer-examples',
-      content: <AvakioResizerExample />,
+      content: <div data-admin-theme={theme}><AvakioResizerExample /></div>,
     },
     {
       id: 'grid-examples',
-      content: <AvakioGridExample />,
+      content: <div data-admin-theme={theme}><AvakioGridExample /></div>,
     },
     {
       id: 'template-example',
-      content: <AvakioTemplateExample />,
+      content: <div data-admin-theme={theme}><AvakioTemplateExample /></div>,
     },
     {
       id: 'multiview-example',
-      content: <AvakioMultiviewExample />,
+      content: <div data-admin-theme={theme}><AvakioMultiviewExample /></div>,
     },
     {
       id: 'view-example',
-      content: <AvakioViewExample />,
+      content: <div data-admin-theme={theme}><AvakioViewExample /></div>,
     },
     {
       id: 'hint-example',
-      content: <AvakioHintExample />,
+      content: <div data-admin-theme={theme}><AvakioHintExample /></div>,
     },
     {
       id: 'carousel-example',
-      content: <AvakioCarouselExample />,
+      content: <div data-admin-theme={theme}><AvakioCarouselExample /></div>,
     },
     {
       id: 'view-header-example',
-      content: <AvakioViewHeaderExample />,
-    },
-    {
-      id: 'tree-example',
-      content: <AvakioTreeExample />,
+      content: <div data-admin-theme={theme}><AvakioViewHeaderExample /></div>,
     },
     {
       id: 'accordion-example',
-      content: <AvakioAccordionExample />,
+      content: <div data-admin-theme={theme}><AvakioAccordionExample /></div>,
     },
     {
       id: 'chart-example',
-      content: <AvakioChartExample />,
+      content: <div data-admin-theme={theme}><AvakioChartExample /></div>,
     },
     {
       id: 'bullet-graph-example',
-      content: <AvakioBulletGraphExample />,
-    },
-    {
-      id: 'comment-example',
-      content: <AvakioCommentExample />,
+      content: <div data-admin-theme={theme}><AvakioBulletGraphExample /></div>,
     },
     {
       id: 'form-example',
-      content: <AvakioFormExample />,
+      content: <div data-admin-theme={theme}><AvakioFormExample /></div>,
     },
     {
       id: 'excel-viewer-example',
-      content: <AvakioExcelViewerExample />,
+      content: <div data-admin-theme={theme}><AvakioExcelViewerExample /></div>,
     },
     {
       id: 'gage-example',
-      content: <AvakioGageExample />,
+      content: <div data-admin-theme={theme}><AvakioGageExample /></div>,
     },
     {
       id: 'googlemap-example',
-      content: <AvakioGoogleMapExample />,
+      content: <div data-admin-theme={theme}><AvakioGoogleMapExample /></div>,
     },
     {
       id: 'grouplist-example',
-      content: <AvakioGroupListExample />,
+      content: <div data-admin-theme={theme}><AvakioGroupListExample /></div>,
+    },
+    {
+      id: 'comment-example',
+      content: <div data-admin-theme={theme}><AvakioCommentExample /></div>,
+    },
+    {
+      id: 'timeline-example',
+      content: <div data-admin-theme={theme}><AvakioTimelineExample /></div>,
+    },
+    {
+      id: 'tree-example',
+      content: <div data-admin-theme={theme}><AvakioTreeExample /></div>,
+    },
+    {
+      id: 'datatable-example',
+      content: <div data-admin-theme={theme}><AvakioDataTableExample /></div>,
+    },
+    {
+      id: 'property-example',
+      content: <div data-admin-theme={theme}><AvakioPropertyExample /></div>,
     },
     {
       id: 'text-example',
-      content: <AvakioTextExample />,
+      content: <div data-admin-theme={theme}><AvakioTextExample /></div>,
     },
     {
       id: 'label-example',
-      content: <AvakioLabelExample />,
+      content: <div data-admin-theme={theme}><AvakioLabelExample /></div>,
     },
     {
       id: 'button-example',
-      content: <AvakioButtonExample />,
+      content: <div data-admin-theme={theme}><AvakioButtonExample /></div>,
     },
     {
       id: 'checkbox-example',
-      content: <AvakioCheckboxExample />,
+      content: <div data-admin-theme={theme}><AvakioCheckboxExample /></div>,
     },
     {
       id: 'togglebutton-example',
-      content: <AvakioToggleButtonExample />,
+      content: <div data-admin-theme={theme}><AvakioToggleButtonExample /></div>,
     },
     {
       id: 'switchbutton-example',
-      content: <AvakioSwitchButtonExample />,
+      content: <div data-admin-theme={theme}><AvakioSwitchButtonExample /></div>,
     },
     {
       id: 'colorpicker-example',
-      content: <AvakioColorPickerExample />,
+      content: <div data-admin-theme={theme}><AvakioColorPickerExample /></div>,
     },
     {
       id: 'counter-example',
-      content: <AvakioCounterExample />,
+      content: <div data-admin-theme={theme}><AvakioCounterExample /></div>,
     },
     {
       id: 'combo-example',
-      content: <AvakioComboExample />,
+      content: <div data-admin-theme={theme}><AvakioComboExample /></div>,
     },
     {
       id: 'richselect-example',
-      content: <AvakioRichSelectExample />,
+      content: <div data-admin-theme={theme}><AvakioRichSelectExample /></div>,
     },
     {
       id: 'datepicker-example',
-      content: <AvakioDatePickerExample />,
+      content: <div data-admin-theme={theme}><AvakioDatePickerExample /></div>,
     },
     {
       id: 'daterangepicker-example',
-      content: <AvakioDateRangePickerExample />,
+      content: <div data-admin-theme={theme}><AvakioDateRangePickerExample /></div>,
     },
     {
       id: 'slider-example',
-      content: <AvakioSliderExample />,
+      content: <div data-admin-theme={theme}><AvakioSliderExample /></div>,
     },
     {
       id: 'multicombo-example',
-      content: <AvakioMultiComboExample />,
+      content: <div data-admin-theme={theme}><AvakioMultiComboExample /></div>,
     },
     {
       id: 'tabbar-example',
-      content: <AvakioTabBarExample />,
+      content: <div data-admin-theme={theme}><AvakioTabBarExample /></div>,
     },
     {
       id: 'segmentedbutton-example',
-      content: <AvakioSegmentedButtonExample />,
+      content: <div data-admin-theme={theme}><AvakioSegmentedButtonExample /></div>,
     },
     {
       id: 'radio-example',
-      content: <AvakioRadioExample />,
+      content: <div data-admin-theme={theme}><AvakioRadioExample /></div>,
     },
     {
       id: 'multitext-example',
-      content: <AvakioMultitextExample />,
+      content: <div data-admin-theme={theme}><AvakioMultitextExample /></div>,
     },
     {
       id: 'doublelist-example',
-      content: <AvakioDoubleListExample />,
+      content: <div data-admin-theme={theme}><AvakioDoubleListExample /></div>,
     },
     {
       id: 'fieldset-example',
-      content: <AvakioFieldsetExample />,
+      content: <div data-admin-theme={theme}><AvakioFieldsetExample /></div>,
+    },
+    {
+      id: 'calendar-example',
+      content: <div data-admin-theme={theme}><AvakioCalendarExample /></div>,
+    },
+    {
+      id: 'gridsuggest-example',
+      content: <div data-admin-theme={theme}><AvakioGridSuggestExample /></div>,
     },
     {
       id: 'dashboard-example',
-      content: <AvakioDashboardExample />,
+      content: <div data-admin-theme={theme}><AvakioDashboardExample /></div>,
     },
     {
       id: 'ui-widgets',
       content: (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px' }} data-admin-theme={theme}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>UI Widgets</h2>
           <p style={{ color: '#666' }}>Select a specific UI widget component from the sidebar submenu.</p>
         </div>
       ),
     },
     {
+      id: 'data-presentation',
+      content: (
+        <div style={{ padding: '20px' }} data-admin-theme={theme}>
+          <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>Data Presentation</h2>
+          <p style={{ color: '#666' }}>Select a specific data presentation component from the sidebar submenu.</p>
+        </div>
+      ),
+    },
+    {
       id: 'ui-controls',
       content: (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px' }} data-admin-theme={theme}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>UI Controls</h2>
           <p style={{ color: '#666' }}>Select a specific UI control component from the sidebar submenu.</p>
         </div>
@@ -620,7 +687,7 @@ export default function ComponentsShowcasePage() {
     {
       id: 'layout',
       content: (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px' }} data-admin-theme={theme}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>Layout Components</h2>
           <p style={{ color: '#666' }}>Select a specific layout component from the sidebar submenu.</p>
         </div>
@@ -629,7 +696,7 @@ export default function ComponentsShowcasePage() {
     {
       id: 'views',
       content: (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px' }} data-admin-theme={theme}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>View Components</h2>
           <p style={{ color: '#666' }}>Select a specific view component from the sidebar submenu.</p>
         </div>
@@ -638,7 +705,7 @@ export default function ComponentsShowcasePage() {
     {
       id: 'complex',
       content: (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px' }} data-admin-theme={theme}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>Complex Components</h2>
           <p style={{ color: '#666' }}>Complex component examples will be displayed here.</p>
         </div>
@@ -647,7 +714,7 @@ export default function ComponentsShowcasePage() {
     {
       id: 'future2',
       content: (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px' }} data-admin-theme={theme}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>Future 2</h2>
           <p style={{ color: '#666' }}>Future component examples will be displayed here.</p>
         </div>
@@ -656,7 +723,7 @@ export default function ComponentsShowcasePage() {
     {
       id: 'components',
       content: (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px' }} data-admin-theme={theme}>
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Avakio Components Showcase</h1>
             <p className="text-lg text-gray-600">
@@ -686,14 +753,15 @@ export default function ComponentsShowcasePage() {
         </div>
       ),
     },
-  ], [components]);
+  ], [components, theme]);
 
   return (
     <AvakioLayout
       id='WebAppMainLayout'
       type="clean"
       height="100vh"
-      css={{ height: '100vh', width: '100%' }}
+      width="100%"
+      css={{ height: '100vh', width: '100%', minWidth: '100%', display: 'flex', flexDirection: 'column' }}
       data-admin-theme={theme}
       rows={[        
         // Header
@@ -779,6 +847,7 @@ export default function ComponentsShowcasePage() {
             id="WebAppMainLayoutMain"
             type="clean"
             height="100%"
+            width="100%"
             gravity={1}
             cols={[
               // Left Sidebar
@@ -800,14 +869,15 @@ export default function ComponentsShowcasePage() {
                 testId="WebAppMainLayoutMainContent"
                 theme={theme as any}
                 cells={mainContentCells}
-                activeView="components"
+                activeView={selectedView}
                 animate={{ type: 'fade' as any, duration: 200 }}
                 keepViews={true}
-                css={{ flex: 1, overflow: 'auto', background: 'white', height: '100%' }}
+                css={{ flex: 1, overflow: 'auto', background: 'white', height: '100%', minWidth: 0, width: '100%' }}
                 height="100%"
+                width="100%"
               />,
             ]}
-            css={{ minHeight: 0 }}
+            css={{ minHeight: 0, width: '100%', flex: 1, display: 'flex', flexGrow: 1 }}
           />,
           
           // Footer

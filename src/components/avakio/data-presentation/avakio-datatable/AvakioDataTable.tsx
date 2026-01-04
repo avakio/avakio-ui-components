@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { ChevronUp, ChevronDown, ChevronsUpDown, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
-import { Input } from '../../ui/input';
+import { Input } from '../../../ui/input';
 // Button component not available
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../ui/select';
 import './avakio-datatable.css';
-import { Button } from '@/components/ui/button';
+import { Button } from '../../../ui/button';
 
 export interface AvakioColumn<T = any> {
   id: string;

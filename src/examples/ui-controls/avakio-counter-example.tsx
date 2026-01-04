@@ -1,37 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
-import "./avakio-counter.css";
-import "./avakio-counter-example.css";
+import React, { useMemo, useState } from "react";
 import { AvakioCounter } from "../../components/avakio/ui-controls/avakio-counter/avakio-counter";
 
-export function AvakioCounterExample() {
+export function AvakioCounterExample({ theme = 'material' }: { theme?: string }) {
   const [quantity, setQuantity] = useState<number>(2);
   const [temperature, setTemperature] = useState<number>(18);
   const [step, setStep] = useState<number>(5);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
-  const [theme, setTheme] = useState<string>("material");
-
-  // Sync with global theme from components-showcase
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    // Set initial theme if it exists
-    const initialTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (initialTheme && initialTheme !== theme) {
-      setTheme(initialTheme);
-    }
-
-    return () => observer.disconnect();
-  }, [theme]);
 
   const stats = useMemo(
     () => [
@@ -43,7 +17,7 @@ export function AvakioCounterExample() {
   );
 
   return (
-    <div data-admin-theme={theme} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div className="counter-demo-card">
         <div className="counter-demo-row">
           <AvakioCounter

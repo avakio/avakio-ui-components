@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { AvakioGoogleMap, AvakioTheme, avakioThemes } from "../../components/avakio/ui-widgets/avakio-googlemap/avakio-googlemap";
-import "./avakio-googlemap.css";
 import { AvakioViewHeader } from "../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header";
 import { AvakioTabBar } from "../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar";
 import { AvakioTemplate } from "../../components/avakio/views/avakio-template/avakio-template";
@@ -40,7 +39,7 @@ const TAB_OPTIONS = [
 ];
 
 export function AvakioGoogleMapExample() {
-  const [theme, setTheme] = useState<string>("material");
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Map state
@@ -63,36 +62,16 @@ export function AvakioGoogleMapExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   const center = useMemo(() => selectedMarker.position, [selectedMarker]);
 
   return (
-    <div className="avakio-googlemap-demo-container" data-admin-theme={theme}>
+    <div className="avakio-googlemap-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-googlemap-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Widgets"
           title="Google Map Component"
           subTitle="An interactive map component powered by Google Maps. Supports markers, multiple map types, zoom control, and custom styling."
@@ -119,20 +98,17 @@ export function AvakioGoogleMapExample() {
         className="avakio-googlemap-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Display an interactive Google Map with a center point. Without an API key, the component falls back to an embedded iframe."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -140,7 +116,7 @@ export function AvakioGoogleMapExample() {
           rows={[
             <div key="basic-demo">
               <AvakioGoogleMap
-                theme={theme as AvakioTheme}
+                theme="material"
                 center={center}
                 zoom={zoom}
                 height={400}
@@ -160,20 +136,17 @@ export function AvakioGoogleMapExample() {
         className="avakio-googlemap-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Markers"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Add markers to highlight specific locations on the map. Markers support labels and custom positioning."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -200,7 +173,7 @@ export function AvakioGoogleMapExample() {
             </div>,
             <AvakioGoogleMap
               key="markers-map"
-              theme={theme as AvakioTheme}
+              theme="material"
               center={center}
               zoom={6}
               markers={defaultMarkers}
@@ -217,20 +190,17 @@ export function AvakioGoogleMapExample() {
         className="avakio-googlemap-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Map Types"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Choose between different map types: roadmap, satellite, hybrid, or terrain."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -249,7 +219,7 @@ export function AvakioGoogleMapExample() {
             </div>,
             <AvakioGoogleMap
               key="maptype-map"
-              theme={theme as AvakioTheme}
+              theme="material"
               center={{ lat: 37.7749, lng: -122.4194 }}
               zoom={12}
               mapType={mapType}
@@ -266,20 +236,17 @@ export function AvakioGoogleMapExample() {
         className="avakio-googlemap-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Zoom Control"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Control the zoom level of the map. Zoom levels range from 2 (world view) to 20 (street level)."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -315,7 +282,7 @@ export function AvakioGoogleMapExample() {
             </div>,
             <AvakioGoogleMap
               key="zoom-map"
-              theme={theme as AvakioTheme}
+              theme="material"
               center={center}
               zoom={zoom}
               height={400}
@@ -331,13 +298,11 @@ export function AvakioGoogleMapExample() {
         className="avakio-googlemap-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Documentation"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -382,6 +347,9 @@ export function AvakioGoogleMapExample() {
 }
 
 export default AvakioGoogleMapExample;
+
+
+
 
 
 

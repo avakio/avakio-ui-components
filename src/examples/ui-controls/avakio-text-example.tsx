@@ -1,13 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { AvakioText, AvakioTextRef } from '../../components/avakio/ui-controls/avakio-text';
+import React, { useState, useRef } from 'react';
+import { AvakioText, AvakioTextRef } from '../../components/avakio/ui-controls/avakio-text/avakio-text';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { Button } from '@/components/ui/button';
 import { Mail, User, Lock, Search, Phone, DollarSign, Calendar, Link as LinkIcon, Type, Shield, Settings, CheckCircle, PenTool, Palette } from 'lucide-react';
-import '../../components/avakio/ui-controls/avakio-text.css';
+import '../../components/avakio/ui-controls/avakio-text/avakio-text.css';
 
 export function AvakioTextExample() {
-  const [theme, setTheme] = useState<string>('material');
-  
   // Interactive Props Playground State
   const [playgroundTheme, setPlaygroundTheme] = useState<string>('material');
   const [playgroundLabel, setPlaygroundLabel] = useState<string>('Input Label');
@@ -87,26 +85,7 @@ export function AvakioTextExample() {
     zipCode: '',
   });
   
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   const handleGetValue = () => {
     const value = textRef.current?.getValue();
@@ -149,10 +128,9 @@ export function AvakioTextExample() {
   };
 
   return (
-    <div className="avakio-template-demo-container" data-admin-theme={theme}>
+    <div className="avakio-template-demo-container">
       <AvakioTemplate
         id="text-example-header"
-        theme={theme as any}
         type="header"
         borderType="clean"
         content={
@@ -187,7 +165,6 @@ export function AvakioTextExample() {
       {/* Basic Inputs Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -217,7 +194,6 @@ export function AvakioTextExample() {
             onChange={(value) => setName(value)}
             icon={<User size={16} />}
             iconPosition="left"
-            theme={theme}
           />
           <AvakioText
             label="Email"
@@ -227,7 +203,6 @@ export function AvakioTextExample() {
             onChange={(value) => setEmail(value)}
             icon={<Mail size={16} />}
             iconPosition="left"
-            theme={theme}
           />
           <AvakioText
             label="Password"
@@ -235,7 +210,6 @@ export function AvakioTextExample() {
             type="password"
             value={password}
             onChange={(value) => setPassword(value)}
-            theme={theme}
           />
         </div>
       </section>
@@ -243,7 +217,6 @@ export function AvakioTextExample() {
       {/* Input Types Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -266,14 +239,12 @@ export function AvakioTextExample() {
             value={searchTerm}
             onChange={(value) => setSearchTerm(value)}
             icon={<Search size={16} />}
-            theme={theme}
           />
           <AvakioText
             label="Phone"
             type="tel"
             placeholder="+1 (555) 123-4567"
             icon={<Phone size={16} />}
-            theme={theme}
           />
           <AvakioText
             label="Number"
@@ -283,14 +254,12 @@ export function AvakioTextExample() {
             max={1000}
             step={10}
             icon={<DollarSign size={16} />}
-            theme={theme}
           />
           <AvakioText
             label="URL"
             type="url"
             placeholder="https://example.com"
             icon={<LinkIcon size={16} />}
-            theme={theme}
           />
         </div>
       </section>
@@ -298,7 +267,6 @@ export function AvakioTextExample() {
       {/* Validation Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -325,7 +293,6 @@ export function AvakioTextExample() {
               return true;
             }}
             validateEvent="change"
-            theme={theme}
             bottomLabel="Min 3 characters, alphanumeric only"
           />
           <AvakioText
@@ -344,7 +311,6 @@ export function AvakioTextExample() {
               return true;
             }}
             validateEvent="blur"
-            theme={theme}
             bottomLabel="Must be between 18 and 120"
           />
           <AvakioText
@@ -354,7 +320,6 @@ export function AvakioTextExample() {
             value={website}
             onChange={(value) => setWebsite(value)}
             required
-            theme={theme}
             bottomLabel="Required field"
           />
         </div>
@@ -363,7 +328,6 @@ export function AvakioTextExample() {
       {/* Interactive/Ref Methods Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -405,7 +369,6 @@ export function AvakioTextExample() {
           label="Controlled Input"
           placeholder="Use buttons above to control this input"
           validate={(value) => value.length >= 5 || 'Must be at least 5 characters'}
-          theme={theme}
           bottomLabel="Try the buttons above to interact with this input"
         />
         {refValue && (
@@ -418,7 +381,6 @@ export function AvakioTextExample() {
       {/* Label Positions Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -437,26 +399,22 @@ export function AvakioTextExample() {
             label="Left Label"
             labelPosition="left"
             placeholder="Label on the left"
-            theme={theme}
           />
           <AvakioText
             label="Top Label"
             labelPosition="top"
             placeholder="Label on top"
-            theme={theme}
           />
           <AvakioText
             label="Right Aligned"
             labelAlign="right"
             inputAlign="right"
             placeholder="Right aligned"
-            theme={theme}
           />
           <AvakioText
             label="Center Input"
             inputAlign="center"
             placeholder="Centered text"
-            theme={theme}
           />
         </div>
       </section>
@@ -464,7 +422,6 @@ export function AvakioTextExample() {
       {/* Form Example Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -493,7 +450,6 @@ export function AvakioTextExample() {
             value={formData.firstName}
             onChange={(value) => setFormData({ ...formData, firstName: value })}
             required
-            theme={theme}
           />
           <AvakioText
             label="Last Name"
@@ -501,7 +457,6 @@ export function AvakioTextExample() {
             value={formData.lastName}
             onChange={(value) => setFormData({ ...formData, lastName: value })}
             required
-            theme={theme}
           />
           <AvakioText
             label="Email"
@@ -511,7 +466,6 @@ export function AvakioTextExample() {
             onChange={(value) => setFormData({ ...formData, emailAddress: value })}
             required
             icon={<Mail size={16} />}
-            theme={theme}
           />
           <AvakioText
             label="Phone"
@@ -520,7 +474,6 @@ export function AvakioTextExample() {
             value={formData.phoneNumber}
             onChange={(value) => setFormData({ ...formData, phoneNumber: value })}
             icon={<Phone size={16} />}
-            theme={theme}
           />
           <AvakioText
             label="Address"
@@ -528,14 +481,12 @@ export function AvakioTextExample() {
             value={formData.address}
             onChange={(value) => setFormData({ ...formData, address: value })}
             labelPosition="top"
-            theme={theme}
           />
           <AvakioText
             label="City"
             placeholder="City"
             value={formData.city}
             onChange={(value) => setFormData({ ...formData, city: value })}
-            theme={theme}
           />
           <AvakioText
             label="ZIP Code"
@@ -544,7 +495,6 @@ export function AvakioTextExample() {
             onChange={(value) => setFormData({ ...formData, zipCode: value })}
             pattern="[0-9]{5}"
             maxLength={5}
-            theme={theme}
           />
         </div>
       </section>
@@ -552,7 +502,6 @@ export function AvakioTextExample() {
       {/* Theme Showcase Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -609,7 +558,6 @@ export function AvakioTextExample() {
       {/* States Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -627,21 +575,18 @@ export function AvakioTextExample() {
           <AvakioText
             label="Normal"
             placeholder="Normal state"
-            theme={theme}
           />
           <AvakioText
             label="Disabled"
             placeholder="Disabled state"
             disabled
             value="Cannot edit"
-            theme={theme}
           />
           <AvakioText
             label="Readonly"
             placeholder="Readonly state"
             readonly
             value="Cannot edit but can copy"
-            theme={theme}
           />
           <AvakioText
             label="Invalid"
@@ -649,13 +594,11 @@ export function AvakioTextExample() {
             invalid
             invalidMessage="This field has an error"
             value="Invalid value"
-            theme={theme}
           />
           <AvakioText
             label="Required"
             placeholder="Required field"
             required
-            theme={theme}
             bottomLabel="This field is required"
           />
           <AvakioText
@@ -663,7 +606,6 @@ export function AvakioTextExample() {
             placeholder="Type something"
             clear
             value="Clear me!"
-            theme={theme}
           />
         </div>
       </section>
@@ -671,7 +613,6 @@ export function AvakioTextExample() {
       {/* Interactive Props Playground */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -924,7 +865,6 @@ export function AvakioTextExample() {
       {/* API Reference Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -960,6 +900,8 @@ export function AvakioTextExample() {
     </div>
   );
 }
+
+
 
 
 

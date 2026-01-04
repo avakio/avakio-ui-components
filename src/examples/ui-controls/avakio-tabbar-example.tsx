@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { AvakioTabBar, AvakioTabBarOption } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
-import './avakio-tabbar-example.css';
 import { Home, List, Calendar, Settings, Bell, Folder, FileText, Layers, MousePointer, X, ArrowDown, EyeOff, Paintbrush } from 'lucide-react';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
@@ -16,8 +15,7 @@ const TAB_OPTIONS = [
   { id: 'custom', label: 'Custom Rendering', icon: <Paintbrush size={14} /> },
 ];
 
-export function AvakioTabBarExample() {
-  const [theme, setTheme] = useState<string>('material');
+export function AvakioTabBarExample({ theme = 'material' }: { theme?: string }) {
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   const [basicTab, setBasicTab] = useState<string | number>('overview');
   const [iconTab, setIconTab] = useState<string | number>('list');
@@ -47,28 +45,6 @@ export function AvakioTabBarExample() {
       }
     }
   };
-
-  // Sync with global theme from components-showcase
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
 
   const basicTabs: AvakioTabBarOption[] = [
     { id: 'overview', label: 'Overview' },
@@ -106,12 +82,11 @@ export function AvakioTabBarExample() {
   ];
 
   return (
-    <div className="avakio-tabbar-demo-container" data-admin-theme={theme}>
+    <div className="avakio-tabbar-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-tabbar-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="TabBar Component"
           subTitle="A flexible tab navigation component. Supports icons, badges, closable tabs, top/bottom styling, and keyboard navigation."
@@ -138,20 +113,17 @@ export function AvakioTabBarExample() {
         className="avakio-tabbar-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Navigation"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Simple top tabbar with automatic selection and keyboard navigation. Use arrow keys to navigate between tabs."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -179,20 +151,17 @@ export function AvakioTabBarExample() {
         className="avakio-tabbar-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Icons & Badges"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Tabs with icons, badges, and stretched layout. Badges can show counts or text labels."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -220,20 +189,17 @@ export function AvakioTabBarExample() {
         className="avakio-tabbar-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Closable Tabs"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Per-tab close buttons with fallback selection. Press Delete/Backspace while focused to close the active tab."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -283,20 +249,17 @@ export function AvakioTabBarExample() {
         className="avakio-tabbar-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Bottom Style"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Tab indicator rendered above for bottom-aligned styling. Use type='bottom' prop."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -324,20 +287,17 @@ export function AvakioTabBarExample() {
         className="avakio-tabbar-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Hidden & Disabled States"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Tabs can be hidden (not rendered) or disabled (visible but not clickable)."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -366,20 +326,17 @@ export function AvakioTabBarExample() {
         className="avakio-tabbar-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Custom Rendering"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Use renderTab prop to fully control tab layout while reusing the built-in close button."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -417,6 +374,8 @@ export function AvakioTabBarExample() {
     </div>
   );
 }
+
+
 
 
 

@@ -6,10 +6,10 @@ import { AvakioGrid, AvakioGridCell } from '../../components/avakio/layouts/avak
 import { AvakioSidebar, SidebarItem } from '../../components/avakio/avakio-sidebar/avakio-sidebar';
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
 import { Play, RotateCcw, Lightbulb, Settings, User, Bell, Home, Search, Mail, Palette, MousePointer, MapPin, List } from 'lucide-react';
-import '../../components/avakio/ui-widgets/avakio-hint.css';
+import '../../components/avakio/ui-widgets/avakio-hint/avakio-hint.css';
 
 export function AvakioHintExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const hintRef = useRef<AvakioHintRef>(null);
   const clickHintRef = useRef<AvakioHintRef>(null);
   const enterHintRef = useRef<AvakioHintRef>(null);
@@ -18,26 +18,7 @@ export function AvakioHintExample() {
   const [eventLog, setEventLog] = useState<string[]>([]);
   const [selectedTheme, setSelectedTheme] = useState<AvakioHintTheme>('material');
 
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   const addLog = (message: string) => {
     setEventLog(prev => [...prev.slice(-9), `${new Date().toLocaleTimeString()} - ${message}`]);
@@ -206,10 +187,9 @@ export function AvakioHintExample() {
   };
 
   return (
-    <div className="avakio-template-demo-container" data-admin-theme={theme}>
+    <div className="avakio-template-demo-container">
       <AvakioTemplate
         id="hint-example-header"
-        theme={theme as any}
         type="header"
         borderType="clean"
         content={
@@ -225,7 +205,7 @@ export function AvakioHintExample() {
 
       {/* Basic Usage Section */}
       <section className="avakio-template-demo-section">
-        <AvakioTemplate theme={theme as any} type="section" borderType="clean"
+        <AvakioTemplate type="section" borderType="clean"
           content={
             <div>
               <h3 style={{ margin: '0 0 4px 0' }}>
@@ -245,7 +225,6 @@ export function AvakioHintExample() {
 
           {/* Demo UI using AvakioLayout */}
           <AvakioLayout
-            theme={theme as any}
             type="clean"
             borderless
             rows={[
@@ -253,7 +232,6 @@ export function AvakioHintExample() {
               <AvakioTemplate
                 key="demo-header"
                 id="demo-header"
-                theme={theme as any}
                 borderType="line"
                 padding={16}
                 css={{ background: '#fff' }}
@@ -274,7 +252,6 @@ export function AvakioHintExample() {
               // Main content area with sidebar and content
               <AvakioLayout
                 key="demo-main"
-                theme={theme as any}
                 type="clean"
                 borderless
                 cols={[
@@ -307,7 +284,6 @@ export function AvakioHintExample() {
                   <AvakioTemplate
                     key="demo-content"
                     id="demo-content"
-                    theme={theme as any}
                     borderType="clean"
                     padding={24}
                     css={{ flex: 1, minHeight: '200px' }}
@@ -327,7 +303,6 @@ export function AvakioHintExample() {
               <AvakioTemplate
                 key="demo-footer"
                 id="demo-footer"
-                theme={theme as any}
                 borderType="line"
                 padding={12}
                 css={{ background: '#fff', textAlign: 'center', fontSize: '14px', color: '#9ca3af' }}
@@ -352,7 +327,6 @@ export function AvakioHintExample() {
       {/* Click Event Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -382,7 +356,6 @@ export function AvakioHintExample() {
             gridColumns={3}
             gridRows={1}
             height={145}
-            theme={theme as any}
             cellHeight={120}
             cellMargin={16}
             cells={[
@@ -444,7 +417,6 @@ export function AvakioHintExample() {
       {/* Enter Event Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -512,7 +484,6 @@ export function AvakioHintExample() {
       {/* Manual Navigation Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -577,7 +548,6 @@ export function AvakioHintExample() {
       {/* Position Demo Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -649,7 +619,6 @@ export function AvakioHintExample() {
       {/* Themes Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -690,7 +659,6 @@ export function AvakioHintExample() {
       {/* Event Log Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -724,7 +692,6 @@ export function AvakioHintExample() {
       {/* API Reference Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -914,6 +881,9 @@ export function AvakioHintExample() {
     </div>
   );
 }
+
+
+
 
 
 

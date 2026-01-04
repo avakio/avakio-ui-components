@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AvakioSegmentedButton, AvakioSegmentedButtonRef, AvakioSegmentedOption } from '../../components/avakio/ui-controls/avakio-segmented-button';
+import { AvakioSegmentedButton, AvakioSegmentedButtonRef, AvakioSegmentedOption } from '../../components/avakio/ui-controls/avakio-segmented-button/avakio-segmented-button';
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
@@ -29,7 +29,7 @@ const TAB_OPTIONS = [
 ];
 
 export function AvakioSegmentedButtonExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Section refs for scroll navigation
@@ -57,26 +57,7 @@ export function AvakioSegmentedButtonExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   // Basic options
   const basicOptions: AvakioSegmentedOption[] = [
@@ -174,12 +155,11 @@ export function AvakioSegmentedButtonExample() {
   const [methodsStatus, setMethodsStatus] = useState<string>('Ready');
 
   return (
-    <div className="avakio-segmented-demo-container" data-admin-theme={theme}>
+    <div className="avakio-segmented-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-segmented-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="Segmented Button Component"
           subTitle="A holistic panel that contains multiple buttons (segments). Ideal for switching between views or options."
@@ -206,13 +186,11 @@ export function AvakioSegmentedButtonExample() {
         className="avakio-segmented-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -221,14 +199,12 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-basic"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. Basic Segmented Button"
@@ -241,7 +217,6 @@ export function AvakioSegmentedButtonExample() {
               labelWidth={80}
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -252,20 +227,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-string-options"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="2. Simple String Options"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -287,13 +259,11 @@ export function AvakioSegmentedButtonExample() {
         className="avakio-segmented-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Icons & Badges"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -302,14 +272,12 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-icons"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. With Icons"
@@ -320,7 +288,6 @@ export function AvakioSegmentedButtonExample() {
               onChange={(val) => setIconValue(val)}
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -331,20 +298,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-badges"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="2. With Badges"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -361,20 +325,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-icon-only"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="3. Icon Only (Compact)"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -396,13 +357,11 @@ export function AvakioSegmentedButtonExample() {
         className="avakio-segmented-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Size Variants"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -411,7 +370,6 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-sizes"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -419,7 +377,6 @@ export function AvakioSegmentedButtonExample() {
           gap={24}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. Small (size='sm')"
@@ -430,7 +387,6 @@ export function AvakioSegmentedButtonExample() {
               size="sm"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -442,7 +398,6 @@ export function AvakioSegmentedButtonExample() {
               size="md"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -458,20 +413,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-fill"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="4. Fill Mode"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -488,20 +440,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-alignment"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="5. Alignment Options"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -515,7 +464,6 @@ export function AvakioSegmentedButtonExample() {
               labelWidth={80}
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="material"
               margin={[16, 0, 0, 0]}
@@ -538,13 +486,11 @@ export function AvakioSegmentedButtonExample() {
         className="avakio-segmented-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="States"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -553,20 +499,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-disabled-options"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. Disabled Options"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -583,20 +526,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-fully-disabled"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="2. Fully Disabled"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -614,20 +554,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-validation"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="3. With Validation"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -646,31 +583,26 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-label-positions"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="4. Label Positions"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
               content="Label can be positioned to the left or on top."
             />,
             <AvakioLayout
-              theme={theme as any}
               type="clean"
               cols={[
                 <AvakioTemplate
-                  theme={theme as any}
                   type="clean"
                   borderType="clean"
                   css={{ flex: 1 }}
@@ -688,7 +620,6 @@ export function AvakioSegmentedButtonExample() {
                   }
                 />,
                 <AvakioTemplate
-                  theme={theme as any}
                   type="clean"
                   borderType="clean"
                   css={{ flex: 1 }}
@@ -711,20 +642,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-borderless"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="5. Borderless Style"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -745,13 +673,11 @@ export function AvakioSegmentedButtonExample() {
         className="avakio-segmented-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Imperative Methods"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -760,7 +686,6 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-methods"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -780,7 +705,6 @@ export function AvakioSegmentedButtonExample() {
               onChange={(val) => setMethodsStatus(`Selected: ${val}`)}
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -865,7 +789,6 @@ export function AvakioSegmentedButtonExample() {
               }
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="material"
               margin={[16, 0, 0, 0]}
@@ -883,13 +806,11 @@ export function AvakioSegmentedButtonExample() {
         className="avakio-segmented-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Advanced"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -898,20 +819,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-dynamic"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. Dynamic Options"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -923,7 +841,6 @@ export function AvakioSegmentedButtonExample() {
               onChange={(val) => setDynamicValue(val)}
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -952,20 +869,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-events"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="2. Event Callbacks"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -992,7 +906,6 @@ export function AvakioSegmentedButtonExample() {
               }}
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[8, 0, 0, 0]}
@@ -1004,20 +917,17 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-custom-width"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="3. Custom Option Width"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -1038,13 +948,11 @@ export function AvakioSegmentedButtonExample() {
         className="avakio-segmented-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Documentation"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -1053,14 +961,12 @@ export function AvakioSegmentedButtonExample() {
 
         <AvakioLayout
           id="layout-docs"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={
@@ -1081,7 +987,6 @@ export function AvakioSegmentedButtonExample() {
               }
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -1101,7 +1006,6 @@ export function AvakioSegmentedButtonExample() {
               }
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -1126,6 +1030,9 @@ export function AvakioSegmentedButtonExample() {
 }
 
 export default AvakioSegmentedButtonExample;
+
+
+
 
 
 

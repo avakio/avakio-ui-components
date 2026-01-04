@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./avakio-multicombo.css";
-import "./avakio-multicombo-example.css";
+import React, { useState, useRef } from "react";
 import { AvakioMultiCombo, AvakioMultiComboOption } from "../../components/avakio/ui-controls/avakio-multicombo/avakio-multicombo";
 import { AvakioViewHeader } from "../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header";
 import { AvakioTabBar } from "../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar";
@@ -53,8 +51,7 @@ const TAB_OPTIONS = [
   { id: 'docs', label: 'Documentation', icon: <FileText size={14} /> },
 ];
 
-export function AvakioMultiComboExample() {
-  const [theme, setTheme] = useState<string>("material");
+export function AvakioMultiComboExample({ theme = 'material' }: { theme?: string }) {
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Basic usage states
@@ -86,34 +83,14 @@ export function AvakioMultiComboExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   return (
-    <div className="avakio-multicombo-demo-container" data-admin-theme={theme}>
+    <div className="avakio-multicombo-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-multicombo-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="MultiCombo Component"
           subTitle="A multi-select dropdown with search, chips, and bulk actions. Supports count display mode, max display items, and disabled state."
@@ -140,20 +117,17 @@ export function AvakioMultiComboExample() {
         className="avakio-multicombo-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Default multi-select with search and removable chips. Click the dropdown to select items, use the search to filter, and click the X to remove items."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -173,7 +147,6 @@ export function AvakioMultiComboExample() {
           ]}
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -200,20 +173,17 @@ export function AvakioMultiComboExample() {
         className="avakio-multicombo-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Count Display Mode"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Use the showCount prop to display the number of selected items instead of chips. This is useful when many items can be selected."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -234,7 +204,6 @@ export function AvakioMultiComboExample() {
           ]}
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -262,20 +231,17 @@ export function AvakioMultiComboExample() {
         className="avakio-multicombo-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Disabled State"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="When disabled, the component shows selected items but prevents interaction. The dropdown cannot be opened and chips cannot be removed."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -296,7 +262,6 @@ export function AvakioMultiComboExample() {
           ]}
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -325,20 +290,17 @@ export function AvakioMultiComboExample() {
         className="avakio-multicombo-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Max Display Items"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Use maxDisplayItems to limit how many chips are shown. Additional selections are shown as '+N more'. This prevents the component from growing too large."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -359,20 +321,17 @@ export function AvakioMultiComboExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Select All / Deselect All"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="The dropdown includes Select All and Deselect All buttons for bulk actions. These actions work with the filtered list when searching."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -399,13 +358,11 @@ export function AvakioMultiComboExample() {
         className="avakio-multicombo-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Props Reference"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -482,13 +439,11 @@ export function AvakioMultiComboExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Usage Example"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -528,6 +483,8 @@ function MyComponent() {
 }
 
 export default AvakioMultiComboExample;
+
+
 
 
 

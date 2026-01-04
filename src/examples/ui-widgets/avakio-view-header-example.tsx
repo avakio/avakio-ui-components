@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { AvakioRichSelect } from '../../components/avakio/ui-controls/avakio-richselect/avakio-richselect';
-import { AvakioLabel } from '../../components/avakio/ui-controls/avakio-label';
-import '../../components/avakio/ui-widgets/avakio-view-header.css';
+import { AvakioLabel } from '../../components/avakio/ui-controls/avakio-label/avakio-label';
+import '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header.css';
 
 export function AvakioViewHeaderExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   
   // Interactive Props Playground State
   const [playgroundTheme, setPlaygroundTheme] = useState<string>('material');
@@ -40,26 +40,7 @@ export function AvakioViewHeaderExample() {
     });
   };
 
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   const themes = ['material', 'flat', 'compact', 'dark', 'ocean', 'sunset'];
 
@@ -77,7 +58,6 @@ export function AvakioViewHeaderExample() {
     <>
       {/* Header */}
       <AvakioViewHeader
-        theme={theme as any}
         label="UI Widgets"
         title="View Header Component"
         subTitle="A themed header component for displaying labels, titles, and subtitles with support for all Avakio themes."
@@ -86,14 +66,12 @@ export function AvakioViewHeaderExample() {
       {/* Interactive Props Playground */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderless={false}
           content={
             <div>
               <AvakioLabel
                 label="Interactive Props Playground"
-                theme={theme as any}
                 fontSize={24}
                 fontWeight="600"
               />
@@ -229,7 +207,6 @@ export function AvakioViewHeaderExample() {
       {/* Theme Variations */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderless={false}
           content={
@@ -262,7 +239,6 @@ export function AvakioViewHeaderExample() {
       {/* Usage Examples */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderless={false}
           content={
@@ -279,7 +255,6 @@ export function AvakioViewHeaderExample() {
                   </h3>
                   <AvakioViewHeader
                   isSticky={false}
-                    theme={theme}
                     label="DOCUMENTATION"
                     title="Getting Started"
                     subTitle="Learn how to integrate and use Avakio components in your React applications."
@@ -293,7 +268,6 @@ export function AvakioViewHeaderExample() {
                   </h3>
                   <AvakioViewHeader
                   isSticky={false}
-                    theme={theme}
                     showLabel={false}
                     showSubTitle={false}
                     title="Simple Page Header"
@@ -307,7 +281,6 @@ export function AvakioViewHeaderExample() {
                   </h3>
                   <AvakioViewHeader
                   isSticky={false}
-                    theme={theme}
                     showLabel={false}
                     title="Dashboard Overview"
                     subTitle="Monitor your key metrics and performance indicators."
@@ -321,7 +294,6 @@ export function AvakioViewHeaderExample() {
                   </h3>
                   <AvakioViewHeader
                   isSticky={false}
-                    theme={theme}
                     showSubTitle={false}
                     label="SETTINGS"
                     title="User Preferences"
@@ -337,6 +309,8 @@ export function AvakioViewHeaderExample() {
 }
 
 export default AvakioViewHeaderExample;
+
+
 
 
 

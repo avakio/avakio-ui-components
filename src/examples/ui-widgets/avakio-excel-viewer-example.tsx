@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./avakio-excel-viewer.css";
 import "./avakio-excel-viewer-example.css";
 import { AvakioExcelViewer, AvakioExcelViewerSheet, AvakioExcelViewerColumn, AvakioExcelViewerRef } from "../../components/avakio/ui-widgets/avakio-excel-viewer/avakio-excel-viewer";
 import { AvakioViewHeader } from "../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header";
@@ -88,7 +87,7 @@ const TAB_OPTIONS = [
 ];
 
 export function AvakioExcelViewerExample() {
-  const [theme, setTheme] = useState<string>("material");
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Refs
@@ -110,26 +109,7 @@ export function AvakioExcelViewerExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   // Custom column with template
   const customColumns: AvakioExcelViewerColumn[] = [
@@ -204,7 +184,6 @@ export function AvakioExcelViewerExample() {
             <h3 className="avakio-excel-viewer-example-demo-title">Simple Data Grid</h3>
             <div className="avakio-excel-viewer-example-demo-container" style={{ height: '350px' }}>
               <AvakioExcelViewer
-                theme={theme as any}
                 data={EMPLOYEES_DATA}
                 showRowNumbers
                 gridLines
@@ -217,7 +196,6 @@ export function AvakioExcelViewerExample() {
             <h3 className="avakio-excel-viewer-example-demo-title">Without Row Numbers</h3>
             <div className="avakio-excel-viewer-example-demo-container" style={{ height: '280px' }}>
               <AvakioExcelViewer
-                theme={theme as any}
                 data={PRODUCTS_DATA}
                 showRowNumbers={false}
                 gridLines
@@ -259,7 +237,6 @@ export function AvakioExcelViewerExample() {
             <h3 className="avakio-excel-viewer-example-demo-title">Workbook with Sheet Tabs</h3>
             <div className="avakio-excel-viewer-example-demo-container" style={{ height: '400px' }}>
               <AvakioExcelViewer
-                theme={theme as any}
                 sheets={MULTI_SHEET_DATA}
                 toolbar
                 showRowNumbers
@@ -311,7 +288,6 @@ const sheets = [
             <h3 className="avakio-excel-viewer-example-demo-title">Custom Column Templates</h3>
             <div className="avakio-excel-viewer-example-demo-container" style={{ height: '350px' }}>
               <AvakioExcelViewer
-                theme={theme as any}
                 data={EMPLOYEES_DATA}
                 columns={customColumns}
                 showRowNumbers
@@ -328,7 +304,6 @@ const sheets = [
             </p>
             <div className="avakio-excel-viewer-example-demo-container" style={{ height: '300px' }}>
               <AvakioExcelViewer
-                theme={theme as any}
                 data={PRODUCTS_DATA}
                 columns={[
                   { id: 'sku', header: 'SKU', width: 90, sort: 'string' },
@@ -388,7 +363,6 @@ const columns = [
             <div className="avakio-excel-viewer-example-demo-container" style={{ height: '350px' }}>
               <AvakioExcelViewer
                 ref={editableViewerRef}
-                theme={theme as any}
                 data={editableData}
                 columns={[
                   { id: 'id', header: 'ID', width: 60, editable: false },
@@ -721,6 +695,8 @@ const columns = [
 }
 
 export default AvakioExcelViewerExample;
+
+
 
 
 

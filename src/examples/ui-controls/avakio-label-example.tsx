@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { AvakioLabel, AvakioLabelRef } from '../../components/avakio/ui-controls/avakio-label';
+import { AvakioLabel, AvakioLabelRef } from '../../components/avakio/ui-controls/avakio-label/avakio-label';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { Button } from '@/components/ui/button';
 import { 
@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 
 export function AvakioLabelExample() {
-  const [theme] = useState<'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'>('material');
   const labelRef = useRef<AvakioLabelRef>(null);
   const [refValue, setRefValue] = useState('');
 
@@ -96,7 +95,7 @@ export function AvakioLabelExample() {
   };
 
   return (
-    <div className="avakio-template-demo-container" data-admin-theme={theme}>
+    <div className="avakio-template-demo-container">
       {/* Header */}
       <AvakioTemplate
         type="header"
@@ -615,6 +614,7 @@ export function AvakioLabelExample() {
     </div>
   );
 }
+
 
 
 

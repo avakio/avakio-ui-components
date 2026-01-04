@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./avakio-doublelist.css";
-import "./avakio-doublelist-example.css";
+import React, { useState, useRef } from "react";
 import { AvakioDoubleList, AvakioDoubleListItem } from "../../components/avakio/ui-controls/avakio-doublelist/avakio-doublelist";
 import { AvakioViewHeader } from "../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header";
 import { AvakioTabBar } from "../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar";
@@ -67,7 +65,7 @@ const TAB_OPTIONS = [
 ];
 
 export function AvakioDoubleListExample() {
-  const [theme, setTheme] = useState<string>("material");
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Basic usage states
@@ -96,34 +94,14 @@ export function AvakioDoubleListExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   return (
-    <div className="avakio-doublelist-demo-container" data-admin-theme={theme}>
+    <div className="avakio-doublelist-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-doublelist-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="DoubleList Component"
           subTitle="A dual-list selection widget for moving items between available and selected lists. Supports search, drag-drop, multi-select, and keyboard navigation."
@@ -150,20 +128,17 @@ export function AvakioDoubleListExample() {
         className="avakio-doublelist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Select items by clicking, double-clicking to move, or using the arrow buttons. Use Ctrl+Click for multi-select and Shift+Click for range selection."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -185,7 +160,6 @@ export function AvakioDoubleListExample() {
           ]}
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -215,20 +189,17 @@ export function AvakioDoubleListExample() {
         className="avakio-doublelist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Search & Custom Labels"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Use the search boxes to filter items in each list. Custom labels can be set for top and bottom of each list."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -253,20 +224,17 @@ export function AvakioDoubleListExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Without Buttons"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Hide the control buttons and rely on double-click or drag-drop to move items."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -296,20 +264,17 @@ export function AvakioDoubleListExample() {
         className="avakio-doublelist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Drag & Drop"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Drag items between lists using the grip handle. Drop zones highlight when dragging over them."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -332,20 +297,17 @@ export function AvakioDoubleListExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Without Drag & Drop"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Disable drag and drop functionality with draggable=false."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -372,20 +334,17 @@ export function AvakioDoubleListExample() {
         className="avakio-doublelist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Disabled State"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="When disabled, the component shows the current selection but prevents any interaction."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -408,20 +367,17 @@ export function AvakioDoubleListExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Disabled Items"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Individual items can be disabled, preventing them from being moved between lists."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -448,13 +404,11 @@ export function AvakioDoubleListExample() {
         className="avakio-doublelist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Props Reference"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -549,13 +503,11 @@ export function AvakioDoubleListExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Usage Example"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -597,6 +549,9 @@ function MyComponent() {
 }
 
 export default AvakioDoubleListExample;
+
+
+
 
 
 

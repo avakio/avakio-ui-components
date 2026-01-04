@@ -7,8 +7,8 @@ import { AvakioText } from '../../components/avakio/ui-controls/avakio-text/avak
 import { AvakioCheckbox } from '../../components/avakio/ui-controls/avakio-checkbox/avakio-checkbox';
 import { AvakioCounter } from '../../components/avakio/ui-controls/avakio-counter/avakio-counter';
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
-import { AvakioDataTable } from '../../components/avakio/avakio-datatable/AvakioDataTable';
-import type { AvakioColumn } from '../../components/avakio/avakio-datatable/AvakioDataTable';
+import { AvakioDataTable } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
+import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { 
@@ -32,7 +32,7 @@ import {
   EyeOff,
   Zap,
 } from 'lucide-react';
-import '../../components/avakio/ui-controls/avakio-switch-button.css';
+import '../../components/avakio/ui-controls/avakio-switch-button/avakio-switch-button.css';
 import './avakio-switch-button-example.css';
 
 // Tab options for navigation
@@ -47,7 +47,7 @@ const TAB_OPTIONS = [
 ];
 
 export function AvakioSwitchButtonExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Section refs for scroll navigation
@@ -92,26 +92,7 @@ export function AvakioSwitchButtonExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   const handleGetValue = () => {
     const value = switchRef.current?.getValue();
@@ -177,12 +158,11 @@ export function AvakioSwitchButtonExample() {
   ];
 
   return (
-    <div className="avakio-switch-button-demo-container" data-admin-theme={theme}>
+    <div className="avakio-switch-button-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-switch-button-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="Switch Button"                                
           subTitle="A slider variation of the Toggle button and Checkbox for turning settings on and off."
@@ -209,20 +189,17 @@ export function AvakioSwitchButtonExample() {
         className="avakio-switch-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="A simple on/off switch control. Click or tap to toggle between states."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -230,25 +207,21 @@ export function AvakioSwitchButtonExample() {
           rows={[
             <div key="basic" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Sound"
                 value={soundOn}
                 onChange={setSoundOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="WiFi"
                 value={wifiOn}
                 onChange={setWifiOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Notifications"
                 value={notificationsOn}
                 onChange={setNotificationsOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Dark Mode"
                 value={darkModeOn}
                 onChange={setDarkModeOn}
@@ -264,13 +237,11 @@ export function AvakioSwitchButtonExample() {
         className="avakio-switch-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Label Options"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -279,7 +250,6 @@ export function AvakioSwitchButtonExample() {
         
         {/* Left Label (Default) */}
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -287,21 +257,18 @@ export function AvakioSwitchButtonExample() {
           rows={[
             <AvakioTemplate
               key="left-label-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Left Label (Default)</strong>}
             />,
             <div key="left-label" style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Sound"
                 labelWidth={100}
                 value={soundOn}
                 onChange={setSoundOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Notifications"
                 labelWidth={100}
                 value={notificationsOn}
@@ -313,7 +280,6 @@ export function AvakioSwitchButtonExample() {
 
         {/* Right Label */}
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -321,21 +287,18 @@ export function AvakioSwitchButtonExample() {
           rows={[
             <AvakioTemplate
               key="right-label-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Right Label</strong>}
             />,
             <div key="right-label" style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
               <AvakioSwitchButton
-                theme={theme as any}
                 labelWidth={0}
                 labelRight="Enable dark mode"
                 value={darkModeOn}
                 onChange={setDarkModeOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 labelWidth={0}
                 labelRight="Auto-save documents"
                 value={autoSaveOn}
@@ -347,7 +310,6 @@ export function AvakioSwitchButtonExample() {
 
         {/* On/Off Labels on Track */}
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -355,14 +317,12 @@ export function AvakioSwitchButtonExample() {
           rows={[
             <AvakioTemplate
               key="track-labels-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Labels on Switch Track</strong>}
             />,
             <div key="track-labels" style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '12px' }}>
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Power"
                 onLabel="ON"
                 offLabel="OFF"
@@ -370,7 +330,6 @@ export function AvakioSwitchButtonExample() {
                 onChange={setSoundOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Status"
                 onLabel="Yes"
                 offLabel="No"
@@ -378,7 +337,6 @@ export function AvakioSwitchButtonExample() {
                 onChange={setWifiOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 labelWidth={0}
                 labelRight="Active Mode"
                 onLabel="ON"
@@ -397,20 +355,17 @@ export function AvakioSwitchButtonExample() {
         className="avakio-switch-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Sizes"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Switch buttons come in three sizes: small (sm), medium (md), and large (lg)."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -418,28 +373,24 @@ export function AvakioSwitchButtonExample() {
           rows={[
             <AvakioTemplate
               key="sizes-simple-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Simple Switches</strong>}
             />,
             <div key="sizes-simple" style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'center', marginTop: '12px' }}>
               <AvakioSwitchButton
-                theme={theme as any}
                 size="sm"
                 label="Small"
                 value={soundOn}
                 onChange={setSoundOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 size="md"
                 label="Medium"
                 value={wifiOn}
                 onChange={setWifiOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 size="lg"
                 label="Large"
                 value={notificationsOn}
@@ -448,7 +399,6 @@ export function AvakioSwitchButtonExample() {
             </div>,
             <AvakioTemplate
               key="sizes-labeled-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -456,7 +406,6 @@ export function AvakioSwitchButtonExample() {
             />,
             <div key="sizes-labeled" style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'center', marginTop: '12px' }}>
               <AvakioSwitchButton
-                theme={theme as any}
                 size="sm"
                 label="Small"
                 onLabel="ON"
@@ -465,7 +414,6 @@ export function AvakioSwitchButtonExample() {
                 onChange={setDarkModeOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 size="md"
                 label="Medium"
                 onLabel="ON"
@@ -474,7 +422,6 @@ export function AvakioSwitchButtonExample() {
                 onChange={setAutoSaveOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 size="lg"
                 label="Large"
                 onLabel="ON"
@@ -493,20 +440,17 @@ export function AvakioSwitchButtonExample() {
         className="avakio-switch-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="States"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Switches support disabled, required, and invalid states."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -514,43 +458,36 @@ export function AvakioSwitchButtonExample() {
           rows={[
             <div key="states" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Normal On"
                 value={true}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Normal Off"
                 value={false}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Disabled On"
                 value={true}
                 disabled
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Disabled Off"
                 value={false}
                 disabled
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Required"
                 required
                 value={visibleOn}
                 onChange={setVisibleOn}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="Invalid"
                 invalid
                 invalidMessage="This field is required"
                 value={false}
               />
               <AvakioSwitchButton
-                theme={theme as any}
                 label="With Bottom Label"
                 bottomLabel="This setting affects all users"
                 value={autoSaveOn}
@@ -567,20 +504,17 @@ export function AvakioSwitchButtonExample() {
         className="avakio-switch-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Ref Methods"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Use imperative methods through a ref to programmatically control the switch."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -590,7 +524,6 @@ export function AvakioSwitchButtonExample() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                 <AvakioSwitchButton
                   ref={switchRef}
-                  theme={theme as any}
                   label="Controlled"
                   onLabel="ON"
                   offLabel="OFF"
@@ -603,32 +536,27 @@ export function AvakioSwitchButtonExample() {
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 <AvakioButton
-                  theme={theme as any}
                   size="sm"
                   label="getValue()"
                   onClick={handleGetValue}
                 />
                 <AvakioButton
-                  theme={theme as any}
                   size="sm"
                   label="setValue(true)"
                   onClick={() => handleSetValue(true)}
                 />
                 <AvakioButton
-                  theme={theme as any}
                   size="sm"
                   label="setValue(false)"
                   onClick={() => handleSetValue(false)}
                 />
                 <AvakioButton
-                  theme={theme as any}
                   size="sm"
                   label="toggle()"
                   onClick={handleToggle}
                   icon={<RefreshCw size={14} />}
                 />
                 <AvakioButton
-                  theme={theme as any}
                   size="sm"
                   label="focus()"
                   onClick={() => switchRef.current?.focus()}
@@ -645,33 +573,28 @@ export function AvakioSwitchButtonExample() {
         className="avakio-switch-button-demo-section avakio-hide-on-mobile"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Interactive Playground"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Experiment with different props to see how they affect the switch appearance and behavior."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           rows={[
             <AvakioLayout
               key="playground"
-              theme={theme as any}
               type="clean"
               borderless
               cols={[
                 <AvakioTemplate
                   key="controls"
-                  theme={theme as any}
                   type="clean"
                   borderType="clean"
                   width={320}
@@ -754,21 +677,18 @@ export function AvakioSwitchButtonExample() {
                 />,
                 <AvakioLayout
                   key="preview"
-                  theme={theme as any}
                   type="clean"
                   borderless
                   padding={16}
                   rows={[
                     <AvakioTemplate
                       key="preview-header"
-                      theme={theme as any}
                       type="header"
                       borderType="clean"
                       content={<h4 style={{ margin: 0 }}>Preview</h4>}
                     />,
                     <div key="preview-content" style={{ padding: '24px', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '120px', background: 'var(--avakio-bg-secondary)', borderRadius: '8px' }}>
                       <AvakioSwitchButton
-                        theme={theme as any}
                         label={playgroundLabel || undefined}
                         labelWidth={playgroundLabelWidth}
                         labelRight={playgroundLabelRight || undefined}
@@ -786,7 +706,6 @@ export function AvakioSwitchButtonExample() {
                     </div>,
                     <AvakioTemplate
                       key="code"
-                      theme={theme as any}
                       type="clean"
                       borderType="clean"
                       content={
@@ -800,7 +719,7 @@ export function AvakioSwitchButtonExample() {
                           fontSize: '12px',
                         }}>
 {`<AvakioSwitchButton
-  theme="${theme}"${playgroundLabel ? `
+  theme="material"${playgroundLabel ? `
   label="${playgroundLabel}"` : ''}${playgroundLabelWidth !== 80 ? `
   labelWidth={${playgroundLabelWidth}}` : ''}${playgroundLabelRight ? `
   labelRight="${playgroundLabelRight}"` : ''}${playgroundOnLabel ? `
@@ -832,7 +751,6 @@ export function AvakioSwitchButtonExample() {
         className="avakio-switch-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Props Documentation"
@@ -846,7 +764,6 @@ export function AvakioSwitchButtonExample() {
         />
         
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Ref Methods Documentation"
@@ -862,6 +779,9 @@ export function AvakioSwitchButtonExample() {
     </div>
   );
 }
+
+
+
 
 
 

@@ -6,8 +6,8 @@ import { AvakioRichSelect } from '../../components/avakio/ui-controls/avakio-ric
 import { AvakioText } from '../../components/avakio/ui-controls/avakio-text/avakio-text';
 import { AvakioCounter } from '../../components/avakio/ui-controls/avakio-counter/avakio-counter';
 import { AvakioCheckbox } from '../../components/avakio/ui-controls/avakio-checkbox/avakio-checkbox';
-import { AvakioDataTable } from '../../components/avakio/avakio-datatable/AvakioDataTable';
-import type { AvakioColumn } from '../../components/avakio/avakio-datatable/AvakioDataTable';
+import { AvakioDataTable } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
+import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
@@ -32,7 +32,7 @@ import {
   ArrowUp,
   ArrowDown
 } from 'lucide-react';
-import '../../components/avakio/views/avakio-multiview.css';
+import '../../components/avakio/views/avakio-multiview/avakio-multiview.css';
 import './avakio-multiview-example.css';
 
 // Tab options for navigation
@@ -48,7 +48,7 @@ const TAB_OPTIONS = [
 ];
 
 export function AvakioMultiviewExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Interactive demo states
@@ -85,26 +85,7 @@ export function AvakioMultiviewExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   const handleViewChange = (newId: string, oldId: string) => {
     setCurrentView(newId);
@@ -136,7 +117,6 @@ export function AvakioMultiviewExample() {
             onClick={() => dynamicMultiviewRef.current?.back()} 
             size="sm" 
             variant="outline"
-            theme={theme as any}
             icon={<ChevronLeft size={16} />}
             label="Go Back"
           />
@@ -183,9 +163,9 @@ export function AvakioMultiviewExample() {
             Welcome to the AvakioMultiview demo! Navigate between views with smooth animations.
           </p>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            <AvakioButton onClick={() => goToView('profile')} size="sm" theme={theme as any} icon={<User size={16} />} label="Go to Profile" />
-            <AvakioButton onClick={() => goToView('settings')} size="sm" variant="outline" theme={theme as any} icon={<Settings size={16} />} label="Go to Settings" />
-            <AvakioButton onClick={() => goToView('documents')} size="sm" variant="outline" theme={theme as any} icon={<FileText size={16} />} label="Go to Documents" />
+            <AvakioButton onClick={() => goToView('profile')} size="sm" icon={<User size={16} />} label="Go to Profile" />
+            <AvakioButton onClick={() => goToView('settings')} size="sm" variant="outline" icon={<Settings size={16} />} label="Go to Settings" />
+            <AvakioButton onClick={() => goToView('documents')} size="sm" variant="outline" icon={<FileText size={16} />} label="Go to Documents" />
           </div>
         </div>
       ),
@@ -208,7 +188,7 @@ export function AvakioMultiviewExample() {
             <p style={{ margin: '4px 0' }}>Email: john.doe@example.com</p>
             <p style={{ margin: '4px 0' }}>Role: Administrator</p>
           </div>
-          <AvakioButton onClick={goBack} size="sm" variant="outline" theme={theme as any} icon={<ChevronLeft size={16} />} label="Go Back" />
+          <AvakioButton onClick={goBack} size="sm" variant="outline" icon={<ChevronLeft size={16} />} label="Go Back" />
         </div>
       ),
     },
@@ -230,7 +210,7 @@ export function AvakioMultiviewExample() {
               <input type="checkbox" defaultChecked /> Auto-save
             </label>
           </div>
-          <AvakioButton onClick={goBack} size="sm" variant="outline" theme={theme as any} icon={<ChevronLeft size={16} />} label="Go Back" />
+          <AvakioButton onClick={goBack} size="sm" variant="outline" icon={<ChevronLeft size={16} />} label="Go Back" />
         </div>
       ),
     },
@@ -259,11 +239,11 @@ export function AvakioMultiviewExample() {
               </div>
             ))}
           </div>
-          <AvakioButton onClick={goBack} size="sm" variant="outline" theme={theme as any} icon={<ChevronLeft size={16} />} label="Go Back" />
+          <AvakioButton onClick={goBack} size="sm" variant="outline" icon={<ChevronLeft size={16} />} label="Go Back" />
         </div>
       ),
     },
-  ], [goToView, goBack, theme]);
+  ], [goToView, goBack]);
 
   // Dynamic demo cells
   const dynamicCells = useMemo(() => [
@@ -279,12 +259,11 @@ export function AvakioMultiviewExample() {
   ], []);
 
   return (
-    <div className="avakio-multiview-demo-container" data-admin-theme={theme}>
+    <div className="avakio-multiview-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-multiview-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="Views"
           title="Multiview Component"
           subTitle="A container that displays one view at a time with smooth animations and navigation history."
@@ -311,13 +290,11 @@ export function AvakioMultiviewExample() {
         className="avakio-multiview-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -325,7 +302,6 @@ export function AvakioMultiviewExample() {
         />
         <AvakioLayout
           id="layout-basic-usage"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -333,19 +309,17 @@ export function AvakioMultiviewExample() {
           rows={[
             <AvakioTemplate
               key="nav-buttons"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-                  <AvakioButton onClick={goBack} size="sm" variant="outline" theme={theme as any} icon={<ChevronLeft size={16} />} label="Back" disabled={history.length <= 1} />
+                  <AvakioButton onClick={goBack} size="sm" variant="outline" icon={<ChevronLeft size={16} />} label="Back" disabled={history.length <= 1} />
                   {['home', 'profile', 'settings', 'documents'].map((id) => (
                     <AvakioButton
                       key={id}
                       onClick={() => goToView(id)}
                       size="sm"
                       variant={currentView === id ? 'primary' : 'outline'}
-                      theme={theme as any}
                       label={id.charAt(0).toUpperCase() + id.slice(1)}
                     />
                   ))}
@@ -357,7 +331,6 @@ export function AvakioMultiviewExample() {
                 ref={multiviewRef}
                 id="main-multiview"
                 testId="main-multiview"
-                theme={theme as any}
                 cells={mainCells}
                 activeView="home"
                 height="280px"
@@ -375,20 +348,17 @@ export function AvakioMultiviewExample() {
         className="avakio-multiview-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Animation Types"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Choose different animation styles for view transitions: slide, fade, flip, or none. For slide animation, you can also choose the direction."
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[14, 0, 0, 14]}
@@ -400,7 +370,6 @@ export function AvakioMultiviewExample() {
                   <AvakioButton
                     key={type}
                     onClick={() => setAnimationType(type)}
-                    theme={theme as any}
                     label={type.charAt(0).toUpperCase() + type.slice(1)}
                     variant={animationType === type ? 'primary' : 'outline'}
                     size="sm"
@@ -415,7 +384,6 @@ export function AvakioMultiviewExample() {
                     <AvakioButton
                       key={dir}
                       onClick={() => setSlideDirection(dir)}
-                      theme={theme as any}
                       label={dir.charAt(0).toUpperCase() + dir.slice(1)}
                       variant={slideDirection === dir ? 'primary' : 'outline'}
                       size="sm"
@@ -431,7 +399,6 @@ export function AvakioMultiviewExample() {
                     <AvakioButton
                       key={dir}
                       onClick={() => setFlipDirection(dir)}
-                      theme={theme as any}
                       label={dir.charAt(0).toUpperCase() + dir.slice(1)}
                       variant={flipDirection === dir ? 'primary' : 'outline'}
                       size="sm"
@@ -445,7 +412,6 @@ export function AvakioMultiviewExample() {
         />
         <AvakioLayout
           id="layout-animations"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -453,7 +419,6 @@ export function AvakioMultiviewExample() {
           rows={[
             <AvakioTemplate
               key="animation-info"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={
@@ -472,13 +437,11 @@ export function AvakioMultiviewExample() {
         className="avakio-multiview-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Keep Views Mode"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -486,7 +449,6 @@ export function AvakioMultiviewExample() {
         />
         <AvakioLayout
           id="layout-keepviews"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -496,7 +458,6 @@ export function AvakioMultiviewExample() {
               <AvakioMultiview
                 id="keepviews-multiview"
                 testId="keepviews-multiview"
-                theme={theme as any}
                 keepViews={true}
                 cells={[
                   { id: 'kept-1', content: <div style={{ padding: '24px' }}><h4>View 1</h4><p>This view is kept in DOM when hidden</p></div> },
@@ -508,7 +469,6 @@ export function AvakioMultiviewExample() {
             </div>,
             <AvakioTemplate
               key="keepviews-note"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[12, 0, 0, 0]}
@@ -528,35 +488,31 @@ export function AvakioMultiviewExample() {
         className="avakio-multiview-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Dynamic Views"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Add and remove views dynamically using addView() and removeView() methods."
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[14, 0, 0, 14]}
           content={
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              <AvakioButton onClick={addDynamicView} size="sm" theme={theme as any} icon={<Plus size={14} />} label="Add View" />
+              <AvakioButton onClick={addDynamicView} size="sm" icon={<Plus size={14} />} label="Add View" />
               {viewList.some((v) => v.startsWith('dynamic-')) && (
-                <AvakioButton onClick={removeDynamicView} size="sm" variant="outline" theme={theme as any} icon={<Trash2 size={14} />} label="Remove Last" />
+                <AvakioButton onClick={removeDynamicView} size="sm" variant="outline" icon={<Trash2 size={14} />} label="Remove Last" />
               )}
             </div>
           }
         />
         <AvakioLayout
           id="layout-dynamic"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -567,7 +523,6 @@ export function AvakioMultiviewExample() {
                 ref={dynamicMultiviewRef}
                 id="dynamic-multiview"
                 testId="dynamic-multiview"
-                theme={theme as any}
                 cells={dynamicCells}
                 activeView="main"
                 animate={{ type: 'slide', duration: 300 }}
@@ -575,7 +530,6 @@ export function AvakioMultiviewExample() {
             </div>,
             <AvakioTemplate
               key="dynamic-views-list"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[12, 0, 0, 0]}
@@ -595,13 +549,11 @@ export function AvakioMultiviewExample() {
         className="avakio-multiview-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Navigation History"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -609,7 +561,6 @@ export function AvakioMultiviewExample() {
         />
         <AvakioLayout
           id="layout-navigation"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -617,7 +568,6 @@ export function AvakioMultiviewExample() {
           rows={[
             <AvakioTemplate
               key="history-display"
-              theme={theme as any}
               type="clean"
               borderType="material"
               padding={16}
@@ -631,7 +581,6 @@ export function AvakioMultiviewExample() {
             />,
             <AvakioTemplate
               key="history-note"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[12, 0, 0, 0]}
@@ -651,13 +600,11 @@ export function AvakioMultiviewExample() {
         className="avakio-multiview-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="All Themes"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -665,7 +612,6 @@ export function AvakioMultiviewExample() {
         />
         <AvakioLayout
           id="layout-themes"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -702,19 +648,17 @@ export function AvakioMultiviewExample() {
         className="avakio-multiview-demo-section avakio-hide-on-mobile"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Interactive Props Playground"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Experiment with all available props and see changes in real-time."
         />
-        <PlaygroundSection theme={theme} />
+        <PlaygroundSection />
       </section>
 
       {/* Documentation Section */}
@@ -723,12 +667,11 @@ export function AvakioMultiviewExample() {
         className="avakio-multiview-demo-section avakio-hide-on-mobile"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Documentation"
         />
-        <PropsDocumentation theme={theme} />
+        <PropsDocumentation />
       </section>
     </div>
   );
@@ -754,7 +697,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
   return (
     <AvakioLayout
       id="playground-layout"
-      theme={theme as any}
       type="clean"
       borderless={false}
       margin={12}
@@ -763,13 +705,11 @@ function PlaygroundSection({ theme }: { theme: string }) {
         <AvakioLayout
           key="headers"
           id="playground-headers"
-          theme={theme as any}
           type="clean"
           borderless={true}
           cols={[
             <AvakioTemplate
               key="controls-header"
-              theme={theme as any}
               type="header"
               width={300}
               borderType="clean"
@@ -777,7 +717,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="preview-header"
-              theme={theme as any}
               css={{ flex: 1 }}
               type="header"
               borderType="clean"
@@ -789,13 +728,11 @@ function PlaygroundSection({ theme }: { theme: string }) {
         <AvakioLayout
           key="content"
           id="playground-content"
-          theme={theme as any}
           type="clean"
           borderless={true}
           cols={[
             <AvakioTemplate
               key="controls"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               width={300}
@@ -891,7 +828,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
                           }}
                           size="sm"
                           variant={activeView === v ? 'primary' : 'outline'}
-                          theme={theme as any}
                           label={v}
                         />
                       ))}
@@ -903,7 +839,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
             <AvakioLayout
               key="preview"
               id="playground-preview"
-              theme={theme as any}
               margin={0}
               padding={0}
               type="clean"
@@ -913,7 +848,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
                   <AvakioMultiview
                     ref={playgroundRef}
                     id="playground-multiview"
-                    theme={theme as any}
                     cells={playgroundCells}
                     activeView="view1"
                     animate={{ type: animationType as any, duration: animationDuration, direction: animationDirection as any, flipDirection: flipDirection as any }}
@@ -925,7 +859,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
                 </div>,
                 <AvakioTemplate
                   key="props-header"
-                  theme={theme as any}
                   type="header"
                   borderType="clean"
                   margin={0}
@@ -933,7 +866,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
                 />,
                 <AvakioTemplate
                   key="props-code"
-                  theme={theme as any}
                   type="clean"
                   borderType="clean"
                   content={
@@ -1035,7 +967,6 @@ const refColumns: AvakioColumn<RefMethodDoc>[] = [
 function PropsDocumentation({ theme }: { theme: string }) {
   return (
     <AvakioTemplate
-      theme={theme as any}
       borderType="material"
       type="clean"
       borderless={true}
@@ -1044,7 +975,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
           rows={[
             <AvakioTemplate
               key="props-header"
-              theme={theme as any}
               borderType="material"
               type="header"
               content="Props Reference"
@@ -1054,7 +984,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="props-table"
-              theme={theme as any}
               borderType="clean"
               type="clean"
               borderless={true}
@@ -1072,7 +1001,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="events-header"
-              theme={theme as any}
               borderType="material"
               type="header"
               content="Event Props"
@@ -1082,7 +1010,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="events-table"
-              theme={theme as any}
               borderType="clean"
               type="clean"
               borderless={true}
@@ -1098,7 +1025,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="ref-header"
-              theme={theme as any}
               borderType="material"
               type="header"
               content="Ref Methods (useRef)"
@@ -1108,7 +1034,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="ref-table"
-              theme={theme as any}
               borderType="clean"
               type="clean"
               borderless={true}
@@ -1129,6 +1054,9 @@ function PropsDocumentation({ theme }: { theme: string }) {
     />
   );
 }
+
+
+
 
 
 

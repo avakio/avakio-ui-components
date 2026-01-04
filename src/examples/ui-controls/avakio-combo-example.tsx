@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AvakioCombo } from "../../components/avakio/ui-controls/avakio-combo/avakio-combo";
 import type { AvakioComboOption } from "../../components/avakio/ui-controls/avakio-combo/avakio-combo";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import "./avakio-combo-example.css";
 
 const themeBackgrounds = {
   material: "bg-gray-50",
@@ -42,36 +41,12 @@ const userOptions: AvakioComboOption[] = [
   { id: "u5", value: "Charlie Brown", email: "charlie@example.com", role: "Admin" },
 ];
 
-export default function AvakioComboExample() {
-  const [currentTheme, setCurrentTheme] = useState("material");
+export default function AvakioComboExample({ theme: currentTheme = 'material' }: { theme?: string }) {
   const [selectedCountry, setSelectedCountry] = useState<string | number>("");
   const [selectedCity, setSelectedCity] = useState<string | number>("");
   const [selectedUser, setSelectedUser] = useState<string | number>("");
   const [disabledValue, setDisabledValue] = useState<string | number>(1);
   const [readonlyValue, setReadonlyValue] = useState<string | number>(2);
-
-  // Sync with global theme from components-showcase
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== currentTheme) {
-        setCurrentTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    // Set initial theme if it exists
-    const initialTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (initialTheme && initialTheme !== currentTheme) {
-      setCurrentTheme(initialTheme);
-    }
-
-    return () => observer.disconnect();
-  }, [currentTheme]);
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${themeBackgrounds[currentTheme as keyof typeof themeBackgrounds]}`}>

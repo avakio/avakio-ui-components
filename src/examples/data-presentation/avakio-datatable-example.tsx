@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { AvakioDataTable } from "./AvakioDataTable";
-import type { AvakioColumn, AvakioSpan } from "./AvakioDataTable";
-import { AvakioDatePicker } from "../ui-controls/avakio-datepicker/avakio-datepicker";
-import { AvakioMultiCombo } from "../ui-controls/avakio-multicombo/avakio-multicombo";
-import { AvakioCombo } from "../ui-controls/avakio-combo/avakio-combo";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
-import { Button } from '../../ui/button';
+import { AvakioDataTable } from "../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable";
+import type { AvakioColumn, AvakioSpan } from "../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable";
+import { AvakioDatePicker } from "../../components/avakio/ui-controls/avakio-datepicker/avakio-datepicker";
+import { AvakioMultiCombo } from "../../components/avakio/ui-controls/avakio-multicombo/avakio-multicombo";
+import { AvakioCombo } from "../../components/avakio/ui-controls/avakio-combo/avakio-combo";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Calendar } from "lucide-react";
 
 // Sample data
@@ -111,7 +111,7 @@ const themeBackgrounds = {
   sunset: "bg-orange-50",
 };
 
-export default function AvakioDataTableExample() {
+export function AvakioDataTableExample() {
   const [currentTheme, setCurrentTheme] = useState("material");
 
   // Sync with global theme from components-showcase

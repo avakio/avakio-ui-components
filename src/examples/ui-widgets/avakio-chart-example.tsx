@@ -247,7 +247,7 @@ const skillsData: AvakioChartSeries[] = [
 ];
 
 export function AvakioChartExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('line');
 
   // Refs for chart instances
@@ -269,33 +269,13 @@ export function AvakioChartExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   return (
-    <div className="avakio-chart-demo-container" data-admin-theme={theme}>
+    <div className="avakio-chart-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-chart-sticky-header">
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Widgets"
           title="Chart Component"
           subTitle="A comprehensive charting library for data visualization. Supports line, bar, pie, donut, area, scatter, and radar charts with themes, legends, tooltips, and animations."
@@ -321,20 +301,17 @@ export function AvakioChartExample() {
         className="avakio-chart-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Line Charts"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Line charts are great for showing trends over time. Use spline for smooth curves."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -353,7 +330,6 @@ export function AvakioChartExample() {
                 legend={{ show: true, position: 'bottom' }}
                 tooltip={{ show: true }}
                 height={320}
-                theme={theme as any}
                 animate
               />
             </div>,
@@ -371,7 +347,6 @@ export function AvakioChartExample() {
                   format: (point, series) => `${series.name}: $${point.y}K`
                 }}
                 height={320}
-                theme={theme as any}
                 animate
               />
             </div>,
@@ -385,20 +360,17 @@ export function AvakioChartExample() {
         className="avakio-chart-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Bar Charts"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Bar charts excel at comparing discrete categories. Supports grouped and stacked variants."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -418,7 +390,6 @@ export function AvakioChartExample() {
                 borderRadius={6}
                 barWidth={40}
                 height={320}
-                theme={theme as any}
                 animate
               />
             </div>,
@@ -434,7 +405,6 @@ export function AvakioChartExample() {
                 barWidth={20}
                 borderRadius={4}
                 height={320}
-                theme={theme as any}
                 animate
               />
             </div>,
@@ -451,7 +421,6 @@ export function AvakioChartExample() {
                 barWidth={36}
                 borderRadius={4}
                 height={320}
-                theme={theme as any}
                 animate
               />
             </div>,
@@ -465,20 +434,17 @@ export function AvakioChartExample() {
         className="avakio-chart-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Pie & Donut Charts"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Perfect for showing proportions and part-to-whole relationships."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -495,7 +461,6 @@ export function AvakioChartExample() {
                   pieLabels
                   gradient
                   height={300}
-                  theme={theme as any}
                   animate
                   tooltip={{
                     show: true,
@@ -514,7 +479,6 @@ export function AvakioChartExample() {
                   donutInnerText="Budget"
                   pieLabels
                   height={300}
-                  theme={theme as any}
                   animate
                   tooltip={{
                     show: true,
@@ -533,20 +497,17 @@ export function AvakioChartExample() {
         className="avakio-chart-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Area Charts"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Area charts emphasize the magnitude of change over time. Great for showing cumulative totals."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -563,7 +524,6 @@ export function AvakioChartExample() {
                 legend={{ show: false }}
                 gradient
                 height={300}
-                theme={theme as any}
                 animate
               />
             </div>,
@@ -606,7 +566,6 @@ export function AvakioChartExample() {
                 yAxis={{ title: 'Visitors' }}
                 legend={{ show: true, position: 'bottom' }}
                 height={300}
-                theme={theme as any}
                 animate
               />
             </div>,
@@ -620,20 +579,17 @@ export function AvakioChartExample() {
         className="avakio-chart-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Scatter & Radar Charts"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Specialized chart types for correlation analysis and multi-variable comparison."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -650,7 +606,6 @@ export function AvakioChartExample() {
                   yAxis={{ title: 'Variable Y' }}
                   legend={{ show: true, position: 'bottom' }}
                   height={300}
-                  theme={theme as any}
                   animate
                 />
               </div>
@@ -662,7 +617,6 @@ export function AvakioChartExample() {
                   title="Skills Comparison"
                   legend={{ show: true, position: 'bottom' }}
                   height={340}
-                  theme={theme as any}
                   animate
                 />
               </div>
@@ -677,13 +631,11 @@ export function AvakioChartExample() {
         className="avakio-chart-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="API Reference"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -810,6 +762,9 @@ export function AvakioChartExample() {
 }
 
 export default AvakioChartExample;
+
+
+
 
 
 

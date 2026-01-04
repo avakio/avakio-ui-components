@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import "./avakio-slider.css";
-import "./avakio-slider-example.css";
+import React, { useState, useRef } from "react";
 import { AvakioSlider, AvakioSliderValue } from "../../components/avakio/ui-controls/avakio-slider/avakio-slider";
 import { AvakioViewHeader } from "../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header";
 import { AvakioTabBar } from "../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar";
@@ -18,8 +16,7 @@ const TAB_OPTIONS = [
   { id: 'custom', label: 'Custom Range', icon: <Ruler size={14} /> },
 ];
 
-export function AvakioSliderExample() {
-  const [theme, setTheme] = useState<string>("material");
+export function AvakioSliderExample({ theme = 'material' }: { theme?: string }) {
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   const [volume, setVolume] = useState<number>(45);
   const [brightness, setBrightness] = useState<number>(70);
@@ -50,35 +47,12 @@ export function AvakioSliderExample() {
     }
   };
 
-  // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, [theme]);
-
   return (
-    <div className="avakio-slider-demo-container" data-admin-theme={theme}>
+    <div className="avakio-slider-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-slider-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="Slider Component"
           subTitle="A theme-aware slider component. Supports marks, steps, sizes, value display, required state, and error messages."
@@ -105,20 +79,17 @@ export function AvakioSliderExample() {
         className="avakio-slider-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Slider"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Controlled slider with live value display. Drag or click the track to change the value."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -148,20 +119,17 @@ export function AvakioSliderExample() {
         className="avakio-slider-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Range Slider"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Dual-handle slider for selecting a range of values. Use the 'range' prop to enable this mode."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -186,7 +154,6 @@ export function AvakioSliderExample() {
           ]}
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -210,7 +177,6 @@ export function AvakioSliderExample() {
           ]}
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -241,20 +207,17 @@ export function AvakioSliderExample() {
         className="avakio-slider-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Steps & Marks"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Configure step increments and display marks at specific values."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -277,7 +240,6 @@ export function AvakioSliderExample() {
           ]}
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -307,20 +269,17 @@ export function AvakioSliderExample() {
         className="avakio-slider-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Validation"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Show error states and required indicators for form validation."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -353,20 +312,17 @@ export function AvakioSliderExample() {
         className="avakio-slider-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Disabled & Sizes"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Sliders can be disabled and come in three sizes: small, medium, and large."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -374,7 +330,6 @@ export function AvakioSliderExample() {
           rows={[
             <AvakioTemplate
               key="size-label-sm"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="Small Size (sm)"
@@ -382,7 +337,6 @@ export function AvakioSliderExample() {
             <AvakioSlider key="slider-sm" label="Small" size="sm" min={0} max={10} defaultValue={3} disabled />,
             <AvakioTemplate
               key="size-label-md"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="Medium Size (md) - Default"
@@ -390,7 +344,6 @@ export function AvakioSliderExample() {
             <AvakioSlider key="slider-md" label="Default" size="md" min={0} max={10} defaultValue={6} disabled />,
             <AvakioTemplate
               key="size-label-lg"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="Large Size (lg)"
@@ -406,20 +359,17 @@ export function AvakioSliderExample() {
         className="avakio-slider-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Custom Range Values"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Sliders can use different min/max ranges for various use cases."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -447,6 +397,8 @@ export function AvakioSliderExample() {
 }
 
 export default AvakioSliderExample;
+
+
 
 
 

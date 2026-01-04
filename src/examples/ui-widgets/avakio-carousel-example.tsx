@@ -20,10 +20,10 @@ import {
   ShoppingCart,
   DollarSign,
 } from 'lucide-react';
-import '../../components/avakio/ui-widgets/avakio-carousel.css';
+import '../../components/avakio/ui-widgets/avakio-carousel/avakio-carousel.css';
 
 export function AvakioCarouselExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const basicCarouselRef = useRef<AvakioCarouselRef>(null);
   const autoplayCarouselRef = useRef<AvakioCarouselRef>(null);
   const sideNavCarouselRef = useRef<AvakioCarouselRef>(null);
@@ -45,26 +45,7 @@ export function AvakioCarouselExample() {
     },
   ]);
 
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   // Basic slides with Avakio components
   const basicSlides: AvakioCarouselSlide[] = [
@@ -85,7 +66,6 @@ export function AvakioCarouselExample() {
           <AvakioGrid
             gridColumns={2}
             gridRows={2}
-            theme={theme as any}
             cellHeight={120}
             cellMargin={16}
             width="100%"
@@ -215,10 +195,9 @@ export function AvakioCarouselExample() {
   };
 
   return (
-    <div className="avakio-template-demo-container" data-admin-theme={theme}>
+    <div className="avakio-template-demo-container">
       <AvakioTemplate
         id="carousel-example-header"
-        theme={theme as any}
         type="header"
         borderType="clean"
         content={
@@ -239,7 +218,6 @@ export function AvakioCarouselExample() {
       {/* Basic Usage Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -309,7 +287,6 @@ export function AvakioCarouselExample() {
       {/* Autoplay Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -349,7 +326,6 @@ export function AvakioCarouselExample() {
       {/* Side Navigation Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -381,7 +357,6 @@ export function AvakioCarouselExample() {
       {/* Dynamic Slides Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -430,7 +405,6 @@ export function AvakioCarouselExample() {
       {/* Themes Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -468,7 +442,6 @@ export function AvakioCarouselExample() {
       {/* API Reference Section */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -509,6 +482,9 @@ export function AvakioCarouselExample() {
     </div>
   );
 }
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { AvakioToggleButton, AvakioToggleButtonRef } from '../../components/avakio/ui-controls/avakio-toggle-button';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
@@ -6,8 +6,8 @@ import { AvakioRichSelect } from '../../components/avakio/ui-controls/avakio-ric
 import { AvakioText } from '../../components/avakio/ui-controls/avakio-text/avakio-text';
 import { AvakioCheckbox } from '../../components/avakio/ui-controls/avakio-checkbox/avakio-checkbox';
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
-import { AvakioDataTable } from '../../components/avakio/avakio-datatable/AvakioDataTable';
-import type { AvakioColumn } from '../../components/avakio/avakio-datatable/AvakioDataTable';
+import { AvakioDataTable } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
+import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { 
@@ -44,8 +44,7 @@ import {
   Wand2,
   Book,
 } from 'lucide-react';
-import '../../components/avakio/ui-controls/avakio-toggle-button.css';
-import './avakio-toggle-button-example.css';
+import '../../components/avakio/ui-controls/avakio-toggle-button/avakio-toggle-button.css';
 
 // Tab options for navigation
 const TAB_OPTIONS = [
@@ -58,8 +57,7 @@ const TAB_OPTIONS = [
   { id: 'docs', label: 'Documentation', icon: <Book size={14} /> },
 ];
 
-export function AvakioToggleButtonExample() {
-  const [theme, setTheme] = useState<string>('material');
+export function AvakioToggleButtonExample({ theme = 'material' }: { theme?: string }) {
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Section refs for scroll navigation
@@ -107,26 +105,7 @@ export function AvakioToggleButtonExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   const handleGetValue = () => {
     const value = toggleRef.current?.getValue();
@@ -192,12 +171,11 @@ export function AvakioToggleButtonExample() {
   ];
 
   return (
-    <div className="avakio-toggle-button-demo-container" data-admin-theme={theme}>
+    <div className="avakio-toggle-button-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-toggle-button-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="Toggle Button"                                
           subTitle="A two-state button that can be pressed and unpressed. "
@@ -224,20 +202,17 @@ export function AvakioToggleButtonExample() {
         className="avakio-toggle-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Toggle buttons can have a single label or separate on/off labels. They support controlled and uncontrolled modes."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -245,25 +220,21 @@ export function AvakioToggleButtonExample() {
           rows={[
             <div key="basic" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}>
               <AvakioToggleButton
-                theme={theme as any}
                 label="Toggle"
                 value={isPlaying}
                 onChange={setIsPlaying}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 onLabel="On"
                 offLabel="Off"
                 value={isPowerOn}
                 onChange={setIsPowerOn}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 label="Disabled Off"
                 disabled
               />
               <AvakioToggleButton
-                theme={theme as any}
                 label="Disabled On"
                 value={true}
                 disabled
@@ -279,20 +250,17 @@ export function AvakioToggleButtonExample() {
         className="avakio-toggle-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="With Icons"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Icons can change based on state using onIcon/offIcon props, or use the same icon for both states."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -300,7 +268,6 @@ export function AvakioToggleButtonExample() {
           rows={[
             <div key="icons" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}>
               <AvakioToggleButton
-                theme={theme as any}
                 onLabel="Playing"
                 offLabel="Paused"
                 onIcon={<Pause size={16} />}
@@ -309,7 +276,6 @@ export function AvakioToggleButtonExample() {
                 onChange={setIsPlaying}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 onLabel="Muted"
                 offLabel="Sound On"
                 onIcon={<VolumeX size={16} />}
@@ -318,7 +284,6 @@ export function AvakioToggleButtonExample() {
                 onChange={setIsMuted}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 onLabel="WiFi On"
                 offLabel="WiFi Off"
                 onIcon={<Wifi size={16} />}
@@ -327,7 +292,6 @@ export function AvakioToggleButtonExample() {
                 onChange={setIsWifiOn}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 onLabel="Dark Mode"
                 offLabel="Light Mode"
                 onIcon={<Moon size={16} />}
@@ -346,13 +310,11 @@ export function AvakioToggleButtonExample() {
         className="avakio-toggle-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Button Types"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -361,7 +323,6 @@ export function AvakioToggleButtonExample() {
         
         {/* Icon Only Type */}
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -369,14 +330,12 @@ export function AvakioToggleButtonExample() {
           rows={[
             <AvakioTemplate
               key="icon-only-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Icon Only (type="icon")</strong>}
             />,
             <div key="icon-only" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', marginTop: '12px' }}>
               <AvakioToggleButton
-                theme={theme as any}
                 type="icon"
                 onIcon={<Eye size={16} />}
                 offIcon={<EyeOff size={16} />}
@@ -385,7 +344,6 @@ export function AvakioToggleButtonExample() {
                 tooltip={isVisible ? 'Hide' : 'Show'}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 type="icon"
                 onIcon={<Unlock size={16} />}
                 offIcon={<Lock size={16} />}
@@ -394,7 +352,6 @@ export function AvakioToggleButtonExample() {
                 tooltip={isLocked ? 'Unlock' : 'Lock'}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 type="icon"
                 onIcon={<Bell size={16} />}
                 offIcon={<BellOff size={16} />}
@@ -403,7 +360,6 @@ export function AvakioToggleButtonExample() {
                 tooltip={notificationsOn ? 'Mute notifications' : 'Enable notifications'}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 type="icon"
                 icon={<Heart size={16} />}
                 value={isFavorite}
@@ -411,7 +367,6 @@ export function AvakioToggleButtonExample() {
                 tooltip="Favorite"
               />
               <AvakioToggleButton
-                theme={theme as any}
                 type="icon"
                 icon={<Star size={16} />}
                 value={isStarred}
@@ -419,7 +374,6 @@ export function AvakioToggleButtonExample() {
                 tooltip="Star"
               />
               <AvakioToggleButton
-                theme={theme as any}
                 type="icon"
                 icon={<ThumbsUp size={16} />}
                 value={isLiked}
@@ -427,7 +381,6 @@ export function AvakioToggleButtonExample() {
                 tooltip="Like"
               />
               <AvakioToggleButton
-                theme={theme as any}
                 type="icon"
                 icon={<Bookmark size={16} />}
                 value={isBookmarked}
@@ -440,7 +393,6 @@ export function AvakioToggleButtonExample() {
 
         {/* Icon Top Type */}
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -448,14 +400,12 @@ export function AvakioToggleButtonExample() {
           rows={[
             <AvakioTemplate
               key="icon-top-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Icon Top (type="iconTop")</strong>}
             />,
             <div key="icon-top" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'flex-start', marginTop: '12px' }}>
               <AvakioToggleButton
-                theme={theme as any}
                 type="iconTop"
                 onLabel="Power On"
                 offLabel="Power Off"
@@ -465,7 +415,6 @@ export function AvakioToggleButtonExample() {
                 onChange={setIsPowerOn}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 type="iconTop"
                 onLabel="Protected"
                 offLabel="Unprotected"
@@ -475,7 +424,6 @@ export function AvakioToggleButtonExample() {
                 onChange={setIsLocked}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 type="iconTop"
                 onLabel="Settings"
                 offLabel="Settings"
@@ -488,7 +436,6 @@ export function AvakioToggleButtonExample() {
 
         {/* Block Style */}
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -496,14 +443,12 @@ export function AvakioToggleButtonExample() {
           rows={[
             <AvakioTemplate
               key="block-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Block Style (Full Width)</strong>}
             />,
             <div key="block" style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '400px', marginTop: '12px' }}>
               <AvakioToggleButton
-                theme={theme as any}
                 block
                 onLabel="Enabled"
                 offLabel="Disabled"
@@ -513,7 +458,6 @@ export function AvakioToggleButtonExample() {
                 onChange={setIsPowerOn}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 block
                 onLabel="Active"
                 offLabel="Inactive"
@@ -530,20 +474,17 @@ export function AvakioToggleButtonExample() {
         className="avakio-toggle-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Sizes"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Toggle buttons come in three sizes: small (sm), medium (md), and large (lg)."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -551,26 +492,22 @@ export function AvakioToggleButtonExample() {
           rows={[
             <AvakioTemplate
               key="sizes-default-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Default Type Sizes</strong>}
             />,
             <div key="sizes" style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', marginTop: '12px' }}>
               <AvakioToggleButton
-                theme={theme as any}
                 size="sm"
                 label="Small"
                 icon={<Zap size={14} />}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 size="md"
                 label="Medium"
                 icon={<Zap size={16} />}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 size="lg"
                 label="Large"
                 icon={<Zap size={20} />}
@@ -578,7 +515,6 @@ export function AvakioToggleButtonExample() {
             </div>,
             <AvakioTemplate
               key="sizes-icon-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -586,19 +522,16 @@ export function AvakioToggleButtonExample() {
             />,
             <div key="sizes-icon" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center', marginTop: '12px' }}>
               <AvakioToggleButton
-                theme={theme as any}
                 type="icon"
                 size="sm"
                 icon={<Power size={14} />}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 type="icon"
                 size="md"
                 icon={<Power size={16} />}
               />
               <AvakioToggleButton
-                theme={theme as any}
                 type="icon"
                 size="lg"
                 icon={<Power size={20} />}
@@ -614,20 +547,17 @@ export function AvakioToggleButtonExample() {
         className="avakio-toggle-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Ref Methods"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Use imperative methods through a ref to programmatically control the toggle button."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -637,7 +567,6 @@ export function AvakioToggleButtonExample() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                 <AvakioToggleButton
                   ref={toggleRef}
-                  theme={theme as any}
                   onLabel="Active"
                   offLabel="Inactive"
                   onIcon={<Check size={16} />}
@@ -651,32 +580,27 @@ export function AvakioToggleButtonExample() {
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 <AvakioButton
-                  theme={theme as any}
                   size="sm"
                   label="getValue()"
                   onClick={handleGetValue}
                 />
                 <AvakioButton
-                  theme={theme as any}
                   size="sm"
                   label="setValue(true)"
                   onClick={() => handleSetValue(true)}
                 />
                 <AvakioButton
-                  theme={theme as any}
                   size="sm"
                   label="setValue(false)"
                   onClick={() => handleSetValue(false)}
                 />
                 <AvakioButton
-                  theme={theme as any}
                   size="sm"
                   label="toggle()"
                   onClick={handleToggle}
                   icon={<RefreshCw size={14} />}
                 />
                 <AvakioButton
-                  theme={theme as any}
                   size="sm"
                   label="focus()"
                   onClick={() => toggleRef.current?.focus()}
@@ -693,33 +617,28 @@ export function AvakioToggleButtonExample() {
         className="avakio-toggle-button-demo-section avakio-hide-on-mobile"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Interactive Playground"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Experiment with different props to see how they affect the toggle button appearance and behavior."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           rows={[
             <AvakioLayout
               key="playground"
-              theme={theme as any}
               type="clean"
               borderless
               cols={[
                 <AvakioTemplate
                   key="controls"
-                  theme={theme as any}
                   type="clean"
                   borderType="clean"
                   width={300}
@@ -800,21 +719,18 @@ export function AvakioToggleButtonExample() {
                 />,
                 <AvakioLayout
                   key="preview"
-                  theme={theme as any}
                   type="clean"
                   borderless
                   padding={16}
                   rows={[
                     <AvakioTemplate
                       key="preview-header"
-                      theme={theme as any}
                       type="header"
                       borderType="clean"
                       content={<h4 style={{ margin: 0 }}>Preview</h4>}
                     />,
                     <div key="preview-content" style={{ padding: '24px', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100px', background: 'var(--avakio-bg-secondary)', borderRadius: '8px' }}>
                       <AvakioToggleButton
-                        theme={theme as any}
                         label={playgroundUseStateLabels ? undefined : playgroundLabel}
                         onLabel={playgroundUseStateLabels ? playgroundOnLabel : undefined}
                         offLabel={playgroundUseStateLabels ? playgroundOffLabel : undefined}
@@ -830,7 +746,6 @@ export function AvakioToggleButtonExample() {
                     </div>,
                     <AvakioTemplate
                       key="code"
-                      theme={theme as any}
                       type="clean"
                       borderType="clean"
                       content={
@@ -874,7 +789,6 @@ export function AvakioToggleButtonExample() {
         className="avakio-toggle-button-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Props Documentation"
@@ -888,7 +802,6 @@ export function AvakioToggleButtonExample() {
         />
         
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Ref Methods Documentation"
@@ -904,6 +817,8 @@ export function AvakioToggleButtonExample() {
     </div>
   );
 }
+
+
 
 
 

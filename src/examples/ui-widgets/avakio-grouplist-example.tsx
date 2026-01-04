@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AvakioGroupList, GroupListItem, GroupListOpenState } from "../../components/avakio/ui-widgets/avakio-grouplist/avakio-grouplist";
-import "./avakio-grouplist.css";
 import { AvakioViewHeader } from "../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header";
 import { AvakioTabBar } from "../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar";
 import { AvakioTemplate } from "../../components/avakio/views/avakio-template/avakio-template";
@@ -220,7 +219,7 @@ const locationsData: GroupListItem[] = [
 ];
 
 export function AvakioGroupListExample() {
-  const [theme, setTheme] = useState<string>("material");
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // State for demos
@@ -244,34 +243,14 @@ export function AvakioGroupListExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   return (
-    <div className="avakio-grouplist-demo-container" data-admin-theme={theme}>
+    <div className="avakio-grouplist-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-grouplist-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Widgets"
           title="GroupList Component"
           subTitle="A hierarchical list component for presenting data in groups with drill-down navigation. Supports templates, selection, and animated transitions."
@@ -298,20 +277,17 @@ export function AvakioGroupListExample() {
         className="avakio-grouplist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="A GroupList displays hierarchical data with drill-down navigation. Click on a group to expand it and see its children. Click the back header to return to the parent level."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -345,20 +321,17 @@ export function AvakioGroupListExample() {
         className="avakio-grouplist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Hierarchical Data"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="GroupList supports deeply nested hierarchical data. Each level can have its own icon and as many children as needed."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -392,20 +365,17 @@ export function AvakioGroupListExample() {
         className="avakio-grouplist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Custom Templates"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Customize item rendering using templateItem, templateGroup, and templateBack props."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -461,20 +431,17 @@ export function AvakioGroupListExample() {
         className="avakio-grouplist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Selection & Navigation"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Track selection state and navigation events. The onNavigate callback provides the current navigation state."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -517,20 +484,17 @@ export function AvakioGroupListExample() {
         className="avakio-grouplist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Styling Options"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Control dimensions, animations, and disable selection mode."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -574,13 +538,11 @@ export function AvakioGroupListExample() {
         className="avakio-grouplist-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Documentation"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -628,6 +590,9 @@ export function AvakioGroupListExample() {
     </div>
   );
 }
+
+
+
 
 
 

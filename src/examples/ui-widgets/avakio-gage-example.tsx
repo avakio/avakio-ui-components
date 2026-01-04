@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AvakioGage } from "../../components/avakio/ui-widgets/avakio-gage/avakio-gage";
-import "./avakio-gage.css";
 import { AvakioViewHeader } from "../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header";
 import { AvakioTabBar } from "../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar";
 import { AvakioTemplate } from "../../components/avakio/views/avakio-template/avakio-template";
@@ -19,7 +18,7 @@ const TAB_OPTIONS = [
 ];
 
 export function AvakioGageExample() {
-  const [theme, setTheme] = useState<string>("material");
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Basic usage values
@@ -44,26 +43,7 @@ export function AvakioGageExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   // Animate value periodically for demo
   useEffect(() => {
@@ -78,12 +58,11 @@ export function AvakioGageExample() {
   }, []);
 
   return (
-    <div className="avakio-gage-demo-container" data-admin-theme={theme}>
+    <div className="avakio-gage-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-gage-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Widgets"
           title="Gage Component"
           subTitle="A circular gauge component for displaying percentage values with optional target markers. Supports multiple sizes, custom colors, and animated values."
@@ -110,20 +89,17 @@ export function AvakioGageExample() {
         className="avakio-gage-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="A circular gauge showing a value as a percentage. Use labels and sublabels to provide context for what the gauge represents."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -185,20 +161,17 @@ export function AvakioGageExample() {
         className="avakio-gage-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Sizes"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="The gauge component supports three sizes: small (sm), medium (md), and large (lg). Choose the size that fits your layout needs."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -249,20 +222,17 @@ export function AvakioGageExample() {
         className="avakio-gage-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Target Markers"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Add target markers to show threshold values. Useful for displaying KPI targets or warning limits."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -310,20 +280,17 @@ export function AvakioGageExample() {
         className="avakio-gage-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Custom Colors"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Customize the gauge colors using the color and trackColor props to match your application's design."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -381,20 +348,17 @@ export function AvakioGageExample() {
         className="avakio-gage-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Animated Values"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="The gauge automatically animates when values change, providing smooth visual feedback."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -429,13 +393,11 @@ export function AvakioGageExample() {
         className="avakio-gage-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Documentation"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -472,6 +434,9 @@ export function AvakioGageExample() {
     </div>
   );
 }
+
+
+
 
 
 

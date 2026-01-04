@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./avakio-bullet-graph.css";
 import "./avakio-bullet-graph-example.css";
 import { AvakioBulletGraph, AvakioBulletGraphBand } from "../../components/avakio/ui-widgets/avakio-bullet-graph/avakio-bullet-graph";
 import { AvakioViewHeader } from "../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header";
@@ -39,7 +38,7 @@ const TAB_OPTIONS = [
 ];
 
 export function AvakioBulletGraphExample() {
-  const [theme, setTheme] = useState<string>("material");
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Basic usage values
@@ -64,26 +63,7 @@ export function AvakioBulletGraphExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   // Animate value periodically for demo
   useEffect(() => {
@@ -105,12 +85,11 @@ export function AvakioBulletGraphExample() {
   };
 
   return (
-    <div className="avakio-bullet-graph-demo-container" data-admin-theme={theme}>
+    <div className="avakio-bullet-graph-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-bullet-graph-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Widgets"
           title="Bullet Graph Component"
           subTitle="A compact data visualization widget for comparing values against targets and qualitative ranges. Supports animation, custom bands, and dynamic colors."
@@ -137,20 +116,17 @@ export function AvakioBulletGraphExample() {
         className="avakio-bullet-graph-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="A horizontal bullet graph showing a value against performance bands. The colored background represents qualitative ranges (poor, satisfactory, good)."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -198,20 +174,17 @@ export function AvakioBulletGraphExample() {
         className="avakio-bullet-graph-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Target Markers"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Add a vertical marker line to indicate a target value. The marker helps compare the current value against the expected goal."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -262,20 +235,17 @@ export function AvakioBulletGraphExample() {
         className="avakio-bullet-graph-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Custom Bands"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Define custom performance bands with different colors and value thresholds to match your data visualization needs."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -337,20 +307,17 @@ export function AvakioBulletGraphExample() {
         className="avakio-bullet-graph-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Dynamic Color"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="The bar color can change dynamically based on the current value. Pass a function to the color prop to implement custom logic."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -411,20 +378,17 @@ export function AvakioBulletGraphExample() {
         className="avakio-bullet-graph-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Bar Width & Scale"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Customize the bar width (stroke) and scale appearance. The scale can have custom step intervals and label templates."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -471,13 +435,11 @@ export function AvakioBulletGraphExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Without Label or Scale"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -523,13 +485,11 @@ export function AvakioBulletGraphExample() {
         className="avakio-bullet-graph-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Props Reference"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -624,13 +584,11 @@ export function AvakioBulletGraphExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Usage Example"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -670,6 +628,9 @@ function MyComponent() {
 }
 
 export default AvakioBulletGraphExample;
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { AvakioProperty, AvakioPropertyItem } from "./avakio-property";
-import "./avakio-property.css";
+import { AvakioProperty, AvakioPropertyItem } from "../../components/avakio/data-presentation/avakio-property/avakio-property";
+import "../../components/avakio/data-presentation/avakio-property/avakio-property.css";
 
 const initialItems: AvakioPropertyItem[] = [
   {
@@ -250,7 +250,6 @@ export function AvakioPropertyExample() {
 
   return (
     <div
-      data-admin-theme={theme}
       style={{
         padding: 24,
         maxWidth: 760,
@@ -289,13 +288,14 @@ export function AvakioPropertyExample() {
           setItems(next);
           console.log("changed", changed.id, "to", changed.value);
         }}
-        theme={theme}
       />
     </div>
   );
 }
 
 export default AvakioPropertyExample;
+
+
 
 
 

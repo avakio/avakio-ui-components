@@ -1,16 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./avakio-property.css";
-import { AvakioDatePicker } from "../ui-controls/avakio-datepicker/avakio-datepicker";
-import { AvakioCheckbox } from "../ui-controls/avakio-checkbox/avakio-checkbox";
-import { AvakioButton, AvakioButtonSize, AvakioButtonVariant } from "../ui-controls/avakio-button/avakio-button";
-import { AvakioColorPicker, AvakioColorPickerPreset } from "../ui-controls/avakio-colorpicker/avakio-colorpicker";
-import { AvakioCombo, AvakioComboOption } from "../ui-controls/avakio-combo/avakio-combo";
-import { AvakioCounter } from "../ui-controls/avakio-counter/avakio-counter";
-import { AvakioDateRangePicker, AvakioDateRange, PresetRange } from "../ui-controls/avakio-daterangepicker/avakio-daterangepicker";
-import { AvakioGridSuggest, AvakioGridSuggestBodyConfig, AvakioGridSuggestOption } from "../ui-controls/avakio-gridsuggest/avakio-gridsuggest";
-import { AvakioMultiCombo, AvakioMultiComboOption } from "../ui-controls/avakio-multicombo/avakio-multicombo";
-import { AvakioRichSelect, AvakioRichSelectOption } from "../ui-controls/avakio-richselect/avakio-richselect";
-import { AvakioSlider } from "../ui-controls/avakio-slider/avakio-slider";
+import { AvakioDatePicker } from "../../ui-controls/avakio-datepicker/avakio-datepicker";
+import { AvakioCheckbox } from "../../ui-controls/avakio-checkbox/avakio-checkbox";
+import { AvakioButton, AvakioButtonSize, AvakioButtonVariant } from "../../ui-controls/avakio-button/avakio-button";
+import { AvakioColorPicker, AvakioColorPickerPreset } from "../../ui-controls/avakio-colorpicker/avakio-colorpicker";
+import { AvakioCombo, AvakioComboOption } from "../../ui-controls/avakio-combo/avakio-combo";
+import { AvakioCounter } from "../../ui-controls/avakio-counter/avakio-counter";
+import { AvakioDateRangePicker, AvakioDateRange, PresetRange } from "../../ui-controls/avakio-daterangepicker/avakio-daterangepicker";
+import { AvakioGridSuggest, AvakioGridSuggestBodyConfig, AvakioGridSuggestOption } from "../../ui-controls/avakio-gridsuggest/avakio-gridsuggest";
+import { AvakioMultiCombo, AvakioMultiComboOption } from "../../ui-controls/avakio-multicombo/avakio-multicombo";
+import { AvakioRichSelect, AvakioRichSelectOption } from "../../ui-controls/avakio-richselect/avakio-richselect";
+import { AvakioSlider } from "../../ui-controls/avakio-slider/avakio-slider";
 
 export type AvakioPropertyEditor =
   | "text"

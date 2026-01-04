@@ -3,11 +3,11 @@ import { AvakioGrid, AvakioGridRef, AvakioGridCell } from '../../components/avak
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 // Button component not available
 import { Plus, Trash2, Move, RotateCcw, Save, Upload, Grid3X3, List } from 'lucide-react';
-import '../../components/avakio/layouts/avakio-grid.css';
+import '../../components/avakio/layouts/avakio-grid/avakio-grid.css';
 import { Button } from '@/components/ui/button';
 
 export function AvakioGridExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const gridRef = useRef<AvakioGridRef>(null);
   const interactiveGridRef = useRef<AvakioGridRef>(null);
   const dragDropGridRef = useRef<AvakioGridRef>(null);
@@ -36,26 +36,7 @@ export function AvakioGridExample() {
   const [dragDrop3ColCounter, setDragDrop3ColCounter] = useState(7);
   const [cellOrder3Col, setCellOrder3Col] = useState<string | null>(null);
 
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   // Basic grid cells
   const basicCells: AvakioGridCell[] = useMemo(() => [
@@ -409,10 +390,9 @@ export function AvakioGridExample() {
   };
 
   return (
-    <div className="avakio-template-demo-container" data-admin-theme={theme}>
+    <div className="avakio-template-demo-container">
       <AvakioTemplate
         id="grid-example-header"
-        theme={theme as any}
         type="header"
         borderType="clean"
         content={
@@ -429,7 +409,6 @@ export function AvakioGridExample() {
       {/* Basic Grid Example */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -446,7 +425,6 @@ export function AvakioGridExample() {
           ref={gridRef}
           id="basic-grid"
           testId="basic-grid"
-          theme={theme as any}
           gridColumns={1}
           gridRows={3}
           cells={basicCells}
@@ -464,7 +442,6 @@ export function AvakioGridExample() {
       {/* Interactive Grid */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -504,7 +481,6 @@ export function AvakioGridExample() {
           ref={interactiveGridRef}
           id="interactive-grid"
           testId="interactive-grid"
-          theme={theme as any}
           gridColumns={4}
           gridRows={10}
           cells={interactiveCells}
@@ -522,7 +498,6 @@ export function AvakioGridExample() {
       {/* Drag & Drop Example */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -563,7 +538,6 @@ export function AvakioGridExample() {
           ref={dragDropGridRef}
           id="drag-drop-grid"
           testId="drag-drop-grid"
-          theme={theme as any}
           gridColumns={1}
           gridRows={10}
           cells={dragDropCells}
@@ -582,7 +556,6 @@ export function AvakioGridExample() {
       {/* Drag & Drop Example (3 columns) */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -623,7 +596,6 @@ export function AvakioGridExample() {
           ref={dragDropGrid3ColRef}
           id="drag-drop-grid-3col"
           testId="drag-drop-grid-3col"
-          theme={theme as any}
           gridColumns={3}
           gridRows={10}
           cells={dragDrop3ColCells}
@@ -642,7 +614,6 @@ export function AvakioGridExample() {
       {/* Dashboard Example */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -655,7 +626,6 @@ export function AvakioGridExample() {
         <AvakioGrid
           id="dashboard-grid"
           testId="dashboard-grid"
-          theme={theme as any}
           gridColumns={4}
           gridRows={3}
           cells={dashboardCells}
@@ -669,7 +639,6 @@ export function AvakioGridExample() {
       {/* Fixed Cell Size */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -682,7 +651,6 @@ export function AvakioGridExample() {
         <AvakioGrid
           id="fixed-grid"
           testId="fixed-grid"
-          theme={theme as any}
           gridColumns={4}
           gridRows={2}
           cellWidth={150}
@@ -703,7 +671,6 @@ export function AvakioGridExample() {
       {/* All Themes */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="AvakioGrid supports all 6 Avakio themes."
@@ -736,7 +703,6 @@ export function AvakioGridExample() {
       {/* Borderless Example */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -749,7 +715,6 @@ export function AvakioGridExample() {
         <AvakioGrid
           id="borderless-grid"
           testId="borderless-grid"
-          theme={theme as any}
           cellBorderless
           gridColumns={4}
           gridRows={2}
@@ -770,7 +735,6 @@ export function AvakioGridExample() {
       {/* Fixed Height Cells Example */}
       <section className="avakio-template-demo-section">
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content={
@@ -783,7 +747,6 @@ export function AvakioGridExample() {
         <AvakioGrid
           id="fixed-height-grid"
           testId="fixed-height-grid"
-          theme={theme as any}
           gridColumns={1}
           gridRows={4}
           margin={12}
@@ -843,6 +806,9 @@ export function AvakioGridExample() {
     </div>
   );
 }
+
+
+
 
 
 

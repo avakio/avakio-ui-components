@@ -6,8 +6,8 @@ import { AvakioRichSelect } from '../../components/avakio/ui-controls/avakio-ric
 import { AvakioText } from '../../components/avakio/ui-controls/avakio-text/avakio-text';
 import { AvakioCounter } from '../../components/avakio/ui-controls/avakio-counter/avakio-counter';
 import { AvakioCheckbox } from '../../components/avakio/ui-controls/avakio-checkbox/avakio-checkbox';
-import { AvakioDataTable } from '../../components/avakio/avakio-datatable/AvakioDataTable';
-import type { AvakioColumn } from '../../components/avakio/avakio-datatable/AvakioDataTable';
+import { AvakioDataTable } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
+import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
@@ -28,7 +28,7 @@ const TAB_OPTIONS = [
 ];
 
 export function AvakioViewExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Interactive states for demos
@@ -54,34 +54,14 @@ export function AvakioViewExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   return (
-    <div className="avakio-view-demo-container" data-admin-theme={theme}>
+    <div className="avakio-view-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-view-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="Views"
           title="View Component"
           subTitle="A versatile container component with theming, animations, and flexible layouts."
@@ -108,13 +88,11 @@ export function AvakioViewExample() {
         className="avakio-view-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Views"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -122,7 +100,6 @@ export function AvakioViewExample() {
         />
         <AvakioLayout
           id="layout-basic-views"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -131,7 +108,6 @@ export function AvakioViewExample() {
           cols={[
             <AvakioView
               key="basic-1"
-              theme={theme as any}
               width="100%"
               height={180}
               padding={20}
@@ -144,7 +120,6 @@ export function AvakioViewExample() {
             </AvakioView>,
             <AvakioView
               key="basic-2"
-              theme={theme as any}
               width="100%"
               height={180}
               padding={20}
@@ -158,7 +133,6 @@ export function AvakioViewExample() {
             </AvakioView>,
             <AvakioView
               key="basic-3"
-              theme={theme as any}
               width="100%"
               height={180}
               padding={20}
@@ -180,13 +154,11 @@ export function AvakioViewExample() {
         className="avakio-view-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="View Types"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -194,7 +166,6 @@ export function AvakioViewExample() {
         />
         <AvakioLayout
           id="layout-view-types"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -202,14 +173,12 @@ export function AvakioViewExample() {
           rows={[
             <AvakioTemplate
               key="type-label-1"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. type=header"
             />,
             <AvakioView
               key="type-header"
-              theme={theme as any}
               type="header"
               width="100%"
               padding={16}
@@ -219,7 +188,6 @@ export function AvakioViewExample() {
             </AvakioView>,
             <AvakioTemplate
               key="type-label-2"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="2. type=section"
@@ -227,7 +195,6 @@ export function AvakioViewExample() {
             />,
             <AvakioView
               key="type-section"
-              theme={theme as any}
               type="section"
               width="100%"
               padding={16}
@@ -237,7 +204,6 @@ export function AvakioViewExample() {
             </AvakioView>,
             <AvakioTemplate
               key="type-label-3"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="3. type=clean (default)"
@@ -245,7 +211,6 @@ export function AvakioViewExample() {
             />,
             <AvakioView
               key="type-clean"
-              theme={theme as any}
               type="clean"
               width="100%"
               padding={16}
@@ -263,20 +228,17 @@ export function AvakioViewExample() {
         className="avakio-view-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Animations"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="AvakioView supports three animation types: fade, slide, and flip. Toggle visibility to see the animations."
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[14, 0, 0, 14]}
@@ -284,28 +246,24 @@ export function AvakioViewExample() {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               <AvakioButton
                 onClick={() => setShowAnimatedView(!showAnimatedView)}
-                theme={theme as any}
                 label={showAnimatedView ? 'Hide View' : 'Show View'}
                 icon={showAnimatedView ? <EyeOff size={14} /> : <Eye size={14} />}
                 size="sm"
               />
               <AvakioButton
                 onClick={() => setAnimationType('fade')}
-                theme={theme as any}
                 label="Fade"
                 variant={animationType === 'fade' ? 'primary' : 'outline'}
                 size="sm"
               />
               <AvakioButton
                 onClick={() => setAnimationType('slide')}
-                theme={theme as any}
                 label="Slide"
                 variant={animationType === 'slide' ? 'primary' : 'outline'}
                 size="sm"
               />
               <AvakioButton
                 onClick={() => setAnimationType('flip')}
-                theme={theme as any}
                 label="Flip"
                 variant={animationType === 'flip' ? 'primary' : 'outline'}
                 size="sm"
@@ -315,7 +273,6 @@ export function AvakioViewExample() {
         />
         <AvakioLayout
           id="layout-animations"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -324,7 +281,6 @@ export function AvakioViewExample() {
           rows={[
             <AvakioView
               key="animated-view"
-              theme={theme as any}
               width="100%"
               minHeight={200}
               padding={30}
@@ -354,13 +310,11 @@ export function AvakioViewExample() {
         className="avakio-view-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Sizing & Constraints"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -368,7 +322,6 @@ export function AvakioViewExample() {
         />
         <AvakioLayout
           id="layout-sizing"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -376,14 +329,12 @@ export function AvakioViewExample() {
           rows={[
             <AvakioTemplate
               key="sizing-label"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="Fixed and Flexible Sizing"
             />,
             <div key="sizing-flex" style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
               <AvakioView
-                theme={theme as any}
                 width={200}
                 height={120}
                 padding={15}
@@ -394,7 +345,6 @@ export function AvakioViewExample() {
                 </div>
               </AvakioView>
               <AvakioView
-                theme={theme as any}
                 gravity={1}
                 height={120}
                 padding={15}
@@ -405,7 +355,6 @@ export function AvakioViewExample() {
                 </div>
               </AvakioView>
               <AvakioView
-                theme={theme as any}
                 gravity={2}
                 height={120}
                 padding={15}
@@ -418,7 +367,6 @@ export function AvakioViewExample() {
             </div>,
             <AvakioTemplate
               key="constraints-label"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="Min/Max Constraints"
@@ -426,13 +374,11 @@ export function AvakioViewExample() {
             />,
             <AvakioLayout
               key="constraints-views"
-              theme={theme as any}
               type="clean"
               responsive={true}
               cols={[
                 <AvakioView
                   key="constraint-height"
-                  theme={theme as any}
                   width="100%"
                   minHeight={80}
                   maxHeight={150}
@@ -445,7 +391,6 @@ export function AvakioViewExample() {
                 </AvakioView>,
                 <AvakioView
                   key="constraint-width"
-                  theme={theme as any}
                   width="100%"
                   minWidth={200}
                   maxWidth={400}
@@ -468,13 +413,11 @@ export function AvakioViewExample() {
         className="avakio-view-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Nested Views"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -482,7 +425,6 @@ export function AvakioViewExample() {
         />
         <AvakioLayout
           id="layout-nested"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -490,7 +432,6 @@ export function AvakioViewExample() {
           rows={[
             <AvakioView
               key="nested-parent"
-              theme={theme as any}
               width="100%"
               padding={20}
             >
@@ -498,7 +439,6 @@ export function AvakioViewExample() {
               <p>This view contains child views:</p>
               <div style={{ display: 'flex', gap: '16px', marginTop: '16px' }}>
                 <AvakioView
-                  theme={theme as any}
                   gravity={1}
                   padding={15}
                   borderless
@@ -508,7 +448,6 @@ export function AvakioViewExample() {
                   </div>
                 </AvakioView>
                 <AvakioView
-                  theme={theme as any}
                   gravity={1}
                   padding={15}
                   borderless
@@ -518,7 +457,6 @@ export function AvakioViewExample() {
                   </div>
                 </AvakioView>
                 <AvakioView
-                  theme={theme as any}
                   gravity={1}
                   padding={15}
                   borderless
@@ -539,13 +477,11 @@ export function AvakioViewExample() {
         className="avakio-view-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Event Handlers"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -553,7 +489,6 @@ export function AvakioViewExample() {
         />
         <AvakioLayout
           id="layout-events"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -562,7 +497,6 @@ export function AvakioViewExample() {
           cols={[
             <AvakioView
               key="event-click"
-              theme={theme as any}
               width="100%"
               padding={20}
               onClick={() => alert('View clicked!')}
@@ -575,7 +509,6 @@ export function AvakioViewExample() {
             </AvakioView>,
             <AvakioView
               key="event-focus"
-              theme={theme as any}
               width="100%"
               padding={20}
               onFocus={() => console.log('View focused')}
@@ -589,7 +522,6 @@ export function AvakioViewExample() {
             </AvakioView>,
             <AvakioView
               key="event-resize"
-              theme={theme as any}
               width="100%"
               padding={20}
               onResize={(w, h) => console.log(`Resized: ${w}×${h}`)}
@@ -610,20 +542,17 @@ export function AvakioViewExample() {
         className="avakio-view-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Visibility & State"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Control view visibility with hidden prop and interactivity with disabled prop."
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[14, 0, 0, 14]}
@@ -631,25 +560,21 @@ export function AvakioViewExample() {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               <AvakioButton
                 onClick={() => setShowView1(!showView1)}
-                theme={theme as any}
                 label={showView1 ? 'Hide View 1' : 'Show View 1'}
                 size="sm"
               />
               <AvakioButton
                 onClick={() => setShowView2(!showView2)}
-                theme={theme as any}
                 label={showView2 ? 'Hide View 2' : 'Show View 2'}
                 size="sm"
               />
               <AvakioButton
                 onClick={() => setShowView3(!showView3)}
-                theme={theme as any}
                 label={showView3 ? 'Hide View 3' : 'Show View 3'}
                 size="sm"
               />
               <AvakioButton
                 onClick={() => setDisabledView(!disabledView)}
-                theme={theme as any}
                 label={disabledView ? 'Enable View 4' : 'Disable View 4'}
                 variant="outline"
                 size="sm"
@@ -659,7 +584,6 @@ export function AvakioViewExample() {
         />
         <AvakioLayout
           id="layout-visibility"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -669,7 +593,6 @@ export function AvakioViewExample() {
           cols={[
             <AvakioView
               key="vis-1"
-              theme={theme as any}
               width="100%"
               minHeight={150}
               padding={20}
@@ -684,7 +607,6 @@ export function AvakioViewExample() {
             </AvakioView>,
             <AvakioView
               key="vis-2"
-              theme={theme as any}
               width="100%"
               minHeight={150}
               padding={20}
@@ -699,7 +621,6 @@ export function AvakioViewExample() {
             </AvakioView>,
             <AvakioView
               key="vis-3"
-              theme={theme as any}
               width="100%"
               minHeight={150}
               padding={20}
@@ -714,7 +635,6 @@ export function AvakioViewExample() {
             </AvakioView>,
             <AvakioView
               key="vis-4"
-              theme={theme as any}
               width="100%"
               minHeight={150}
               padding={20}
@@ -737,19 +657,17 @@ export function AvakioViewExample() {
         className="avakio-view-demo-section avakio-hide-on-mobile"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Interactive Props Playground"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Experiment with all available props and see changes in real-time."
         />
-        <PlaygroundSection theme={theme} />
+        <PlaygroundSection />
       </section>
 
       {/* Documentation Section */}
@@ -758,12 +676,11 @@ export function AvakioViewExample() {
         className="avakio-view-demo-section avakio-hide-on-mobile"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Documentation"
         />
-        <PropsDocumentation theme={theme} />
+        <PropsDocumentation />
       </section>
     </div>
   );
@@ -786,7 +703,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
   return (
     <AvakioLayout
       id="playground-layout"
-      theme={theme as any}
       type="clean"
       borderless={false}
       margin={12}
@@ -795,13 +711,11 @@ function PlaygroundSection({ theme }: { theme: string }) {
         <AvakioLayout
           key="headers"
           id="playground-layout-headers"
-          theme={theme as any}
           type="clean"
           borderless={true}
           cols={[
             <AvakioTemplate
               key="controls-header"
-              theme={theme as any}
               type="header"
               width={300}
               borderType="clean"
@@ -809,7 +723,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="preview-header"
-              theme={theme as any}
               css={{ flex: 1 }}
               type="header"
               borderType="clean"
@@ -821,13 +734,11 @@ function PlaygroundSection({ theme }: { theme: string }) {
         <AvakioLayout
           key="content"
           id="playground-layout-content"
-          theme={theme as any}
           type="clean"
           borderless={true}
           cols={[
             <AvakioTemplate
               key="controls"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               width={300}
@@ -950,7 +861,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
             <AvakioLayout
               key="preview"
               id="layout-playground-preview"
-              theme={theme as any}
               margin={0}
               padding={0}
               type="clean"
@@ -958,7 +868,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
               rows={[
                 <AvakioTemplate
                   key="preview-area"
-                  theme={theme as any}
                   type="clean"
                   borderType="material"
                   borderless={true}
@@ -966,7 +875,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
                   padding={40}
                   content={
                     <AvakioView
-                      theme={theme as any}
                       type={viewType}
                       borderless={borderless}
                       animate={
@@ -996,7 +904,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
                 /* Props Display */
                 <AvakioTemplate
                   key="props-header"
-                  theme={theme as any}
                   type="header"
                   borderType="clean"
                   margin={0}
@@ -1004,7 +911,6 @@ function PlaygroundSection({ theme }: { theme: string }) {
                 />,
                 <AvakioTemplate
                   key="props-code"
-                  theme={theme as any}
                   type="clean"
                   borderType="clean"
                   content={
@@ -1123,7 +1029,6 @@ const refColumns: AvakioColumn<RefMethodDoc>[] = [
 function PropsDocumentation({ theme }: { theme: string }) {
   return (
     <AvakioTemplate
-      theme={theme as any}
       borderType="material"
       type="clean"
       borderless={true}
@@ -1132,7 +1037,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
           rows={[
             <AvakioTemplate
               key="props-header"
-              theme={theme as any}
               borderType="material"
               type="header"
               content="Props Reference"
@@ -1142,7 +1046,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="props-table"
-              theme={theme as any}
               borderType="clean"
               type="clean"
               borderless={true}
@@ -1160,7 +1063,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="events-header"
-              theme={theme as any}
               borderType="material"
               type="header"
               content="Event Props"
@@ -1170,7 +1072,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="events-table"
-              theme={theme as any}
               borderType="clean"
               type="clean"
               borderless={true}
@@ -1186,7 +1087,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="ref-header"
-              theme={theme as any}
               borderType="material"
               type="header"
               content="Ref Methods (AvakioViewWithRef)"
@@ -1196,7 +1096,6 @@ function PropsDocumentation({ theme }: { theme: string }) {
             />,
             <AvakioTemplate
               key="ref-table"
-              theme={theme as any}
               borderType="clean"
               type="clean"
               borderless={true}
@@ -1217,6 +1116,9 @@ function PropsDocumentation({ theme }: { theme: string }) {
     />
   );
 }
+
+
+
 
 
 

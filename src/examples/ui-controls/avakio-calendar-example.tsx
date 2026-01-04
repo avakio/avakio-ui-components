@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { AvakioCalendar, AvakioCalendarMarker } from '../../components/avakio/avakio-calendar/avakio-calendar';
-import '../../components/avakio/avakio-calendar/avakio-calendar.css';
+import { AvakioCalendar, AvakioCalendarMarker } from '../../components/avakio/ui-controls/avakio-calendar/avakio-calendar';
+import '../../components/avakio/ui-controls/avakio-calendar/avakio-calendar.css';
 
 export function AvakioCalendarExample() {
   const [theme, setTheme] = useState<string>('material');
@@ -35,7 +35,6 @@ export function AvakioCalendarExample() {
   return (
     <div
       className="min-h-screen p-8"
-      data-admin-theme={theme}
       style={{
         background: theme === 'dark' ? 'hsl(222, 47%, 11%)' : '#f8fafc',
         color: theme === 'dark' ? 'hsl(210, 40%, 96%)' : '#0f172a',
@@ -243,3 +242,5 @@ const [selectedDate, setSelectedDate] = useState('');
 }
 
 export default AvakioCalendarExample;
+
+

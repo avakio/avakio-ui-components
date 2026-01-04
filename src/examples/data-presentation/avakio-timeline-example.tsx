@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from "react";
-import { AvakioTimeline, AvakioTimelineItem } from "./avakio-timeline";
-import { AvakioPopup } from "../avakio-popup/avakio-popup";
-import "./avakio-timeline.css";
+import { AvakioTimeline, AvakioTimelineItem } from "../../components/avakio/data-presentation/avakio-timeline/avakio-timeline";
+import { AvakioPopup } from "../../components/avakio/avakio-popup/avakio-popup";
+import "../../components/avakio/data-presentation/avakio-timeline/avakio-timeline.css";
 import "./avakio-timeline-example.css";
-import "../avakio-popup/avakio-popup.css";
+import "../../components/avakio/avakio-popup/avakio-popup.css";
 
 export function AvakioTimelineExample() {
   const [theme, setTheme] = useState("material");
@@ -64,7 +64,6 @@ export function AvakioTimelineExample() {
   return (
     <div
       className="tl-demo-shell"
-      data-admin-theme={theme}
       style={{ background: theme === "dark" ? "hsl(222, 47%, 11%)" : "#f8fafc" }}
     >
       <div className="tl-demo-header">
@@ -83,19 +82,18 @@ export function AvakioTimelineExample() {
 
       <div className="tl-demo-card">
         <h4 className="tl-demo-label">Vertical</h4>
-        <AvakioTimeline items={items} theme={theme} onItemClick={setActiveItem} />
+        <AvakioTimeline items={items} onItemClick={setActiveItem} />
       </div>
 
       <div className="tl-demo-card">
         <h4 className="tl-demo-label">Horizontal</h4>
-        <AvakioTimeline items={items} theme={theme} orientation="horizontal" onItemClick={setActiveItem} />
+        <AvakioTimeline items={items} orientation="horizontal" onItemClick={setActiveItem} />
       </div>
 
       <div className="tl-demo-card">
         <h4 className="tl-demo-label">Vertical — Style 2</h4>
         <AvakioTimeline
           items={items}
-          theme={theme}
           variant="split"
           onItemClick={setActiveItem}
         />
@@ -105,7 +103,6 @@ export function AvakioTimelineExample() {
         <h4 className="tl-demo-label">Horizontal — Style 2</h4>
         <AvakioTimeline
           items={items}
-          theme={theme}
           orientation="horizontal"
           variant="colorband"
           onItemClick={setActiveItem}
@@ -115,7 +112,6 @@ export function AvakioTimelineExample() {
       <AvakioPopup
         open={Boolean(activeItem)}
         onClose={() => setActiveItem(null)}
-        theme={theme}
         modal
       >
         <h4>Clicked item</h4>
@@ -126,6 +122,8 @@ export function AvakioTimelineExample() {
 }
 
 export default AvakioTimelineExample;
+
+
 
 
 

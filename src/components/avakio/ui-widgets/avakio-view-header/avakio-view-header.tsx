@@ -37,15 +37,23 @@ export const AvakioViewHeader: React.FC<AvakioViewHeaderProps> = ({
   label = '',
   title = '',
   subTitle = '',
-  theme = 'material',
+  theme,
   className = '',
   style = {},
   isSticky = true,
 }) => {
   const wrapperStyle = isSticky ? { position: 'sticky' as const, top: 0, zIndex: 1000 } : {};
   
+  // Only set data-admin-theme if theme is explicitly provided
+  const wrapperProps: React.HTMLAttributes<HTMLDivElement> & { 'data-admin-theme'?: string } = {
+    style: wrapperStyle,
+  };
+  if (theme) {
+    wrapperProps['data-admin-theme'] = theme;
+  }
+  
   return (
-    <div style={wrapperStyle}>
+    <div {...wrapperProps}>
     <AvakioView
         theme={theme as any}
         type="header"

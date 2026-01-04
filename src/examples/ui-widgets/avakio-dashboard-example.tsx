@@ -55,7 +55,7 @@ function makeWidget(id: string, x: number, y: number, dx: number, dy: number, ti
 }
 
 export function AvakioDashboardExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('overview');
 
   const dashboardRef = useRef<AvakioDashboardRef>(null);
@@ -85,22 +85,7 @@ export function AvakioDashboardExample() {
     }
   };
 
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) setTheme(currentTheme);
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) setTheme(globalTheme);
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   const addWidget = () => {
     const nextId = `w${Math.floor(Math.random() * 100000)}`;
@@ -129,10 +114,9 @@ export function AvakioDashboardExample() {
   };
 
   return (
-    <div className="avakio-dashboard-example-container" data-admin-theme={theme}>
+    <div className="avakio-dashboard-example-container">
       <div className="avakio-dashboard-example-sticky-header">
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Widgets"
           title="Dashboard Component"
           subTitle="A Webix-like dashboard for draggable/resizable panels in a grid."
@@ -158,9 +142,8 @@ export function AvakioDashboardExample() {
         }}
         className="avakio-dashboard-example-section"
       >
-        <AvakioTemplate theme={theme as any} type="section" borderType="clean" content="Overview" />
+        <AvakioTemplate type="section" borderType="clean" content="Overview" />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -170,7 +153,6 @@ export function AvakioDashboardExample() {
         <div className="avakio-dashboard-example-card">
           <AvakioDashboard
             id="dashboard-overview"
-            theme={theme as any}
             gridColumns={4}
             gridRows={3}
             cellMargin={10}
@@ -188,9 +170,8 @@ export function AvakioDashboardExample() {
         }}
         className="avakio-dashboard-example-section"
       >
-        <AvakioTemplate theme={theme as any} type="section" borderType="clean" content="Drag & Edit" />
+        <AvakioTemplate type="section" borderType="clean" content="Drag & Edit" />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -199,7 +180,6 @@ export function AvakioDashboardExample() {
 
         <AvakioLayout
           id="dashboard-editing-controls"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={0}
@@ -208,7 +188,6 @@ export function AvakioDashboardExample() {
             <div className="avakio-dashboard-example-controls" key="controls">
               <AvakioButton
                 id="dashboard-toggle-edit"
-                theme={theme as any}
                 size="sm"
                 label={editable ? 'Editable: On' : 'Editable: Off'}
                 icon={editable ? <Unlock size={14} /> : <Lock size={14} />}
@@ -216,7 +195,6 @@ export function AvakioDashboardExample() {
               />
               <AvakioButton
                 id="dashboard-toggle-handle"
-                theme={theme as any}
                 size="sm"
                 label={dragHandle === 'header' ? 'Drag Handle: Header' : 'Drag Handle: Any'}
                 icon={<Move size={14} />}
@@ -224,7 +202,6 @@ export function AvakioDashboardExample() {
               />
               <AvakioButton
                 id="dashboard-add"
-                theme={theme as any}
                 size="sm"
                 label="Add Widget"
                 icon={<Plus size={14} />}
@@ -232,7 +209,6 @@ export function AvakioDashboardExample() {
               />
               <AvakioButton
                 id="dashboard-save"
-                theme={theme as any}
                 size="sm"
                 label="Save Layout"
                 icon={<Save size={14} />}
@@ -240,7 +216,6 @@ export function AvakioDashboardExample() {
               />
               <AvakioButton
                 id="dashboard-restore"
-                theme={theme as any}
                 size="sm"
                 label="Restore"
                 icon={<RotateCcw size={14} />}
@@ -248,7 +223,6 @@ export function AvakioDashboardExample() {
               />
               <AvakioButton
                 id="dashboard-reset"
-                theme={theme as any}
                 size="sm"
                 label="Reset"
                 icon={<RotateCcw size={14} />}
@@ -259,7 +233,6 @@ export function AvakioDashboardExample() {
               <AvakioDashboard
                 ref={dashboardRef}
                 id="dashboard-editing"
-                theme={theme as any}
                 gridColumns={4}
                 gridRows={3}
                 cellMargin={10}
@@ -280,9 +253,8 @@ export function AvakioDashboardExample() {
         }}
         className="avakio-dashboard-example-section"
       >
-        <AvakioTemplate theme={theme as any} type="section" borderType="clean" content="Resize" />
+        <AvakioTemplate type="section" borderType="clean" content="Resize" />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -292,7 +264,6 @@ export function AvakioDashboardExample() {
         <div className="avakio-dashboard-example-card">
           <AvakioDashboard
             id="dashboard-resize"
-            theme={theme as any}
             gridColumns={4}
             gridRows={3}
             cellMargin={10}
@@ -311,7 +282,7 @@ export function AvakioDashboardExample() {
         }}
         className="avakio-dashboard-example-section"
       >
-        <AvakioTemplate theme={theme as any} type="section" borderType="clean" content="API Reference" />
+        <AvakioTemplate type="section" borderType="clean" content="API Reference" />
 
         <div className="avakio-dashboard-example-card">
           <div className="avakio-dashboard-example-api">
@@ -385,6 +356,9 @@ export function AvakioDashboardExample() {
     </div>
   );
 }
+
+
+
 
 
 

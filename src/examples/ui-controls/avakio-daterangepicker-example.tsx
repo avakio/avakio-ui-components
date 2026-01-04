@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { AvakioDateRangePicker, AvakioDateRange } from '../../components/avakio/ui-controls/avakio-daterangepicker/avakio-daterangepicker';
-import './avakio-daterangepicker-example.css';
 import { CalendarRange, Clock, Zap, Settings, Code } from 'lucide-react';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
@@ -39,8 +38,7 @@ function formatDisplay(range: AvakioDateRange, includeTime = false) {
   return `${formatDate(range.start)} → ${formatDate(range.end)}`;
 }
 
-export function AvakioDateRangePickerExample() {
-  const [theme, setTheme] = useState<string>('material');
+export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: string }) {
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
 
   // Demo state values
@@ -115,35 +113,12 @@ export function AvakioDateRangePickerExample() {
     }
   };
 
-  // Sync with global theme from components-showcase
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
-
   return (
-    <div className="avakio-drp-demo-container" data-admin-theme={theme}>
+    <div className="avakio-drp-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-drp-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="DateRangePicker Component"
           subTitle="A powerful date range picker with dual calendars, quick presets, and optional time selection. with full theme support."
@@ -170,20 +145,17 @@ export function AvakioDateRangePickerExample() {
         className="avakio-drp-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="The DateRangePicker displays a dropdown with two side-by-side calendars for selecting a date range. Click the trigger to open the picker."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -209,20 +181,17 @@ export function AvakioDateRangePickerExample() {
         className="avakio-drp-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Quick Presets"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Add quick selection presets using the presets prop. Each preset has a label and a range function that returns start/end dates."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -252,20 +221,17 @@ export function AvakioDateRangePickerExample() {
         className="avakio-drp-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="With Time Selection"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Enable time selection with showTime={true}. Each calendar will include hour and minute inputs for precise datetime ranges."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -291,20 +257,17 @@ export function AvakioDateRangePickerExample() {
         className="avakio-drp-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Customization Options"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="The DateRangePicker supports various configurations including single-day selection, time mode, and custom presets."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -350,20 +313,17 @@ export function AvakioDateRangePickerExample() {
         className="avakio-drp-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="API Reference"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Component properties and usage examples."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -464,6 +424,7 @@ function MyComponent() {
 }
 
 export default AvakioDateRangePickerExample;
+
 
 
 

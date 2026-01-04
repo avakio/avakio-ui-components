@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../../components/avakio/layouts/avakio-absolute-layout.css';
+import '../../components/avakio/layouts/avakio-absolute-layout/avakio-absolute-layout.css';
 import './avakio-absolute-layout-example.css';
 import { AvakioAbsoluteLayout, AvakioAbsoluteLayoutCell, AvakioAbsoluteLayoutRef } from '../../components/avakio/layouts/avakio-absolute-layout';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
@@ -150,7 +150,7 @@ const RELATIVE_CELLS: AvakioAbsoluteLayoutCell[] = [
 ];
 
 export function AvakioAbsoluteLayoutExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Refs
@@ -182,26 +182,7 @@ export function AvakioAbsoluteLayoutExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   // Add dynamic cell
   const addCell = () => {
@@ -278,7 +259,6 @@ export function AvakioAbsoluteLayoutExample() {
             </p>
             <div className="avakio-absolute-layout-example-demo-container" style={{ height: '350px' }}>
               <AvakioAbsoluteLayout
-                theme={theme as any}
                 cells={BASIC_CELLS}
                 borderless
               />
@@ -292,7 +272,6 @@ export function AvakioAbsoluteLayoutExample() {
             </p>
             <div className="avakio-absolute-layout-example-demo-container" style={{ height: '180px' }}>
               <AvakioAbsoluteLayout
-                theme={theme as any}
                 cells={FORM_CELLS}
               />
             </div>
@@ -349,7 +328,6 @@ const cells = [
             </p>
             <div className="avakio-absolute-layout-example-demo-container" style={{ height: '280px' }}>
               <AvakioAbsoluteLayout
-                theme={theme as any}
                 cells={RELATIVE_CELLS}
               />
             </div>
@@ -389,10 +367,10 @@ const cells = [
           <div className="avakio-absolute-layout-example-demo">
             <h3 className="avakio-absolute-layout-example-demo-title">Add/Remove Cells</h3>
             <div className="avakio-absolute-layout-example-demo-actions" style={{ marginBottom: '16px' }}>
-              <AvakioButton onClick={addCell} theme={theme as any}>
+              <AvakioButton onClick={addCell}>
                 <Plus size={14} /> Add Cell
               </AvakioButton>
-              <AvakioButton onClick={removeCell} theme={theme as any} disabled={dynamicCells.length === 0}>
+              <AvakioButton onClick={removeCell} disabled={dynamicCells.length === 0}>
                 <Minus size={14} /> Remove Cell
               </AvakioButton>
               <span className="cell-count">Cells: {dynamicCells.length}</span>
@@ -400,7 +378,6 @@ const cells = [
             <div className="avakio-absolute-layout-example-demo-container" style={{ height: '320px' }}>
               <AvakioAbsoluteLayout
                 ref={dynamicLayoutRef}
-                theme={theme as any}
                 cells={dynamicCells}
               />
             </div>
@@ -691,6 +668,8 @@ layoutRef.current?.reconstruct(newCellsArray);`}
 }
 
 export default AvakioAbsoluteLayoutExample;
+
+
 
 
 

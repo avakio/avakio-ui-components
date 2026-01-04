@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { AvakioRadio, AvakioRadioOption, AvakioRadioRef } from '../../components/avakio/ui-controls/avakio-radio';
-import './avakio-radio-example.css';
+import React, { useState, useRef } from 'react';
+import { AvakioRadio, AvakioRadioOption, AvakioRadioRef } from '../../components/avakio/ui-controls/avakio-radio/avakio-radio';
 import { CircleDot, Layers, AlignLeft, AlignVerticalJustifyCenter, EyeOff, Paintbrush, Settings, Home, User, Bell, Shield, Globe } from 'lucide-react';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
@@ -17,8 +16,7 @@ const TAB_OPTIONS = [
   { id: 'imperative', label: 'Imperative API', icon: <Paintbrush size={14} /> },
 ];
 
-export function AvakioRadioExample() {
-  const [theme, setTheme] = useState<string>('material');
+export function AvakioRadioExample({ theme = 'material' }: { theme?: string }) {
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
 
   // Demo state values
@@ -47,28 +45,6 @@ export function AvakioRadioExample() {
       }
     }
   };
-
-  // Sync with global theme from components-showcase
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
 
   // Basic options
   const branchOptions: AvakioRadioOption[] = [
@@ -120,12 +96,11 @@ export function AvakioRadioExample() {
   ];
 
   return (
-    <div className="avakio-radio-demo-container" data-admin-theme={theme}>
+    <div className="avakio-radio-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-radio-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="Radio Component"
           subTitle="A radio button group for selecting one option from a set. Supports horizontal/vertical layout, icons, disabled states, and keyboard navigation."
@@ -152,20 +127,17 @@ export function AvakioRadioExample() {
         className="avakio-radio-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Simple radio button group with horizontal layout. Use arrow keys to navigate between options."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -186,14 +158,12 @@ export function AvakioRadioExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="You can also pass a simple string array for options:"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -216,20 +186,17 @@ export function AvakioRadioExample() {
         className="avakio-radio-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Vertical Layout"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Set vertical={true} to stack radio options vertically. Also showing labelPosition='top'."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -258,20 +225,17 @@ export function AvakioRadioExample() {
         className="avakio-radio-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="With Icons"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Options can include icons for better visual distinction."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -291,14 +255,12 @@ export function AvakioRadioExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Vertical layout with icons:"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -326,20 +288,17 @@ export function AvakioRadioExample() {
         className="avakio-radio-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Disabled & Hidden States"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Options can be individually disabled or hidden. The entire group can also be disabled."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -360,14 +319,12 @@ export function AvakioRadioExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Entire group disabled:"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -384,14 +341,12 @@ export function AvakioRadioExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Invalid state with error message:"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -416,20 +371,17 @@ export function AvakioRadioExample() {
         className="avakio-radio-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Size Variants"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Radio buttons come in three sizes: small (sm), medium (md), and large (lg)."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -475,20 +427,17 @@ export function AvakioRadioExample() {
         className="avakio-radio-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Imperative API"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Use the ref to programmatically control the radio group: getValue, setValue, enable/disableOption, show/hideOption."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -561,6 +510,8 @@ export function AvakioRadioExample() {
 }
 
 export default AvakioRadioExample;
+
+
 
 
 

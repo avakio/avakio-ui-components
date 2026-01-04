@@ -6,8 +6,8 @@ import { AvakioRichSelect } from '../../components/avakio/ui-controls/avakio-ric
 import { AvakioText } from '../../components/avakio/ui-controls/avakio-text/avakio-text';
 import { AvakioCheckbox } from '../../components/avakio/ui-controls/avakio-checkbox/avakio-checkbox';
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
-import { AvakioDataTable } from '../../components/avakio/avakio-datatable/AvakioDataTable';
-import type { AvakioColumn } from '../../components/avakio/avakio-datatable/AvakioDataTable';
+import { AvakioDataTable } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
+import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioFieldset } from '../../components/avakio/ui-controls/avakio-fieldset/avakio-fieldset';
@@ -21,7 +21,7 @@ import {
   Shield,
   Layers,
 } from 'lucide-react';
-import '../../components/avakio/ui-widgets/avakio-form.css';
+import '../../components/avakio/ui-widgets/avakio-form/avakio-form.css';
 import './avakio-form-example.css';
 
 // Tab options for navigation
@@ -36,7 +36,7 @@ const TAB_OPTIONS = [
 ];
 
 export function AvakioFormExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
 
   // Section refs for scroll navigation
@@ -80,26 +80,7 @@ export function AvakioFormExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   // Add to event log
   const addLog = (message: string) => {
@@ -198,12 +179,11 @@ export function AvakioFormExample() {
   const themes: AvakioFormTheme[] = ['material', 'flat', 'compact', 'dark', 'ocean', 'sunset'];
 
   return (
-    <div className="avakio-form-demo-container" data-admin-theme={theme}>
+    <div className="avakio-form-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-form-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Widgets"
           title="Form"
           subTitle="A theme-aware form component with validation, layouts, and dirty checking."
@@ -234,20 +214,17 @@ export function AvakioFormExample() {
           className="avakio-form-demo-section"
         >
           <AvakioTemplate
-            theme={theme as any}
             type="section"
             borderType="clean"
             content="Basic Usage"
           />
           <AvakioTemplate
-            theme={theme as any}
             type="clean"
             borderType="clean"
             padding={[0, 0, 0, 16]}
             content="A simple login form with text inputs and buttons."
           />
           <AvakioLayout
-            theme={theme as any}
             type="clean"
             borderless={false}
             margin={12}
@@ -321,20 +298,17 @@ export function AvakioFormExample() {
           className="avakio-form-demo-section"
         >
           <AvakioTemplate
-            theme={theme as any}
             type="section"
             borderType="clean"
             content="Themes"
           />
           <AvakioTemplate
-            theme={theme as any}
             type="clean"
             borderType="clean"
             padding={[0, 0, 0, 16]}
             content="AvakioForm supports 6 theme variants that integrate with the global theme system."
           />
           <AvakioLayout
-            theme={theme as any}
             type="clean"
             borderless={false}
             margin={12}
@@ -367,20 +341,17 @@ export function AvakioFormExample() {
           className="avakio-form-demo-section"
         >
           <AvakioTemplate
-            theme={theme as any}
             type="section"
             borderType="clean"
             content="Layout Options"
           />
           <AvakioTemplate
-            theme={theme as any}
             type="clean"
             borderType="clean"
             padding={[0, 0, 0, 16]}
             content="Forms can be organized with columns, rows, sections, and fieldsets."
           />
           <AvakioLayout
-            theme={theme as any}
             type="clean"
             borderless={false}
             margin={12}
@@ -454,20 +425,17 @@ export function AvakioFormExample() {
           className="avakio-form-demo-section"
         >
           <AvakioTemplate
-            theme={theme as any}
             type="section"
             borderType="clean"
             content="Validation"
           />
           <AvakioTemplate
-            theme={theme as any}
             type="clean"
             borderType="clean"
             padding={[0, 0, 0, 16]}
             content="Built-in validation rules with custom error messages."
           />
           <AvakioLayout
-            theme={theme as any}
             type="clean"
             borderless={false}
             margin={12}
@@ -573,20 +541,17 @@ export function AvakioFormExample() {
           className="avakio-form-demo-section"
         >
           <AvakioTemplate
-            theme={theme as any}
             type="section"
             borderType="clean"
             content="Ref Methods"
           />
           <AvakioTemplate
-            theme={theme as any}
             type="clean"
             borderType="clean"
             padding={[0, 0, 0, 16]}
             content="Access form methods via ref for programmatic control."
           />
           <AvakioLayout
-            theme={theme as any}
             type="clean"
             borderless={false}
             margin={12}
@@ -716,20 +681,17 @@ export function AvakioFormExample() {
           className="avakio-form-demo-section"
         >
           <AvakioTemplate
-            theme={theme as any}
             type="section"
             borderType="clean"
             content="Interactive Playground"
           />
           <AvakioTemplate
-            theme={theme as any}
             type="clean"
             borderType="clean"
             padding={[0, 0, 0, 16]}
             content="Experiment with different form configurations."
           />
           <AvakioLayout
-            theme={theme as any}
             type="clean"
             borderless={false}
             margin={12}
@@ -740,7 +702,7 @@ export function AvakioFormExample() {
                 <div className="avakio-form-playground-preview">
                   <h4>Preview</h4>
                   <AvakioForm
-                    theme={theme as AvakioFormTheme}
+                    theme="material"
                     type={playgroundType as any}
                     borderless={playgroundBorderless}
                     disabled={playgroundDisabled}
@@ -814,20 +776,17 @@ export function AvakioFormExample() {
           className="avakio-form-demo-section"
         >
           <AvakioTemplate
-            theme={theme as any}
             type="section"
             borderType="clean"
             content="Documentation"
           />
           <AvakioTemplate
-            theme={theme as any}
             type="clean"
             borderType="clean"
             padding={[0, 0, 0, 16]}
             content="Complete API reference for AvakioForm."
           />
           <AvakioLayout
-            theme={theme as any}
             type="clean"
             borderless={false}
             margin={12}
@@ -890,6 +849,9 @@ export function AvakioFormExample() {
 }
 
 export default AvakioFormExample;
+
+
+
 
 
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { AvakioComment, AvakioCommentRef, AvakioCommentTheme, CommentItem, CommentUser } from '../../components/avakio/ui-widgets/avakio-comment';
+import React, { useState, useRef } from 'react';
+import { AvakioComment, AvakioCommentRef, AvakioCommentTheme, CommentItem, CommentUser } from '../../components/avakio/data-presentation/avakio-comment/avakio-comment';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
 import { AvakioRichSelect } from '../../components/avakio/ui-controls/avakio-richselect/avakio-richselect';
@@ -22,8 +22,7 @@ import {
   Eye,
   MessageCircle,
 } from 'lucide-react';
-import '../../components/avakio/ui-widgets/avakio-comment.css';
-import './avakio-comment-example.css';
+import '../../components/avakio/data-presentation/avakio-comment/avakio-comment.css';
 
 // Tab options for navigation
 const TAB_OPTIONS = [
@@ -74,7 +73,6 @@ const sampleComments: CommentItem[] = [
 ];
 
 export function AvakioCommentExample() {
-  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Section refs for scroll navigation
@@ -103,9 +101,6 @@ export function AvakioCommentExample() {
       }
     }
   };
-
-  // Sync with global theme
-  
 
   // Add to event log
   const addLog = (message: string) => {
@@ -225,7 +220,6 @@ export function AvakioCommentExample() {
           rows={[
             <div key="basic" style={{ display: 'flex', justifyContent: 'center' }}>
               <AvakioComment
-                theme={theme as AvakioCommentTheme}
                 data={sampleComments}
                 users={sampleUsers}
                 currentUser={1}
@@ -267,7 +261,6 @@ export function AvakioCommentExample() {
                 <div key={t} style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
                   <span style={{ fontWeight: 500, textTransform: 'capitalize' }}>{t}</span>
                   <AvakioComment
-                    theme={t}
                     data={sampleComments.slice(0, 2)}
                     users={sampleUsers}
                     currentUser={1}
@@ -313,7 +306,6 @@ export function AvakioCommentExample() {
             />,
             <div key="readonly" style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
               <AvakioComment
-                theme={theme as AvakioCommentTheme}
                 data={sampleComments.slice(0, 3)}
                 users={sampleUsers}
                 readonly
@@ -339,7 +331,6 @@ export function AvakioCommentExample() {
             />,
             <div key="chat" style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
               <AvakioComment
-                theme={theme as AvakioCommentTheme}
                 data={sampleComments}
                 users={sampleUsers}
                 currentUser={1}
@@ -373,7 +364,6 @@ export function AvakioCommentExample() {
             />,
             <div key="status" style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
               <AvakioComment
-                theme={theme as AvakioCommentTheme}
                 data={[
                   { id: 1, user_id: 1, date: new Date(), text: "I'm online and active!" },
                   { id: 2, user_id: 2, date: new Date(), text: "I'm away from my desk." },
@@ -404,7 +394,6 @@ export function AvakioCommentExample() {
             />,
             <div key="anon" style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
               <AvakioComment
-                theme={theme as AvakioCommentTheme}
                 data={[
                   { id: 1, date: new Date(Date.now() - 86400000), text: "This is an anonymous comment without user_id." },
                   { id: 2, date: new Date(), text: "Another anonymous comment from the community." },
@@ -442,7 +431,6 @@ export function AvakioCommentExample() {
           rows={[
             <div key="mentions" style={{ display: 'flex', justifyContent: 'center' }}>
               <AvakioComment
-                theme={theme as AvakioCommentTheme}
                 data={[
                   { id: 1, user_id: 1, date: new Date(Date.now() - 3600000), text: 'Hey @"Sarah Johnson", can you review this?' },
                   { id: 2, user_id: 2, date: new Date(), text: 'Sure @"John Smith", I\'ll take a look!' },
@@ -484,7 +472,6 @@ export function AvakioCommentExample() {
             <div key="methods" style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
               <AvakioComment
                 ref={commentRef}
-                theme={theme as AvakioCommentTheme}
                 data={sampleComments.slice(0, 2)}
                 users={sampleUsers}
                 currentUser={1}
@@ -579,7 +566,6 @@ export function AvakioCommentExample() {
                   justifyContent: 'center'
                 }}>
                   <AvakioComment
-                    theme={theme as AvakioCommentTheme}
                     data={sampleComments}
                     users={sampleUsers}
                     currentUser={1}
@@ -716,9 +702,6 @@ export function AvakioCommentExample() {
 }
 
 export default AvakioCommentExample;
-
-
-
 
 
 

@@ -1,40 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
-import './avakio-button-example.css';
 import { Check, Loader2, Plus, Trash2, ArrowRight, Download, Bell, Settings, Heart, Star, Mail, Home } from 'lucide-react';
 
 export function AvakioButtonExample() {
-  const [theme, setTheme] = useState<string>('material');
   const [clickCount, setClickCount] = useState(0);
 
-  // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'data-admin-theme') {
-          const newTheme = document.documentElement.getAttribute('data-admin-theme');
-          if (newTheme) {
-            setTheme(newTheme);
-          }
-        }
-      });
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div className="avakio-button-example" data-admin-theme={theme}>
+    <div className="avakio-button-example">
       <div className="avakio-button-demo-container">
         <header className="avakio-button-hero">
           <div>
@@ -251,6 +223,7 @@ export function AvakioButtonExample() {
     </div>
   );
 }
+
 
 
 

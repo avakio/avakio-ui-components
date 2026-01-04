@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AvakioTree, AvakioTreeNode, AvakioTreeRef } from '../../components/avakio/ui-widgets/avakio-tree';
+import { AvakioTree, AvakioTreeNode, AvakioTreeRef } from '../../components/avakio/data-presentation/avakio-tree/avakio-tree';
 import './avakio-tree-example.css';
 import { FolderTree, CheckSquare, MousePointer, Keyboard, Settings, Code, Database, Server, Globe, FileCode, FileJson, FileText as FileTextIcon, Image, Music, Video, Archive, Lock, Cloud } from 'lucide-react';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
@@ -180,7 +180,7 @@ const serverData: AvakioTreeNode[] = [
 ];
 
 export function AvakioTreeExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
 
   // Refs for tree instances
@@ -207,33 +207,13 @@ export function AvakioTreeExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   return (
-    <div className="avakio-tree-demo-container" data-admin-theme={theme}>
+    <div className="avakio-tree-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-tree-sticky-header">
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Widgets"
           title="Tree Component"
           subTitle="A hierarchical tree component for displaying nested data structures. Supports selection, checkboxes with three-state, expand/collapse, keyboard navigation, and custom icons."
@@ -259,20 +239,17 @@ export function AvakioTreeExample() {
         className="avakio-tree-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Tree"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="A simple tree displaying a file system structure. Click on branch nodes to expand/collapse. Use arrow keys to navigate."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -316,20 +293,17 @@ export function AvakioTreeExample() {
         className="avakio-tree-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Checkboxes with Three-State"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Enable checkboxes with threeState={true} to show indeterminate state on parent nodes when only some children are checked."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -388,20 +362,17 @@ export function AvakioTreeExample() {
         className="avakio-tree-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Selection Modes"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Single selection (default) or multi-selection with Ctrl+Click. The tree also supports keyboard navigation with arrow keys."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -438,20 +409,17 @@ export function AvakioTreeExample() {
         className="avakio-tree-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Customization Options"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Customize appearance with showLines, showIcons, showToggle, and custom icons per node."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -494,20 +462,17 @@ export function AvakioTreeExample() {
         className="avakio-tree-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="API Reference"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Component properties and imperative methods."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -668,6 +633,9 @@ function MyComponent() {
 }
 
 export default AvakioTreeExample;
+
+
+
 
 
 

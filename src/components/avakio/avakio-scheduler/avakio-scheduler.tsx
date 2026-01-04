@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import "./avakio-scheduler.css";
 import { AvakioPopup } from "../avakio-popup/avakio-popup";
 import "../avakio-popup/avakio-popup.css";
-import { AvakioCalendar, AvakioCalendarMarker } from "../avakio-calendar/avakio-calendar";
+import { AvakioCalendar, AvakioCalendarMarker } from "../ui-controls/avakio-calendar/avakio-calendar";
 
 function startOfWeek(date: Date) {
   const d = new Date(date);

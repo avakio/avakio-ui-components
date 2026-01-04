@@ -324,7 +324,7 @@ const THEME_OPTIONS: { value: AvakioAccordionTheme; label: string }[] = [
 
 export const AvakioAccordionExample: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
-  const [theme, setTheme] = useState('material');
+  
   const accordionRef = useRef<AvakioAccordionRef>(null);
 
   // Section refs for scroll navigation
@@ -342,33 +342,13 @@ export const AvakioAccordionExample: React.FC = () => {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   return (
-    <div className="avakio-accordion-demo-container" data-admin-theme={theme}>
+    <div className="avakio-accordion-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-accordion-sticky-header">
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Widgets"
           title="Accordion Component"
           subTitle="A collapsible accordion component for organizing content into expandable panels. Supports multi-expand modes, horizontal layout, and custom icons."
@@ -394,20 +374,17 @@ export const AvakioAccordionExample: React.FC = () => {
         className="avakio-accordion-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Accordion"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Single-expand mode (default). Only one panel can be open at a time."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -417,7 +394,7 @@ export const AvakioAccordionExample: React.FC = () => {
               <AvakioAccordion
                 ref={accordionRef}
                 items={basicAccordionItems}
-                theme={theme as AvakioAccordionTheme}
+                theme="material"
                 multi={false}
                 onExpand={(id) => console.log('Expanded:', id)}
                 onCollapse={(id) => console.log('Collapsed:', id)}
@@ -447,20 +424,17 @@ export const AvakioAccordionExample: React.FC = () => {
         className="avakio-accordion-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Multi-Expand Modes"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Control how multiple panels can be expanded simultaneously."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -472,7 +446,7 @@ export const AvakioAccordionExample: React.FC = () => {
                 <span className="avakio-accordion-multi-desc">All panels can expand/collapse independently</span>
                 <AvakioAccordion
                   items={settingsAccordionItems}
-                  theme={theme as AvakioAccordionTheme}
+                  theme="material"
                   multi={true}
                 />
               </div>
@@ -481,7 +455,7 @@ export const AvakioAccordionExample: React.FC = () => {
                 <span className="avakio-accordion-multi-desc">Multiple can open, but one must stay visible</span>
                 <AvakioAccordion
                   items={faqAccordionItems}
-                  theme={theme as AvakioAccordionTheme}
+                  theme="material"
                   multi="mixed"
                 />
               </div>
@@ -496,20 +470,17 @@ export const AvakioAccordionExample: React.FC = () => {
         className="avakio-accordion-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Customization Options"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Customize icons, animations, and disabled states."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -524,7 +495,7 @@ export const AvakioAccordionExample: React.FC = () => {
                     { id: '2', header: 'Second Panel', body: <p>Content for the second panel.</p>, collapsed: true },
                     { id: '3', header: 'Third Panel', body: <p>Content for the third panel.</p>, collapsed: true },
                   ]}
-                  theme={theme as AvakioAccordionTheme}
+                  theme="material"
                   multi={true}
                   expandIcon={<ChevronUp size={18} />}
                   collapseIcon={<ChevronLeft size={18} />}
@@ -538,7 +509,7 @@ export const AvakioAccordionExample: React.FC = () => {
                     { id: '2', header: 'Disabled Panel', body: <p>Disabled content.</p>, collapsed: true, disabled: true },
                     { id: '3', header: 'Another Active', body: <p>Also active.</p>, collapsed: true },
                   ]}
-                  theme={theme as AvakioAccordionTheme}
+                  theme="material"
                   multi={true}
                 />
               </div>
@@ -549,7 +520,7 @@ export const AvakioAccordionExample: React.FC = () => {
                     { id: '1', header: 'Clean Header 1', body: <p>Content without toggle icon.</p> },
                     { id: '2', header: 'Clean Header 2', body: <p>More content.</p>, collapsed: true },
                   ]}
-                  theme={theme as AvakioAccordionTheme}
+                  theme="material"
                   showIcons={false}
                 />
               </div>
@@ -564,20 +535,17 @@ export const AvakioAccordionExample: React.FC = () => {
         className="avakio-accordion-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Horizontal Layout"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Accordion with horizontal (columns) layout."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -586,7 +554,7 @@ export const AvakioAccordionExample: React.FC = () => {
             <div key="horizontal-demo" className="avakio-accordion-horizontal-wrapper">
               <AvakioAccordion
                 items={horizontalAccordionItems}
-                theme={theme as AvakioAccordionTheme}
+                theme="material"
                 type="cols"
                 height={300}
               />
@@ -601,13 +569,11 @@ export const AvakioAccordionExample: React.FC = () => {
         className="avakio-accordion-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="API Reference"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -780,6 +746,9 @@ function MyComponent() {
 }
 
 export default AvakioAccordionExample;
+
+
+
 
 
 

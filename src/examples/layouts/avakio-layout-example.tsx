@@ -8,7 +8,7 @@ import './avakio-layout-example.css';
 import { Layout, Grid, Rows, Columns, Box, Square, Circle, Triangle, Move, ArrowLeftRight, ArrowUpDown } from 'lucide-react';
 
 export function AvakioLayoutExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   
   // State for resizable panels
   const [leftPanelWidth, setLeftPanelWidth] = useState(200);
@@ -16,45 +16,20 @@ export function AvakioLayoutExample() {
   const [sidebarWidth, setSidebarWidth] = useState(250);
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'data-admin-theme') {
-          const newTheme = document.documentElement.getAttribute('data-admin-theme');
-          if (newTheme) {
-            setTheme(newTheme);
-          }
-        }
-      });
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, []);
+  
 
   return (
     <AvakioLayout
       id="avakio-layout-example-container"
       testId="avakio-layout-example-container"
-      theme={theme as any}
       type="clean"
       css={{ minHeight: '100vh' }}
       rows={[
-        <div className="avakio-layout-demo-container" data-admin-theme={theme} key="demo-container">
+        <div className="avakio-layout-demo-container" key="demo-container">
           {/* Header */}
           <AvakioTemplate
             id="layout-example-header"
             testId="layout-example-header"
-            theme={theme as any}
             type="header"
             borderType="clean"
             content={
@@ -75,12 +50,10 @@ export function AvakioLayoutExample() {
           <AvakioLayout
             id="layout-rows-basic"
             testId="layout-rows-basic"
-            theme={theme as any}
             rows={[
               <AvakioTemplate
                 id="row-1"
                 testId="row-1"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#1CA1C1', color: 'white' }}
                 padding={20}
@@ -94,7 +67,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="row-2"
                 testId="row-2"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#5E81AC', color: 'white' }}
                 padding={20}
@@ -108,7 +80,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="row-3"
                 testId="row-3"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#00796B', color: 'white' }}
                 padding={20}
@@ -132,12 +103,10 @@ export function AvakioLayoutExample() {
           <AvakioLayout
             id="layout-cols-basic"
             testId="layout-cols-basic"
-            theme={theme as any}
             cols={[
               <AvakioTemplate
                 id="col-1"
                 testId="col-1"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#f57c00', color: 'white', flex: 1 }}
                 padding={20}
@@ -151,7 +120,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="col-2"
                 testId="col-2"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#0277BD', color: 'white', flex: 1 }}
                 padding={20}
@@ -165,7 +133,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="col-3"
                 testId="col-3"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#3b82f6', color: 'white', flex: 1 }}
                 padding={20}
@@ -189,12 +156,10 @@ export function AvakioLayoutExample() {
           <AvakioLayout
             id="layout-nested"
             testId="layout-nested"
-            theme={theme as any}
             rows={[
               <AvakioTemplate
                 id="nested-header"
                 testId="nested-header"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#1CA1C1', color: 'white' }}
                 padding={20}
@@ -210,7 +175,6 @@ export function AvakioLayoutExample() {
                   <AvakioTemplate
                     id="nested-sidebar"
                     testId="nested-sidebar"
-                    theme={theme as any}
                     borderType="material"
                     css={{ background: '#5E81AC', color: 'white', flex: 1 }}
                     padding={40}
@@ -226,7 +190,6 @@ export function AvakioLayoutExample() {
                       <AvakioTemplate
                         id="nested-content-1"
                         testId="nested-content-1"
-                        theme={theme as any}
                         borderType="material"
                         css={{ background: '#00796B', color: 'white' }}
                         padding={20}
@@ -240,7 +203,6 @@ export function AvakioLayoutExample() {
                       <AvakioTemplate
                         id="nested-content-2"
                         testId="nested-content-2"
-                        theme={theme as any}
                         borderType="material"
                         css={{ background: '#f57c00', color: 'white' }}
                         padding={20}
@@ -260,7 +222,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="nested-footer"
                 testId="nested-footer"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#3b82f6', color: 'white' }}
                 padding={20}
@@ -285,7 +246,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>Space</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="space"
                 rows={[
                   <div className="demo-box-small">Row 1</div>,
@@ -297,7 +257,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>Wide</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="wide"
                 rows={[
                   <div className="demo-box-small">Row 1</div>,
@@ -309,7 +268,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>Clean</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="clean"
                 rows={[
                   <div className="demo-box-small">Row 1</div>,
@@ -321,7 +279,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>Line</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="line"
                 rows={[
                   <div className="demo-box-small">Row 1</div>,
@@ -333,7 +290,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>Head</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="head"
                 rows={[
                   <div className="demo-box-small">Header</div>,
@@ -345,7 +301,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>Material</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="material"
                 rows={[
                   <div className="demo-box-small">Row 1</div>,
@@ -365,7 +320,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>With Padding (16px)</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="line"
                 padding={16}
                 rows={[
@@ -377,7 +331,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>With Gap (12px)</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="clean"
                 gap={12}
                 rows={[
@@ -389,7 +342,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>Padding X & Y</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="line"
                 paddingX={20}
                 paddingY={8}
@@ -409,13 +361,11 @@ export function AvakioLayoutExample() {
           <AvakioLayout
             id="layout-responsive"
             testId="layout-responsive"
-            theme={theme as any}
             responsive
             cols={[
               <AvakioTemplate
                 id="responsive-panel-1"
                 testId="responsive-panel-1"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#1CA1C1', color: 'white', flex: 1, minWidth: '200px' }}
                 padding={30}
@@ -429,7 +379,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="responsive-panel-2"
                 testId="responsive-panel-2"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#5E81AC', color: 'white', flex: 1, minWidth: '200px' }}
                 padding={30}
@@ -443,7 +392,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="responsive-panel-3"
                 testId="responsive-panel-3"
-                theme={theme as any}
                 borderType="material"
                 css={{ background: '#00796B', color: 'white', flex: 1, minWidth: '200px' }}
                 padding={30}
@@ -469,7 +417,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>Align: Center</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="clean"
                 align="center"
                 height={150}
@@ -482,7 +429,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>Justify: Space Between</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="clean"
                 justify="space-between"
                 cols={[
@@ -495,7 +441,6 @@ export function AvakioLayoutExample() {
             <div>
               <h4>Justify: Center</h4>
               <AvakioLayout
-                theme={theme as any}
                 type="clean"
                 justify="center"
                 cols={[
@@ -527,7 +472,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="layout-left-panel"
                 testId="layout-left-panel"
-                theme={theme as any}
                 borderType="clean"
                 width={leftPanelWidth}
                 minWidth={150}
@@ -551,7 +495,6 @@ export function AvakioLayoutExample() {
                 id="layout-vertical-resizer"
                 testId="layout-vertical-resizer"
                 direction="vertical"
-                theme={theme as any}
                 onResize={(delta) => {
                   setLeftPanelWidth(prev => Math.max(150, Math.min(400, prev + delta)));
                 }}
@@ -559,7 +502,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="layout-right-panel"
                 testId="layout-right-panel"
-                theme={theme as any}
                 borderType="clean"
                 css={{        
                   overflow: 'auto',
@@ -597,7 +539,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="layout-top-panel"
                 testId="layout-top-panel"
-                theme={theme as any}
                 borderType="clean"
                 height={topPanelHeight}
                 minHeight={100}
@@ -622,7 +563,6 @@ export function AvakioLayoutExample() {
                 id="layout-horizontal-resizer"
                 testId="layout-horizontal-resizer"
                 direction="horizontal"
-                theme={theme as any}
                 onResize={(delta) => {
                   setTopPanelHeight(prev => Math.max(100, Math.min(250, prev + delta)));
                 }}
@@ -630,7 +570,6 @@ export function AvakioLayoutExample() {
               <AvakioTemplate
                 id="layout-bottom-panel"
                 testId="layout-bottom-panel"
-                theme={theme as any}
                 borderType="clean"
                 css={{ 
                   background: '#f57c00',
@@ -663,21 +602,20 @@ export function AvakioLayoutExample() {
               Complex Resizable Layout (Both directions)
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', height: 'min(500px, 60vh)', minHeight: '350px', border: '1px solid #e0e0e0' }}>
-              <div style={{ padding: '12px', background: theme === 'dark' ? '#2d2d2d' : '#f8f9fa', borderBottom: '1px solid #e0e0e0' }}>
+              <div style={{ padding: '12px', background: '#f8f9fa', borderBottom: '1px solid #e0e0e0' }}>
                 <h4 style={{ margin: 0 }}>Application Header</h4>
               </div>
               <div style={{ display: 'flex', flexDirection: 'row', flex: 1, minHeight: 0 }}>
                 <AvakioTemplate
                   id="complex-sidebar"
                   testId="complex-sidebar"
-                  theme={theme as any}
                   borderType="clean"
                   width={sidebarWidth}
                   minWidth={180}
                   maxWidth={350}
                   height="100%"
                   css={{ 
-                    background: theme === 'dark' ? '#252525' : '#fafafa',
+                    background: '#fafafa',
                     overflow: 'auto',
                     flexShrink: 0
                   }}
@@ -700,7 +638,6 @@ export function AvakioLayoutExample() {
                   id="complex-vertical-resizer"
                   testId="complex-vertical-resizer"
                   direction="vertical"
-                  theme={theme as any}
                   onResize={(delta) => {
                     setSidebarWidth(prev => Math.max(180, Math.min(350, prev + delta)));
                   }}
@@ -708,7 +645,6 @@ export function AvakioLayoutExample() {
                 <AvakioTemplate
                   id="complex-main-content"
                   testId="complex-main-content"
-                  theme={theme as any}
                   borderType="clean"
                   css={{ 
                     overflow: 'auto',
@@ -738,7 +674,7 @@ export function AvakioLayoutExample() {
                           <p>Content</p>
                         </div>
                       </div>
-                      <div style={{ marginTop: '24px', padding: '16px', background: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)', borderRadius: '8px' }}>
+                      <div style={{ marginTop: '24px', padding: '16px', background: 'rgba(0,0,0,0.03)', borderRadius: '8px' }}>
                         <h4>Responsive Behavior</h4>
                         <p>Try resizing your browser window. The layout automatically adapts to smaller screens by stacking vertically.</p>
                       </div>
@@ -757,9 +693,8 @@ export function AvakioLayoutExample() {
           <AvakioLayout
             id="layout-dashboard"
             testId="layout-dashboard"
-            theme={theme as any}
             rows={[
-              <div style={{ padding: '16px', background: theme === 'dark' ? '#2d2d2d' : '#f8f9fa', borderBottom: '1px solid #e0e0e0' }}>
+              <div style={{ padding: '16px', background: '#f8f9fa', borderBottom: '1px solid #e0e0e0' }}>
                 <h3 style={{ margin: 0 }}>Dashboard Header</h3>
               </div>,
               <AvakioLayout
@@ -767,9 +702,8 @@ export function AvakioLayoutExample() {
                   <AvakioTemplate
                     id="dashboard-nav"
                     testId="dashboard-nav"
-                    theme={theme as any}
                     borderType="clean"
-                    css={{ minWidth: '200px', background: theme === 'dark' ? '#252525' : '#fafafa' }}
+                    css={{ minWidth: '200px', background: '#fafafa' }}
                     padding={16}
                     content={
                       <>
@@ -813,7 +747,7 @@ export function AvakioLayoutExample() {
                 type="clean"
                 css={{ flex: 1 }}
               />,
-              <div style={{ padding: '12px', textAlign: 'center', background: theme === 'dark' ? '#1e1e1e' : '#f0f0f0', borderTop: '1px solid #e0e0e0', fontSize: '14px' }}>
+              <div style={{ padding: '12px', textAlign: 'center', background: '#f0f0f0', borderTop: '1px solid #e0e0e0', fontSize: '14px' }}>
                 © 2025 Dashboard Footer
               </div>,
             ]}
@@ -826,6 +760,10 @@ export function AvakioLayoutExample() {
     />
   );
 }
+
+
+
+
 
 
 

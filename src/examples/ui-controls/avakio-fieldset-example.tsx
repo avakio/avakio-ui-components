@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { AvakioFieldset, AvakioFieldsetRef, AvakioFieldsetTheme } from '../../components/avakio/ui-controls/avakio-fieldset';
+import React, { useState, useRef } from 'react';
+import { AvakioFieldset, AvakioFieldsetRef, AvakioFieldsetTheme } from '../../components/avakio/ui-controls/avakio-fieldset/avakio-fieldset';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
 import { AvakioRichSelect } from '../../components/avakio/ui-controls/avakio-richselect/avakio-richselect';
@@ -7,8 +7,8 @@ import { AvakioText } from '../../components/avakio/ui-controls/avakio-text/avak
 import { AvakioCheckbox } from '../../components/avakio/ui-controls/avakio-checkbox/avakio-checkbox';
 import { AvakioCounter } from '../../components/avakio/ui-controls/avakio-counter/avakio-counter';
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
-import { AvakioDataTable } from '../../components/avakio/avakio-datatable/AvakioDataTable';
-import type { AvakioColumn } from '../../components/avakio/avakio-datatable/AvakioDataTable';
+import { AvakioDataTable } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
+import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { 
@@ -29,8 +29,7 @@ import {
   Layers,
   SquareDashedBottom,
 } from 'lucide-react';
-import '../../components/avakio/ui-controls/avakio-fieldset.css';
-import './avakio-fieldset-example.css';
+import '../../components/avakio/ui-controls/avakio-fieldset/avakio-fieldset.css';
 
 // Tab options for navigation
 const TAB_OPTIONS = [
@@ -43,8 +42,7 @@ const TAB_OPTIONS = [
   { id: 'docs', label: 'Documentation', icon: <Book size={14} /> },
 ];
 
-export function AvakioFieldsetExample() {
-  const [theme, setTheme] = useState<string>('material');
+export function AvakioFieldsetExample({ theme = 'material' }: { theme?: string }) {
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
   // Section refs for scroll navigation
@@ -80,26 +78,7 @@ export function AvakioFieldsetExample() {
   };
 
   // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
+  
 
   // Ref method handlers
   const handleEnable = () => fieldsetRef.current?.enable();
@@ -160,12 +139,11 @@ export function AvakioFieldsetExample() {
   const themes: AvakioFieldsetTheme[] = ['material', 'flat', 'compact', 'dark', 'ocean', 'sunset'];
 
   return (
-    <div className="avakio-fieldset-demo-container" data-admin-theme={theme}>
+    <div className="avakio-fieldset-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-fieldset-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="Fieldset"                                
           subTitle="A grouping control based on HTML fieldset, designed to group related form elements with an optional legend/label."
@@ -192,20 +170,17 @@ export function AvakioFieldsetExample() {
         className="avakio-fieldset-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="A simple fieldset with a label (legend) that groups related form fields together."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -219,17 +194,14 @@ export function AvakioFieldsetExample() {
               >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <AvakioText
-                    theme={theme as any}
                     label="First Name"
                     placeholder="Enter your first name"
                   />
                   <AvakioText
-                    theme={theme as any}
                     label="Last Name"
                     placeholder="Enter your last name"
                   />
                   <AvakioText
-                    theme={theme as any}
                     label="Email"
                     placeholder="Enter your email"
                   />
@@ -264,20 +236,17 @@ export function AvakioFieldsetExample() {
         className="avakio-fieldset-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Themes"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Fieldset supports multiple theme variants: material, flat, compact, dark, ocean, and sunset."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -314,13 +283,11 @@ export function AvakioFieldsetExample() {
         className="avakio-fieldset-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Options"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -329,7 +296,6 @@ export function AvakioFieldsetExample() {
 
         {/* Borderless */}
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -337,7 +303,6 @@ export function AvakioFieldsetExample() {
           rows={[
             <AvakioTemplate
               key="borderless-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Borderless</strong>}
@@ -364,7 +329,6 @@ export function AvakioFieldsetExample() {
 
         {/* With Icons */}
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -372,7 +336,6 @@ export function AvakioFieldsetExample() {
           rows={[
             <AvakioTemplate
               key="icons-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>With Icons</strong>}
@@ -408,7 +371,6 @@ export function AvakioFieldsetExample() {
 
         {/* Custom Padding */}
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -416,7 +378,6 @@ export function AvakioFieldsetExample() {
           rows={[
             <AvakioTemplate
               key="padding-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Custom Padding</strong>}
@@ -453,7 +414,6 @@ export function AvakioFieldsetExample() {
 
         {/* Disabled */}
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -461,7 +421,6 @@ export function AvakioFieldsetExample() {
           rows={[
             <AvakioTemplate
               key="disabled-title"
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={<strong>Disabled State</strong>}
@@ -474,11 +433,10 @@ export function AvakioFieldsetExample() {
               >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <AvakioText
-                    theme={theme as any}
                     label="Name"
                     placeholder="Enter name"
                   />
-                  <AvakioButton theme={theme as any}>Submit</AvakioButton>
+                  <AvakioButton>Submit</AvakioButton>
                 </div>
               </AvakioFieldset>
               <AvakioFieldset
@@ -489,11 +447,10 @@ export function AvakioFieldsetExample() {
               >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <AvakioText
-                    theme={theme as any}
                     label="Name"
                     placeholder="Enter name"
                   />
-                  <AvakioButton theme={theme as any}>Submit</AvakioButton>
+                  <AvakioButton>Submit</AvakioButton>
                 </div>
               </AvakioFieldset>
             </div>,
@@ -507,20 +464,17 @@ export function AvakioFieldsetExample() {
         className="avakio-fieldset-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Collapsible"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Fieldsets can be made collapsible to save space and organize content into expandable sections."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -537,12 +491,10 @@ export function AvakioFieldsetExample() {
               >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <AvakioText
-                    theme={theme as any}
                     label="Full Name"
                     placeholder="Enter your name"
                   />
                   <AvakioText
-                    theme={theme as any}
                     label="Email"
                     placeholder="Enter your email"
                   />
@@ -559,17 +511,14 @@ export function AvakioFieldsetExample() {
               >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <AvakioText
-                    theme={theme as any}
                     label="Street"
                     placeholder="Street address"
                   />
                   <AvakioText
-                    theme={theme as any}
                     label="City"
                     placeholder="City"
                   />
                   <AvakioText
-                    theme={theme as any}
                     label="ZIP Code"
                     placeholder="ZIP code"
                   />
@@ -586,18 +535,15 @@ export function AvakioFieldsetExample() {
               >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <AvakioText
-                    theme={theme as any}
                     label="Card Number"
                     placeholder="XXXX-XXXX-XXXX-XXXX"
                   />
                   <div style={{ display: 'flex', gap: '12px' }}>
                     <AvakioText
-                      theme={theme as any}
                       label="Expiry"
                       placeholder="MM/YY"
                     />
                     <AvakioText
-                      theme={theme as any}
                       label="CVV"
                       placeholder="XXX"
                     />
@@ -615,20 +561,17 @@ export function AvakioFieldsetExample() {
         className="avakio-fieldset-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Ref Methods"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Access component methods via ref for programmatic control."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -646,12 +589,10 @@ export function AvakioFieldsetExample() {
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <AvakioText
-                      theme={theme as any}
                       label="Field 1"
                       placeholder="Enter value"
                     />
                     <AvakioText
-                      theme={theme as any}
                       label="Field 2"
                       placeholder="Enter value"
                     />
@@ -659,13 +600,13 @@ export function AvakioFieldsetExample() {
                 </AvakioFieldset>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minWidth: 150 }}>
-                <AvakioButton theme={theme as any} onClick={handleEnable}>enable()</AvakioButton>
-                <AvakioButton theme={theme as any} onClick={handleDisable}>disable()</AvakioButton>
-                <AvakioButton theme={theme as any} onClick={handleCollapse}>collapse()</AvakioButton>
-                <AvakioButton theme={theme as any} onClick={handleExpand}>expand()</AvakioButton>
-                <AvakioButton theme={theme as any} onClick={handleToggle}>toggle()</AvakioButton>
-                <AvakioButton theme={theme as any} onClick={handleIsEnabled}>isEnabled()</AvakioButton>
-                <AvakioButton theme={theme as any} onClick={handleIsCollapsed}>isCollapsed()</AvakioButton>
+                <AvakioButton onClick={handleEnable}>enable()</AvakioButton>
+                <AvakioButton onClick={handleDisable}>disable()</AvakioButton>
+                <AvakioButton onClick={handleCollapse}>collapse()</AvakioButton>
+                <AvakioButton onClick={handleExpand}>expand()</AvakioButton>
+                <AvakioButton onClick={handleToggle}>toggle()</AvakioButton>
+                <AvakioButton onClick={handleIsEnabled}>isEnabled()</AvakioButton>
+                <AvakioButton onClick={handleIsCollapsed}>isCollapsed()</AvakioButton>
               </div>
             </div>,
           ]}
@@ -678,20 +619,17 @@ export function AvakioFieldsetExample() {
         className="avakio-fieldset-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Interactive Playground"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Experiment with different fieldset configurations in real-time."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -701,14 +639,13 @@ export function AvakioFieldsetExample() {
               {/* Preview */}
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <AvakioTemplate
-                  theme={theme as any}
                   type="clean"
                   borderType="clean"
                   content={<strong>Preview</strong>}
                 />
                 <div style={{ 
                   padding: '24px', 
-                  background: theme === 'dark' ? '#2a2a2a' : '#f9f9f9', 
+                  background: '#f9f9f9', 
                   borderRadius: '8px',
                   minHeight: '200px',
                   display: 'flex',
@@ -729,14 +666,13 @@ export function AvakioFieldsetExample() {
                   >
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                       <AvakioText
-                        theme={theme as any}
                         label="Sample Field"
                         placeholder="Enter value"
                       />
                       <AvakioCheckbox
                         label="Enable option"
                       />
-                      <AvakioButton theme={theme as any}>Action</AvakioButton>
+                      <AvakioButton>Action</AvakioButton>
                     </div>
                   </AvakioFieldset>
                 </div>
@@ -745,13 +681,11 @@ export function AvakioFieldsetExample() {
               {/* Controls */}
               <div style={{ width: '300px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <AvakioTemplate
-                  theme={theme as any}
                   type="clean"
                   borderType="clean"
                   content={<strong>Configuration</strong>}
                 />
                 <AvakioText
-                  theme={theme as any}
                   label="Label"
                   value={playgroundLabel}
                   onChange={setPlaygroundLabel}
@@ -814,7 +748,6 @@ export function AvakioFieldsetExample() {
         className="avakio-fieldset-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Documentation"
@@ -822,14 +755,12 @@ export function AvakioFieldsetExample() {
 
         {/* Props Table */}
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[16, 0, 0, 16]}
           content={<strong>Props</strong>}
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -848,14 +779,12 @@ export function AvakioFieldsetExample() {
 
         {/* Ref Methods Table */}
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[24, 0, 0, 16]}
           content={<strong>Ref Methods</strong>}
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -877,6 +806,9 @@ export function AvakioFieldsetExample() {
 }
 
 export default AvakioFieldsetExample;
+
+
+
 
 
 

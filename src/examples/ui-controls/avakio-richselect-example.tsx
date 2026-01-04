@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { AvakioRichSelect, AvakioRichSelectOption } from '../../components/avakio/ui-controls/avakio-richselect/avakio-richselect';
+import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
+import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
 import './avakio-richselect-example.css';
 
 export function AvakioRichSelectExample() {
-  const [theme, setTheme] = useState<string>('material');
+  
   const [selectedValue1, setSelectedValue1] = useState<string | number>('');
   const [selectedValue2, setSelectedValue2] = useState<string | number>(2);
   const [selectedValue3, setSelectedValue3] = useState<string | number>('');
@@ -49,22 +50,10 @@ export function AvakioRichSelectExample() {
     value: `Item ${i + 1}`,
   }));
 
-  const themes = [
-    { id: 'material', value: 'Material' },
-    { id: 'flat', value: 'Flat' },
-    { id: 'compact', value: 'Compact' },
-    { id: 'dark', value: 'Dark' },
-    { id: 'ocean', value: 'Ocean' },
-    { id: 'sunset', value: 'Sunset' },
-  ];
 
-  const handleThemeChange = (value: string | number) => {
-    setTheme(value as string);
-    document.documentElement.setAttribute('data-admin-theme', value as string);
-  };
 
   return (
-    <div className="avakio-richselect-example-container" data-admin-theme={theme}>
+    <div className="avakio-richselect-example-container">
       <div className="avakio-richselect-example-header">
         <h1 className="avakio-richselect-example-title">AvakioRichSelect Component</h1>
         <p className="avakio-richselect-example-description">
@@ -72,56 +61,49 @@ export function AvakioRichSelectExample() {
         </p>
       </div>
 
-      <Card className="avakio-richselect-example-card">
-        <CardHeader>
-          <CardTitle className="avakio-richselect-example-card-title">Theme Selector</CardTitle>
-          <CardDescription className="avakio-richselect-example-card-description">
-            Choose a theme to see the component in different styles
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AvakioRichSelect
-            value={theme}
-            options={themes}
-            onChange={handleThemeChange}
-            label="Select Theme"
-            labelWidth={120}
-          />
-        </CardContent>
-      </Card>
+      <AvakioTemplate
+        type="section"
+        borderType="clean"
+        content="Example 1: Basic RichSelect"
+      />
+      <AvakioTemplate
+        type="clean"
+        borderType="clean"
+        padding={[0, 0, 0, 16]}
+        content="Simple string array options"
+      />
+      <AvakioLayout
+        type="clean"
+        borderless={false}
+        margin={12}
+        padding={16}
+        rows={[
+          <div key="basic-select">
+            <AvakioRichSelect
+              value={selectedValue1}
+              options={simpleOptions}
+              onChange={(value) => setSelectedValue1(value)}
+              placeholder="Select an option..."
+              label="Simple Select"
+              labelWidth={120}
+            />
+            {selectedValue1 && (
+              <div className="avakio-richselect-example-selected">
+                Selected: <strong>{selectedValue1}</strong>
+              </div>
+            )}
+          </div>,
+        ]}
+      />
 
-      <Card className="avakio-richselect-example-card">
-        <CardHeader>
-          <CardTitle className="avakio-richselect-example-card-title">Example 1: Basic RichSelect</CardTitle>
-          <CardDescription className="avakio-richselect-example-card-description">
-            Simple string array options
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AvakioRichSelect
-            value={selectedValue1}
-            options={simpleOptions}
-            onChange={(value) => setSelectedValue1(value)}
-            placeholder="Select an option..."
-            label="Simple Select"
-            labelWidth={120}
-          />
-          {selectedValue1 && (
-            <div className="avakio-richselect-example-selected">
-              Selected: <strong>{selectedValue1}</strong>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card className="avakio-richselect-example-card">
-        <CardHeader>
-          <CardTitle className="avakio-richselect-example-card-title">Example 2: Object Options with Initial Value</CardTitle>
-          <CardDescription className="avakio-richselect-example-card-description">
+      <div className="avakio-richselect-example-card">
+        <div className="avakio-richselect-example-card-header">
+          <h3 className="avakio-richselect-example-card-title">Example 2: Object Options with Initial Value</h3>
+          <p className="avakio-richselect-example-card-description">
             Full object format with ID and value pairs
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        </div>
+        <div className="avakio-richselect-example-card-content">
           <AvakioRichSelect
             value={selectedValue2}
             options={fullOptions}
@@ -138,17 +120,17 @@ export function AvakioRichSelectExample() {
               Selected ID: <strong>{selectedValue2}</strong>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card className="avakio-richselect-example-card">
-        <CardHeader>
-          <CardTitle className="avakio-richselect-example-card-title">Example 3: Custom Template</CardTitle>
-          <CardDescription className="avakio-richselect-example-card-description">
+      <div className="avakio-richselect-example-card">
+        <div className="avakio-richselect-example-card-header">
+          <h3 className="avakio-richselect-example-card-title">Example 3: Custom Template</h3>
+          <p className="avakio-richselect-example-card-description">
             Using custom template to render options with flags
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        </div>
+        <div className="avakio-richselect-example-card-content">
           <AvakioRichSelect
             value={selectedValue3}
             options={countryOptions}
@@ -168,17 +150,17 @@ export function AvakioRichSelectExample() {
               Selected Country: <strong>{countryOptions.find(c => c.id === selectedValue3)?.value}</strong>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card className="avakio-richselect-example-card">
-        <CardHeader>
-          <CardTitle className="avakio-richselect-example-card-title">Example 4: Status with Color Indicators</CardTitle>
-          <CardDescription className="avakio-richselect-example-card-description">
+      <div className="avakio-richselect-example-card">
+        <div className="avakio-richselect-example-card-header">
+          <h3 className="avakio-richselect-example-card-title">Example 4: Status with Color Indicators</h3>
+          <p className="avakio-richselect-example-card-description">
             Options with custom color indicators
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        </div>
+        <div className="avakio-richselect-example-card-content">
           <AvakioRichSelect
             value={selectedValue4}
             options={statusOptions}
@@ -205,17 +187,17 @@ export function AvakioRichSelectExample() {
               Selected Status: <strong>{statusOptions.find(s => s.id === selectedValue4)?.value}</strong>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card className="avakio-richselect-example-card">
-        <CardHeader>
-          <CardTitle className="avakio-richselect-example-card-title">Example 5: Large Dataset with yCount</CardTitle>
-          <CardDescription className="avakio-richselect-example-card-description">
+      <div className="avakio-richselect-example-card">
+        <div className="avakio-richselect-example-card-header">
+          <h3 className="avakio-richselect-example-card-title">Example 5: Large Dataset with yCount</h3>
+          <p className="avakio-richselect-example-card-description">
             100 items with limited visible rows using yCount property
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+          </p>
+        </div>
+        <div className="avakio-richselect-example-card-content">
           <AvakioRichSelect
             value={selectedValue5}
             options={largeOptions}
@@ -230,17 +212,17 @@ export function AvakioRichSelectExample() {
               Selected Item: <strong>{largeOptions.find(i => i.id === selectedValue5)?.value}</strong>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card className="avakio-richselect-example-card">
-        <CardHeader>
-          <CardTitle className="avakio-richselect-example-card-title">Example 6: States & Variations</CardTitle>
-          <CardDescription className="avakio-richselect-example-card-description">
+      <div className="avakio-richselect-example-card">
+        <div className="avakio-richselect-example-card-header">
+          <h3 className="avakio-richselect-example-card-title">Example 6: States & Variations</h3>
+          <p className="avakio-richselect-example-card-description">
             Different states and configurations
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          </p>
+        </div>
+        <div className="avakio-richselect-example-card-content space-y-4">
           <AvakioRichSelect
             value=""
             options={simpleOptions}
@@ -281,14 +263,14 @@ export function AvakioRichSelectExample() {
             labelWidth={120}
             clearable={false}
           />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card className="avakio-richselect-example-card">
-        <CardHeader>
-          <CardTitle className="avakio-richselect-example-card-title">Key Features</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="avakio-richselect-example-card">
+        <div className="avakio-richselect-example-card-header">
+          <h3 className="avakio-richselect-example-card-title">Key Features</h3>
+        </div>
+        <div className="avakio-richselect-example-card-content">
           <ul className="avakio-richselect-example-features">
             <li>✓ Non-editable dropdown (select only)</li>
             <li>✓ Simple string array or full object options</li>
@@ -303,14 +285,14 @@ export function AvakioRichSelectExample() {
             <li>✓ Smooth animations</li>
             <li>✓ Click outside to close</li>
           </ul>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card className="avakio-richselect-example-card">
-        <CardHeader>
-          <CardTitle className="avakio-richselect-example-card-title">Props API</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="avakio-richselect-example-card">
+        <div className="avakio-richselect-example-card-header">
+          <h3 className="avakio-richselect-example-card-title">Props API</h3>
+        </div>
+        <div className="avakio-richselect-example-card-content">
           <div className="avakio-richselect-example-table-container">
             <table className="avakio-richselect-example-table">
               <thead>
@@ -427,11 +409,14 @@ export function AvakioRichSelectExample() {
               </tbody>
             </table>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
+
+
+
 
 
 

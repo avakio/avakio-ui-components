@@ -1,39 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AvakioColorPicker, AvakioColorPickerPreset } from '../../components/avakio/ui-controls/avakio-colorpicker/avakio-colorpicker';
-import './avakio-colorpicker-example.css';
 
-export function AvakioColorPickerExample() {
-  const [theme, setTheme] = useState<string>('material');
+export function AvakioColorPickerExample({ theme = 'material' }: { theme?: string }) {
   const [colorPrimary, setColorPrimary] = useState<string>('#1ca1c1');
   const [colorAccent, setColorAccent] = useState<string>('#f57c00');
   const [colorDisabled, setColorDisabled] = useState<string>('#9ca3af');
-
-  // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-    
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'data-admin-theme') {
-          const newTheme = document.documentElement.getAttribute('data-admin-theme');
-          if (newTheme) {
-            setTheme(newTheme);
-          }
-        }
-      });
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-    
-    return () => observer.disconnect();
-  }, []);
 
   const presets: AvakioColorPickerPreset[] = [
     { label: 'Sky', value: '#38bdf8' },
@@ -49,7 +21,7 @@ export function AvakioColorPickerExample() {
   ];
 
   return (
-    <div className="avakio-colorpicker-example" data-admin-theme={theme}>
+    <div className="avakio-colorpicker-example">
       <header className="avakio-colorpicker-hero">
         <div>
           <p className="avakio-colorpicker-kicker">Avakio Components</p>

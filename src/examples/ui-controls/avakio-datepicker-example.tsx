@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { AvakioDatePicker } from '../../components/avakio/ui-controls/avakio-datepicker';
-import './avakio-datepicker-example.css';
 import { Calendar, Clock, Layout, Settings, Code } from 'lucide-react';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
@@ -16,8 +15,7 @@ const TAB_OPTIONS = [
   { id: 'api', label: 'API Reference', icon: <Code size={14} /> },
 ];
 
-export function AvakioDatePickerExample() {
-  const [theme, setTheme] = useState<string>('material');
+export function AvakioDatePickerExample({ theme = 'material' }: { theme?: string }) {
   const [activeSection, setActiveSection] = useState<string | number | null>('dropdown');
 
   // Demo state values
@@ -29,39 +27,6 @@ export function AvakioDatePickerExample() {
 
   // Section refs for scroll navigation
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
-
-  // Scroll to section when tab is clicked
-  const handleTabChange = (value: string | number | null) => {
-    setActiveSection(value);
-    if (value && sectionRefs.current[value as string]) {
-      const element = sectionRefs.current[value as string];
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-  };
-
-  // Sync with global theme from components-showcase
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
 
   const formatDate = (isoString: string, includeTime = true) => {
     if (!isoString) return 'No date selected';
@@ -83,12 +48,11 @@ export function AvakioDatePickerExample() {
   };
 
   return (
-    <div className="avakio-datepicker-demo-container" data-admin-theme={theme}>
+    <div className="avakio-datepicker-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-datepicker-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="DatePicker Component"
           subTitle="A beautiful date and time picker with dropdown and inline modes. Supports themes, time selection, and custom labels."
@@ -101,7 +65,7 @@ export function AvakioDatePickerExample() {
             id="datepicker-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
-            onChange={handleTabChange}
+            onChange={(val) => setActiveSection(val)}
             align="left"
             size="sm"
             scrollable
@@ -115,20 +79,17 @@ export function AvakioDatePickerExample() {
         className="avakio-datepicker-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Dropdown Mode (Default)"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="The default mode displays a trigger button that opens a popover with the calendar. Click the button to select a date."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -147,14 +108,12 @@ export function AvakioDatePickerExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Custom label and placeholder:"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -181,20 +140,17 @@ export function AvakioDatePickerExample() {
         className="avakio-datepicker-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Inline Mode"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Set inline={true} to display the calendar directly without a dropdown. Useful for dedicated date selection views."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -221,20 +177,17 @@ export function AvakioDatePickerExample() {
         className="avakio-datepicker-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="With Time Selection"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Enable time selection with showTime={true}. The picker will include hour and minute inputs."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -253,14 +206,12 @@ export function AvakioDatePickerExample() {
           ]}
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Inline mode with time selection:"
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -287,20 +238,17 @@ export function AvakioDatePickerExample() {
         className="avakio-datepicker-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Customization Options"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="The DatePicker supports various customization options including custom labels, placeholders, and styling."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -346,20 +294,17 @@ export function AvakioDatePickerExample() {
         className="avakio-datepicker-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="API Reference"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
           content="Component properties and usage examples."
         />
         <AvakioLayout
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -457,6 +402,8 @@ function MyComponent() {
 }
 
 export default AvakioDatePickerExample;
+
+
 
 
 

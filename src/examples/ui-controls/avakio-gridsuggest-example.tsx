@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../ui/card';
-import { AvakioGridSuggest, AvakioGridSuggestOption } from './avakio-gridsuggest';
-import './avakio-gridsuggest-example.css';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { AvakioGridSuggest, AvakioGridSuggestOption } from '../../components/avakio/ui-controls/avakio-gridsuggest/avakio-gridsuggest';
 
-export function AvakioGridSuggestExample() {
-  const [theme, setTheme] = useState<string>('material');
+export function AvakioGridSuggestExample({ theme = 'material' }: { theme?: string }) {
   const [selectedValue1, setSelectedValue1] = useState<string | number>('');
   const [selectedValue2, setSelectedValue2] = useState<string | number>(2);
   const [selectedValue3, setSelectedValue3] = useState<string | number>('');
@@ -69,7 +67,7 @@ export function AvakioGridSuggestExample() {
   };
 
   return (
-    <div className="avakio-gridsuggest-example-container" data-admin-theme={theme}>
+    <div className="avakio-gridsuggest-example-container">
       <div className="avakio-gridsuggest-example-header">
         <h1 className="avakio-gridsuggest-example-title">AvakioGridSuggest Component</h1>
         <p className="avakio-gridsuggest-example-description">
@@ -548,6 +546,7 @@ export function AvakioGridSuggestExample() {
     </div>
   );
 }
+
 
 
 

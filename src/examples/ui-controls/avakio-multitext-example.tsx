@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { AvakioMultitext, AvakioMultitextRef } from '../../components/avakio/ui-controls/avakio-multitext';
+import React, { useState, useRef } from 'react';
+import { AvakioMultitext, AvakioMultitextRef } from '../../components/avakio/ui-controls/avakio-multitext/avakio-multitext';
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
-import './avakio-multitext-example.css';
 import {
   Box, Layers, Maximize2, ToggleLeft, Wand2, Settings, BookOpen,
   Plus, Trash2, RefreshCw, Eye, EyeOff, Mail, Phone, Tag
@@ -22,8 +21,7 @@ const TAB_OPTIONS = [
   { id: 'docs', label: 'Documentation', icon: <BookOpen size={14} /> },
 ];
 
-export function AvakioMultitextExample() {
-  const [theme, setTheme] = useState<string>('material');
+export function AvakioMultitextExample({ theme = 'material' }: { theme?: string }) {
   const [activeSection, setActiveSection] = useState<string | number | null>('basic');
 
   // Section refs for scroll navigation
@@ -50,40 +48,17 @@ export function AvakioMultitextExample() {
     }
   };
 
-  // Sync with global theme
-  useEffect(() => {
-    const currentTheme = document.documentElement.getAttribute('data-admin-theme');
-    if (currentTheme) {
-      setTheme(currentTheme);
-    }
-
-    const observer = new MutationObserver(() => {
-      const globalTheme = document.documentElement.getAttribute('data-admin-theme');
-      if (globalTheme && globalTheme !== theme) {
-        setTheme(globalTheme);
-      }
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-admin-theme'],
-    });
-
-    return () => observer.disconnect();
-  }, [theme]);
-
   const logMethod = (msg: string) => {
     setMethodsLog(prev => [msg, ...prev.slice(0, 4)]);
     setMethodsStatus(msg);
   };
 
   return (
-    <div className="avakio-multitext-demo-container" data-admin-theme={theme}>
+    <div className="avakio-multitext-demo-container">
       {/* Sticky Header + Tab Navigation */}
       <div className="avakio-multitext-sticky-header">
         {/* Header */}
         <AvakioViewHeader
-          theme={theme as any}
           label="UI Controls"
           title="Multitext Component"
           subTitle="A dynamic multi-field text input that allows adding and removing fields on the fly. Ideal for collecting multiple emails, phone numbers, tags, or any repeated text values."
@@ -110,13 +85,11 @@ export function AvakioMultitextExample() {
         className="avakio-multitext-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Basic Usage"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -125,14 +98,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-basic"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. Basic Multitext"
@@ -145,7 +116,6 @@ export function AvakioMultitextExample() {
               onChange={(values) => setBasicValue(values)}
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -156,20 +126,17 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-default-value"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="2. With Default Values"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -187,14 +154,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-phone"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="3. Phone Numbers"
@@ -217,13 +182,11 @@ export function AvakioMultitextExample() {
         className="avakio-multitext-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Labels & Positions"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -232,14 +195,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-label-left"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. Label Position: Left (default)"
@@ -256,14 +217,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-label-top"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="2. Label Position: Top"
@@ -279,20 +238,17 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-label-align"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="3. Label Alignment"
             />,
             <AvakioLayout
-              theme={theme as any}
               type="clean"
               gap={16}
               cols={[
@@ -321,20 +277,17 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-numbered"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="4. With Line Numbers"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -352,14 +305,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-bottom-label"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="5. With Bottom Label"
@@ -380,13 +331,11 @@ export function AvakioMultitextExample() {
         className="avakio-multitext-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="States"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -395,14 +344,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-disabled"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. Disabled State"
@@ -419,20 +366,17 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-readonly"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="2. Readonly State"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -449,14 +393,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-required"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="3. Required Field"
@@ -472,20 +414,17 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-max-fields"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="4. Maximum Fields Limit"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -508,13 +447,11 @@ export function AvakioMultitextExample() {
         className="avakio-multitext-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Validation"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -523,14 +460,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-error"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. Error State"
@@ -547,20 +482,17 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-custom-validation"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="2. Custom Validation"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -586,14 +518,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-max-length"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="3. Max Length per Field"
@@ -614,13 +544,11 @@ export function AvakioMultitextExample() {
         className="avakio-multitext-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Imperative Methods"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -629,7 +557,6 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-methods"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
@@ -646,7 +573,6 @@ export function AvakioMultitextExample() {
               onSectionRemove={(id, val) => logMethod(`onSectionRemove: ${id} (${val})`)}
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -748,7 +674,6 @@ export function AvakioMultitextExample() {
               }
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="material"
               margin={[16, 0, 0, 0]}
@@ -781,13 +706,11 @@ export function AvakioMultitextExample() {
         className="avakio-multitext-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Advanced"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -796,20 +719,17 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-separator"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="1. Custom Separator"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -827,20 +747,17 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-subconfig"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="2. Sub-Configuration for Additional Fields"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -860,20 +777,17 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-controlled"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="3. Controlled Component"
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[0, 0, 8, 0]}
@@ -887,7 +801,6 @@ export function AvakioMultitextExample() {
               onChange={(values) => setControlledValue(values)}
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[12, 0, 0, 0]}
@@ -915,7 +828,6 @@ export function AvakioMultitextExample() {
               }
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[8, 0, 0, 0]}
@@ -926,14 +838,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-custom-icon"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content="4. Custom Add Button"
@@ -955,13 +865,11 @@ export function AvakioMultitextExample() {
         className="avakio-multitext-demo-section"
       >
         <AvakioTemplate
-          theme={theme as any}
           type="section"
           borderType="clean"
           content="Documentation"
         />
         <AvakioTemplate
-          theme={theme as any}
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
@@ -970,14 +878,12 @@ export function AvakioMultitextExample() {
 
         <AvakioLayout
           id="layout-docs"
-          theme={theme as any}
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               content={
@@ -999,7 +905,6 @@ export function AvakioMultitextExample() {
               }
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -1023,7 +928,6 @@ export function AvakioMultitextExample() {
               }
             />,
             <AvakioTemplate
-              theme={theme as any}
               type="clean"
               borderType="clean"
               padding={[16, 0, 0, 0]}
@@ -1049,6 +953,7 @@ export function AvakioMultitextExample() {
 }
 
 export default AvakioMultitextExample;
+
 
 
 
