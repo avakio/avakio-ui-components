@@ -1,0 +1,306 @@
+/* Base card styles */
+.avakio-combo-example-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.avakio-combo-example-card-title {
+  color: #111827;
+}
+
+.avakio-combo-example-card-description {
+  color: #6b7280;
+}
+
+.avakio-combo-example-heading {
+  color: #111827;
+}
+
+.avakio-combo-example-text {
+  color: #374151;
+}
+
+.avakio-combo-example-selected {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.avakio-combo-example-label {
+  color: #374151;
+}
+
+/* Material theme */
+[data-admin-theme="material"] .avakio-combo-example-card {
+  background-color: #ffffff;
+  border-color: #e0e0e0;
+}
+
+[data-admin-theme="material"] .avakio-combo-example-card-title {
+  color: #1a1a1a;
+}
+
+[data-admin-theme="material"] .avakio-combo-example-card-description {
+  color: #616161;
+}
+
+[data-admin-theme="material"] .avakio-combo-example-heading {
+  color: #1a1a1a;
+}
+
+[data-admin-theme="material"] .avakio-combo-example-text {
+  color: #424242;
+}
+
+[data-admin-theme="material"] .avakio-combo-example-selected {
+  background-color: rgba(28, 161, 193, 0.1);
+  color: #1a1a1a;
+  border-left: 3px solid #1CA1C1;
+}
+
+[data-admin-theme="material"] .avakio-combo-example-label {
+  color: #333;
+}
+
+/* Flat theme */
+[data-admin-theme="flat"] .avakio-combo-example-card {
+  background-color: #ffffff;
+  border-color: #d0d0d0;
+}
+
+[data-admin-theme="flat"] .avakio-combo-example-card-title {
+  color: #2e3440;
+}
+
+[data-admin-theme="flat"] .avakio-combo-example-card-description {
+  color: #5e81ac;
+}
+
+[data-admin-theme="flat"] .avakio-combo-example-heading {
+  color: #2e3440;
+}
+
+[data-admin-theme="flat"] .avakio-combo-example-text {
+  color: #4c566a;
+}
+
+[data-admin-theme="flat"] .avakio-combo-example-selected {
+  background-color: rgba(94, 129, 172, 0.1);
+  color: #2e3440;
+  border-left: 3px solid #5E81AC;
+}
+
+[data-admin-theme="flat"] .avakio-combo-example-label {
+  color: #333;
+}
+
+/* Compact theme */
+[data-admin-theme="compact"] .avakio-combo-example-card {
+  background-color: #ffffff;
+  border-color: #c0c0c0;
+}
+
+[data-admin-theme="compact"] .avakio-combo-example-card-title {
+  color: #1a1a1a;
+  font-size: 16px;
+}
+
+[data-admin-theme="compact"] .avakio-combo-example-card-description {
+  color: #666666;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-combo-example-heading {
+  color: #1a1a1a;
+  font-size: 14px;
+}
+
+[data-admin-theme="compact"] .avakio-combo-example-text {
+  color: #404040;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-combo-example-selected {
+  background-color: rgba(0, 121, 107, 0.1);
+  color: #1a1a1a;
+  border-left: 3px solid #00796B;
+}
+
+[data-admin-theme="compact"] .avakio-combo-example-label {
+  color: #333;
+  font-size: 13px;
+}
+
+/* Dark theme */
+[data-admin-theme="dark"] .avakio-combo-example-card {
+  background-color: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-combo-example-card-title {
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-combo-example-card-description {
+  color: hsl(215, 20.2%, 65.1%);
+}
+
+[data-admin-theme="dark"] .avakio-combo-example-heading {
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-combo-example-text {
+  color: hsl(215, 20.2%, 65.1%);
+}
+
+[data-admin-theme="dark"] .avakio-combo-example-selected {
+  background-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(210, 40%, 98%);
+  border-left: 3px solid hsl(217, 91%, 60%);
+}
+
+[data-admin-theme="dark"] .avakio-combo-example-label {
+  color: hsl(210, 40%, 98%);
+}
+
+/* Ocean theme */
+[data-admin-theme="ocean"] .avakio-combo-example-card {
+  background-color: #ffffff;
+  border-color: #B3E5FC;
+}
+
+[data-admin-theme="ocean"] .avakio-combo-example-card-title {
+  color: #01579B;
+}
+
+[data-admin-theme="ocean"] .avakio-combo-example-card-description {
+  color: #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-combo-example-heading {
+  color: #01579B;
+}
+
+[data-admin-theme="ocean"] .avakio-combo-example-text {
+  color: #0288D1;
+}
+
+[data-admin-theme="ocean"] .avakio-combo-example-selected {
+  background-color: rgba(2, 119, 189, 0.1);
+  color: #01579B;
+  border-left: 3px solid #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-combo-example-label {
+  color: #01579B;
+}
+
+/* Sunset theme */
+[data-admin-theme="sunset"] .avakio-combo-example-card {
+  background-color: #ffffff;
+  border-color: #FFE0B2;
+}
+
+[data-admin-theme="sunset"] .avakio-combo-example-card-title {
+  color: #E65100;
+}
+
+[data-admin-theme="sunset"] .avakio-combo-example-card-description {
+  color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-combo-example-heading {
+  color: #E65100;
+}
+
+[data-admin-theme="sunset"] .avakio-combo-example-text {
+  color: #F57C00;
+}
+
+[data-admin-theme="sunset"] .avakio-combo-example-selected {
+  background-color: rgba(245, 124, 0, 0.1);
+  color: #E65100;
+  border-left: 3px solid #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-combo-example-label {
+  color: #E65100;
+}
+
+/* Table styles */
+.avakio-combo-example-table {
+  border-collapse: collapse;
+}
+
+.avakio-combo-example-table th {
+  color: #111827;
+  font-weight: 600;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.avakio-combo-example-table td {
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+[data-admin-theme="material"] .avakio-combo-example-table th {
+  color: #1a1a1a;
+  border-bottom-color: #e0e0e0;
+}
+
+[data-admin-theme="material"] .avakio-combo-example-table td {
+  color: #424242;
+  border-bottom-color: #f0f0f0;
+}
+
+[data-admin-theme="flat"] .avakio-combo-example-table th {
+  color: #2e3440;
+  border-bottom-color: #d0d0d0;
+}
+
+[data-admin-theme="flat"] .avakio-combo-example-table td {
+  color: #4c566a;
+  border-bottom-color: #eceff4;
+}
+
+[data-admin-theme="compact"] .avakio-combo-example-table th {
+  color: #1a1a1a;
+  border-bottom-color: #c0c0c0;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-combo-example-table td {
+  color: #404040;
+  border-bottom-color: #e0e0e0;
+  font-size: 13px;
+}
+
+[data-admin-theme="dark"] .avakio-combo-example-table th {
+  color: hsl(210, 40%, 98%);
+  border-bottom-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-combo-example-table td {
+  color: hsl(215, 20.2%, 65.1%);
+  border-bottom-color: hsl(217.2, 32.6%, 12%);
+}
+
+[data-admin-theme="ocean"] .avakio-combo-example-table th {
+  color: #01579B;
+  border-bottom-color: #B3E5FC;
+}
+
+[data-admin-theme="ocean"] .avakio-combo-example-table td {
+  color: #0288D1;
+  border-bottom-color: #E1F5FE;
+}
+
+[data-admin-theme="sunset"] .avakio-combo-example-table th {
+  color: #E65100;
+  border-bottom-color: #FFE0B2;
+}
+
+[data-admin-theme="sunset"] .avakio-combo-example-table td {
+  color: #F57C00;
+  border-bottom-color: #FFF3E0;
+}
+

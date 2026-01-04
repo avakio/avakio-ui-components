@@ -1,0 +1,166 @@
+/* AvakioResizer - Draggable resizer component for adjusting panel sizes */
+
+.avakio-resizer {
+  position: relative;
+  flex-shrink: 0;
+  background: transparent;
+  transition: background-color 0.2s ease;
+  z-index: 1;
+}
+
+/* Horizontal resizer (for resizing rows - vertical drag) */
+.avakio-resizer-horizontal {
+  height: 8px;
+  width: 100%;
+  cursor: row-resize;
+}
+
+/* Vertical resizer (for resizing columns - horizontal drag) */
+.avakio-resizer-vertical {
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+}
+
+/* Resizer handle (visible line) */
+.avakio-resizer-handle {
+  position: absolute;
+  background-color: currentColor;
+  opacity: 0.3;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.avakio-resizer-horizontal .avakio-resizer-handle {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.avakio-resizer-vertical .avakio-resizer-handle {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+/* Hover state */
+.avakio-resizer:hover {
+  background-color: rgba(28, 161, 193, 0.08);
+}
+
+.avakio-resizer:hover .avakio-resizer-handle {
+  opacity: 0.8;
+}
+
+/* Dragging state */
+.avakio-resizer-dragging {
+  z-index: 100;
+}
+
+.avakio-resizer-dragging .avakio-resizer-handle {
+  opacity: 1;
+}
+
+/* Theme colors */
+.avakio-resizer-theme-material,
+.avakio-resizer[data-admin-theme="material"] {
+  color: var(--avakio-accent-primary);
+}
+
+.avakio-resizer-theme-material:hover,
+.avakio-resizer[data-admin-theme="material"]:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+.avakio-resizer-theme-flat,
+.avakio-resizer[data-admin-theme="flat"] {
+  color: var(--avakio-accent-primary);
+}
+
+.avakio-resizer-theme-flat:hover,
+.avakio-resizer[data-admin-theme="flat"]:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+.avakio-resizer-theme-compact,
+.avakio-resizer[data-admin-theme="compact"] {
+  color: var(--avakio-accent-primary);
+}
+
+.avakio-resizer-theme-compact:hover,
+.avakio-resizer[data-admin-theme="compact"]:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+.avakio-resizer-theme-dark,
+.avakio-resizer[data-admin-theme="dark"] {
+  color: var(--avakio-accent-primary);
+}
+
+.avakio-resizer-theme-dark:hover,
+.avakio-resizer[data-admin-theme="dark"]:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+.avakio-resizer-theme-ocean,
+.avakio-resizer[data-admin-theme="ocean"] {
+  color: var(--avakio-accent-primary);
+}
+
+.avakio-resizer-theme-ocean:hover,
+.avakio-resizer[data-admin-theme="ocean"]:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+.avakio-resizer-theme-sunset,
+.avakio-resizer[data-admin-theme="sunset"] {
+  color: var(--avakio-accent-primary);
+}
+
+.avakio-resizer-theme-sunset:hover,
+.avakio-resizer[data-admin-theme="sunset"]:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+/* Prevent text selection during drag */
+.avakio-resizer-dragging,
+.avakio-resizer-dragging * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Accessibility */
+.avakio-resizer:focus {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.avakio-resizer:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .avakio-resizer-handle {
+    opacity: 1;
+    background-color: currentColor;
+  }
+  
+  .avakio-resizer:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .avakio-resizer,
+  .avakio-resizer-handle {
+    transition: none;
+  }
+}
+

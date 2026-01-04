@@ -1,0 +1,219 @@
+/* AvakioLayout Example Styles */
+.avakio-layout-example {
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+[data-admin-theme="dark"] .avakio-layout-example {
+  background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+}
+
+.avakio-layout-demo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Hero Section */
+.avakio-layout-hero {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+[data-admin-theme="dark"] .avakio-layout-hero {
+  background: #2d2d2d;
+  color: #e0e0e0;
+}
+
+.avakio-layout-kicker {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #1CA1C1;
+  margin: 0 0 8px 0;
+}
+
+[data-admin-theme="dark"] .avakio-layout-kicker {
+  color: #64b5f6;
+}
+
+.avakio-layout-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+.avakio-layout-subtitle {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #666;
+  margin: 0 0 24px 0;
+}
+
+[data-admin-theme="dark"] .avakio-layout-subtitle {
+  color: #b0b0b0;
+}
+
+/* Theme Picker */
+.avakio-layout-theme-picker {
+  margin-top: 24px;
+}
+
+.avakio-layout-theme-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin: 0 0 12px 0;
+}
+
+.avakio-layout-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.avakio-layout-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 2px solid;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.avakio-layout-chip:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+[data-admin-theme="dark"] .avakio-layout-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.avakio-layout-chip.active {
+  background: rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+}
+
+[data-admin-theme="dark"] .avakio-layout-chip.active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.avakio-layout-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* Section */
+.avakio-layout-section {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+[data-admin-theme="dark"] .avakio-layout-section {
+  background: #2d2d2d;
+  color: #e0e0e0;
+}
+
+.avakio-layout-section-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.avakio-layout-section-description {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 24px 0;
+}
+
+[data-admin-theme="dark"] .avakio-layout-section-description {
+  color: #b0b0b0;
+}
+
+/* Demo Boxes */
+.demo-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 500;
+  border-radius: 4px;
+  min-height: 80px;
+}
+
+.demo-box-small {
+  padding: 16px;
+  text-align: center;
+  font-weight: 500;
+  border-radius: 4px;
+  background: rgba(28, 161, 193, 0.1);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-admin-theme="dark"] .demo-box-small {
+  background: rgba(100, 181, 246, 0.15);
+  color: #e0e0e0;
+}
+
+/* Layout Types Grid */
+.layout-types-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.layout-types-grid h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #333;
+}
+
+[data-admin-theme="dark"] .layout-types-grid h4 {
+  color: #e0e0e0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .avakio-layout-example {
+    padding: 16px;
+  }
+
+  .avakio-layout-hero {
+    padding: 24px;
+  }
+
+  .avakio-layout-section {
+    padding: 24px;
+  }
+
+  .avakio-layout-title {
+    font-size: 28px;
+  }
+
+  .layout-types-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

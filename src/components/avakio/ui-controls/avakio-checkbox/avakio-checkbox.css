@@ -1,0 +1,208 @@
+/* ===================================
+   AVAKIO CHECKBOX - BASE STYLES
+   =================================== */
+
+.avakio-checkbox {
+  --cb-primary: #1ca1c1;
+  --cb-primary-strong: #0f7b93;
+  --cb-surface: #ffffff;
+  --cb-border: #cbd5e1;
+  --cb-text: #0f172a;
+  --cb-muted: #64748b;
+  --cb-error: #ef4444;
+
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  cursor: pointer;
+  color: var(--cb-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  user-select: none;
+  margin-bottom: 12px;
+}
+
+.avakio-checkbox input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.avakio-checkbox-box {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--cb-border);
+  background: var(--cb-surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  box-shadow: 0 3px 10px -8px rgba(0, 0, 0, 0.4);
+}
+
+.avakio-checkbox-md .avakio-checkbox-box { width: 22px; height: 22px; }
+.avakio-checkbox-sm .avakio-checkbox-box { width: 18px; height: 18px; border-radius: 5px; }
+
+.avakio-checkbox:hover .avakio-checkbox-box {
+  border-color: color-mix(in srgb, var(--cb-primary) 35%, var(--cb-border));
+}
+
+.avakio-checkbox-box:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--cb-primary) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.avakio-checkbox-mark {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: transparent;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.avakio-checkbox[data-status="checked"] .avakio-checkbox-box {
+  background: linear-gradient(120deg, var(--cb-primary) 0%, var(--cb-primary-strong) 100%);
+  border-color: color-mix(in srgb, var(--cb-primary) 50%, transparent);
+  box-shadow: 0 8px 18px -12px rgba(0, 0, 0, 0.35);
+}
+
+.avakio-checkbox[data-status="checked"] .avakio-checkbox-mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="white" d="M6.173 12.414a1 1 0 0 1-1.414 0l-2.88-2.879a1 1 0 1 1 1.415-1.414l2.172 2.172 6.95-6.95a1 1 0 0 1 1.414 1.414z"/></svg>');
+  background: #fff;
+}
+
+.avakio-checkbox[data-status="indeterminate"] .avakio-checkbox-box {
+  background: linear-gradient(120deg, var(--cb-primary) 0%, var(--cb-primary-strong) 100%);
+  border-color: color-mix(in srgb, var(--cb-primary) 50%, transparent);
+}
+
+.avakio-checkbox[data-status="indeterminate"] .avakio-checkbox-mark {
+  background: #fff;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.avakio-checkbox-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.35;
+}
+
+.avakio-checkbox-label-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.avakio-checkbox-label { font-weight: 400; color: var(--avakio-text-primary); }
+
+.avakio-checkbox[data-status="checked"] .avakio-checkbox-label { font-weight: 500; }
+
+.avakio-checkbox-description { color: var(--cb-muted); font-size: 13px; }
+
+.avakio-checkbox-required { color: #ef4444; }
+
+.avakio-checkbox-error-text { color: var(--cb-error); font-size: 13px; }
+
+.avakio-checkbox-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.avakio-checkbox-error .avakio-checkbox-box {
+  border-color: var(--cb-error);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.14);
+}
+
+/* ===================================
+   THEMES
+   =================================== */
+
+/* MATERIAL */
+[data-admin-theme="material"] .avakio-checkbox {
+  --cb-primary: #1ca1c1;
+  --cb-primary-strong: #0f7b93;
+  --cb-surface: #f4fbfd;
+  --cb-border: #cfe8f3;
+  --cb-text: #0b2f3a;
+  --cb-muted: #255c6b;
+}
+
+/* FLAT */
+[data-admin-theme="flat"] .avakio-checkbox {
+  --cb-primary: #5e81ac;
+  --cb-primary-strong: #46678e;
+  --cb-surface: #f3f6fb;
+  --cb-border: #cfd8e6;
+  --cb-text: #1f2a3d;
+  --cb-muted: #42526a;
+}
+
+/* COMPACT */
+[data-admin-theme="compact"] .avakio-checkbox {
+  --cb-primary: #00796b;
+  --cb-primary-strong: #005f55;
+  --cb-surface: #f1f7f6;
+  --cb-border: #b7d6d1;
+  --cb-text: #0b2c28;
+  --cb-muted: #1f5a52;
+}
+
+[data-admin-theme="compact"] .avakio-checkbox-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+/* DARK */
+[data-admin-theme="dark"] .avakio-checkbox {
+  --cb-primary: hsl(217, 91%, 60%);
+  --cb-primary-strong: hsl(217, 100%, 78%);
+  --cb-surface: hsl(222, 47%, 11%);
+  --cb-border: hsl(217, 33%, 17%);
+  --cb-text: hsl(210, 40%, 96%);
+  --cb-muted: hsl(215, 20%, 80%);
+}
+
+[data-admin-theme="dark"] .avakio-checkbox-box {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+[data-admin-theme="dark"] .avakio-checkbox-label {
+  color: var(--avakio-text-white);
+}
+
+/* OCEAN */
+[data-admin-theme="ocean"] .avakio-checkbox {
+  --cb-primary: #0277bd;
+  --cb-primary-strong: #015c93;
+  --cb-surface: #f1f7fd;
+  --cb-border: #bfd8f1;
+  --cb-text: #0f2740;
+  --cb-muted: #244f74;
+}
+
+[data-admin-theme="ocean"] .avakio-checkbox-label {
+  color: var(--avakio-accent-secondary);
+}
+
+/* SUNSET */
+[data-admin-theme="sunset"] .avakio-checkbox {
+  --cb-primary: #f57c00;
+  --cb-primary-strong: #c35f00;
+  --cb-surface: #fff8f1;
+  --cb-border: #f4d3ad;
+  --cb-text: #4a2e0f;
+  --cb-muted: #8c5416;
+}
+
+[data-admin-theme="sunset"] .avakio-checkbox-label {
+  color: var(--avakio-accent-secondary);
+}
+

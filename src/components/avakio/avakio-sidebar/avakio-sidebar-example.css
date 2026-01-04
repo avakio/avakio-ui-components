@@ -1,0 +1,287 @@
+/* ===================================
+   AVAKIO SIDEBAR EXAMPLE - STYLES
+   =================================== */
+
+.avakio-sidebar-example {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+}
+
+/* Hero Section */
+.avakio-sidebar-hero {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.avakio-sidebar-kicker {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.avakio-sidebar-title {
+  color: #ffffff;
+  font-size: 42px;
+  font-weight: 800;
+  margin: 0 0 12px 0;
+  line-height: 1.1;
+}
+
+.avakio-sidebar-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+/* Theme Picker */
+.avakio-sidebar-theme-picker {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  padding: 20px;
+  min-width: 280px;
+}
+
+.avakio-sidebar-theme-label {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.avakio-sidebar-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.avakio-sidebar-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.avakio-sidebar-chip:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+}
+
+.avakio-sidebar-chip.active {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: currentColor;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.avakio-sidebar-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Cards */
+.avakio-sidebar-card {
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Demo Container */
+.avakio-sidebar-demo-container {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-demo-container {
+  background: hsl(222, 47%, 11%);
+  border-color: hsl(217, 33%, 17%);
+}
+
+.avakio-sidebar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-toolbar {
+  background: hsl(217, 33%, 15%);
+  border-bottom-color: hsl(217, 33%, 17%);
+}
+
+.avakio-sidebar-toolbar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-toolbar-title {
+  color: hsl(210, 40%, 96%);
+}
+
+.avakio-sidebar-mobile-hint {
+  margin-left: auto;
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-mobile-hint {
+  color: hsl(215, 20%, 80%);
+}
+
+@media (max-width: 768px) {
+  .avakio-sidebar-mobile-hint {
+    display: none;
+  }
+}
+
+.avakio-sidebar-layout {
+  display: flex;
+  height: 500px;
+}
+
+.avakio-sidebar-content-area {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  background: #fafafa;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-content-area {
+  background: hsl(222, 47%, 13%);
+}
+
+.avakio-sidebar-content-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-content-card {
+  background: hsl(222, 47%, 11%);
+  border-color: hsl(217, 33%, 17%);
+}
+
+.avakio-sidebar-content-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-content-card h3 {
+  color: hsl(210, 40%, 96%);
+}
+
+.avakio-sidebar-content-card p {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-content-card p {
+  color: hsl(215, 20%, 80%);
+}
+
+.avakio-sidebar-content-card strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-content-card strong {
+  color: hsl(210, 40%, 96%);
+}
+
+/* Features Grid */
+.avakio-sidebar-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.avakio-sidebar-feature {
+  padding: 20px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-feature {
+  background: hsl(222, 47%, 13%);
+  border-color: hsl(217, 33%, 17%);
+}
+
+.avakio-sidebar-feature h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-feature h4 {
+  color: hsl(210, 40%, 96%);
+}
+
+.avakio-sidebar-feature p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+[data-admin-theme="dark"] .avakio-sidebar-feature p {
+  color: hsl(215, 20%, 80%);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .avakio-sidebar-hero {
+    flex-direction: column;
+  }
+
+  .avakio-sidebar-title {
+    font-size: 32px;
+  }
+
+  .avakio-sidebar-subtitle {
+    font-size: 16px;
+  }
+
+  .avakio-sidebar-layout {
+    height: 400px;
+  }
+
+  .avakio-sidebar-theme-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+

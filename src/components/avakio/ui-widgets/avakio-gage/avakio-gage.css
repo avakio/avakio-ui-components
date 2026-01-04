@@ -1,0 +1,147 @@
+/* ===================================
+   AVAKIO GAGE - BASE
+   =================================== */
+
+.avakio-gage {
+  --gg-fill: #1ca1c1;
+  --gg-track: #e2e8f0;
+  --gg-bg: #ffffff;
+  --gg-text: #0f172a;
+  --gg-muted: #6b7280;
+  --gg-size: 180px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--gg-text);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.avakio-gage-label {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.avakio-gage-shell {
+  position: relative;
+  width: var(--gg-size);
+  height: var(--gg-size);
+}
+
+.avakio-gage svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.avakio-gage-track {
+  fill: none;
+  stroke: var(--gg-track);
+  stroke-linecap: round;
+}
+
+.avakio-gage-value {
+  fill: none;
+  stroke: var(--gg-fill);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.35s ease;
+}
+
+.avakio-gage-target {
+  fill: var(--gg-fill);
+  stroke: var(--gg-bg);
+  stroke-width: 2px;
+}
+
+.avakio-gage-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.avakio-gage-value-text {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--gg-text);
+}
+
+.avakio-gage-sublabel {
+  font-size: 13px;
+  color: var(--gg-muted);
+}
+
+.avakio-gage-minmax {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--gg-muted);
+  font-size: 12px;
+}
+
+/* Sizes */
+.avakio-gage-sm { --gg-size: 140px; }
+.avakio-gage-md { --gg-size: 180px; }
+.avakio-gage-lg { --gg-size: 220px; }
+
+/* ===================================
+   THEMES
+   =================================== */
+
+[data-admin-theme="material"] .avakio-gage,
+.avakio-gage[data-admin-theme="material"] {
+  --gg-fill: #1ca1c1;
+  --gg-track: #e2e8f0;
+  --gg-bg: #ffffff;
+  --gg-text: #0f172a;
+  --gg-muted: #6b7280;
+}
+
+[data-admin-theme="flat"] .avakio-gage,
+.avakio-gage[data-admin-theme="flat"] {
+  --gg-fill: #5e81ac;
+  --gg-track: #cfd8e6;
+  --gg-bg: #f7f9fb;
+  --gg-text: #1f2a3d;
+  --gg-muted: #42526a;
+}
+
+[data-admin-theme="compact"] .avakio-gage,
+.avakio-gage[data-admin-theme="compact"] {
+  --gg-fill: #00796b;
+  --gg-track: #b7d6d1;
+  --gg-bg: #f4faf8;
+  --gg-text: #0b2c28;
+  --gg-muted: #1f5a52;
+}
+
+[data-admin-theme="dark"] .avakio-gage,
+.avakio-gage[data-admin-theme="dark"] {
+  --gg-fill: hsl(217, 91%, 60%);
+  --gg-track: hsl(217, 33%, 17%);
+  --gg-bg: hsl(222, 47%, 11%);
+  --gg-text: hsl(210, 40%, 96%);
+  --gg-muted: hsl(215, 20%, 80%);
+}
+
+[data-admin-theme="ocean"] .avakio-gage,
+.avakio-gage[data-admin-theme="ocean"] {
+  --gg-fill: #0277bd;
+  --gg-track: #bfd8f1;
+  --gg-bg: #f1f7fd;
+  --gg-text: #0f2740;
+  --gg-muted: #244f74;
+}
+
+[data-admin-theme="sunset"] .avakio-gage,
+.avakio-gage[data-admin-theme="sunset"] {
+  --gg-fill: #f57c00;
+  --gg-track: #f4d3ad;
+  --gg-bg: #fff8f1;
+  --gg-text: #4a2e0f;
+  --gg-muted: #8c5416;
+}
+

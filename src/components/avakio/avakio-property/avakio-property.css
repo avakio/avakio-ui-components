@@ -1,0 +1,256 @@
+/* AVAKIO PROPERTY SHEET */
+
+.avakio-property {
+  --prop-surface: #ffffff;
+  --prop-border: #d1d5db;
+  --prop-muted: #6b7280;
+  --prop-strong: #0f172a;
+  --prop-accent: #1ca1c1;
+  --prop-bg-alt: #f8fafc;
+  --prop-shadow: 0 10px 24px -20px rgba(15, 23, 42, 0.35);
+  --prop-radius: 0px;
+  color: var(--prop-strong);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  width: 100%;
+  max-width: 900px;
+}
+
+.avakio-property.is-dense {
+  --prop-radius: 0px;
+}
+
+.av-prop-table {
+  border: 1px solid var(--prop-border);
+  border-radius: var(--prop-radius);
+  overflow: visible;
+  background: var(--prop-surface);
+  box-shadow: var(--prop-shadow);
+}
+
+.av-prop-group {
+  padding: 10px 14px;
+  background: var(--prop-bg-alt);
+  font-weight: 800;
+  color: var(--prop-strong);
+  border-bottom: 1px solid var(--prop-border);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 12px;
+}
+
+.av-prop-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+}
+
+.av-prop-row + .av-prop-row {
+  border-top: 1px solid var(--prop-border);
+}
+
+.avakio-property.is-dense .av-prop-row {
+  padding: 10px 12px;
+  gap: 10px;
+}
+
+.av-prop-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 700;
+  color: var(--prop-strong);
+}
+
+.av-prop-desc {
+  font-size: 12px;
+  color: var(--prop-muted);
+  line-height: 1.4;
+}
+
+.av-prop-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.av-prop-input {
+  width: 100%;
+  padding: 10px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--prop-border);
+  background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+  color: var(--prop-strong);
+  font-size: 14px;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.av-prop-input:focus {
+  outline: none;
+  border-color: var(--prop-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--prop-accent) 30%, transparent);
+}
+
+.av-prop-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.av-prop-textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.av-prop-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: var(--prop-strong);
+  cursor: pointer;
+  user-select: none;
+}
+
+.av-prop-checkbox input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.av-prop-checkbox-box {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 1px solid var(--prop-border);
+  background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: border-color 0.12s ease, background-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.av-prop-checkbox input:checked + .av-prop-checkbox-box {
+  background: var(--prop-accent);
+  border-color: var(--prop-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--prop-accent) 30%, transparent);
+}
+
+.av-prop-checkbox-label {
+  font-size: 14px;
+  color: var(--prop-strong);
+}
+
+.av-prop-datewrap { position: relative; display: inline-flex; }
+.av-prop-datebtn {
+  padding: 10px 11px;
+  border-radius: 10px;
+  border: 1px solid var(--prop-border);
+  background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+  color: var(--prop-strong);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.av-prop-datebtn:hover { border-color: var(--prop-accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--prop-accent) 20%, transparent); }
+.av-prop-datepop {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 6px);
+  left: 0;
+  background: var(--prop-surface);
+  border: 1px solid var(--prop-border);
+  border-radius: 12px;
+  box-shadow: 0 18px 38px -26px rgba(15, 23, 42, 0.45);
+  overflow: hidden;
+}
+
+.av-prop-datepop.is-top {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+
+.av-prop-datepicker {
+  border: none;
+}
+
+.avakio-property.has-borders .av-prop-table {
+  border: 1px solid var(--prop-border);
+}
+
+/* Themes */
+[data-admin-theme="material"] .avakio-property,
+.avakio-property[data-admin-theme="material"] {
+  --prop-surface: #ffffff;
+  --prop-border: #d7dde4;
+  --prop-muted: #6b7280;
+  --prop-strong: #0f172a;
+  --prop-accent: #1ca1c1;
+  --prop-bg-alt: #f8fafc;
+  --prop-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.25);
+}
+
+[data-admin-theme="flat"] .avakio-property,
+.avakio-property[data-admin-theme="flat"] {
+  --prop-surface: #f7f9fb;
+  --prop-border: #cfd8e6;
+  --prop-muted: #42526a;
+  --prop-strong: #1f2a3d;
+  --prop-accent: #5e81ac;
+  --prop-bg-alt: #eef2f7;
+  --prop-shadow: 0 8px 20px -18px rgba(15, 23, 42, 0.28);
+}
+
+[data-admin-theme="compact"] .avakio-property,
+.avakio-property[data-admin-theme="compact"] {
+  --prop-surface: #f4faf8;
+  --prop-border: #b7d6d1;
+  --prop-muted: #1f5a52;
+  --prop-strong: #0b2c28;
+  --prop-accent: #00796b;
+  --prop-bg-alt: #e9f3f1;
+  --prop-shadow: 0 8px 18px -16px rgba(0, 60, 50, 0.25);
+}
+
+[data-admin-theme="dark"] .avakio-property,
+.avakio-property[data-admin-theme="dark"] {
+  --prop-surface: hsl(222, 47%, 11%);
+  --prop-border: hsl(217, 33%, 17%);
+  --prop-muted: hsl(215, 20%, 80%);
+  --prop-strong: hsl(210, 40%, 96%);
+  --prop-accent: hsl(217, 91%, 60%);
+  --prop-bg-alt: hsl(217, 33%, 17%);
+  --prop-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.65);
+}
+
+[data-admin-theme="ocean"] .avakio-property,
+.avakio-property[data-admin-theme="ocean"] {
+  --prop-surface: #f1f7fd;
+  --prop-border: #bfd8f1;
+  --prop-muted: #244f74;
+  --prop-strong: #0f2740;
+  --prop-accent: #0277bd;
+  --prop-bg-alt: #e3effc;
+  --prop-shadow: 0 10px 22px -18px rgba(9, 41, 73, 0.35);
+}
+
+[data-admin-theme="sunset"] .avakio-property,
+.avakio-property[data-admin-theme="sunset"] {
+  --prop-surface: #fff8f1;
+  --prop-border: #f4d3ad;
+  --prop-muted: #8c5416;
+  --prop-strong: #4a2e0f;
+  --prop-accent: #f57c00;
+  --prop-bg-alt: #fde9d9;
+  --prop-shadow: 0 10px 22px -18px rgba(74, 46, 15, 0.35);
+}
+
+@media (max-width: 760px) {
+  .av-prop-row {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .av-prop-label {
+    font-size: 14px;
+  }
+}
+

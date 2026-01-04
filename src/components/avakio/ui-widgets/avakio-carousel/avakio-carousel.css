@@ -1,0 +1,272 @@
+/* AvakioCarousel - Continuous circular navigation through content blocks */
+
+/* Base carousel container */
+.avakio-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--avakio-bg-primary);
+  border-radius: 8px;
+}
+
+/* Viewport for slides */
+.avakio-carousel-viewport {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+/* Track that holds all slides */
+.avakio-carousel-track {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* Individual slide */
+.avakio-carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navigation Buttons */
+.avakio-carousel-nav-button {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--avakio-border-primary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--avakio-text-primary);
+  z-index: 10;
+}
+
+.avakio-carousel-nav-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: scale(1.1);
+}
+
+.avakio-carousel-nav-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Side navigation buttons */
+.avakio-carousel-nav-prev,
+.avakio-carousel-nav-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.avakio-carousel-nav-prev {
+  left: 16px;
+}
+
+.avakio-carousel-nav-next {
+  right: 16px;
+}
+
+/* Bottom navigation container */
+.avakio-carousel-nav-bottom {
+  position: absolute;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.avakio-carousel-nav-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.avakio-carousel-nav-left {
+  left: 16px;
+}
+
+.avakio-carousel-nav-right {
+  right: 16px;
+}
+
+/* Navigation buttons group (for bottom navigation) */
+.avakio-carousel-nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.avakio-carousel-nav-buttons .avakio-carousel-nav-button {
+  width: 32px;
+  height: 32px;
+}
+
+/* Navigation indicators (dots) */
+.avakio-carousel-indicators {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.avakio-carousel-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--avakio-border-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.avakio-carousel-indicator:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(1.2);
+}
+
+.avakio-carousel-indicator-active {
+  background: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
+  width: 12px;
+  height: 12px;
+}
+
+/* Theme: Material */
+.avakio-carousel-theme-material {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.avakio-carousel-theme-material .avakio-carousel-indicator-active {
+  background: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
+}
+
+/* Theme: Flat */
+.avakio-carousel-theme-flat {
+  border: 1px solid var(--avakio-border-primary);
+}
+
+.avakio-carousel-theme-flat .avakio-carousel-indicator-active {
+  background: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
+}
+
+.avakio-carousel-theme-flat .avakio-carousel-nav-button {
+  border-radius: 4px;
+}
+
+/* Theme: Compact */
+.avakio-carousel-theme-compact {
+  border: 1px solid var(--avakio-border-secondary);
+}
+
+.avakio-carousel-theme-compact .avakio-carousel-indicator-active {
+  background: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
+}
+
+.avakio-carousel-theme-compact .avakio-carousel-nav-button {
+  width: 32px;
+  height: 32px;
+}
+
+.avakio-carousel-theme-compact .avakio-carousel-indicator {
+  width: 8px;
+  height: 8px;
+}
+
+.avakio-carousel-theme-compact .avakio-carousel-indicator-active {
+  width: 10px;
+  height: 10px;
+}
+
+/* Theme: Dark */
+.avakio-carousel-theme-dark {
+  background: var(--avakio-bg-tertiary);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.avakio-carousel-theme-dark .avakio-carousel-nav-button {
+  background: var(--avakio-bg-tertiary);
+  border-color: var(--avakio-border-primary);
+  color: var(--avakio-text-white);
+}
+
+.avakio-carousel-theme-dark .avakio-carousel-nav-button:hover:not(:disabled) {
+  background: var(--avakio-bg-hover);
+  border-color: var(--avakio-border-hover);
+}
+
+.avakio-carousel-theme-dark .avakio-carousel-indicator {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: var(--avakio-border-secondary);
+}
+
+.avakio-carousel-theme-dark .avakio-carousel-indicator-active {
+  background: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
+}
+
+/* Theme: Ocean */
+.avakio-carousel-theme-ocean {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.avakio-carousel-theme-ocean .avakio-carousel-indicator-active {
+  background: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
+}
+
+/* Theme: Sunset */
+.avakio-carousel-theme-sunset {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.avakio-carousel-theme-sunset .avakio-carousel-indicator-active {
+  background: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .avakio-carousel-nav-prev {
+    left: 8px;
+  }
+
+  .avakio-carousel-nav-next {
+    right: 8px;
+  }
+
+  .avakio-carousel-nav-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .avakio-carousel-nav-bottom {
+    bottom: 12px;
+  }
+}
+
+/* Accessibility */
+.avakio-carousel-nav-button:focus-visible {
+  outline: 2px solid var(--avakio-border-focus);
+  outline-offset: 2px;
+}
+
+.avakio-carousel-indicator:focus-visible {
+  outline: 2px solid var(--avakio-border-focus);
+  outline-offset: 2px;
+}
+

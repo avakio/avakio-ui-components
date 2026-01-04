@@ -1,0 +1,259 @@
+/* AvakioRadio Example Styles */
+
+.avakio-radio-demo-container {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  background: var(--avakio-bg-primary, #ffffff);
+}
+
+/* Sticky Header */
+.avakio-radio-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--avakio-bg-primary, #ffffff);
+  border-bottom: 1px solid var(--avakio-border, #e5e7eb);
+}
+
+/* Tab Bar Container */
+.avakio-radio-tabbar-container {
+  padding: 0 16px 8px 16px;
+  background: var(--avakio-bg-primary, #ffffff);
+}
+
+/* Section Styles */
+.avakio-radio-demo-section {
+  padding: 16px;
+  scroll-margin-top: 180px;
+}
+
+/* Result Display */
+.avakio-radio-result {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: var(--avakio-bg-secondary, #f9fafb);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--avakio-text-secondary, #6b7280);
+}
+
+.avakio-radio-result strong {
+  color: var(--avakio-text-primary, #1f2937);
+}
+
+/* Action Buttons */
+.avakio-radio-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.avakio-radio-action-btn {
+  padding: 8px 16px;
+  background: var(--avakio-primary, #3b82f6);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.avakio-radio-action-btn:hover {
+  background: var(--avakio-primary-dark, #2563eb);
+}
+
+.avakio-radio-action-btn:active {
+  transform: scale(0.98);
+}
+
+/* ========================================
+   THEME STYLES
+   ======================================== */
+
+/* Dark Theme */
+[data-admin-theme="dark"] .avakio-radio-demo-container,
+.avakio-radio-demo-container[data-admin-theme="dark"] {
+  background: #1f2937;
+}
+
+[data-admin-theme="dark"] .avakio-radio-sticky-header,
+.avakio-radio-demo-container[data-admin-theme="dark"] .avakio-radio-sticky-header {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-admin-theme="dark"] .avakio-radio-tabbar-container,
+.avakio-radio-demo-container[data-admin-theme="dark"] .avakio-radio-tabbar-container {
+  background: #1f2937;
+}
+
+[data-admin-theme="dark"] .avakio-radio-result,
+.avakio-radio-demo-container[data-admin-theme="dark"] .avakio-radio-result {
+  background: #374151;
+  color: #9ca3af;
+}
+
+[data-admin-theme="dark"] .avakio-radio-result strong,
+.avakio-radio-demo-container[data-admin-theme="dark"] .avakio-radio-result strong {
+  color: #f9fafb;
+}
+
+[data-admin-theme="dark"] .avakio-radio-action-btn,
+.avakio-radio-demo-container[data-admin-theme="dark"] .avakio-radio-action-btn {
+  background: #3b82f6;
+}
+
+[data-admin-theme="dark"] .avakio-radio-action-btn:hover,
+.avakio-radio-demo-container[data-admin-theme="dark"] .avakio-radio-action-btn:hover {
+  background: #2563eb;
+}
+
+/* Ocean Theme */
+[data-admin-theme="ocean"] .avakio-radio-demo-container,
+.avakio-radio-demo-container[data-admin-theme="ocean"] {
+  background: #f0f9ff;
+}
+
+[data-admin-theme="ocean"] .avakio-radio-sticky-header,
+.avakio-radio-demo-container[data-admin-theme="ocean"] .avakio-radio-sticky-header {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+[data-admin-theme="ocean"] .avakio-radio-tabbar-container,
+.avakio-radio-demo-container[data-admin-theme="ocean"] .avakio-radio-tabbar-container {
+  background: #f0f9ff;
+}
+
+[data-admin-theme="ocean"] .avakio-radio-result,
+.avakio-radio-demo-container[data-admin-theme="ocean"] .avakio-radio-result {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+[data-admin-theme="ocean"] .avakio-radio-result strong,
+.avakio-radio-demo-container[data-admin-theme="ocean"] .avakio-radio-result strong {
+  color: #0c4a6e;
+}
+
+[data-admin-theme="ocean"] .avakio-radio-action-btn,
+.avakio-radio-demo-container[data-admin-theme="ocean"] .avakio-radio-action-btn {
+  background: #0ea5e9;
+}
+
+[data-admin-theme="ocean"] .avakio-radio-action-btn:hover,
+.avakio-radio-demo-container[data-admin-theme="ocean"] .avakio-radio-action-btn:hover {
+  background: #0284c7;
+}
+
+/* Sunset Theme */
+[data-admin-theme="sunset"] .avakio-radio-demo-container,
+.avakio-radio-demo-container[data-admin-theme="sunset"] {
+  background: #fff7ed;
+}
+
+[data-admin-theme="sunset"] .avakio-radio-sticky-header,
+.avakio-radio-demo-container[data-admin-theme="sunset"] .avakio-radio-sticky-header {
+  background: #fff7ed;
+  border-color: #fed7aa;
+}
+
+[data-admin-theme="sunset"] .avakio-radio-tabbar-container,
+.avakio-radio-demo-container[data-admin-theme="sunset"] .avakio-radio-tabbar-container {
+  background: #fff7ed;
+}
+
+[data-admin-theme="sunset"] .avakio-radio-result,
+.avakio-radio-demo-container[data-admin-theme="sunset"] .avakio-radio-result {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+[data-admin-theme="sunset"] .avakio-radio-result strong,
+.avakio-radio-demo-container[data-admin-theme="sunset"] .avakio-radio-result strong {
+  color: #7c2d12;
+}
+
+[data-admin-theme="sunset"] .avakio-radio-action-btn,
+.avakio-radio-demo-container[data-admin-theme="sunset"] .avakio-radio-action-btn {
+  background: #f97316;
+}
+
+[data-admin-theme="sunset"] .avakio-radio-action-btn:hover,
+.avakio-radio-demo-container[data-admin-theme="sunset"] .avakio-radio-action-btn:hover {
+  background: #ea580c;
+}
+
+/* Flat Theme */
+[data-admin-theme="flat"] .avakio-radio-demo-container,
+.avakio-radio-demo-container[data-admin-theme="flat"] {
+  background: #f8fafc;
+}
+
+[data-admin-theme="flat"] .avakio-radio-sticky-header,
+.avakio-radio-demo-container[data-admin-theme="flat"] .avakio-radio-sticky-header {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+[data-admin-theme="flat"] .avakio-radio-tabbar-container,
+.avakio-radio-demo-container[data-admin-theme="flat"] .avakio-radio-tabbar-container {
+  background: #f8fafc;
+}
+
+[data-admin-theme="flat"] .avakio-radio-result,
+.avakio-radio-demo-container[data-admin-theme="flat"] .avakio-radio-result {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+[data-admin-theme="flat"] .avakio-radio-action-btn,
+.avakio-radio-demo-container[data-admin-theme="flat"] .avakio-radio-action-btn {
+  background: #5E81AC;
+  border-radius: 4px;
+}
+
+[data-admin-theme="flat"] .avakio-radio-action-btn:hover,
+.avakio-radio-demo-container[data-admin-theme="flat"] .avakio-radio-action-btn:hover {
+  background: #4c6a91;
+}
+
+/* Compact Theme */
+[data-admin-theme="compact"] .avakio-radio-demo-section,
+.avakio-radio-demo-container[data-admin-theme="compact"] .avakio-radio-demo-section {
+  padding: 12px;
+}
+
+[data-admin-theme="compact"] .avakio-radio-result,
+.avakio-radio-demo-container[data-admin-theme="compact"] .avakio-radio-result {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+[data-admin-theme="compact"] .avakio-radio-action-btn,
+.avakio-radio-demo-container[data-admin-theme="compact"] .avakio-radio-action-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  background: #00796B;
+}
+
+[data-admin-theme="compact"] .avakio-radio-action-btn:hover,
+.avakio-radio-demo-container[data-admin-theme="compact"] .avakio-radio-action-btn:hover {
+  background: #00695c;
+}
+
+/* Material Theme */
+[data-admin-theme="material"] .avakio-radio-action-btn,
+.avakio-radio-demo-container[data-admin-theme="material"] .avakio-radio-action-btn {
+  background: #1CA1C1;
+}
+
+[data-admin-theme="material"] .avakio-radio-action-btn:hover,
+.avakio-radio-demo-container[data-admin-theme="material"] .avakio-radio-action-btn:hover {
+  background: #178ba6;
+}
+

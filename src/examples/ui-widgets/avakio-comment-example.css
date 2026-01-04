@@ -1,0 +1,57 @@
+/* =====================================================
+   AVAKIO COMMENT EXAMPLE - Demo Page Styles
+   ===================================================== */
+
+.avakio-comment-demo-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: #f9f9f9;
+}
+
+.avakio-comment-demo-container[data-admin-theme="dark"] {
+  background: #1e1e1e;
+}
+
+/* Sticky Header */
+.avakio-comment-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.avakio-comment-demo-container[data-admin-theme="dark"] .avakio-comment-sticky-header {
+  background: #252525;
+  border-bottom-color: #333;
+}
+
+/* TabBar Container */
+.avakio-comment-tabbar-container {
+  padding: 0 16px;
+  background: inherit;
+}
+
+/* Section Styles */
+.avakio-comment-demo-section {
+  padding: 24px 16px;
+  scroll-margin-top: 160px;
+}
+
+.avakio-comment-demo-section:last-child {
+  padding-bottom: 48px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .avakio-comment-demo-section {
+    padding: 16px 12px;
+  }
+
+  .avakio-comment-tabbar-container {
+    padding: 0 8px;
+  }
+}
+

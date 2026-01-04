@@ -1,0 +1,311 @@
+/* ================================
+   AVAKIO TREE EXAMPLE STYLES
+   ================================ */
+
+.avakio-tree-demo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+/* Sticky header with tabs */
+.avakio-tree-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--avakio-sticky-header-bg, #f8f9fa);
+  border-bottom: 1px solid var(--avakio-sticky-header-border, #e5e7eb);
+}
+
+.avakio-tree-tabbar-container {
+  padding: 0 16px 12px;
+  background: inherit;
+}
+
+/* Demo sections */
+.avakio-tree-demo-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--avakio-section-border, #e5e7eb);
+}
+
+.avakio-tree-demo-section:last-child {
+  border-bottom: none;
+}
+
+/* Tree wrapper */
+.avakio-tree-demo-wrapper {
+  width: 100%;
+}
+
+/* Result display */
+.avakio-tree-result {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: var(--avakio-result-bg, #f0f9ff);
+  border: 1px solid var(--avakio-result-border, #bae6fd);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--avakio-result-text, #0369a1);
+}
+
+.avakio-tree-result strong {
+  color: var(--avakio-result-strong, #075985);
+}
+
+/* Actions row */
+.avakio-tree-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* Selection grid */
+.avakio-tree-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.avakio-tree-selection-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.avakio-tree-selection-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--avakio-custom-label, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Custom grid for variations */
+.avakio-tree-custom-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.avakio-tree-custom-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.avakio-tree-custom-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--avakio-custom-label, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* API Table */
+.avakio-tree-api-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.avakio-tree-api-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.avakio-tree-api-table th,
+.avakio-tree-api-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--avakio-table-border, #e5e7eb);
+}
+
+.avakio-tree-api-table th {
+  font-weight: 600;
+  background: var(--avakio-table-header-bg, #f3f4f6);
+  color: var(--avakio-table-header-text, #374151);
+}
+
+.avakio-tree-api-table td {
+  color: var(--avakio-table-text, #4b5563);
+}
+
+.avakio-tree-api-table code {
+  padding: 2px 6px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 12px;
+  background: var(--avakio-code-bg, #e5e7eb);
+  border-radius: 4px;
+  color: var(--avakio-code-text, #be185d);
+}
+
+.avakio-tree-api-table h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--avakio-table-header-text, #374151);
+}
+
+/* Code block */
+.avakio-tree-code {
+  margin-top: 16px;
+}
+
+.avakio-tree-code pre {
+  padding: 16px;
+  background: var(--avakio-pre-bg, #1f2937);
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--avakio-pre-text, #e5e7eb);
+}
+
+/* ================================
+   THEME: MATERIAL
+   ================================ */
+.avakio-tree-demo-container[data-admin-theme="material"] {
+  --avakio-sticky-header-bg: #ffffff;
+  --avakio-sticky-header-border: #e0e0e0;
+  --avakio-section-border: #e0e0e0;
+  --avakio-result-bg: #e3f2fd;
+  --avakio-result-border: #90caf9;
+  --avakio-result-text: #1565c0;
+  --avakio-result-strong: #0d47a1;
+  --avakio-custom-label: #757575;
+  --avakio-table-border: #e0e0e0;
+  --avakio-table-header-bg: #fafafa;
+  --avakio-table-header-text: #424242;
+  --avakio-table-text: #616161;
+  --avakio-code-bg: #f5f5f5;
+  --avakio-code-text: #d81b60;
+  --avakio-pre-bg: #263238;
+  --avakio-pre-text: #eceff1;
+}
+
+/* ================================
+   THEME: DARK
+   ================================ */
+.avakio-tree-demo-container[data-admin-theme="dark"] {
+  --avakio-sticky-header-bg: #1a1a2e;
+  --avakio-sticky-header-border: #2d2d44;
+  --avakio-section-border: #2d2d44;
+  --avakio-result-bg: #1e3a5f;
+  --avakio-result-border: #3b82f6;
+  --avakio-result-text: #93c5fd;
+  --avakio-result-strong: #bfdbfe;
+  --avakio-custom-label: #9ca3af;
+  --avakio-table-border: #374151;
+  --avakio-table-header-bg: #1f2937;
+  --avakio-table-header-text: #e5e7eb;
+  --avakio-table-text: #d1d5db;
+  --avakio-code-bg: #374151;
+  --avakio-code-text: #f472b6;
+  --avakio-pre-bg: #0f172a;
+  --avakio-pre-text: #e2e8f0;
+}
+
+/* ================================
+   THEME: OCEAN
+   ================================ */
+.avakio-tree-demo-container[data-admin-theme="ocean"] {
+  --avakio-sticky-header-bg: #f0f7ff;
+  --avakio-sticky-header-border: #bfdbfe;
+  --avakio-section-border: #bfdbfe;
+  --avakio-result-bg: #dbeafe;
+  --avakio-result-border: #60a5fa;
+  --avakio-result-text: #1d4ed8;
+  --avakio-result-strong: #1e40af;
+  --avakio-custom-label: #6b7280;
+  --avakio-table-border: #bfdbfe;
+  --avakio-table-header-bg: #eff6ff;
+  --avakio-table-header-text: #1e40af;
+  --avakio-table-text: #3730a3;
+  --avakio-code-bg: #dbeafe;
+  --avakio-code-text: #7c3aed;
+  --avakio-pre-bg: #1e3a8a;
+  --avakio-pre-text: #e0e7ff;
+}
+
+/* ================================
+   THEME: SUNSET
+   ================================ */
+.avakio-tree-demo-container[data-admin-theme="sunset"] {
+  --avakio-sticky-header-bg: #fffbeb;
+  --avakio-sticky-header-border: #fed7aa;
+  --avakio-section-border: #fed7aa;
+  --avakio-result-bg: #fef3c7;
+  --avakio-result-border: #fbbf24;
+  --avakio-result-text: #b45309;
+  --avakio-result-strong: #92400e;
+  --avakio-custom-label: #78716c;
+  --avakio-table-border: #fed7aa;
+  --avakio-table-header-bg: #fffbeb;
+  --avakio-table-header-text: #92400e;
+  --avakio-table-text: #78350f;
+  --avakio-code-bg: #fef3c7;
+  --avakio-code-text: #dc2626;
+  --avakio-pre-bg: #7c2d12;
+  --avakio-pre-text: #fef3c7;
+}
+
+/* ================================
+   THEME: FLAT
+   ================================ */
+.avakio-tree-demo-container[data-admin-theme="flat"] {
+  --avakio-sticky-header-bg: #f9fafb;
+  --avakio-sticky-header-border: #d1d5db;
+  --avakio-section-border: #d1d5db;
+  --avakio-result-bg: #f3f4f6;
+  --avakio-result-border: #9ca3af;
+  --avakio-result-text: #374151;
+  --avakio-result-strong: #111827;
+  --avakio-custom-label: #6b7280;
+  --avakio-table-border: #d1d5db;
+  --avakio-table-header-bg: #f3f4f6;
+  --avakio-table-header-text: #374151;
+  --avakio-table-text: #4b5563;
+  --avakio-code-bg: #e5e7eb;
+  --avakio-code-text: #7c3aed;
+  --avakio-pre-bg: #1f2937;
+  --avakio-pre-text: #e5e7eb;
+}
+
+/* ================================
+   THEME: COMPACT
+   ================================ */
+.avakio-tree-demo-container[data-admin-theme="compact"] {
+  --avakio-sticky-header-bg: #fafafa;
+  --avakio-sticky-header-border: #e4e4e7;
+  --avakio-section-border: #e4e4e7;
+  --avakio-result-bg: #f4f4f5;
+  --avakio-result-border: #a1a1aa;
+  --avakio-result-text: #3f3f46;
+  --avakio-result-strong: #18181b;
+  --avakio-custom-label: #71717a;
+  --avakio-table-border: #e4e4e7;
+  --avakio-table-header-bg: #f4f4f5;
+  --avakio-table-header-text: #3f3f46;
+  --avakio-table-text: #52525b;
+  --avakio-code-bg: #e4e4e7;
+  --avakio-code-text: #a855f7;
+  --avakio-pre-bg: #27272a;
+  --avakio-pre-text: #e4e4e7;
+}
+
+.avakio-tree-demo-container[data-admin-theme="compact"] .avakio-tree-demo-section {
+  padding: 12px;
+}
+
+.avakio-tree-demo-container[data-admin-theme="compact"] .avakio-tree-api-table th,
+.avakio-tree-demo-container[data-admin-theme="compact"] .avakio-tree-api-table td {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+

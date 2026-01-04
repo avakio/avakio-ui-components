@@ -1,0 +1,267 @@
+/* AvakioLayout Base Styles */
+.avakio-layout {
+  display: flex;
+  box-sizing: border-box;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.avakio-layout-rows {
+  flex-direction: column;
+}
+
+.avakio-layout-cols {
+  flex-direction: row;
+}
+
+.avakio-layout-item {
+  flex-shrink: 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Allow layout items to grow when their content has flex: 1 or is a multiview/layout */
+.avakio-layout-rows > .avakio-layout-item:has(> .avakio-layout),
+.avakio-layout-rows > .avakio-layout-item:has(> .avakio-multiview) {
+  flex: 1;
+  min-height: 0;
+}
+
+.avakio-layout-cols > .avakio-layout-item:has(> .avakio-layout),
+.avakio-layout-cols > .avakio-layout-item:has(> .avakio-multiview) {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Explicit flex class for layout items */
+.avakio-layout-item-flex {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+.avakio-layout-item > * {
+  flex: 1;
+}
+
+.avakio-layout-hidden {
+  display: none !important;
+}
+
+.avakio-layout-disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Responsive Layout */
+.avakio-layout-responsive .avakio-layout-item {
+  flex-shrink: 1;
+}
+
+.avakio-layout-responsive-active {
+  flex-direction: column !important;
+}
+
+.avakio-layout-responsive-active .avakio-layout-item {
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .avakio-layout-responsive.avakio-layout-cols {
+    flex-direction: column;
+  }
+  
+  .avakio-layout-responsive.avakio-layout-cols .avakio-layout-item {
+    width: 100%;
+  }
+}
+
+/* Layout Types - Borders */
+.avakio-layout-type-space .avakio-layout-item {
+  border: 1px solid;
+  border-color: inherit;
+  margin: 4px;
+}
+
+.avakio-layout-type-wide .avakio-layout-item {
+  border: 1px solid;
+  border-color: inherit;
+  margin: 8px;
+}
+
+.avakio-layout-type-line .avakio-layout-item:not(:last-child) {
+  border-bottom: 1px solid;
+  border-color: inherit;
+}
+
+.avakio-layout-type-line.avakio-layout-cols .avakio-layout-item:not(:last-child) {
+  border-right: 1px solid;
+  border-bottom: none;
+}
+
+.avakio-layout-type-head .avakio-layout-item:first-child {
+  border-bottom: 2px solid;
+  border-color: inherit;
+  font-weight: 600;
+}
+
+.avakio-layout-type-material .avakio-layout-item {
+  border: 1px solid;
+  border-color: inherit;
+  border-radius: 4px;
+  margin: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Container Border - applies when borderless is false */
+.avakio-layout:not(.avakio-layout-borderless) {
+  border: 1px solid;
+  border-color: inherit;
+  border-radius: 4px;
+}
+
+.avakio-layout-borderless {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Theme: Material */
+.avakio-layout-theme-material {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+.avakio-layout-theme-material .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+}
+
+/* Theme: Flat */
+.avakio-layout-theme-flat {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+.avakio-layout-theme-flat .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+}
+
+/* Theme: Compact */
+.avakio-layout-theme-compact {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+.avakio-layout-theme-compact .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+  padding: 4px;
+}
+
+.avakio-layout-theme-compact.avakio-layout-type-space .avakio-layout-item,
+.avakio-layout-theme-compact.avakio-layout-type-wide .avakio-layout-item {
+  margin: 2px;
+}
+
+/* Theme: Dark */
+.avakio-layout-theme-dark {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+.avakio-layout-theme-dark .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+  background-color: var(--avakio-bg-secondary);
+}
+
+/* Theme: Ocean */
+.avakio-layout-theme-ocean {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+.avakio-layout-theme-ocean .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+  background-color: var(--avakio-bg-primary);
+}
+
+/* Theme: Sunset */
+.avakio-layout-theme-sunset {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+.avakio-layout-theme-sunset .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+  background-color: var(--avakio-bg-primary);
+}
+
+/* Admin Theme Integration */
+[data-admin-theme="material"] .avakio-layout {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="material"] .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="flat"] .avakio-layout {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="flat"] .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="compact"] .avakio-layout {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="compact"] .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="dark"] .avakio-layout {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="dark"] .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+  background-color: var(--avakio-bg-secondary);
+}
+
+[data-admin-theme="ocean"] .avakio-layout {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="ocean"] .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="sunset"] .avakio-layout {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="sunset"] .avakio-layout-item {
+  border-color: var(--avakio-border-primary);
+}
+

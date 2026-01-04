@@ -1,0 +1,595 @@
+/* Avakio Combo Base Styles */
+.avakio-combo-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
+  font-family: var(--font-sans);
+}
+
+.avakio-combo-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground);
+  padding-top: 10px;
+  flex-shrink: 0;
+}
+
+.avakio-combo-label-left {
+  justify-content: flex-start;
+}
+
+.avakio-combo-label-right {
+  justify-content: flex-end;
+}
+
+.avakio-combo-required {
+  color: var(--avakio-text-error);
+  margin-left: 2px;
+}
+
+.avakio-combo-container {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.avakio-combo-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background-color: var(--avakio-bg-primary);
+  transition: all 0.2s;
+  cursor: text;
+}
+
+.avakio-combo-input-wrapper:hover {
+  border-color: var(--primary);
+}
+
+.avakio-combo-input-wrapper.open,
+.avakio-combo-input-wrapper:focus-within {
+  border-color: var(--primary);
+  outline: 2px solid var(--ring);
+  outline-offset: 0;
+}
+
+.avakio-combo-input-wrapper.error {
+  border-color: var(--avakio-border-error);
+}
+
+.avakio-combo-input-wrapper.disabled {
+  background-color: var(--muted);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.avakio-combo-search-icon {
+  color: var(--avakio-text-secondary);
+  flex-shrink: 0;
+}
+
+.avakio-combo-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--avakio-text-primary);
+  outline: none;
+  min-width: 0;
+}
+
+.avakio-combo-input::placeholder {
+  color: var(--avakio-text-tertiary);
+}
+
+.avakio-combo-input:disabled {
+  cursor: not-allowed;
+}
+
+.avakio-combo-clear-btn,
+.avakio-combo-toggle-btn {
+  flex-shrink: 0;
+  padding: 2px;
+  border: none;
+  background: transparent;
+  color: var(--avakio-text-secondary);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avakio-combo-clear-btn:hover,
+.avakio-combo-toggle-btn:hover {
+  background-color: var(--avakio-bg-hover);
+  color: var(--avakio-text-primary);
+}
+
+.avakio-combo-toggle-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.avakio-combo-toggle-btn svg.rotate {
+  transform: rotate(180deg);
+}
+
+.avakio-combo-toggle-btn svg {
+  transition: transform 0.2s;
+}
+
+/* Dropdown */
+.avakio-combo-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background-color: var(--avakio-bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-top: 0;
+}
+
+.avakio-combo-options {
+  max-height: inherit;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+/* Scrollbar styles */
+.avakio-combo-options::-webkit-scrollbar {
+  width: 8px;
+}
+
+.avakio-combo-options::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+.avakio-combo-options::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.avakio-combo-options::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+.avakio-combo-option {
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--avakio-text-primary);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.15s;
+}
+
+.avakio-combo-option:hover,
+.avakio-combo-option.highlighted {
+  background-color: var(--avakio-bg-hover);
+}
+
+.avakio-combo-option.selected {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 500;
+}
+
+.avakio-combo-option.selected:hover,
+.avakio-combo-option.selected.highlighted {
+  background-color: var(--primary);
+  opacity: 0.9;
+}
+
+.avakio-combo-no-options {
+  padding: 12px;
+  text-align: center;
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+/* Styling for nested content in options (like custom templates) */
+.avakio-combo-option .text-muted-foreground {
+  color: var(--muted-foreground);
+}
+
+.avakio-combo-option.selected .text-muted-foreground {
+  color: inherit;
+  opacity: 0.8;
+}
+
+/* Error message */
+.avakio-combo-error-message {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--avakio-text-error);
+}
+
+/* Theme-specific adjustments for Material theme */
+[data-admin-theme="material"] .avakio-combo-label {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="material"] .avakio-combo-input-wrapper {
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="material"] .avakio-combo-input-wrapper:hover {
+  border-color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="material"] .avakio-combo-input-wrapper.open,
+[data-admin-theme="material"] .avakio-combo-input-wrapper:focus-within {
+  border-color: var(--avakio-accent-primary);
+  outline-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="material"] .avakio-combo-dropdown {
+  border-color: var(--avakio-border-primary);
+  box-shadow: 0 10px 25px -5px var(--avakio-accent-light);
+}
+
+[data-admin-theme="material"] .avakio-combo-option.selected {
+  background-color: var(--avakio-accent-primary);
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="material"] .avakio-combo-option:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="material"] .avakio-combo-option.selected:hover,
+[data-admin-theme="material"] .avakio-combo-option.selected.highlighted {
+  background-color: var(--avakio-accent-primary);
+  opacity: 0.9;
+}
+
+[data-admin-theme="material"] .avakio-combo-toggle-btn:hover,
+[data-admin-theme="material"] .avakio-combo-clear-btn:hover {
+  background-color: var(--avakio-accent-light);
+  color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="material"] .avakio-combo-option .text-muted-foreground {
+  color: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="material"] .avakio-combo-option.selected .text-muted-foreground {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Theme-specific adjustments for Flat theme */
+[data-admin-theme="flat"] .avakio-combo-label {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="flat"] .avakio-combo-input-wrapper {
+  border-color: var(--avakio-border-primary);
+  border-radius: 4px;
+}
+
+[data-admin-theme="flat"] .avakio-combo-input-wrapper:hover {
+  border-color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="flat"] .avakio-combo-input-wrapper.open,
+[data-admin-theme="flat"] .avakio-combo-input-wrapper:focus-within {
+  border-color: var(--avakio-accent-primary);
+  outline-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="flat"] .avakio-combo-dropdown {
+  border-color: var(--avakio-border-primary);
+  border-radius: 4px;
+  box-shadow: 0 10px 25px -5px var(--avakio-accent-light);
+}
+
+[data-admin-theme="flat"] .avakio-combo-option {
+  border-radius: 2px;
+}
+
+[data-admin-theme="flat"] .avakio-combo-option.selected {
+  background-color: var(--avakio-accent-primary);
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="flat"] .avakio-combo-option:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="flat"] .avakio-combo-option.selected:hover,
+[data-admin-theme="flat"] .avakio-combo-option.selected.highlighted {
+  background-color: var(--avakio-accent-primary);
+  opacity: 0.9;
+}
+
+[data-admin-theme="flat"] .avakio-combo-toggle-btn:hover,
+[data-admin-theme="flat"] .avakio-combo-clear-btn:hover {
+  background-color: var(--avakio-accent-light);
+  color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="flat"] .avakio-combo-option .text-muted-foreground {
+  color: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="flat"] .avakio-combo-option.selected .text-muted-foreground {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Theme-specific adjustments for Compact theme */
+[data-admin-theme="compact"] .avakio-combo-label {
+  color: var(--avakio-text-primary);
+  font-size: 13px;
+  padding-top: 7px;
+}
+
+[data-admin-theme="compact"] .avakio-combo-input-wrapper {
+  border-color: var(--avakio-border-primary);
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+[data-admin-theme="compact"] .avakio-combo-input-wrapper:hover {
+  border-color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="compact"] .avakio-combo-input-wrapper.open,
+[data-admin-theme="compact"] .avakio-combo-input-wrapper:focus-within {
+  border-color: var(--avakio-accent-primary);
+  outline-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="compact"] .avakio-combo-input {
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-combo-dropdown {
+  border-color: var(--avakio-border-primary);
+  border-radius: 3px;
+  box-shadow: 0 8px 20px -5px var(--avakio-accent-light);
+}
+
+[data-admin-theme="compact"] .avakio-combo-option {
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 2px;
+}
+
+[data-admin-theme="compact"] .avakio-combo-option.selected {
+  background-color: var(--avakio-accent-primary);
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="compact"] .avakio-combo-option:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="compact"] .avakio-combo-option.selected:hover,
+[data-admin-theme="compact"] .avakio-combo-option.selected.highlighted {
+  background-color: var(--avakio-accent-primary);
+  opacity: 0.9;
+}
+
+[data-admin-theme="compact"] .avakio-combo-toggle-btn:hover,
+[data-admin-theme="compact"] .avakio-combo-clear-btn:hover {
+  background-color: var(--avakio-accent-light);
+  color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="compact"] .avakio-combo-option .text-muted-foreground {
+  color: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="compact"] .avakio-combo-option.selected .text-muted-foreground {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Theme-specific adjustments for Dark theme */
+[data-admin-theme="dark"] .avakio-combo-input-wrapper {
+  background-color: var(--avakio-bg-primary);
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-input-wrapper:hover {
+  border-color: var(--avakio-border-hover);
+}
+
+[data-admin-theme="dark"] .avakio-combo-input-wrapper.open,
+[data-admin-theme="dark"] .avakio-combo-input-wrapper:focus-within {
+  border-color: var(--avakio-border-hover);
+  outline-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="dark"] .avakio-combo-input {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-input::placeholder {
+  color: var(--avakio-text-tertiary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-label {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-search-icon,
+[data-admin-theme="dark"] .avakio-combo-toggle-btn,
+[data-admin-theme="dark"] .avakio-combo-clear-btn {
+  color: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-toggle-btn:hover,
+[data-admin-theme="dark"] .avakio-combo-clear-btn:hover {
+  background-color: var(--avakio-bg-hover);
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-dropdown {
+  background-color: var(--avakio-bg-primary);
+  border-color: var(--avakio-border-primary);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+[data-admin-theme="dark"] .avakio-combo-option {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-option:hover {
+  background-color: var(--avakio-bg-hover);
+}
+
+[data-admin-theme="dark"] .avakio-combo-option.selected {
+  background-color: var(--avakio-accent-primary);
+  color: var(--avakio-bg-primary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-option.selected:hover,
+[data-admin-theme="dark"] .avakio-combo-option.selected.highlighted {
+  background-color: var(--avakio-accent-primary);
+  opacity: 0.9;
+}
+
+[data-admin-theme="dark"] .avakio-combo-no-options {
+  color: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-options::-webkit-scrollbar-track {
+  background: var(--avakio-bg-secondary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-options::-webkit-scrollbar-thumb {
+  background: var(--avakio-border-primary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-options::-webkit-scrollbar-thumb:hover {
+  background: var(--avakio-border-hover);
+}
+
+[data-admin-theme="dark"] .avakio-combo-option .text-muted-foreground {
+  color: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="dark"] .avakio-combo-option.selected .text-muted-foreground {
+  color: rgba(9, 15, 28, 0.8);
+}
+
+/* Theme-specific adjustments for Ocean theme */
+[data-admin-theme="ocean"] .avakio-combo-label {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="ocean"] .avakio-combo-input-wrapper {
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="ocean"] .avakio-combo-input-wrapper:hover {
+  border-color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="ocean"] .avakio-combo-input-wrapper.open,
+[data-admin-theme="ocean"] .avakio-combo-input-wrapper:focus-within {
+  border-color: var(--avakio-accent-primary);
+  outline-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="ocean"] .avakio-combo-dropdown {
+  border-color: var(--avakio-border-primary);
+  box-shadow: 0 10px 25px -5px var(--avakio-accent-light);
+}
+
+[data-admin-theme="ocean"] .avakio-combo-option.selected {
+  background-color: var(--avakio-accent-primary);
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="ocean"] .avakio-combo-option:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="ocean"] .avakio-combo-option.selected:hover,
+[data-admin-theme="ocean"] .avakio-combo-option.selected.highlighted {
+  background-color: var(--avakio-accent-primary);
+  opacity: 0.9;
+}
+
+[data-admin-theme="ocean"] .avakio-combo-toggle-btn:hover,
+[data-admin-theme="ocean"] .avakio-combo-clear-btn:hover {
+  background-color: var(--avakio-accent-light);
+  color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="ocean"] .avakio-combo-option .text-muted-foreground {
+  color: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="ocean"] .avakio-combo-option.selected .text-muted-foreground {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Theme-specific adjustments for Sunset theme */
+[data-admin-theme="sunset"] .avakio-combo-label {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="sunset"] .avakio-combo-input-wrapper {
+  border-color: var(--avakio-border-primary);
+}
+
+[data-admin-theme="sunset"] .avakio-combo-input-wrapper:hover {
+  border-color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="sunset"] .avakio-combo-input-wrapper.open,
+[data-admin-theme="sunset"] .avakio-combo-input-wrapper:focus-within {
+  border-color: var(--avakio-accent-primary);
+  outline-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="sunset"] .avakio-combo-dropdown {
+  border-color: var(--avakio-border-primary);
+  box-shadow: 0 10px 25px -5px var(--avakio-accent-light);
+}
+
+[data-admin-theme="sunset"] .avakio-combo-option.selected {
+  background-color: var(--avakio-accent-primary);
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="sunset"] .avakio-combo-option:hover {
+  background-color: var(--avakio-accent-light);
+}
+
+[data-admin-theme="sunset"] .avakio-combo-option.selected:hover,
+[data-admin-theme="sunset"] .avakio-combo-option.selected.highlighted {
+  background-color: var(--avakio-accent-primary);
+  opacity: 0.9;
+}
+
+[data-admin-theme="sunset"] .avakio-combo-toggle-btn:hover,
+[data-admin-theme="sunset"] .avakio-combo-clear-btn:hover {
+  background-color: var(--avakio-accent-light);
+  color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="sunset"] .avakio-combo-option .text-muted-foreground {
+  color: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="sunset"] .avakio-combo-option.selected .text-muted-foreground {
+  color: rgba(255, 255, 255, 0.85);
+}
+

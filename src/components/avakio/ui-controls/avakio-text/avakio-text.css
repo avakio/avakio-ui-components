@@ -1,0 +1,421 @@
+/* AvakioText Component Styles */
+
+.avakio-text {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.avakio-text-label-top {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.avakio-text-label-left {
+  flex-direction: row;
+  align-items: center;
+}
+
+.avakio-text-label {
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--avakio-text-primary);
+  letter-spacing: 0.01em;
+  padding: 8px 0;
+  flex-shrink: 0;
+}
+
+.avakio-text-label-top .avakio-text-label {
+  width: 100%;
+  padding: 0 0 6px 0;
+}
+
+.avakio-text-required {
+  color: var(--avakio-text-error);
+  margin-left: 4px;
+}
+
+.avakio-text-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.avakio-text-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.avakio-text-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--avakio-border-primary);
+  border-radius: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--avakio-text-primary);
+  background-color: var(--avakio-bg-input);
+  transition: all 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.avakio-text-input:hover:not(:disabled) {
+  border-color: var(--avakio-border-hover);
+}
+
+.avakio-text-input:focus {
+  border-color: var(--avakio-border-focus);
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.avakio-text-input::placeholder {
+  color: var(--avakio-text-tertiary);
+  font-weight: 400;
+}
+
+.avakio-text-input:disabled {
+  background-color: var(--avakio-bg-disabled);
+  color: var(--avakio-text-disabled);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Textarea specific styles */
+textarea.avakio-text-input {
+  resize: vertical;
+  min-height: 60px;
+  line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.avakio-text-input-align-left {
+  text-align: left;
+}
+
+.avakio-text-input-align-center {
+  text-align: center;
+}
+
+.avakio-text-input-align-right {
+  text-align: right;
+}
+
+.avakio-text-input-with-icon-left {
+  padding-left: 36px;
+}
+
+.avakio-text-input-with-icon-right {
+  padding-right: 36px;
+}
+
+.avakio-text-input-with-action {
+  padding-right: 72px;
+}
+
+/* When both icon-left and action buttons are present */
+.avakio-text-input-with-icon-left.avakio-text-input-with-action {
+  padding-left: 36px;
+  padding-right: 72px;
+}
+
+.avakio-text-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--avakio-text-secondary);
+  pointer-events: none;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.avakio-text-icon-left {
+  left: 12px;
+}
+
+.avakio-text-icon-right {
+  right: 12px;
+}
+
+.avakio-text-action {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--avakio-text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.avakio-text-action:first-of-type {
+  right: 40px;
+}
+
+.avakio-text-action:last-of-type {
+  right: 8px;
+}
+
+.avakio-text-action:only-of-type {
+  right: 8px;
+}
+
+.avakio-text-action:hover:not(:disabled) {
+  color: var(--avakio-text-primary);
+  background-color: var(--avakio-bg-hover);
+}
+
+.avakio-text-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.avakio-text-bottom-label {
+  font-size: 12px;
+  color: var(--avakio-text-secondary);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.avakio-text-error-message {
+  font-size: 12px;
+  color: var(--avakio-text-error);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.avakio-text-invalid .avakio-text-input {
+  border-color: var(--avakio-border-error);
+}
+
+.avakio-text-invalid .avakio-text-input:focus {
+  border-color: var(--avakio-border-error);
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+.avakio-text-disabled {
+  opacity: 0.7;
+}
+
+.avakio-text-readonly .avakio-text-input {
+  background-color: var(--avakio-bg-disabled);
+  cursor: default;
+}
+
+/* Material Theme */
+.avakio-text-theme-material .avakio-text-label {
+  color: var(--avakio-text-primary);
+}
+
+.avakio-text-theme-material .avakio-text-input {
+  border-color: var(--avakio-border-secondary);
+}
+
+.avakio-text-theme-material .avakio-text-input:hover:not(:disabled) {
+  border-color: var(--avakio-border-hover);
+}
+
+.avakio-text-theme-material .avakio-text-input:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+}
+
+.avakio-text-theme-material .avakio-text-focused .avakio-text-label {
+  color: var(--avakio-accent-primary);
+}
+
+/* Flat Theme */
+.avakio-text-theme-flat .avakio-text-label {
+  color: var(--avakio-text-primary);
+}
+
+.avakio-text-theme-flat .avakio-text-input {
+  border-color: var(--avakio-border-primary);
+  background-color: var(--avakio-bg-secondary);
+}
+
+.avakio-text-theme-flat .avakio-text-input:hover:not(:disabled) {
+  border-color: var(--avakio-accent-primary);
+}
+
+.avakio-text-theme-flat .avakio-text-input:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+  background-color: var(--avakio-bg-primary);
+}
+
+/* Compact Theme */
+.avakio-text-theme-compact {
+  font-size: 13px;
+}
+
+.avakio-text-theme-compact .avakio-text-label {
+  color: var(--avakio-text-primary);
+  font-size: 13px;
+}
+
+.avakio-text-theme-compact .avakio-text-input {
+  padding: 6px 10px;
+  font-size: 13px;
+  border-color: var(--avakio-border-secondary);
+}
+
+.avakio-text-theme-compact .avakio-text-input:hover:not(:disabled) {
+  border-color: var(--avakio-border-hover);
+}
+
+.avakio-text-theme-compact .avakio-text-input:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 2px var(--avakio-shadow-focus);
+}
+
+/* Dark Theme */
+.avakio-text-theme-dark {
+  color: var(--avakio-text-white);
+}
+
+.avakio-text-theme-dark .avakio-text-label {
+  color: var(--avakio-text-white);
+}
+
+.avakio-text-theme-dark .avakio-text-input {
+  background-color: var(--avakio-bg-tertiary);
+  border-color: var(--avakio-border-primary);
+  color: var(--avakio-text-white);
+}
+
+.avakio-text-theme-dark .avakio-text-input:hover:not(:disabled) {
+  border-color: var(--avakio-border-hover);
+}
+
+.avakio-text-theme-dark .avakio-text-input:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+}
+
+.avakio-text-theme-dark .avakio-text-input::placeholder {
+  color: var(--avakio-text-tertiary);
+}
+
+.avakio-text-theme-dark .avakio-text-input:disabled {
+  background-color: var(--avakio-bg-disabled);
+  color: var(--avakio-text-disabled);
+}
+
+.avakio-text-theme-dark .avakio-text-icon {
+  color: var(--avakio-text-tertiary);
+}
+
+.avakio-text-theme-dark .avakio-text-action {
+  color: var(--avakio-text-tertiary);
+}
+
+.avakio-text-theme-dark .avakio-text-action:hover:not(:disabled) {
+  color: var(--avakio-text-white);
+  background-color: var(--avakio-bg-hover);
+}
+
+.avakio-text-theme-dark .avakio-text-bottom-label {
+  color: var(--avakio-text-tertiary);
+}
+
+/* Ocean Theme */
+.avakio-text-theme-ocean .avakio-text-label {
+  color: var(--avakio-accent-secondary);
+}
+
+.avakio-text-theme-ocean .avakio-text-input {
+  border-color: var(--avakio-border-secondary);
+  background-color: var(--avakio-bg-secondary);
+}
+
+.avakio-text-theme-ocean .avakio-text-input:hover:not(:disabled) {
+  border-color: var(--avakio-accent-primary);
+}
+
+.avakio-text-theme-ocean .avakio-text-input:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+  background-color: var(--avakio-bg-primary);
+}
+
+/* Sunset Theme */
+.avakio-text-theme-sunset .avakio-text-label {
+  color: var(--avakio-accent-secondary);
+}
+
+.avakio-text-theme-sunset .avakio-text-input {
+  border-color: var(--avakio-border-secondary);
+  background-color: var(--avakio-bg-secondary);
+}
+
+.avakio-text-theme-sunset .avakio-text-input:hover:not(:disabled) {
+  border-color: var(--avakio-border-hover);
+}
+
+.avakio-text-theme-sunset .avakio-text-input:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+  background-color: var(--avakio-bg-primary);
+}
+
+/* ===================================
+   GLOBAL ADMIN THEME OVERRIDES
+   =================================== */
+
+[data-admin-theme="material"] .avakio-text-label {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="flat"] .avakio-text-label {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="compact"] .avakio-text-label {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="dark"] .avakio-text-label {
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="ocean"] .avakio-text-label {
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="sunset"] .avakio-text-label {
+  color: var(--avakio-accent-secondary);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .avakio-text-label-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .avakio-text-label-left .avakio-text-label {
+    width: 100%;
+    padding: 0 0 6px 0;
+  }
+}
+

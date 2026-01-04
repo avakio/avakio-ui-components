@@ -1,0 +1,104 @@
+/* ===================================
+   AVAKIO SEGMENTED BUTTON EXAMPLE - STYLES
+   Following avakio-template-example pattern
+   =================================== */
+
+/* Main Container */
+.avakio-segmented-demo-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--avakio-bg-primary, #f8fafc);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Sticky Header + Tab Navigation */
+.avakio-segmented-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--avakio-bg-primary, #ffffff);
+  border-bottom: 1px solid var(--avakio-border-color, #e2e8f0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* TabBar Container */
+.avakio-segmented-tabbar-container {
+  padding: 0 16px 12px;
+  background: var(--avakio-bg-primary, #ffffff);
+}
+
+/* Demo Sections */
+.avakio-segmented-demo-section {
+  scroll-margin-top: 160px;
+  padding: 0 16px 24px;
+}
+
+.avakio-segmented-demo-section:first-of-type {
+  padding-top: 24px;
+}
+
+/* Theme-aware backgrounds */
+[data-admin-theme="dark"] .avakio-segmented-demo-container {
+  background: hsl(222, 47%, 8%);
+}
+
+[data-admin-theme="dark"] .avakio-segmented-sticky-header {
+  background: hsl(222, 47%, 11%);
+  border-bottom-color: hsl(217, 33%, 17%);
+}
+
+[data-admin-theme="dark"] .avakio-segmented-tabbar-container {
+  background: hsl(222, 47%, 11%);
+}
+
+/* Ocean theme */
+[data-admin-theme="ocean"] .avakio-segmented-demo-container {
+  background: #e3f2fd;
+}
+
+[data-admin-theme="ocean"] .avakio-segmented-sticky-header,
+[data-admin-theme="ocean"] .avakio-segmented-tabbar-container {
+  background: #ffffff;
+}
+
+/* Sunset theme */
+[data-admin-theme="sunset"] .avakio-segmented-demo-container {
+  background: #fff8e1;
+}
+
+[data-admin-theme="sunset"] .avakio-segmented-sticky-header,
+[data-admin-theme="sunset"] .avakio-segmented-tabbar-container {
+  background: #ffffff;
+}
+
+/* Code elements styling */
+.avakio-segmented-demo-section code {
+  background: var(--avakio-bg-secondary, #f1f5f9);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+  color: var(--avakio-text-primary, #1e293b);
+}
+
+[data-admin-theme="dark"] .avakio-segmented-demo-section code {
+  background: hsl(217, 33%, 17%);
+  color: hsl(210, 40%, 96%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .avakio-segmented-demo-container {
+    padding: 16px;
+  }
+  
+  .avakio-segmented-sticky-header {
+    position: relative;
+  }
+  
+  .avakio-segmented-demo-section {
+    scroll-margin-top: 0;
+  }
+}
+

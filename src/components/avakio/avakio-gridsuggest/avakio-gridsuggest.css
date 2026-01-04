@@ -1,0 +1,572 @@
+/* ===================================
+   AVAKIO GRIDSUGGEST - BASE STYLES
+   =================================== */
+
+.avakio-gridsuggest {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.avakio-gridsuggest-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.avakio-gridsuggest-required {
+  color: #ef4444;
+}
+
+.avakio-gridsuggest-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.avakio-gridsuggest-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0 12px;
+  transition: all 0.2s ease;
+  min-height: 38px;
+}
+
+.avakio-gridsuggest-input-wrapper:hover {
+  border-color: #9ca3af;
+  background-color: #fafafa;
+}
+
+.avakio-gridsuggest-input-wrapper:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background-color: #ffffff;
+}
+
+.avakio-gridsuggest[data-disabled="true"] .avakio-gridsuggest-input-wrapper {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.avakio-gridsuggest[data-readonly="true"] .avakio-gridsuggest-input-wrapper {
+  background-color: #f9fafb;
+  cursor: default;
+}
+
+.avakio-gridsuggest[data-error="true"] .avakio-gridsuggest-input-wrapper {
+  border-color: #ef4444;
+}
+
+.avakio-gridsuggest-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+  padding: 8px 0;
+}
+
+.avakio-gridsuggest-input::placeholder {
+  color: #9ca3af;
+}
+
+.avakio-gridsuggest-input:disabled {
+  cursor: not-allowed;
+}
+
+.avakio-gridsuggest-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.avakio-gridsuggest-search-icon {
+  color: #6b7280;
+}
+
+.avakio-gridsuggest-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #6b7280;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.avakio-gridsuggest-clear:hover {
+  background-color: #f3f4f6;
+  color: #333;
+}
+
+.avakio-gridsuggest-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 2px;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.avakio-gridsuggest-toggle:hover {
+  background-color: #f3f4f6;
+}
+
+.avakio-gridsuggest-toggle svg {
+  transition: transform 0.2s ease;
+}
+
+.avakio-gridsuggest-toggle svg.open {
+  transform: rotate(180deg);
+}
+
+.avakio-gridsuggest-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 9999;
+  overflow: hidden;
+  animation: slideDown 0.15s ease-out;
+}
+
+.avakio-gridsuggest-dropdown.borderless {
+  border: none;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.avakio-gridsuggest-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.avakio-gridsuggest-header {
+  display: flex;
+  background-color: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+  font-weight: 600;
+  font-size: 13px;
+  color: #374151;
+}
+
+.avakio-gridsuggest-header-cell {
+  padding: 10px 12px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avakio-gridsuggest-body {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.avakio-gridsuggest-body.scrollable {
+  overflow-y: scroll;
+}
+
+.avakio-gridsuggest-row {
+  display: flex;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.avakio-gridsuggest-row:hover,
+.avakio-gridsuggest-row.highlighted {
+  background-color: #f9fafb;
+}
+
+.avakio-gridsuggest-row.selected {
+  background-color: #e0f2fe;
+}
+
+.avakio-gridsuggest-row.selected:hover {
+  background-color: #bae6fd;
+}
+
+.avakio-gridsuggest-cell {
+  padding: 10px 12px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  color: #333;
+}
+
+.avakio-gridsuggest-empty {
+  padding: 20px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.avakio-gridsuggest-error {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #ef4444;
+}
+
+/* ===================================
+   THEME: MATERIAL (#1CA1C1)
+   =================================== */
+
+[data-admin-theme="material"] .avakio-gridsuggest-label {
+  color: #1a1a1a;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-input-wrapper {
+  border-color: #e0e0e0;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-input-wrapper:hover {
+  border-color: #1CA1C1;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-input-wrapper:focus-within {
+  border-color: #1CA1C1;
+  box-shadow: 0 0 0 3px rgba(28, 161, 193, 0.1);
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-dropdown {
+  border-color: #e0e0e0;
+  box-shadow: 0 10px 15px -3px rgba(28, 161, 193, 0.2), 0 4px 6px -2px rgba(28, 161, 193, 0.1);
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-row.selected {
+  background-color: #e0f7fa;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-row.selected:hover {
+  background-color: #b2ebf2;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-header {
+  background-color: #e0f7fa;
+  border-bottom-color: #1CA1C1;
+  color: #00838f;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-clear:hover,
+[data-admin-theme="material"] .avakio-gridsuggest-toggle:hover {
+  background-color: rgba(28, 161, 193, 0.1);
+  color: #1CA1C1;
+}
+
+/* ===================================
+   THEME: FLAT (#5E81AC)
+   =================================== */
+
+[data-admin-theme="flat"] .avakio-gridsuggest-label {
+  color: #2e3440;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-input-wrapper {
+  border-radius: 4px;
+  border-color: #d0d0d0;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-input-wrapper:hover {
+  border-color: #5E81AC;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-input-wrapper:focus-within {
+  border-color: #5E81AC;
+  box-shadow: 0 0 0 3px rgba(94, 129, 172, 0.1);
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-dropdown {
+  border-radius: 4px;
+  border-color: #d0d0d0;
+  box-shadow: 0 10px 15px -3px rgba(94, 129, 172, 0.2), 0 4px 6px -2px rgba(94, 129, 172, 0.1);
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-row.selected {
+  background-color: #eceff4;
+  color: #5E81AC;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-row.selected:hover {
+  background-color: #e5e9f0;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-header {
+  background-color: #eceff4;
+  border-bottom-color: #5E81AC;
+  color: #5E81AC;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-clear:hover,
+[data-admin-theme="flat"] .avakio-gridsuggest-toggle:hover {
+  background-color: rgba(94, 129, 172, 0.1);
+  color: #5E81AC;
+}
+
+/* ===================================
+   THEME: COMPACT (#00796B)
+   =================================== */
+
+[data-admin-theme="compact"] .avakio-gridsuggest {
+  gap: 8px;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-label {
+  font-size: 13px;
+  color: #1a1a1a;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-input-wrapper {
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-input-wrapper:focus-within {
+  border-color: #00796B;
+  box-shadow: 0 0 0 2px rgba(0, 121, 107, 0.1);
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-input {
+  font-size: 13px;
+  padding: 6px 0;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-dropdown {
+  border-radius: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-header {
+  font-size: 12px;
+  background-color: #e0f2f1;
+  border-bottom-color: #00796B;
+  color: #00695c;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-row.selected:hover {
+  background-color: #b2dfdb;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-clear:hover,
+[data-admin-theme="compact"] .avakio-gridsuggest-toggle:hover {
+  background-color: rgba(0, 121, 107, 0.1);
+  color: #00796B;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-header-cell {
+  padding: 8px 10px;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-cell {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-row.selected {
+  background-color: #e0f2f1;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-row.selected:hover {
+  background-color: #b2dfdb;
+}
+
+/* ===================================
+   THEME: DARK
+   =================================== */
+
+[data-admin-theme="dark"] .avakio-gridsuggest-label {
+  color: hsl(210, 40%, 96%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-input-wrapper {
+  background-color: hsl(222, 47%, 11%);
+  border-color: hsl(217, 33%, 17%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-input-wrapper:hover {
+  background-color: hsl(217, 33%, 17%);
+  border-color: hsl(215, 28%, 25%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-input-wrapper:focus-within {
+  border-color: hsl(217, 91%, 60%);
+  box-shadow: 0 0 0 3px hsla(217, 91%, 60%, 0.15);
+  background-color: hsl(222, 47%, 11%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-input {
+  color: hsl(210, 40%, 96%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-input::placeholder {
+  color: hsl(215, 20%, 65%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-dropdown {
+  background-color: hsl(222, 47%, 11%);
+  border-color: hsl(217, 33%, 17%);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-header {
+  background-color: hsl(217, 33%, 17%);
+  border-bottom-color: hsl(215, 28%, 25%);
+  color: hsl(210, 40%, 96%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-row {
+  border-bottom-color: hsl(217, 33%, 17%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-row:hover,
+[data-admin-theme="dark"] .avakio-gridsuggest-row.highlighted {
+  background-color: hsl(217, 33%, 17%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-row.selected {
+  background-color: hsl(217, 91%, 20%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-row.selected:hover {
+  background-color: hsl(217, 91%, 25%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-cell {
+  color: hsl(210, 40%, 96%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-empty {
+  color: hsl(215, 20%, 65%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-search-icon,
+[data-admin-theme="dark"] .avakio-gridsuggest-clear,
+[data-admin-theme="dark"] .avakio-gridsuggest-toggle {
+  color: hsl(215, 20%, 65%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-clear:hover,
+[data-admin-theme="dark"] .avakio-gridsuggest-toggle:hover {
+  background-color: hsl(217, 33%, 17%);
+  color: hsl(210, 40%, 96%);
+}
+
+/* ===================================
+   THEME: OCEAN (#0277BD)
+   =================================== */
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-label {
+  color: #01579B;
+}
+hover {
+  border-color: #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-input-wrapper:focus-within {
+  border-color: #0277BD;
+  box-shadow: 0 0 0 3px rgba(2, 119, 189, 0.1);
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-dropdown {
+  box-shadow: 0 10px 15px -3px rgba(2, 119, 189, 0.2), 0 4px 6px -2px rgba(2, 119, 189, 0.1);
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-row.selected {
+  background-color: #e1f5fe;
+  color: #01579b;
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-row.selected:hover {
+  background-color: #b3e5fc;
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-header {
+  background-color: #e1f5fe;
+  border-bottom-color: #0277BD;
+  color: #01579b;
+}
+hover {
+  border-color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-input-wrapper:focus-within {
+  border-color: #f57c00;
+  box-shadow: 0 0 0 3px rgba(245, 124, 0, 0.1);
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-dropdown {
+  box-shadow: 0 10px 15px -3px rgba(245, 124, 0, 0.2), 0 4px 6px -2px rgba(245, 124, 0, 0.1);
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-row.selected {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-row.selected:hover {
+  background-color: #ffe0b2;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-header {
+  background-color: #fff3e0;
+  border-bottom-color: #f57c00;
+  color: #e65100;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-clear:hover,
+[data-admin-theme="sunset"] .avakio-gridsuggest-toggle:hover {
+  background-color: rgba(245, 124, 0, 0.1);
+  color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-row.selected {
+  background-color: #fff3e0;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-row.selected:hover {
+  background-color: #ffe0b2;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-header {
+  background-color: #fff3e0;
+  border-bottom-color: #f57c00;
+  color: #e65100;
+}
+

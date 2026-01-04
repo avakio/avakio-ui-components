@@ -1,0 +1,264 @@
+/* ======================================
+   Avakio Dashboard Example - CSS Styles
+   ====================================== */
+
+.avakio-dashboard-example-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 48px;
+  min-height: 100%;
+  background: var(--avakio-dashboard-example-bg, #f8f9fa);
+}
+
+/* ======================================
+   Sticky Header
+   ====================================== */
+
+.avakio-dashboard-example-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--avakio-dashboard-example-header-bg, #ffffff);
+  border-bottom: 1px solid var(--avakio-dashboard-example-border, #e0e0e0);
+  margin: -16px -16px 0 -16px;
+  padding: 16px;
+}
+
+.avakio-dashboard-example-tabbar-container {
+  margin-top: 16px;
+  padding-top: 8px;
+  border-top: 1px solid var(--avakio-dashboard-example-border, #f0f0f0);
+}
+
+/* ======================================
+   Sections & Cards
+   ====================================== */
+
+.avakio-dashboard-example-section {
+  scroll-margin-top: 180px;
+}
+
+.avakio-dashboard-example-card {
+  padding: 16px;
+  background: var(--avakio-dashboard-example-card-bg, #ffffff);
+  border-radius: 8px;
+}
+
+.avakio-dashboard-example-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 0 0 12px 0;
+}
+
+/* ======================================
+   Widget content styles
+   ====================================== */
+
+.avakio-dashboard-example-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.avakio-dashboard-example-widget-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--avakio-dashboard-example-title, #212121);
+}
+
+.avakio-dashboard-example-widget-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--avakio-dashboard-example-muted, #6b7280);
+}
+
+.avakio-dashboard-example-widget-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.avakio-dashboard-example-widget-metric {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--avakio-dashboard-example-accent, #1976d2);
+}
+
+.avakio-dashboard-example-widget-caption {
+  font-size: 12px;
+  color: var(--avakio-dashboard-example-muted, #6b7280);
+}
+
+/* ======================================
+   API table
+   ====================================== */
+
+.avakio-dashboard-example-api {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.api-section h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--avakio-dashboard-example-title, #333333);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--avakio-dashboard-example-accent, #1976d2);
+}
+
+.api-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.api-table th {
+  text-align: left;
+  padding: 12px 16px;
+  background: var(--avakio-dashboard-example-table-header, #f5f5f5);
+  color: var(--avakio-dashboard-example-title, #333333);
+  font-weight: 600;
+  border-bottom: 2px solid var(--avakio-dashboard-example-border, #e0e0e0);
+}
+
+.api-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--avakio-dashboard-example-border, #e0e0e0);
+  color: var(--avakio-dashboard-example-text, #666666);
+}
+
+.api-table tr:hover td {
+  background: var(--avakio-dashboard-example-hover, #f9f9f9);
+}
+
+.api-table code {
+  background: var(--avakio-dashboard-example-code-bg, #f0f0f0);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 12px;
+  color: var(--avakio-dashboard-example-code-color, #1976d2);
+}
+
+/* ======================================
+   THEME: Material (Default)
+   ====================================== */
+
+[data-admin-theme="material"] .avakio-dashboard-example-container,
+.avakio-dashboard-example-container {
+  --avakio-dashboard-example-bg: #fafafa;
+  --avakio-dashboard-example-header-bg: #ffffff;
+  --avakio-dashboard-example-card-bg: #ffffff;
+  --avakio-dashboard-example-border: #e0e0e0;
+  --avakio-dashboard-example-title: #212121;
+  --avakio-dashboard-example-text: #424242;
+  --avakio-dashboard-example-muted: #6b7280;
+  --avakio-dashboard-example-accent: #1976d2;
+  --avakio-dashboard-example-table-header: #f5f5f5;
+  --avakio-dashboard-example-hover: #fafafa;
+  --avakio-dashboard-example-code-bg: #f5f5f5;
+  --avakio-dashboard-example-code-color: #1976d2;
+}
+
+/* ======================================
+   THEME: Dark
+   ====================================== */
+
+[data-admin-theme="dark"] .avakio-dashboard-example-container {
+  --avakio-dashboard-example-bg: #121212;
+  --avakio-dashboard-example-header-bg: #1e1e1e;
+  --avakio-dashboard-example-card-bg: #1e1e1e;
+  --avakio-dashboard-example-border: #333333;
+  --avakio-dashboard-example-title: #e0e0e0;
+  --avakio-dashboard-example-text: #b0b0b0;
+  --avakio-dashboard-example-muted: #9ca3af;
+  --avakio-dashboard-example-accent: #64b5f6;
+  --avakio-dashboard-example-table-header: #2d2d2d;
+  --avakio-dashboard-example-hover: #252525;
+  --avakio-dashboard-example-code-bg: #2d2d2d;
+  --avakio-dashboard-example-code-color: #64b5f6;
+}
+
+/* ======================================
+   THEME: Ocean
+   ====================================== */
+
+[data-admin-theme="ocean"] .avakio-dashboard-example-container {
+  --avakio-dashboard-example-bg: #f0f9ff;
+  --avakio-dashboard-example-header-bg: #ffffff;
+  --avakio-dashboard-example-card-bg: #ffffff;
+  --avakio-dashboard-example-border: #bae6fd;
+  --avakio-dashboard-example-title: #0c4a6e;
+  --avakio-dashboard-example-text: #0369a1;
+  --avakio-dashboard-example-muted: #0369a1;
+  --avakio-dashboard-example-accent: #0284c7;
+  --avakio-dashboard-example-table-header: #e0f2fe;
+  --avakio-dashboard-example-hover: #f0f9ff;
+  --avakio-dashboard-example-code-bg: #e0f2fe;
+  --avakio-dashboard-example-code-color: #0369a1;
+}
+
+/* ======================================
+   THEME: Sunset
+   ====================================== */
+
+[data-admin-theme="sunset"] .avakio-dashboard-example-container {
+  --avakio-dashboard-example-bg: #fffbeb;
+  --avakio-dashboard-example-header-bg: #ffffff;
+  --avakio-dashboard-example-card-bg: #ffffff;
+  --avakio-dashboard-example-border: #fde68a;
+  --avakio-dashboard-example-title: #92400e;
+  --avakio-dashboard-example-text: #b45309;
+  --avakio-dashboard-example-muted: #b45309;
+  --avakio-dashboard-example-accent: #d97706;
+  --avakio-dashboard-example-table-header: #fef3c7;
+  --avakio-dashboard-example-hover: #fffbeb;
+  --avakio-dashboard-example-code-bg: #fef3c7;
+  --avakio-dashboard-example-code-color: #b45309;
+}
+
+/* ======================================
+   THEME: Flat
+   ====================================== */
+
+[data-admin-theme="flat"] .avakio-dashboard-example-container {
+  --avakio-dashboard-example-bg: #fafafa;
+  --avakio-dashboard-example-header-bg: #ffffff;
+  --avakio-dashboard-example-card-bg: #ffffff;
+  --avakio-dashboard-example-border: #e5e5e5;
+  --avakio-dashboard-example-title: #262626;
+  --avakio-dashboard-example-text: #525252;
+  --avakio-dashboard-example-muted: #737373;
+  --avakio-dashboard-example-accent: #737373;
+  --avakio-dashboard-example-table-header: #f5f5f5;
+  --avakio-dashboard-example-hover: #fafafa;
+  --avakio-dashboard-example-code-bg: #f5f5f5;
+  --avakio-dashboard-example-code-color: #525252;
+}
+
+/* ======================================
+   THEME: Compact
+   ====================================== */
+
+[data-admin-theme="compact"] .avakio-dashboard-example-container {
+  --avakio-dashboard-example-bg: #f6f8fa;
+  --avakio-dashboard-example-header-bg: #ffffff;
+  --avakio-dashboard-example-card-bg: #ffffff;
+  --avakio-dashboard-example-border: #d0d7de;
+  --avakio-dashboard-example-title: #24292f;
+  --avakio-dashboard-example-text: #57606a;
+  --avakio-dashboard-example-muted: #57606a;
+  --avakio-dashboard-example-accent: #0969da;
+  --avakio-dashboard-example-table-header: #f6f8fa;
+  --avakio-dashboard-example-hover: #f6f8fa;
+  --avakio-dashboard-example-code-bg: #f6f8fa;
+  --avakio-dashboard-example-code-color: #0969da;
+}

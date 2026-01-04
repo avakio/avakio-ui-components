@@ -1,0 +1,239 @@
+/* ============================================================================
+   AvakioForm - Theme-aware Form Component
+   ============================================================================ */
+
+/* Base Form Styles */
+.avakio-form {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--avakio-form-bg, #ffffff);
+  border: 1px solid var(--avakio-form-border, #e0e0e0);
+  border-radius: var(--avakio-form-radius, 4px);
+  font-family: var(--avakio-form-font, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  font-size: var(--avakio-form-font-size, 14px);
+  color: var(--avakio-form-color, #333333);
+  box-sizing: border-box;
+}
+
+.avakio-form *,
+.avakio-form *::before,
+.avakio-form *::after {
+  box-sizing: border-box;
+}
+
+/* Form Content */
+.avakio-form__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--avakio-form-gap, 12px);
+  padding: var(--avakio-form-padding, 16px);
+  flex: 1;
+}
+
+/* Layout Types */
+.avakio-form--type-clean {
+  border: none;
+  background: transparent;
+}
+
+.avakio-form--type-clean .avakio-form__content {
+  padding: 0;
+}
+
+.avakio-form--type-line .avakio-form__content {
+  padding: 8px;
+}
+
+.avakio-form--type-wide .avakio-form__content {
+  padding: 24px;
+  gap: 16px;
+}
+
+.avakio-form--type-space .avakio-form__content {
+  padding: 20px;
+  gap: 20px;
+}
+
+.avakio-form--type-form .avakio-form__content {
+  padding: 16px;
+  gap: 12px;
+}
+
+/* Borderless */
+.avakio-form--borderless {
+  border: none;
+}
+
+/* Disabled State */
+.avakio-form--disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Scroll */
+.avakio-form--scroll {
+  overflow: auto;
+}
+
+.avakio-form--scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.avakio-form--scroll-y {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Columns Layout */
+.avakio-form__cols {
+  display: flex;
+  flex-direction: row;
+  gap: var(--avakio-form-gap, 12px);
+  align-items: flex-start;
+}
+
+.avakio-form__cols > * {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Rows Layout */
+.avakio-form__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--avakio-form-gap, 12px);
+}
+
+/* Section Header */
+.avakio-form__section {
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.avakio-form__section-header {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--avakio-form-section-color, #666666);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--avakio-form-border, #e0e0e0);
+}
+
+/* Form Element */
+.avakio-form__element {
+  min-width: 0;
+}
+
+/* Form Field */
+.avakio-form__field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================================
+   THEME: Material (Default)
+   ============================================================================ */
+.avakio-form--theme-material,
+[data-admin-theme="material"] .avakio-form:not([class*="--theme-"]) {
+  --avakio-form-bg: #ffffff;
+  --avakio-form-border: #e0e0e0;
+  --avakio-form-color: #333333;
+  --avakio-form-section-color: #1CA1C1;
+  --avakio-form-radius: 4px;
+  --avakio-form-padding: 16px;
+  --avakio-form-gap: 12px;
+}
+
+/* ============================================================================
+   THEME: Flat
+   ============================================================================ */
+.avakio-form--theme-flat,
+[data-admin-theme="flat"] .avakio-form:not([class*="--theme-"]) {
+  --avakio-form-bg: #ffffff;
+  --avakio-form-border: #d8dee4;
+  --avakio-form-color: #2e3440;
+  --avakio-form-section-color: #5E81AC;
+  --avakio-form-radius: 3px;
+  --avakio-form-padding: 16px;
+  --avakio-form-gap: 12px;
+}
+
+/* ============================================================================
+   THEME: Compact
+   ============================================================================ */
+.avakio-form--theme-compact,
+[data-admin-theme="compact"] .avakio-form:not([class*="--theme-"]) {
+  --avakio-form-bg: #ffffff;
+  --avakio-form-border: #b0bec5;
+  --avakio-form-color: #263238;
+  --avakio-form-section-color: #00796B;
+  --avakio-form-radius: 2px;
+  --avakio-form-padding: 12px;
+  --avakio-form-gap: 8px;
+  --avakio-form-font-size: 13px;
+}
+
+.avakio-form--theme-compact .avakio-form__section-header,
+[data-admin-theme="compact"] .avakio-form:not([class*="--theme-"]) .avakio-form__section-header {
+  font-size: 11px;
+  padding-bottom: 6px;
+}
+
+/* ============================================================================
+   THEME: Dark
+   ============================================================================ */
+.avakio-form--theme-dark,
+[data-admin-theme="dark"] .avakio-form:not([class*="--theme-"]) {
+  --avakio-form-bg: #1e1e1e;
+  --avakio-form-border: #3c3c3c;
+  --avakio-form-color: #e0e0e0;
+  --avakio-form-section-color: #3b82f6;
+  --avakio-form-radius: 4px;
+  --avakio-form-padding: 16px;
+  --avakio-form-gap: 12px;
+}
+
+/* ============================================================================
+   THEME: Ocean
+   ============================================================================ */
+.avakio-form--theme-ocean,
+[data-admin-theme="ocean"] .avakio-form:not([class*="--theme-"]) {
+  --avakio-form-bg: #ffffff;
+  --avakio-form-border: #b3d4e6;
+  --avakio-form-color: #1a3a4a;
+  --avakio-form-section-color: #0277BD;
+  --avakio-form-radius: 6px;
+  --avakio-form-padding: 18px;
+  --avakio-form-gap: 14px;
+}
+
+/* ============================================================================
+   THEME: Sunset
+   ============================================================================ */
+.avakio-form--theme-sunset,
+[data-admin-theme="sunset"] .avakio-form:not([class*="--theme-"]) {
+  --avakio-form-bg: #fffaf5;
+  --avakio-form-border: #f5d5c8;
+  --avakio-form-color: #4a2c1a;
+  --avakio-form-section-color: #f57c00;
+  --avakio-form-radius: 8px;
+  --avakio-form-padding: 18px;
+  --avakio-form-gap: 14px;
+}
+
+/* ============================================================================
+   Responsive Adjustments
+   ============================================================================ */
+@media (max-width: 768px) {
+  .avakio-form__cols {
+    flex-direction: column;
+  }
+
+  .avakio-form__cols > * {
+    flex: none;
+    width: 100%;
+  }
+}
+

@@ -1,0 +1,198 @@
+/* ===================================
+   AVAKIO RICHSELECT EXAMPLE STYLES
+   =================================== */
+
+.avakio-richselect-example-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: var(--avakio-bg-secondary);
+  min-height: 100vh;
+}
+
+.avakio-richselect-example-header {
+  margin-bottom: 32px;
+}
+
+.avakio-richselect-example-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--avakio-text-primary);
+  margin-bottom: 8px;
+}
+
+.avakio-richselect-example-description {
+  font-size: 16px;
+  color: var(--avakio-text-secondary);
+}
+
+.avakio-richselect-example-card {
+  margin-bottom: 24px;
+  background-color: var(--avakio-bg-primary);
+  border: 1px solid var(--avakio-border-primary);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.avakio-richselect-example-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--avakio-text-primary);
+}
+
+.avakio-richselect-example-card-description {
+  font-size: 14px;
+  color: var(--avakio-text-secondary);
+}
+
+.avakio-richselect-example-selected {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: var(--avakio-bg-selected);
+  border: 1px solid var(--avakio-border-focus);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--avakio-accent-secondary);
+}
+
+.avakio-richselect-example-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.avakio-richselect-example-features li {
+  font-size: 14px;
+  color: var(--avakio-text-primary);
+  padding: 8px 0;
+}
+
+.avakio-richselect-example-table-container {
+  overflow-x: auto;
+}
+
+.avakio-richselect-example-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.avakio-richselect-example-table th {
+  text-align: left;
+  padding: 12px;
+  background-color: var(--avakio-bg-secondary);
+  border-bottom: 2px solid var(--avakio-border-primary);
+  font-weight: 600;
+  color: var(--avakio-text-primary);
+}
+
+.avakio-richselect-example-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--avakio-border-primary);
+  color: var(--avakio-text-secondary);
+}
+
+.avakio-richselect-example-table code {
+  background-color: var(--avakio-code-bg);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--avakio-code-text);
+}
+
+.space-y-4 > * + * {
+  margin-top: 16px;
+}
+
+/* ===================================
+   THEME: MATERIAL
+   =================================== */
+
+/* Theme-specific styles handled by global CSS variables */
+
+/* ===================================
+   THEME: FLAT
+   =================================== */
+
+/* Theme-specific styles handled by global CSS variables */
+
+/* ===================================
+   THEME: COMPACT
+   =================================== */
+
+[data-admin-theme="compact"] .avakio-richselect-example-container {
+  padding: 16px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-example-title {
+  font-size: 28px;
+  color: #1a1a1a;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-example-description {
+  font-size: 14px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-example-card {
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-example-card-title {
+  font-size: 16px;
+  color: #1a1a1a;
+}
+
+/* ===================================
+   THEME: COMPACT
+   =================================== */
+
+[data-admin-theme="compact"] .avakio-richselect-example-container {
+  padding: 16px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-example-title {
+  font-size: 28px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-example-description {
+  font-size: 14px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-example-card {
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-example-card-title {
+  font-size: 16px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-example-card-description {
+  font-size: 13px;
+}
+
+/* Theme-specific styles handled by global CSS variables */
+
+/* ===================================
+   THEME: DARK
+   =================================== */
+
+/* Theme-specific styles handled by global CSS variables */
+
+/* ===================================
+   THEME: OCEAN
+   =================================== */
+
+/* Theme-specific styles handled by global CSS variables */
+
+/* ===================================
+   THEME: SUNSET
+   =================================== */
+
+/* Theme-specific styles handled by global CSS variables */
+

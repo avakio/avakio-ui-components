@@ -1,0 +1,157 @@
+/* AvakioBulletGraph Example Demo Styles */
+.avakio-bullet-graph-demo-container {
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Sticky wrapper for header + tabbar */
+.avakio-bullet-graph-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--avakio-bg-secondary, #f8fafc);
+}
+
+.avakio-bullet-graph-tabbar-container {
+  background: var(--avakio-bg-secondary, #f8fafc);
+  border-bottom: 1px solid var(--avakio-border-primary);
+  padding: 8px 12px;
+  overflow: hidden;
+}
+
+.avakio-bullet-graph-demo-section {
+  border-bottom: 1px solid var(--avakio-border-primary);
+  scroll-margin-top: 160px; /* Offset for sticky header + tabbar */
+}
+
+.avakio-bullet-graph-value-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--avakio-bg-tertiary, #f3f4f6);
+  border-radius: 8px;
+}
+
+.avakio-bullet-graph-value-controls label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--avakio-text-primary, #374151);
+}
+
+.avakio-bullet-graph-value-controls input[type="range"] {
+  flex: 1;
+  max-width: 300px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--avakio-border-primary, #e5e7eb);
+  appearance: none;
+  cursor: pointer;
+}
+
+.avakio-bullet-graph-value-controls input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--avakio-accent-primary, #1ca1c1);
+  cursor: pointer;
+}
+
+.avakio-bullet-graph-value-controls span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--avakio-text-primary, #374151);
+  min-width: 50px;
+}
+
+/* Props Table Styles */
+.avakio-bullet-graph-props-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.avakio-bullet-graph-props-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.avakio-bullet-graph-props-table th,
+.avakio-bullet-graph-props-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--avakio-border-primary, #e5e7eb);
+}
+
+.avakio-bullet-graph-props-table th {
+  background: var(--avakio-bg-tertiary, #f3f4f6);
+  font-weight: 600;
+  color: var(--avakio-text-primary, #374151);
+}
+
+.avakio-bullet-graph-props-table td {
+  color: var(--avakio-text-secondary, #6b7280);
+}
+
+.avakio-bullet-graph-props-table code {
+  background: var(--avakio-bg-tertiary, #f3f4f6);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 12px;
+  color: var(--avakio-accent-primary, #3b82f6);
+}
+
+/* Code Example Styles */
+.avakio-bullet-graph-code-example {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.avakio-bullet-graph-code-example pre {
+  background: var(--avakio-bg-tertiary, #1e293b);
+  color: var(--avakio-text-primary, #e2e8f0);
+  padding: 16px;
+  border-radius: 8px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: auto;
+  margin: 0;
+}
+
+/* Dark theme support */
+[data-admin-theme="dark"] .avakio-bullet-graph-sticky-header,
+[data-admin-theme="dark"] .avakio-bullet-graph-tabbar-container {
+  background: var(--avakio-bg-secondary, hsl(222, 47%, 11%));
+}
+
+[data-admin-theme="dark"] .avakio-bullet-graph-value-controls {
+  background: var(--avakio-bg-tertiary, hsl(222, 47%, 20%));
+}
+
+[data-admin-theme="dark"] .avakio-bullet-graph-value-controls label,
+[data-admin-theme="dark"] .avakio-bullet-graph-value-controls span {
+  color: var(--avakio-text-primary, hsl(210, 40%, 90%));
+}
+
+[data-admin-theme="dark"] .avakio-bullet-graph-props-table th {
+  background: var(--avakio-bg-tertiary, hsl(222, 47%, 15%));
+  color: var(--avakio-text-primary, hsl(210, 40%, 90%));
+}
+
+[data-admin-theme="dark"] .avakio-bullet-graph-props-table td {
+  color: var(--avakio-text-secondary, hsl(210, 40%, 70%));
+}
+
+[data-admin-theme="dark"] .avakio-bullet-graph-props-table code {
+  background: var(--avakio-bg-quaternary, hsl(222, 47%, 20%));
+}
+
+[data-admin-theme="dark"] .avakio-bullet-graph-code-example pre {
+  background: hsl(222, 47%, 8%);
+  color: hsl(210, 40%, 90%);
+}
+

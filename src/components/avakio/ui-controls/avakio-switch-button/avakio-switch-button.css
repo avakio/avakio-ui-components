@@ -1,0 +1,504 @@
+/* AvakioSwitchButton Styles */
+
+/* Container */
+.avakio-switch-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-family: inherit;
+  position: relative;
+}
+
+.avakio-switch-container-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Labels */
+.avakio-switch-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--avakio-text-primary, #1f2937);
+  white-space: nowrap;
+}
+
+.avakio-switch-label-left {
+  text-align: right;
+  padding-right: 8px;
+}
+
+.avakio-switch-label-right {
+  text-align: left;
+  padding-left: 8px;
+}
+
+.avakio-switch-required {
+  color: var(--avakio-error, #ef4444);
+  margin-left: 2px;
+}
+
+/* Switch Button/Track */
+.avakio-switch-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.avakio-switch-button:focus-visible .avakio-switch-track {
+  box-shadow: 0 0 0 2px var(--avakio-focus-ring, rgba(59, 130, 246, 0.5));
+}
+
+.avakio-switch-button-disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Track */
+.avakio-switch-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 44px;
+  height: 22px;
+  background-color: var(--avakio-switch-track-off, #d1d5db);
+  border-radius: 999px;
+  transition: background-color 0.2s ease, box-shadow 0.15s ease;
+  overflow: hidden;
+}
+
+.avakio-switch-button-on .avakio-switch-track {
+  background-color: var(--avakio-switch-track-on, var(--avakio-primary, #3b82f6));
+}
+
+/* Thumb - positioned and styled */
+.avakio-switch-thumb {
+  position: absolute;
+  background-color: var(--avakio-switch-thumb, #ffffff);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, left 0.2s ease;
+  /* Default (medium) size dimensions */
+  width: 18px;
+  height: 18px;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.avakio-switch-button-on .avakio-switch-thumb {
+  left: calc(100% - 20px);
+}
+
+/* Size Variants - Small */
+.avakio-switch-container-sm .avakio-switch-label {
+  font-size: 12px;
+}
+
+.avakio-switch-button-sm .avakio-switch-track {
+  width: 36px;
+  height: 18px;
+}
+
+.avakio-switch-button-sm .avakio-switch-thumb {
+  width: 14px;
+  height: 14px;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.avakio-switch-button-sm.avakio-switch-button-on .avakio-switch-thumb {
+  left: calc(100% - 16px);
+}
+
+/* Size Variants - Medium (Default) */
+.avakio-switch-button-md .avakio-switch-track {
+  width: 44px;
+  height: 22px;
+}
+
+.avakio-switch-button-md .avakio-switch-thumb {
+  width: 18px;
+  height: 18px;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.avakio-switch-button-md.avakio-switch-button-on .avakio-switch-thumb {
+  left: calc(100% - 20px);
+}
+
+/* Size Variants - Large */
+.avakio-switch-container-lg .avakio-switch-label {
+  font-size: 16px;
+}
+
+.avakio-switch-button-lg .avakio-switch-track {
+  width: 56px;
+  height: 28px;
+}
+
+.avakio-switch-button-lg .avakio-switch-thumb {
+  width: 24px;
+  height: 24px;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.avakio-switch-button-lg.avakio-switch-button-on .avakio-switch-thumb {
+  left: calc(100% - 26px);
+}
+
+/* With Inner Labels */
+.avakio-switch-button-with-labels .avakio-switch-track {
+  width: auto;
+  min-width: 60px;
+  padding: 0 8px;
+}
+
+.avakio-switch-button-with-labels.avakio-switch-button-sm .avakio-switch-track {
+  min-width: 50px;
+  padding: 0 6px;
+  height: 20px;
+}
+
+.avakio-switch-button-with-labels.avakio-switch-button-md .avakio-switch-track {
+  min-width: 60px;
+  padding: 0 8px;
+  height: 24px;
+}
+
+.avakio-switch-button-with-labels.avakio-switch-button-lg .avakio-switch-track {
+  min-width: 90px;
+  padding: 0 14px;
+  height: 32px;
+}
+
+.avakio-switch-button-with-labels .avakio-switch-thumb {
+  width: 16px;
+  height: 16px;
+}
+
+.avakio-switch-button-with-labels.avakio-switch-button-sm .avakio-switch-thumb {
+  width: 14px;
+  height: 14px;
+  left: 3px;
+}
+
+.avakio-switch-button-with-labels.avakio-switch-button-sm.avakio-switch-button-on .avakio-switch-thumb {
+  left: calc(100% - 17px);
+}
+
+.avakio-switch-button-with-labels.avakio-switch-button-md .avakio-switch-thumb {
+  width: 18px;
+  height: 18px;
+  left: 3px;
+}
+
+.avakio-switch-button-with-labels.avakio-switch-button-md.avakio-switch-button-on .avakio-switch-thumb {
+  left: calc(100% - 21px);
+}
+
+.avakio-switch-button-with-labels.avakio-switch-button-lg .avakio-switch-thumb {
+  width: 24px;
+  height: 24px;
+  left: 4px;
+}
+
+.avakio-switch-button-with-labels.avakio-switch-button-lg.avakio-switch-button-on .avakio-switch-thumb {
+  left: calc(100% - 28px);
+}
+
+/* Track Labels */
+.avakio-switch-track-on-label,
+.avakio-switch-track-off-label {
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--avakio-switch-label-color, #ffffff);
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+  user-select: none;
+}
+
+.avakio-switch-button-sm .avakio-switch-track-on-label,
+.avakio-switch-button-sm .avakio-switch-track-off-label {
+  font-size: 9px;
+}
+
+.avakio-switch-button-lg .avakio-switch-track-on-label,
+.avakio-switch-button-lg .avakio-switch-track-off-label {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.avakio-switch-track-on-label {
+  padding-right: 20px;
+  opacity: 0;
+}
+
+.avakio-switch-track-off-label {
+  padding-left: 22px;
+  color: var(--avakio-switch-label-off-color, #6b7280);
+}
+
+.avakio-switch-button-lg .avakio-switch-track-off-label {
+  padding-left: 28px;
+}
+
+.avakio-switch-button-lg .avakio-switch-track-on-label {
+  padding-right: 28px;
+}
+
+.avakio-switch-button-on .avakio-switch-track-on-label {
+  opacity: 1;
+}
+
+.avakio-switch-button-on .avakio-switch-track-off-label {
+  opacity: 0;
+}
+
+/* Bottom Section */
+.avakio-switch-bottom {
+  width: 100%;
+  flex-basis: 100%;
+  padding-left: 88px; /* labelWidth default + gap */
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.avakio-switch-bottom-label {
+  color: var(--avakio-text-secondary, #6b7280);
+}
+
+.avakio-switch-invalid-message {
+  color: var(--avakio-error, #ef4444);
+}
+
+/* Invalid State */
+.avakio-switch-container-invalid .avakio-switch-track {
+  box-shadow: 0 0 0 2px var(--avakio-error, #ef4444);
+}
+
+/* Hover States */
+.avakio-switch-button:hover:not(.avakio-switch-button-disabled) .avakio-switch-track {
+  opacity: 0.9;
+}
+
+.avakio-switch-button:active:not(.avakio-switch-button-disabled) .avakio-switch-thumb {
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* ========================================
+   THEME STYLES
+   ======================================== */
+
+/* Material Theme (Default) */
+[data-admin-theme="material"] .avakio-switch-track,
+.avakio-switch-container[data-admin-theme="material"] .avakio-switch-track {
+  --avakio-switch-track-off: #d1d5db;
+  --avakio-switch-track-on: var(--avakio-primary, #1CA1C1);
+  --avakio-switch-thumb: #ffffff;
+}
+
+[data-admin-theme="material"] .avakio-switch-label,
+.avakio-switch-container[data-admin-theme="material"] .avakio-switch-label {
+  color: var(--avakio-text-primary, #1f2937);
+}
+
+/* Dark Theme */
+[data-admin-theme="dark"] .avakio-switch-track,
+.avakio-switch-container[data-admin-theme="dark"] .avakio-switch-track {
+  --avakio-switch-track-off: #4b5563;
+  --avakio-switch-track-on: var(--avakio-primary, #3b82f6);
+  --avakio-switch-thumb: #e5e7eb;
+}
+
+[data-admin-theme="dark"] .avakio-switch-label,
+.avakio-switch-container[data-admin-theme="dark"] .avakio-switch-label {
+  color: var(--avakio-text-primary, #f9fafb);
+}
+
+[data-admin-theme="dark"] .avakio-switch-track-off-label {
+  color: #9ca3af;
+}
+
+/* Ocean Theme */
+[data-admin-theme="ocean"] .avakio-switch-track,
+.avakio-switch-container[data-admin-theme="ocean"] .avakio-switch-track {
+  --avakio-switch-track-off: #bae6fd;
+  --avakio-switch-track-on: var(--avakio-primary, #0ea5e9);
+  --avakio-switch-thumb: #ffffff;
+}
+
+[data-admin-theme="ocean"] .avakio-switch-label,
+.avakio-switch-container[data-admin-theme="ocean"] .avakio-switch-label {
+  color: var(--avakio-text-primary, #0c4a6e);
+}
+
+[data-admin-theme="ocean"] .avakio-switch-track-off-label {
+  color: #0369a1;
+}
+
+/* Sunset Theme */
+[data-admin-theme="sunset"] .avakio-switch-track,
+.avakio-switch-container[data-admin-theme="sunset"] .avakio-switch-track {
+  --avakio-switch-track-off: #fed7aa;
+  --avakio-switch-track-on: var(--avakio-primary, #f97316);
+  --avakio-switch-thumb: #ffffff;
+}
+
+[data-admin-theme="sunset"] .avakio-switch-label,
+.avakio-switch-container[data-admin-theme="sunset"] .avakio-switch-label {
+  color: var(--avakio-text-primary, #7c2d12);
+}
+
+[data-admin-theme="sunset"] .avakio-switch-track-off-label {
+  color: #c2410c;
+}
+
+/* Flat Theme */
+[data-admin-theme="flat"] .avakio-switch-track,
+.avakio-switch-container[data-admin-theme="flat"] .avakio-switch-track {
+  border-radius: 4px;
+  --avakio-switch-track-off: #d1d5db;
+  --avakio-switch-track-on: var(--avakio-primary, #5E81AC);
+  --avakio-switch-thumb: #ffffff;
+}
+
+[data-admin-theme="flat"] .avakio-switch-thumb,
+.avakio-switch-container[data-admin-theme="flat"] .avakio-switch-thumb {
+  border-radius: 2px;
+}
+
+[data-admin-theme="flat"] .avakio-switch-label,
+.avakio-switch-container[data-admin-theme="flat"] .avakio-switch-label {
+  color: var(--avakio-text-primary, #1f2937);
+}
+
+/* Compact Theme */
+[data-admin-theme="compact"] .avakio-switch-container,
+.avakio-switch-container[data-admin-theme="compact"] {
+  gap: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-label,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-label {
+  font-size: 12px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-track,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-track {
+  --avakio-switch-track-off: #d1d5db;
+  --avakio-switch-track-on: var(--avakio-primary, #00796B);
+  --avakio-switch-thumb: #ffffff;
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-md .avakio-switch-track,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-md .avakio-switch-track {
+  width: 36px;
+  height: 18px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-md .avakio-switch-thumb,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-md .avakio-switch-thumb {
+  width: 14px;
+  height: 14px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-md.avakio-switch-button-on .avakio-switch-thumb,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-md.avakio-switch-button-on .avakio-switch-thumb {
+  left: calc(100% - 16px);
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-lg .avakio-switch-track,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-lg .avakio-switch-track {
+  width: 44px;
+  height: 22px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-lg .avakio-switch-thumb,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-lg .avakio-switch-thumb {
+  width: 18px;
+  height: 18px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-lg.avakio-switch-button-on .avakio-switch-thumb,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-lg.avakio-switch-button-on .avakio-switch-thumb {
+  left: calc(100% - 20px);
+}
+
+[data-admin-theme="compact"] .avakio-switch-track-on-label,
+[data-admin-theme="compact"] .avakio-switch-track-off-label,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-track-on-label,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-track-off-label {
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/* Compact theme OFF label - darker color for visibility on gray track */
+[data-admin-theme="compact"] .avakio-switch-track-off-label,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-track-off-label {
+  color: #374151;
+}
+
+/* Compact theme with labels - track sizing */
+[data-admin-theme="compact"] .avakio-switch-button-with-labels .avakio-switch-track,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-with-labels .avakio-switch-track {
+  min-width: 56px;
+  padding: 0 8px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-with-labels.avakio-switch-button-lg .avakio-switch-track,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-with-labels.avakio-switch-button-lg .avakio-switch-track {
+  min-width: 70px;
+  height: 26px;
+  padding: 0 10px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-with-labels.avakio-switch-button-lg .avakio-switch-thumb,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-with-labels.avakio-switch-button-lg .avakio-switch-thumb {
+  width: 20px;
+  height: 20px;
+  left: 3px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-with-labels.avakio-switch-button-lg.avakio-switch-button-on .avakio-switch-thumb,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-with-labels.avakio-switch-button-lg.avakio-switch-button-on .avakio-switch-thumb {
+  left: calc(100% - 23px);
+}
+
+/* Compact theme label padding */
+[data-admin-theme="compact"] .avakio-switch-track-off-label,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-track-off-label {
+  padding-left: 22px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-lg .avakio-switch-track-off-label,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-lg .avakio-switch-track-off-label {
+  padding-left: 24px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-button-lg .avakio-switch-track-on-label,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-button-lg .avakio-switch-track-on-label {
+  padding-right: 24px;
+}
+
+[data-admin-theme="compact"] .avakio-switch-bottom,
+.avakio-switch-container[data-admin-theme="compact"] .avakio-switch-bottom {
+  font-size: 10px;
+}
+

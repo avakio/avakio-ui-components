@@ -1,0 +1,646 @@
+/* ===================================
+   AVAKIO SIDEBAR - BASE STYLES
+   =================================== */
+
+.avakio-sidebar {
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e5e7eb;
+  --sidebar-text: #374151;
+  --sidebar-text-muted: #6b7280;
+  --sidebar-hover-bg: #f3f4f6;
+  --sidebar-selected-bg: #1ca1c1;
+  --sidebar-selected-text: #ffffff;
+  --sidebar-icon-color: #6b7280;
+  --sidebar-arrow-color: #9ca3af;
+  --sidebar-popup-bg: #ffffff;
+  --sidebar-popup-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --sidebar-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  display: flex;
+  flex-direction: column;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  height: 100%;
+  transition: var(--sidebar-transition);
+  position: relative;
+  overflow: visible;
+}
+
+.avakio-sidebar.position-right {
+  border-right: none;
+  border-left: 1px solid var(--sidebar-border);
+}
+
+.avakio-sidebar-content {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+/* ===================================
+   SIDEBAR ITEMS
+   =================================== */
+
+.avakio-sidebar-item-wrapper {
+  position: relative;
+}
+
+.avakio-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--sidebar-text);
+  font-size: 14px;
+  font-weight: 500;
+  user-select: none;
+  position: relative;
+}
+
+.avakio-sidebar-item:hover {
+  background: var(--sidebar-hover-bg);
+}
+
+.avakio-sidebar-item.selected {
+  background: var(--sidebar-selected-bg);
+  color: var(--sidebar-selected-text);
+}
+
+.avakio-sidebar-item.selected .avakio-sidebar-icon {
+  color: var(--sidebar-selected-text);
+}
+
+.avakio-sidebar-item.has-children {
+  font-weight: 600;
+}
+
+.avakio-sidebar-item.level-0 {
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.avakio-sidebar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  color: var(--sidebar-icon-color);
+  flex-shrink: 0;
+}
+
+.avakio-sidebar-value {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.avakio-sidebar-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 12px;
+  color: var(--sidebar-arrow-color);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.avakio-sidebar-arrow.open {
+  transform: rotate(90deg);
+}
+
+/* ===================================
+   COLLAPSED STATE
+   =================================== */
+
+.avakio-sidebar.collapsed .avakio-sidebar-item {
+  justify-content: center;
+  padding: 12px 10px;
+}
+
+.avakio-sidebar.collapsed .avakio-sidebar-arrow {
+  display: none;
+}
+
+/* ===================================
+   CHILDREN ITEMS
+   =================================== */
+
+.avakio-sidebar-children {
+  display: flex;
+  flex-direction: column;
+  background: color-mix(in srgb, var(--sidebar-bg) 95%, var(--sidebar-border));
+}
+
+.avakio-sidebar-children .avakio-sidebar-item {
+  font-weight: 400;
+  font-size: 13px;
+}
+
+/* ===================================
+   POPUP (for collapsed mode)
+   =================================== */
+
+.avakio-sidebar-popup {
+  position: absolute;
+  top: 0;
+  background: var(--sidebar-popup-bg);
+  border: 1px solid var(--sidebar-border);
+  border-radius: 8px;
+  box-shadow: var(--sidebar-popup-shadow);
+  z-index: 1000;
+  min-width: 200px;
+  max-width: 300px;
+  overflow: hidden;
+  animation: popupSlideIn 0.2s ease;
+}
+
+.avakio-sidebar-popup.popup-right {
+  left: 100%;
+  margin-left: 4px;
+}
+
+.avakio-sidebar-popup.popup-left {
+  right: 100%;
+  margin-right: 4px;
+}
+
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.avakio-sidebar-popup-title {
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--sidebar-text);
+  border-bottom: 1px solid var(--sidebar-border);
+  background: color-mix(in srgb, var(--sidebar-bg) 98%, var(--sidebar-border));
+}
+
+.avakio-sidebar-popup-children {
+  display: flex;
+  flex-direction: column;
+}
+
+.avakio-sidebar-popup-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  color: var(--sidebar-text);
+  font-size: 13px;
+  transition: background-color 0.2s ease;
+}
+
+.avakio-sidebar-popup-item:hover {
+  background: var(--sidebar-hover-bg);
+}
+
+.avakio-sidebar-popup-item.selected {
+  background: var(--sidebar-selected-bg);
+  color: var(--sidebar-selected-text);
+}
+
+.avakio-sidebar-popup-item.selected .avakio-sidebar-icon {
+  color: var(--sidebar-selected-text);
+}
+
+/* ===================================
+   TOGGLE BUTTON
+   =================================== */
+
+.avakio-sidebar-toggle-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+}
+
+.avakio-sidebar-toggle-button:hover {
+  background: var(--sidebar-hover-bg);
+}
+
+/* ===================================
+   THEME: MATERIAL (Default)
+   =================================== */
+
+[data-admin-theme="material"] .avakio-sidebar {
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e5e7eb;
+  --sidebar-text: #374151;
+  --sidebar-text-muted: #6b7280;
+  --sidebar-hover-bg: #f3f4f6;
+  --sidebar-selected-bg: #1ca1c1;
+  --sidebar-selected-text: #ffffff;
+  --sidebar-pulse-color: rgba(28, 161, 193, 0.2);
+  --sidebar-icon-color: #6b7280;
+  --sidebar-arrow-color: #9ca3af;
+  --sidebar-popup-bg: #ffffff;
+  --sidebar-popup-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ===================================
+   THEME: FLAT
+   =================================== */
+
+[data-admin-theme="flat"] .avakio-sidebar {
+  --sidebar-bg: #f3f6fb;
+  --sidebar-border: #cfd8e6;
+  --sidebar-text: #1f2a3d;
+  --sidebar-text-muted: #42526a;
+  --sidebar-hover-bg: #e4ebf5;
+  --sidebar-selected-bg: #5e81ac;
+  --sidebar-selected-text: #ffffff;
+  --sidebar-pulse-color: rgba(94, 129, 172, 0.2);
+  --sidebar-icon-color: #42526a;
+  --sidebar-arrow-color: #7a8ba5;
+  --sidebar-popup-bg: #f3f6fb;
+  --sidebar-popup-shadow: 0 4px 12px rgba(94, 129, 172, 0.2);
+}
+
+/* ===================================
+   THEME: COMPACT
+   =================================== */
+
+[data-admin-theme="compact"] .avakio-sidebar {
+  --sidebar-bg: #f1f7f6;
+  --sidebar-border: #b7d6d1;
+  --sidebar-text: #0b2c28;
+  --sidebar-text-muted: #1f5a52;
+  --sidebar-hover-bg: #e0f0ed;
+  --sidebar-selected-bg: #00796b;
+  --sidebar-selected-text: #ffffff;
+  --sidebar-pulse-color: rgba(0, 121, 107, 0.2);
+  --sidebar-icon-color: #1f5a52;
+  --sidebar-arrow-color: #5a9e94;
+  --sidebar-popup-bg: #f1f7f6;
+  --sidebar-popup-shadow: 0 3px 10px rgba(0, 121, 107, 0.18);
+}
+
+[data-admin-theme="compact"] .avakio-sidebar-item {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-sidebar-popup-item {
+  padding: 7px 12px;
+}
+
+/* ===================================
+   THEME: DARK
+   =================================== */
+
+[data-admin-theme="dark"] .avakio-sidebar {
+  --sidebar-bg: hsl(222, 47%, 11%);
+  --sidebar-border: hsl(217, 33%, 17%);
+  --sidebar-text: hsl(210, 40%, 96%);
+  --sidebar-text-muted: hsl(215, 20%, 80%);
+  --sidebar-hover-bg: hsl(217, 33%, 15%);
+  --sidebar-selected-bg: hsl(217, 91%, 60%);
+  --sidebar-selected-text: #0b1220;
+  --sidebar-pulse-color: hsla(217, 91%, 60%, 0.2);
+  --sidebar-icon-color: hsl(215, 20%, 80%);
+  --sidebar-arrow-color: hsl(215, 15%, 65%);
+  --sidebar-popup-bg: hsl(222, 47%, 14%);
+  --sidebar-popup-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* ===================================
+   THEME: OCEAN
+   =================================== */
+
+[data-admin-theme="ocean"] .avakio-sidebar {
+  --sidebar-bg: #f1f7fd;
+  --sidebar-border: #bfd8f1;
+  --sidebar-text: #0f2740;
+  --sidebar-text-muted: #244f74;
+  --sidebar-hover-bg: #e3eff9;
+  --sidebar-selected-bg: #0277bd;
+  --sidebar-selected-text: #ffffff;
+  --sidebar-pulse-color: rgba(2, 119, 189, 0.2);
+  --sidebar-icon-color: #244f74;
+  --sidebar-arrow-color: #5b8ab8;
+  --sidebar-popup-bg: #f1f7fd;
+  --sidebar-popup-shadow: 0 4px 12px rgba(2, 119, 189, 0.2);
+}
+
+/* ===================================
+   THEME: SUNSET
+   =================================== */
+
+[data-admin-theme="sunset"] .avakio-sidebar {
+  --sidebar-bg: #fff8f1;
+  --sidebar-border: #f4d3ad;
+  --sidebar-text: #4a2e0f;
+  --sidebar-text-muted: #8c5416;
+  --sidebar-hover-bg: #fef1e4;
+  --sidebar-selected-bg: #f57c00;
+  --sidebar-selected-text: #fff7ed;
+  --sidebar-pulse-color: rgba(245, 124, 0, 0.2);
+  --sidebar-icon-color: #8c5416;
+  --sidebar-arrow-color: #c89858;
+  --sidebar-popup-bg: #fff8f1;
+  --sidebar-popup-shadow: 0 4px 12px rgba(245, 124, 0, 0.2);
+}
+
+/* ===================================
+   SCROLLBAR STYLING
+   =================================== */
+
+.avakio-sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.avakio-sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.avakio-sidebar-content::-webkit-scrollbar-thumb {
+  background: var(--sidebar-border);
+  border-radius: 3px;
+}
+
+.avakio-sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: var(--sidebar-arrow-color);
+}
+
+/* ===================================
+   MOBILE STYLES
+   =================================== */
+
+/* Overlay for mobile */
+.avakio-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  animation: overlayFadeIn 0.3s ease;
+  backdrop-filter: blur(2px);
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile sidebar adjustments */
+.avakio-sidebar.mobile {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.avakio-sidebar.mobile.position-left {
+  left: 0;
+}
+
+.avakio-sidebar.mobile.position-right {
+  right: 0;
+}
+
+/* Mobile dongle/toggle button */
+.avakio-sidebar-mobile-dongle {
+  position: fixed;
+  z-index: 998;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--sidebar-selected-bg);
+  color: var(--sidebar-selected-text);
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  animation: donglePulse 2s ease-in-out infinite;
+}
+
+.avakio-sidebar-mobile-dongle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.avakio-sidebar-mobile-dongle:active {
+  transform: scale(0.95);
+}
+
+.avakio-sidebar-mobile-dongle.position-left {
+  left: 16px;
+  top: 16px;
+}
+
+.avakio-sidebar-mobile-dongle.position-right {
+  right: 16px;
+  top: 16px;
+}
+
+@keyframes donglePulse {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 8px var(--sidebar-selected-bg);
+  }
+}
+
+/* Hide dongle on desktop */
+.avakio-sidebar.desktop ~ .avakio-sidebar-mobile-dongle {
+  display: none;
+}
+
+/* Slide in/out animations for mobile */
+.avakio-sidebar.mobile.position-left.collapsed {
+  transform: translateX(-100%);
+}
+
+.avakio-sidebar.mobile.position-right.collapsed {
+  transform: translateX(100%);
+}
+
+/* ===================================
+   TOGGLE BUTTON FOR HEADER
+   =================================== */
+
+.avakio-sidebar-toggle-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  padding: 8px;
+}
+
+.avakio-sidebar-toggle-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.avakio-sidebar-toggle-button:active {
+  transform: scale(0.95);
+}
+
+.avakio-sidebar-toggle-button svg {
+  transition: transform 0.2s ease;
+}
+
+.avakio-sidebar-toggle-button.collapsed svg {
+  transform: rotate(0deg);
+}
+
+.avakio-sidebar-toggle-button.expanded svg {
+  transform: rotate(0deg);
+}
+
+/* Header-specific toggle button styling */
+.header-toggle.avakio-sidebar-toggle-button {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  color: white !important;
+}
+
+.header-toggle.avakio-sidebar-toggle-button:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Hide header toggle button on mobile since sidebar has its own dongle */
+@media (max-width: 767px) {
+  .header-sidebar-toggle {
+    display: none !important;
+  }
+}
+
+.avakio-sidebar.mobile.expanded {
+  transform: translateX(0);
+}
+
+/* Increase touch targets on mobile */
+.avakio-sidebar.mobile .avakio-sidebar-item {
+  padding: 14px 16px;
+  min-height: 48px;
+  font-size: 15px;
+}
+
+.avakio-sidebar.mobile .avakio-sidebar-item.level-0 {
+  min-height: 52px;
+  padding: 16px;
+}
+
+.avakio-sidebar.mobile .avakio-sidebar-icon {
+  min-width: 24px;
+}
+
+/* Better spacing for nested items on mobile */
+.avakio-sidebar.mobile .avakio-sidebar-children .avakio-sidebar-item {
+  padding: 12px 16px;
+  min-height: 44px;
+}
+
+/* Hide popups on mobile (not needed in expanded state) */
+.avakio-sidebar.mobile .avakio-sidebar-popup {
+  display: none;
+}
+
+/* Desktop-specific behavior */
+.avakio-sidebar.desktop {
+  position: relative;
+}
+
+/* Responsive breakpoint adjustments */
+@media (max-width: 768px) {
+  .avakio-sidebar:not(.mobile) {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
+  }
+
+  .avakio-sidebar:not(.mobile).position-left {
+    left: 0;
+  }
+
+  .avakio-sidebar:not(.mobile).position-right {
+    right: 0;
+  }
+
+  .avakio-sidebar:not(.mobile).position-left.collapsed {
+    transform: translateX(-100%);
+  }
+
+  .avakio-sidebar:not(.mobile).position-right.collapsed {
+    transform: translateX(100%);
+  }
+
+  /* Increase touch targets */
+  .avakio-sidebar-item {
+    padding: 14px 16px;
+    min-height: 48px;
+  }
+
+  .avakio-sidebar-toggle-button {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Tablet and smaller */
+@media (max-width: 1024px) {
+  .avakio-sidebar {
+    max-width: 280px;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 480px) {
+  .avakio-sidebar {
+    width: 85vw !important;
+    max-width: 300px;
+  }
+
+  .avakio-sidebar.mobile .avakio-sidebar-item {
+    font-size: 14px;
+  }
+
+  .avakio-sidebar-popup {
+    max-width: 240px;
+  }
+}
+

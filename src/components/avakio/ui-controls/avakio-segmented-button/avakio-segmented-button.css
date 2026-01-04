@@ -1,0 +1,409 @@
+/* ===================================
+   AVAKIO SEGMENTED BUTTON - BASE STYLES
+   =================================== */
+
+.avakio-segmented {
+  --segmented-primary: #1ca1c1;
+  --segmented-primary-strong: #0f7b93;
+  --segmented-primary-light: rgba(28, 161, 193, 0.12);
+  --segmented-surface: #f8fafc;
+  --segmented-surface-strong: #eef2f7;
+  --segmented-border: #d1d5db;
+  --segmented-text: #0f172a;
+  --segmented-muted: #6b7280;
+  --segmented-badge-bg: #1ca1c1;
+  --segmented-badge-text: #ffffff;
+  --segmented-error: #ef4444;
+  --segmented-radius: 10px;
+  --segmented-segment-radius: 8px;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--segmented-text);
+}
+
+.avakio-segmented-label-top {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.avakio-segmented-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--segmented-text);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 10px;
+}
+
+.avakio-segmented-label-top .avakio-segmented-label {
+  padding-top: 0;
+}
+
+.avakio-segmented-required {
+  color: var(--segmented-error);
+}
+
+.avakio-segmented-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.avakio-segmented-track {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  background: var(--segmented-surface);
+  border: 1px solid var(--segmented-border);
+  border-radius: var(--segmented-radius);
+  padding: 4px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.avakio-segmented-fill .avakio-segmented-track {
+  width: 100%;
+}
+
+.avakio-segmented-borderless .avakio-segmented-track {
+  border-color: transparent;
+  background: transparent;
+  padding: 0;
+}
+
+/* ===================================
+   SEGMENT BUTTON STYLES
+   =================================== */
+
+.avakio-segmented-segment {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--segmented-segment-radius);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--segmented-muted);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  user-select: none;
+  outline: none;
+}
+
+.avakio-segmented-segment:hover:not(:disabled):not(.avakio-segmented-segment-disabled) {
+  color: var(--segmented-primary-strong);
+  background: var(--segmented-surface-strong);
+}
+
+.avakio-segmented-segment:focus-visible {
+  outline: 2px solid var(--segmented-primary);
+  outline-offset: 2px;
+}
+
+.avakio-segmented-segment-active {
+  color: var(--segmented-primary-strong);
+  background: var(--segmented-primary-light);
+  border-color: color-mix(in srgb, var(--segmented-primary) 30%, var(--segmented-border));
+  box-shadow: 0 4px 12px -6px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.avakio-segmented-segment-active:hover:not(:disabled) {
+  background: var(--segmented-primary-light);
+  color: var(--segmented-primary-strong);
+}
+
+.avakio-segmented-segment-disabled,
+.avakio-segmented-segment:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--segmented-muted);
+}
+
+.avakio-segmented-segment-disabled:hover,
+.avakio-segmented-segment:disabled:hover {
+  background: transparent;
+  color: var(--segmented-muted);
+}
+
+/* ===================================
+   SEGMENT INNER ELEMENTS
+   =================================== */
+
+.avakio-segmented-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.avakio-segmented-text {
+  line-height: 1.2;
+}
+
+.avakio-segmented-badge {
+  background: var(--segmented-badge-bg);
+  color: var(--segmented-badge-text);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  line-height: 1.2;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+/* ===================================
+   SIZE VARIANTS
+   =================================== */
+
+/* Small */
+.avakio-segmented-size-sm .avakio-segmented-track {
+  padding: 3px;
+}
+
+.avakio-segmented-size-sm .avakio-segmented-segment {
+  padding: 7px 14px;
+  font-size: 13px;
+  gap: 6px;
+  border-radius: 6px;
+}
+
+.avakio-segmented-size-sm .avakio-segmented-badge {
+  font-size: 10px;
+  padding: 2px 5px;
+}
+
+.avakio-segmented-size-sm .avakio-segmented-label {
+  font-size: 13px;
+  padding-top: 7px;
+}
+
+/* Large */
+.avakio-segmented-size-lg .avakio-segmented-track {
+  padding: 5px;
+}
+
+.avakio-segmented-size-lg .avakio-segmented-segment {
+  padding: 14px 24px;
+  font-size: 15px;
+  gap: 10px;
+  border-radius: 10px;
+}
+
+.avakio-segmented-size-lg .avakio-segmented-badge {
+  font-size: 12px;
+  padding: 3px 8px;
+}
+
+.avakio-segmented-size-lg .avakio-segmented-label {
+  font-size: 15px;
+  padding-top: 14px;
+}
+
+/* ===================================
+   ALIGNMENT
+   =================================== */
+
+.avakio-segmented-align-center .avakio-segmented-wrapper {
+  justify-content: center;
+}
+
+.avakio-segmented-align-right .avakio-segmented-wrapper {
+  justify-content: flex-end;
+}
+
+/* Fill - segments stretch to fill */
+.avakio-segmented-fill .avakio-segmented-segment {
+  flex: 1 1 0;
+}
+
+/* ===================================
+   ERROR STATE
+   =================================== */
+
+.avakio-segmented-error .avakio-segmented-track {
+  border-color: var(--segmented-error);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.12);
+}
+
+.avakio-segmented-error-text {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--segmented-error);
+}
+
+.avakio-segmented-bottom-label {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--segmented-muted);
+}
+
+/* ===================================
+   DISABLED STATE
+   =================================== */
+
+.avakio-segmented-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.avakio-segmented-disabled .avakio-segmented-track {
+  background: var(--segmented-surface-strong);
+}
+
+/* ===================================
+   THEME: MATERIAL (#1CA1C1)
+   =================================== */
+
+[data-admin-theme="material"] .avakio-segmented {
+  --segmented-primary: #1ca1c1;
+  --segmented-primary-strong: #0f7b93;
+  --segmented-primary-light: rgba(28, 161, 193, 0.12);
+  --segmented-surface: #f4fbfd;
+  --segmented-surface-strong: #e7f7fc;
+  --segmented-border: #c8e7f0;
+  --segmented-text: #0b2f3a;
+  --segmented-muted: #255c6b;
+  --segmented-badge-bg: #1ca1c1;
+  --segmented-badge-text: #ffffff;
+}
+
+/* ===================================
+   THEME: FLAT (#5E81AC)
+   =================================== */
+
+[data-admin-theme="flat"] .avakio-segmented {
+  --segmented-primary: #5e81ac;
+  --segmented-primary-strong: #46678e;
+  --segmented-primary-light: rgba(94, 129, 172, 0.12);
+  --segmented-surface: #f3f6fb;
+  --segmented-surface-strong: #e6edf7;
+  --segmented-border: #cfd8e6;
+  --segmented-text: #1f2a3d;
+  --segmented-muted: #42526a;
+  --segmented-badge-bg: #5e81ac;
+  --segmented-badge-text: #ffffff;
+}
+
+/* ===================================
+   THEME: COMPACT (#00796B)
+   =================================== */
+
+[data-admin-theme="compact"] .avakio-segmented {
+  --segmented-primary: #00796b;
+  --segmented-primary-strong: #005f55;
+  --segmented-primary-light: rgba(0, 121, 107, 0.12);
+  --segmented-surface: #f1f7f6;
+  --segmented-surface-strong: #e1f1ef;
+  --segmented-border: #b7d6d1;
+  --segmented-text: #0b2c28;
+  --segmented-muted: #1f5a52;
+  --segmented-badge-bg: #00796b;
+  --segmented-badge-text: #ffffff;
+  --segmented-radius: 8px;
+  --segmented-segment-radius: 6px;
+}
+
+[data-admin-theme="compact"] .avakio-segmented-track {
+  padding: 3px;
+  gap: 0;
+}
+
+[data-admin-theme="compact"] .avakio-segmented-segment {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+/* ===================================
+   THEME: DARK
+   =================================== */
+
+[data-admin-theme="dark"] .avakio-segmented {
+  --segmented-primary: hsl(217, 91%, 60%);
+  --segmented-primary-strong: hsl(217, 100%, 78%);
+  --segmented-primary-light: hsla(217, 91%, 60%, 0.16);
+  --segmented-surface: hsl(222, 47%, 11%);
+  --segmented-surface-strong: hsl(222, 47%, 15%);
+  --segmented-border: hsl(217, 33%, 17%);
+  --segmented-text: hsl(210, 40%, 96%);
+  --segmented-muted: hsl(215, 20%, 70%);
+  --segmented-badge-bg: hsl(217, 91%, 60%);
+  --segmented-badge-text: #ffffff;
+}
+
+[data-admin-theme="dark"] .avakio-segmented-track {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+[data-admin-theme="dark"] .avakio-segmented-segment:hover:not(:disabled):not(.avakio-segmented-segment-disabled) {
+  background: hsl(217, 33%, 20%);
+}
+
+[data-admin-theme="dark"] .avakio-segmented-segment-active {
+  background: hsla(217, 91%, 60%, 0.16);
+  border-color: hsla(217, 91%, 60%, 0.5);
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.65), 0 1px 1px rgba(255, 255, 255, 0.06);
+}
+
+/* ===================================
+   THEME: OCEAN (#0277BD)
+   =================================== */
+
+[data-admin-theme="ocean"] .avakio-segmented {
+  --segmented-primary: #0277bd;
+  --segmented-primary-strong: #015c93;
+  --segmented-primary-light: rgba(2, 119, 189, 0.12);
+  --segmented-surface: #f1f7fd;
+  --segmented-surface-strong: #e2effb;
+  --segmented-border: #bfd8f1;
+  --segmented-text: #0f2740;
+  --segmented-muted: #244f74;
+  --segmented-badge-bg: #0277bd;
+  --segmented-badge-text: #ffffff;
+}
+
+/* ===================================
+   THEME: SUNSET (#f57c00)
+   =================================== */
+
+[data-admin-theme="sunset"] .avakio-segmented {
+  --segmented-primary: #f57c00;
+  --segmented-primary-strong: #c35f00;
+  --segmented-primary-light: rgba(245, 124, 0, 0.12);
+  --segmented-surface: #fff8f1;
+  --segmented-surface-strong: #ffeeda;
+  --segmented-border: #f4d3ad;
+  --segmented-text: #4a2e0f;
+  --segmented-muted: #8c5416;
+  --segmented-badge-bg: #f57c00;
+  --segmented-badge-text: #ffffff;
+}
+
+[data-admin-theme="sunset"] .avakio-segmented-segment-active {
+  box-shadow: 0 6px 18px -10px rgba(245, 124, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* ===================================
+   ANIMATIONS
+   =================================== */
+
+@keyframes avakio-segmented-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+

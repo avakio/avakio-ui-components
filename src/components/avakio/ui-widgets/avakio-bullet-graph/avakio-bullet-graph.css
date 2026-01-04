@@ -1,0 +1,288 @@
+/* ===================================
+   AVAKIO BULLET GRAPH - BASE
+   =================================== */
+
+.avakio-bullet-graph {
+  --bg-primary: #1ca1c1;
+  --bg-marker: #333333;
+  --bg-track: #e5e7eb;
+  --bg-text: #0f172a;
+  --bg-text-muted: #64748b;
+  --bg-label-width: 120px;
+  --bg-label-height: 40px;
+  
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  width: 100%;
+}
+
+.avakio-bullet-graph-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Vertical Layout */
+.avakio-bullet-graph-vertical {
+  flex-direction: column;
+  align-items: center;
+  width: auto;
+  height: 100%;
+}
+
+/* Label */
+.avakio-bullet-graph-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: var(--bg-label-width);
+  flex-shrink: 0;
+}
+
+.avakio-bullet-graph-vertical .avakio-bullet-graph-label {
+  min-width: auto;
+  min-height: var(--bg-label-height);
+  text-align: center;
+}
+
+.avakio-bullet-graph-label-text {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--bg-text);
+  white-space: nowrap;
+}
+
+.avakio-bullet-graph-placeholder {
+  font-size: 12px;
+  color: var(--bg-text-muted);
+  white-space: nowrap;
+}
+
+/* Graph Container */
+.avakio-bullet-graph-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 100px;
+}
+
+.avakio-bullet-graph-vertical .avakio-bullet-graph-container {
+  flex: 1;
+  flex-direction: row;
+  min-width: auto;
+  min-height: 100px;
+  width: auto;
+}
+
+/* Track */
+.avakio-bullet-graph-track {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  background: var(--bg-track);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.avakio-bullet-graph-vertical .avakio-bullet-graph-track {
+  width: 24px;
+  height: 100%;
+}
+
+/* Performance Bands */
+.avakio-bullet-graph-band {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.avakio-bullet-graph-vertical .avakio-bullet-graph-band {
+  top: auto;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+}
+
+/* Value Bar */
+.avakio-bullet-graph-bar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  border-radius: 2px;
+  z-index: 2;
+}
+
+.avakio-bullet-graph-vertical .avakio-bullet-graph-bar {
+  top: auto;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Target Marker */
+.avakio-bullet-graph-marker {
+  position: absolute;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  transform: translateX(-50%);
+  z-index: 3;
+  border-radius: 1px;
+}
+
+.avakio-bullet-graph-vertical .avakio-bullet-graph-marker {
+  top: auto;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  transform: translateY(50%);
+}
+
+/* Scale */
+.avakio-bullet-graph-scale {
+  position: relative;
+  width: 100%;
+  height: 24px;
+}
+
+.avakio-bullet-graph-vertical .avakio-bullet-graph-scale {
+  width: 40px;
+  height: 100%;
+}
+
+.avakio-bullet-graph-tick {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(-50%);
+}
+
+.avakio-bullet-graph-vertical .avakio-bullet-graph-tick {
+  flex-direction: row;
+  transform: translateY(50%);
+}
+
+.avakio-bullet-graph-tick-line {
+  width: 1px;
+  background: var(--bg-text-muted);
+}
+
+.avakio-bullet-graph-vertical .avakio-bullet-graph-tick-line {
+  height: 1px;
+  width: auto;
+}
+
+.avakio-bullet-graph-tick-label {
+  font-size: 10px;
+  color: var(--bg-text-muted);
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+.avakio-bullet-graph-vertical .avakio-bullet-graph-tick-label {
+  margin-top: 0;
+  margin-left: 4px;
+}
+
+/* ===================================
+   THEMES
+   =================================== */
+
+/* Material Theme (default) */
+[data-admin-theme="material"] .avakio-bullet-graph,
+.avakio-bullet-graph[data-admin-theme="material"] {
+  --bg-primary: #1ca1c1;
+  --bg-marker: #1f2937;
+  --bg-track: #e5e7eb;
+  --bg-text: #0f172a;
+  --bg-text-muted: #64748b;
+}
+
+/* Flat Theme */
+[data-admin-theme="flat"] .avakio-bullet-graph,
+.avakio-bullet-graph[data-admin-theme="flat"] {
+  --bg-primary: #5e81ac;
+  --bg-marker: #2e3440;
+  --bg-track: #eceff4;
+  --bg-text: #2e3440;
+  --bg-text-muted: #4c566a;
+}
+
+/* Compact Theme */
+[data-admin-theme="compact"] .avakio-bullet-graph,
+.avakio-bullet-graph[data-admin-theme="compact"] {
+  --bg-primary: #00796b;
+  --bg-marker: #263238;
+  --bg-track: #e0e0e0;
+  --bg-text: #212121;
+  --bg-text-muted: #757575;
+}
+
+[data-admin-theme="compact"] .avakio-bullet-graph-track {
+  height: 20px;
+}
+
+[data-admin-theme="compact"] .avakio-bullet-graph-vertical .avakio-bullet-graph-track {
+  width: 20px;
+  height: 100%;
+}
+
+/* Dark Theme */
+[data-admin-theme="dark"] .avakio-bullet-graph,
+.avakio-bullet-graph[data-admin-theme="dark"] {
+  --bg-primary: hsl(217, 91%, 60%);
+  --bg-marker: hsl(210, 40%, 98%);
+  --bg-track: hsl(217, 33%, 17%);
+  --bg-text: hsl(210, 40%, 98%);
+  --bg-text-muted: hsl(215, 20%, 65%);
+}
+
+/* Ocean Theme */
+[data-admin-theme="ocean"] .avakio-bullet-graph,
+.avakio-bullet-graph[data-admin-theme="ocean"] {
+  --bg-primary: #0277bd;
+  --bg-marker: #01579b;
+  --bg-track: #e1f5fe;
+  --bg-text: #01579b;
+  --bg-text-muted: #0288d1;
+}
+
+/* Sunset Theme */
+[data-admin-theme="sunset"] .avakio-bullet-graph,
+.avakio-bullet-graph[data-admin-theme="sunset"] {
+  --bg-primary: #f57c00;
+  --bg-marker: #e65100;
+  --bg-track: #fff3e0;
+  --bg-text: #e65100;
+  --bg-text-muted: #ff9800;
+}
+
+/* ===================================
+   SIZES
+   =================================== */
+
+.avakio-bullet-graph-sm .avakio-bullet-graph-track {
+  height: 16px;
+}
+
+.avakio-bullet-graph-sm.avakio-bullet-graph-vertical .avakio-bullet-graph-track {
+  width: 16px;
+  height: 100%;
+}
+
+.avakio-bullet-graph-lg .avakio-bullet-graph-track {
+  height: 32px;
+}
+
+.avakio-bullet-graph-lg.avakio-bullet-graph-vertical .avakio-bullet-graph-track {
+  width: 32px;
+  height: 100%;
+}
+

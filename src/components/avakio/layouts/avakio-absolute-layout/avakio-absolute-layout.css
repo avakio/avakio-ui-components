@@ -1,0 +1,228 @@
+/* =====================================================
+   AvakioAbsoluteLayout - Absolute Positioning Layout
+   ===================================================== */
+
+.avakio-absolute-layout {
+  --al-bg-primary: #ffffff;
+  --al-bg-secondary: #f8f9fa;
+  --al-border-color: #e0e0e0;
+  --al-text-primary: #212529;
+  --al-text-secondary: #6c757d;
+  --al-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --al-cell-bg: transparent;
+  --al-cell-border: transparent;
+  --al-disabled-opacity: 0.5;
+  
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--al-bg-primary);
+  border: 1px solid var(--al-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.avakio-absolute-layout.borderless {
+  border: none;
+  border-radius: 0;
+}
+
+.avakio-absolute-layout.disabled {
+  opacity: var(--al-disabled-opacity);
+  pointer-events: none;
+}
+
+/* Cell Styles */
+.avakio-absolute-layout-cell {
+  box-sizing: border-box;
+  background: var(--al-cell-bg);
+  transition: box-shadow 0.15s ease;
+}
+
+.avakio-absolute-layout-cell.absolute {
+  position: absolute;
+}
+
+.avakio-absolute-layout-cell.relative {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.avakio-absolute-layout-cell.disabled {
+  opacity: var(--al-disabled-opacity);
+  pointer-events: none;
+}
+
+/* =====================================================
+   Theme: Material (Default)
+   ===================================================== */
+.avakio-absolute-layout-theme-material {
+  --al-bg-primary: #ffffff;
+  --al-bg-secondary: #fafafa;
+  --al-border-color: #e0e0e0;
+  --al-text-primary: #212121;
+  --al-text-secondary: #757575;
+  --al-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --al-cell-bg: transparent;
+  --al-cell-border: transparent;
+  
+  box-shadow: var(--al-shadow);
+}
+
+.avakio-absolute-layout-theme-material.borderless {
+  box-shadow: none;
+}
+
+/* =====================================================
+   Theme: Flat
+   ===================================================== */
+.avakio-absolute-layout-theme-flat {
+  --al-bg-primary: #ffffff;
+  --al-bg-secondary: #f4f4f4;
+  --al-border-color: #d9d9d9;
+  --al-text-primary: #333333;
+  --al-text-secondary: #666666;
+  --al-shadow: none;
+  --al-cell-bg: transparent;
+  --al-cell-border: transparent;
+  
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* =====================================================
+   Theme: Compact
+   ===================================================== */
+.avakio-absolute-layout-theme-compact {
+  --al-bg-primary: #ffffff;
+  --al-bg-secondary: #f8f9fa;
+  --al-border-color: #dee2e6;
+  --al-text-primary: #212529;
+  --al-text-secondary: #6c757d;
+  --al-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --al-cell-bg: transparent;
+  --al-cell-border: transparent;
+  
+  border-radius: 2px;
+}
+
+/* =====================================================
+   Theme: Dark
+   ===================================================== */
+.avakio-absolute-layout-theme-dark {
+  --al-bg-primary: #1e1e1e;
+  --al-bg-secondary: #252526;
+  --al-border-color: #3c3c3c;
+  --al-text-primary: #d4d4d4;
+  --al-text-secondary: #808080;
+  --al-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --al-cell-bg: transparent;
+  --al-cell-border: transparent;
+}
+
+/* =====================================================
+   Theme: Ocean
+   ===================================================== */
+.avakio-absolute-layout-theme-ocean {
+  --al-bg-primary: #f0f9ff;
+  --al-bg-secondary: #e0f2fe;
+  --al-border-color: #7dd3fc;
+  --al-text-primary: #0c4a6e;
+  --al-text-secondary: #0369a1;
+  --al-shadow: 0 2px 4px rgba(14, 165, 233, 0.15);
+  --al-cell-bg: transparent;
+  --al-cell-border: transparent;
+}
+
+/* =====================================================
+   Theme: Sunset
+   ===================================================== */
+.avakio-absolute-layout-theme-sunset {
+  --al-bg-primary: #fffbf5;
+  --al-bg-secondary: #fff7ed;
+  --al-border-color: #fdba74;
+  --al-text-primary: #7c2d12;
+  --al-text-secondary: #c2410c;
+  --al-shadow: 0 2px 4px rgba(251, 146, 60, 0.15);
+  --al-cell-bg: transparent;
+  --al-cell-border: transparent;
+}
+
+/* =====================================================
+   Cell Visibility Helpers
+   ===================================================== */
+.avakio-absolute-layout-cell[data-visible="false"] {
+  display: none;
+}
+
+/* =====================================================
+   Responsive adjustments
+   ===================================================== */
+@media (max-width: 768px) {
+  .avakio-absolute-layout {
+    border-radius: 2px;
+  }
+}
+
+/* =====================================================
+   Print styles
+   ===================================================== */
+@media print {
+  .avakio-absolute-layout {
+    border: 1px solid #ccc;
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+  
+  .avakio-absolute-layout-cell {
+    page-break-inside: avoid;
+  }
+}
+
+/* =====================================================
+   Animation utilities
+   ===================================================== */
+.avakio-absolute-layout-cell.animate-fade-in {
+  animation: alFadeIn 0.3s ease-out;
+}
+
+.avakio-absolute-layout-cell.animate-slide-in {
+  animation: alSlideIn 0.3s ease-out;
+}
+
+@keyframes alFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes alSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================================================
+   Debug mode - shows cell boundaries
+   ===================================================== */
+.avakio-absolute-layout.debug .avakio-absolute-layout-cell {
+  outline: 1px dashed rgba(255, 0, 0, 0.3);
+}
+
+.avakio-absolute-layout.debug .avakio-absolute-layout-cell.absolute {
+  outline-color: rgba(0, 0, 255, 0.3);
+}
+
+.avakio-absolute-layout.debug .avakio-absolute-layout-cell.relative {
+  outline-color: rgba(0, 255, 0, 0.3);
+}

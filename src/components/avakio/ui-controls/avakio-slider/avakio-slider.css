@@ -1,0 +1,236 @@
+/* ===================================
+   AVAKIO SLIDER - BASE
+   =================================== */
+
+.avakio-slider {
+  --sl-primary: #1ca1c1;
+  --sl-primary-strong: #0f7b93;
+  --sl-surface: #ffffff;
+  --sl-border: #d1d5db;
+  --sl-text: #0f172a;
+  --sl-muted: #6b7280;
+  --sl-error: #ef4444;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--sl-text);
+}
+
+.avakio-slider-header { display: flex; flex-direction: column; gap: 4px; }
+.avakio-slider-label-row { display: flex; align-items: center; gap: 8px; }
+.avakio-slider-label { font-weight: 700; }
+.avakio-slider-required { color: var(--sl-error); }
+.avakio-slider-description { color: var(--sl-muted); font-size: 13px; }
+.avakio-slider-value-chip { padding: 4px 8px; border-radius: 10px; background: #f8fafc; border: 1px solid var(--sl-border); font-weight: 700; font-size: 13px; }
+
+.avakio-slider-body { position: relative; padding: 16px 0 6px; }
+
+.avakio-slider-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 24px;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+.avakio-slider-input:disabled { cursor: not-allowed; }
+
+/* Range mode - dual inputs */
+.avakio-slider-range .avakio-slider-input {
+  pointer-events: none;
+}
+
+.avakio-slider-range .avakio-slider-input-low,
+.avakio-slider-range .avakio-slider-input-high {
+  pointer-events: auto;
+}
+
+/* Ensure low input doesn't block high input at overlap */
+.avakio-slider-range .avakio-slider-input-low {
+  z-index: 3;
+}
+
+.avakio-slider-range .avakio-slider-input-high {
+  z-index: 4;
+}
+
+.avakio-slider-track {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 999px;
+  overflow: visible;
+  border: 1px solid var(--sl-border);
+}
+
+/* Single slider progress - starts from left */
+.avakio-slider-progress {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: -1px;
+  background: linear-gradient(90deg, var(--sl-primary) 0%, color-mix(in srgb, var(--sl-primary) 60%, #fff) 100%);
+  width: var(--slider-progress, 50%);
+  max-width: calc(100% + 2px);
+  border-radius: 999px 0 0 999px;
+  pointer-events: none;
+}
+
+/* Range slider progress - positioned between handles */
+.avakio-slider-progress-range {
+  left: 0;
+  width: auto;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--sl-primary) 0%, color-mix(in srgb, var(--sl-primary) 80%, #fff) 100%);
+}
+
+.avakio-slider-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--sl-surface);
+  border: 2px solid var(--sl-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  z-index: 2;
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+/* Hover effect on thumb */
+.avakio-slider:not(.avakio-slider-disabled) .avakio-slider-thumb:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Active thumb styling */
+.avakio-slider-range .avakio-slider-thumb-low,
+.avakio-slider-range .avakio-slider-thumb-high {
+  z-index: 2;
+}
+
+/* When dragging, increase z-index */
+.avakio-slider-range .avakio-slider-input-low:active ~ .avakio-slider-track .avakio-slider-thumb-low,
+.avakio-slider-range .avakio-slider-input-high:active ~ .avakio-slider-track .avakio-slider-thumb-high {
+  z-index: 5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.avakio-slider-marks {
+  position: relative;
+  margin-top: 10px;
+  height: 26px;
+}
+
+.avakio-slider-mark {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-direction: column;
+  font-size: 11px;
+  color: var(--sl-muted);
+  transition: color 0.15s ease;
+}
+
+.avakio-slider-mark-active {
+  color: var(--sl-primary);
+}
+
+.avakio-slider-mark-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--sl-border);
+  transition: background-color 0.15s ease;
+}
+
+.avakio-slider-mark-active .avakio-slider-mark-dot {
+  background: var(--sl-primary);
+}
+
+.avakio-slider-error-text { color: var(--sl-error); font-size: 13px; }
+
+.avakio-slider-error .avakio-slider-track { border-color: var(--sl-error); box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.14); }
+.avakio-slider-error .avakio-slider-progress { background: var(--sl-error); }
+.avakio-slider-error .avakio-slider-thumb { border-color: var(--sl-error); }
+
+.avakio-slider-disabled { opacity: 0.55; pointer-events: none; }
+
+/* Sizes */
+.avakio-slider-sm .avakio-slider-track { height: 6px; }
+.avakio-slider-sm .avakio-slider-thumb { width: 16px; height: 16px; }
+.avakio-slider-lg .avakio-slider-track { height: 10px; }
+.avakio-slider-lg .avakio-slider-thumb { width: 20px; height: 20px; }
+
+/* ===================================
+   THEMES
+   =================================== */
+
+[data-admin-theme="material"] .avakio-slider,
+.avakio-slider[data-admin-theme="material"] {
+  --sl-primary: #1ca1c1;
+  --sl-primary-strong: #0f7b93;
+  --sl-surface: #ffffff;
+  --sl-border: #d1d5db;
+  --sl-text: #0f172a;
+  --sl-muted: #6b7280;
+}
+
+[data-admin-theme="flat"] .avakio-slider,
+.avakio-slider[data-admin-theme="flat"] {
+  --sl-primary: #5e81ac;
+  --sl-primary-strong: #46678e;
+  --sl-surface: #f7f9fb;
+  --sl-border: #cfd8e6;
+  --sl-text: #1f2a3d;
+  --sl-muted: #42526a;
+}
+
+[data-admin-theme="compact"] .avakio-slider,
+.avakio-slider[data-admin-theme="compact"] {
+  --sl-primary: #00796b;
+  --sl-primary-strong: #005f55;
+  --sl-surface: #f4faf8;
+  --sl-border: #b7d6d1;
+  --sl-text: #0b2c28;
+  --sl-muted: #1f5a52;
+}
+
+[data-admin-theme="dark"] .avakio-slider,
+.avakio-slider[data-admin-theme="dark"] {
+  --sl-primary: hsl(217, 91%, 60%);
+  --sl-primary-strong: hsl(217, 100%, 78%);
+  --sl-surface: hsl(222, 47%, 11%);
+  --sl-border: hsl(217, 33%, 17%);
+  --sl-text: hsl(210, 40%, 96%);
+  --sl-muted: hsl(215, 20%, 80%);
+}
+
+[data-admin-theme="ocean"] .avakio-slider,
+.avakio-slider[data-admin-theme="ocean"] {
+  --sl-primary: #0277bd;
+  --sl-primary-strong: #015c93;
+  --sl-surface: #f1f7fd;
+  --sl-border: #bfd8f1;
+  --sl-text: #0f2740;
+  --sl-muted: #244f74;
+}
+
+[data-admin-theme="sunset"] .avakio-slider,
+.avakio-slider[data-admin-theme="sunset"] {
+  --sl-primary: #f57c00;
+  --sl-primary-strong: #c35f00;
+  --sl-surface: #fff8f1;
+  --sl-border: #f4d3ad;
+  --sl-text: #4a2e0f;
+  --sl-muted: #8c5416;
+}
+

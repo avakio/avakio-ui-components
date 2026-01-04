@@ -1,0 +1,405 @@
+/* ===================================
+   AVAKIO RICHSELECT - BASE STYLES
+   =================================== */
+
+.avakio-richselect {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  margin-bottom: 12px;
+}
+
+.avakio-richselect-label {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--avakio-text-primary);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.avakio-richselect-required {
+  color: var(--avakio-text-error);
+}
+
+.avakio-richselect-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.avakio-richselect-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: var(--avakio-bg-input);
+  border: 1px solid var(--avakio-border-primary);
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  min-height: 38px;
+}
+
+.avakio-richselect-button:hover {
+  border-color: var(--avakio-border-hover);
+  background-color: var(--avakio-bg-hover);
+}
+
+.avakio-richselect-button:focus {
+  outline: none;
+  border-color: var(--avakio-border-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.avakio-richselect-button:disabled {
+  background-color: var(--avakio-bg-disabled);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.avakio-richselect[data-disabled="true"] .avakio-richselect-button {
+  background-color: var(--avakio-bg-disabled);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.avakio-richselect[data-readonly="true"] .avakio-richselect-button {
+  background-color: var(--avakio-bg-secondary);
+  cursor: default;
+}
+
+.avakio-richselect[data-error="true"] .avakio-richselect-button {
+  border-color: var(--avakio-border-error);
+}
+
+.avakio-richselect-value {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--avakio-text-primary);
+}
+
+.avakio-richselect-value.placeholder {
+  color: var(--avakio-text-tertiary);
+}
+
+.avakio-richselect-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.avakio-richselect-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--avakio-text-secondary);
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+.avakio-richselect-clear:hover {
+  background-color: var(--avakio-bg-hover);
+  color: var(--avakio-text-primary);
+}
+
+.avakio-richselect-toggle {
+  color: var(--avakio-text-secondary);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.avakio-richselect-toggle.open {
+  transform: rotate(180deg);
+}
+
+.avakio-richselect-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: var(--avakio-bg-primary);
+  border: 1px solid var(--avakio-border-primary);
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 9999;
+  overflow-y: auto;
+  animation: slideDown 0.15s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.avakio-richselect-option {
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+  color: var(--avakio-text-primary);
+  font-size: 14px;
+}
+
+.avakio-richselect-option:hover,
+.avakio-richselect-option.highlighted {
+  background-color: var(--avakio-bg-hover);
+}
+
+.avakio-richselect-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-primary);
+  font-weight: 500;
+}
+
+.avakio-richselect-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
+}
+
+.avakio-richselect-empty {
+  padding: 12px;
+  text-align: center;
+  color: var(--avakio-text-tertiary);
+  font-size: 14px;
+}
+
+.avakio-richselect-error {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--avakio-text-error);
+}
+
+/* ===================================
+   THEME: MATERIAL (#1CA1C1)
+   =================================== */
+
+[data-admin-theme="material"] .avakio-richselect-label {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="material"] .avakio-richselect-button:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+}
+
+[data-admin-theme="material"] .avakio-richselect-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="material"] .avakio-richselect-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
+}
+
+/* ===================================
+   THEME: FLAT (#5E81AC)
+   =================================== */
+
+[data-admin-theme="flat"] .avakio-richselect-label {
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="flat"] .avakio-richselect-button {
+  border-radius: 4px;
+}
+
+[data-admin-theme="flat"] .avakio-richselect-button:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+}
+
+[data-admin-theme="flat"] .avakio-richselect-dropdown {
+  border-radius: 4px;
+}
+
+[data-admin-theme="flat"] .avakio-richselect-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="flat"] .avakio-richselect-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
+}
+
+/* ===================================
+   THEME: COMPACT (#00796B)
+   =================================== */
+
+[data-admin-theme="compact"] .avakio-richselect {
+  gap: 8px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-label {
+  font-size: 13px;
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="compact"] .avakio-richselect-button {
+  padding: 6px 10px;
+  font-size: 13px;
+  min-height: 32px;
+  border-radius: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-button:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 2px var(--avakio-shadow-focus);
+}
+
+[data-admin-theme="compact"] .avakio-richselect-dropdown {
+  border-radius: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-option {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="compact"] .avakio-richselect-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
+}
+
+/* ===================================
+   THEME: DARK
+   =================================== */
+
+[data-admin-theme="dark"] .avakio-richselect-label {
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-button {
+  background-color: var(--avakio-bg-tertiary);
+  border-color: var(--avakio-border-primary);
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-button:hover {
+  background-color: var(--avakio-bg-hover);
+  border-color: var(--avakio-border-hover);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-button:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-button:disabled {
+  background-color: var(--avakio-bg-disabled);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-value {
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-value.placeholder {
+  color: var(--avakio-text-tertiary);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-dropdown {
+  background-color: var(--avakio-bg-tertiary);
+  border-color: var(--avakio-border-primary);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-option {
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-option:hover,
+[data-admin-theme="dark"] .avakio-richselect-option.highlighted {
+  background-color: var(--avakio-bg-hover);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-empty {
+  color: var(--avakio-text-tertiary);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-clear {
+  color: var(--avakio-text-tertiary);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-clear:hover {
+  background-color: var(--avakio-bg-hover);
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="dark"] .avakio-richselect-toggle {
+  color: var(--avakio-text-tertiary);
+}
+
+/* ===================================
+   THEME: OCEAN (#0277BD)
+   =================================== */
+
+[data-admin-theme="ocean"] .avakio-richselect-label {
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="ocean"] .avakio-richselect-button:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+}
+
+[data-admin-theme="ocean"] .avakio-richselect-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="ocean"] .avakio-richselect-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
+}
+
+/* ===================================
+   THEME: SUNSET (#f57c00)
+   =================================== */
+
+[data-admin-theme="sunset"] .avakio-richselect-label {
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="sunset"] .avakio-richselect-button:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+}
+
+[data-admin-theme="sunset"] .avakio-richselect-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="sunset"] .avakio-richselect-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
+}
+

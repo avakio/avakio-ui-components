@@ -1,0 +1,313 @@
+/* Avakio Calendar - Base Styles */
+.avakio-calendar {
+  background: var(--avakio-bg-primary);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Multi-month navigation */
+.avakio-cal-multi-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--avakio-border-primary);
+}
+
+/* Months container */
+.avakio-cal-months {
+  display: grid;
+  gap: 24px;
+}
+
+.avakio-cal-months-1 {
+  grid-template-columns: 1fr;
+}
+
+.avakio-cal-months-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.avakio-cal-months-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 768px) {
+  .avakio-cal-months-2,
+  .avakio-cal-months-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Month */
+.avakio-cal-month {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.avakio-cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  min-height: 36px;
+}
+
+.avakio-cal-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--avakio-text-primary);
+  flex: 1;
+  text-align: center;
+}
+
+.avakio-cal-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: var(--avakio-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.avakio-cal-nav-btn:hover {
+  background-color: var(--avakio-bg-hover);
+  color: var(--avakio-text-primary);
+}
+
+.avakio-cal-today-btn {
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--avakio-accent-primary);
+  background: transparent;
+  border: 1px solid var(--avakio-border-primary);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.avakio-cal-today-btn:hover {
+  background-color: var(--avakio-bg-selected);
+  border-color: var(--avakio-accent-primary);
+}
+
+/* Weekdays */
+.avakio-cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--avakio-border-secondary);
+}
+
+.avakio-cal-weekdays.avakio-cal-with-week-nums {
+  grid-template-columns: 32px repeat(7, 1fr);
+}
+
+.avakio-cal-weekday {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--avakio-text-secondary);
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+
+.avakio-cal-week-num-header {
+  color: var(--avakio-text-tertiary);
+  font-size: 11px;
+}
+
+/* Grid */
+.avakio-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.avakio-cal-grid.avakio-cal-with-week-nums {
+  grid-template-columns: 32px repeat(7, 1fr);
+}
+
+.avakio-cal-week-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--avakio-text-tertiary);
+  font-weight: 500;
+}
+
+/* Day cell */
+.avakio-cal-day {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--avakio-text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px;
+}
+
+.avakio-cal-day:hover:not(.avakio-cal-day-disabled) {
+  background-color: var(--avakio-bg-hover);
+}
+
+.avakio-cal-day-number {
+  margin-bottom: 2px;
+}
+
+.avakio-cal-day-outside {
+  color: var(--avakio-text-tertiary);
+}
+
+.avakio-cal-day-today {
+  color: var(--avakio-accent-primary);
+  font-weight: 600;
+}
+
+.avakio-cal-day-today::before {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--avakio-accent-primary);
+}
+
+.avakio-cal-day-selected {
+  background-color: var(--avakio-accent-primary);
+  color: var(--avakio-text-white);
+  font-weight: 600;
+}
+
+.avakio-cal-day-selected:hover {
+  background-color: var(--avakio-accent-secondary);
+}
+
+.avakio-cal-day-in-range {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
+}
+
+.avakio-cal-day-disabled {
+  color: var(--avakio-text-disabled);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.avakio-cal-day-disabled:hover {
+  background-color: transparent;
+}
+
+/* Markers */
+.avakio-cal-markers {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2px;
+}
+
+.avakio-cal-marker {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--avakio-accent-primary);
+}
+
+/* Footer */
+.avakio-cal-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--avakio-border-primary);
+}
+
+/* Material Theme */
+[data-admin-theme="material"] .avakio-calendar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-admin-theme="material"] .avakio-cal-day {
+  border-radius: 50%;
+}
+
+/* Flat Theme */
+[data-admin-theme="flat"] .avakio-calendar {
+  box-shadow: none;
+  border: 1px solid var(--avakio-border-primary);
+}
+
+[data-admin-theme="flat"] .avakio-cal-day {
+  border-radius: 4px;
+}
+
+/* Compact Theme */
+[data-admin-theme="compact"] .avakio-calendar {
+  padding: 12px;
+}
+
+[data-admin-theme="compact"] .avakio-cal-header {
+  margin-bottom: 8px;
+}
+
+[data-admin-theme="compact"] .avakio-cal-day {
+  font-size: 13px;
+  padding: 2px;
+}
+
+[data-admin-theme="compact"] .avakio-cal-weekday {
+  font-size: 11px;
+  padding: 2px 0;
+}
+
+/* Dark Theme */
+[data-admin-theme="dark"] .avakio-calendar {
+  background: var(--avakio-bg-tertiary);
+  color: var(--avakio-text-white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark theme styles handled by global CSS variables */
+
+/* Ocean Theme */
+[data-admin-theme="ocean"] .avakio-calendar {
+  background: var(--avakio-bg-primary);
+  box-shadow: 0 2px 4px var(--avakio-shadow-focus);
+}
+
+/* Ocean theme styles handled by global CSS variables */
+
+/* Sunset Theme */
+[data-admin-theme="sunset"] .avakio-calendar {
+  background: var(--avakio-bg-secondary);
+  box-shadow: 0 2px 4px var(--avakio-shadow-focus);
+}
+
+/* Sunset theme styles handled by global CSS variables */
+

@@ -1,0 +1,302 @@
+/* =====================================================
+   AvakioExcelViewer Example Page Styles
+   ===================================================== */
+
+.avakio-excel-viewer-example {
+  padding: 0;
+  background: var(--bg-primary, #f8f9fa);
+  min-height: 100%;
+}
+
+.avakio-excel-viewer-example-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-primary, #ffffff);
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  padding: 0 24px;
+}
+
+.avakio-excel-viewer-example-content {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Sections */
+.avakio-excel-viewer-example-section {
+  margin-bottom: 48px;
+  scroll-margin-top: 80px;
+}
+
+.avakio-excel-viewer-example-section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary, #212529);
+  margin: 0 0 8px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent-color, #1976d2);
+}
+
+.avakio-excel-viewer-example-section-description {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+}
+
+/* Demo containers */
+.avakio-excel-viewer-example-demo {
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.avakio-excel-viewer-example-demo-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+  margin: 0 0 8px 0;
+}
+
+.avakio-excel-viewer-example-demo-description {
+  font-size: 13px;
+  color: var(--text-secondary, #666);
+  margin: 0 0 16px 0;
+}
+
+.avakio-excel-viewer-example-demo-container {
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.avakio-excel-viewer-example-demo-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+}
+
+.avakio-excel-viewer-example-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--accent-color, #1976d2);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.avakio-excel-viewer-example-btn:hover {
+  background: var(--accent-hover, #1565c0);
+}
+
+.avakio-excel-viewer-example-btn.secondary {
+  color: var(--text-primary, #333);
+  background: var(--bg-secondary, #f5f5f5);
+  border: 1px solid var(--border-color, #e0e0e0);
+}
+
+.avakio-excel-viewer-example-btn.secondary:hover {
+  background: var(--bg-hover, #eeeeee);
+}
+
+/* Code blocks */
+.avakio-excel-viewer-example-code {
+  background: #1e1e1e;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.avakio-excel-viewer-example-code pre {
+  margin: 0;
+  padding: 16px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #d4d4d4;
+  overflow-x: auto;
+}
+
+/* Features grid */
+.avakio-excel-viewer-example-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.avakio-excel-viewer-example-feature-card {
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.avakio-excel-viewer-example-feature-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+  margin: 0 0 8px 0;
+}
+
+.avakio-excel-viewer-example-feature-card p {
+  font-size: 13px;
+  color: var(--text-secondary, #666);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.avakio-excel-viewer-example-feature-card code {
+  font-size: 11px;
+  background: var(--bg-secondary, #f5f5f5);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--accent-color, #1976d2);
+}
+
+/* Themes grid */
+.avakio-excel-viewer-example-themes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.avakio-excel-viewer-example-theme-demo {
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.avakio-excel-viewer-example-theme-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+  margin: 0 0 12px 0;
+  text-transform: capitalize;
+}
+
+/* Documentation */
+.avakio-excel-viewer-example-docs {
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.avakio-excel-viewer-example-docs h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.avakio-excel-viewer-example-docs h3:not(:first-child) {
+  margin-top: 32px;
+}
+
+/* Props table */
+.avakio-excel-viewer-example-props-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
+.avakio-excel-viewer-example-props-table th,
+.avakio-excel-viewer-example-props-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.avakio-excel-viewer-example-props-table th {
+  background: var(--bg-secondary, #f5f5f5);
+  font-weight: 600;
+  color: var(--text-primary, #333);
+}
+
+.avakio-excel-viewer-example-props-table td {
+  color: var(--text-secondary, #555);
+}
+
+.avakio-excel-viewer-example-props-table td:first-child {
+  font-weight: 500;
+  color: var(--text-primary, #333);
+}
+
+.avakio-excel-viewer-example-props-table code {
+  font-size: 11px;
+  background: var(--bg-secondary, #f5f5f5);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--accent-color, #1976d2);
+  white-space: nowrap;
+}
+
+.avakio-excel-viewer-example-props-table tr:hover {
+  background: var(--bg-hover, #fafafa);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .avakio-excel-viewer-example-content {
+    padding: 16px;
+  }
+  
+  .avakio-excel-viewer-example-tabs {
+    padding: 0 16px;
+  }
+  
+  .avakio-excel-viewer-example-section-title {
+    font-size: 20px;
+  }
+  
+  .avakio-excel-viewer-example-themes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .avakio-excel-viewer-example-features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .avakio-excel-viewer-example-props-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+/* Dark theme adjustments */
+[data-admin-theme="dark"] .avakio-excel-viewer-example {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252526;
+  --bg-card: #2d2d30;
+  --bg-hover: #3c3c3c;
+  --border-color: #3c3c3c;
+  --text-primary: #d4d4d4;
+  --text-secondary: #a0a0a0;
+  --accent-color: #569cd6;
+  --accent-hover: #4a8cc2;
+}
+
+[data-admin-theme="dark"] .avakio-excel-viewer-example-code {
+  background: #0d0d0d;
+}
+
+[data-admin-theme="dark"] .avakio-excel-viewer-example-feature-card code,
+[data-admin-theme="dark"] .avakio-excel-viewer-example-props-table code {
+  background: #1e1e1e;
+}
+

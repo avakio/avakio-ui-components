@@ -1,0 +1,1331 @@
+/* Avakio DataTable Base Styles */
+.avakio-datatable {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--background);
+  overflow: visible;
+  font-family: var(--font-sans);
+}
+
+/* Header */
+.avakio-datatable-header {
+  background-color: var(--muted);
+  border-bottom: 2px solid var(--border);
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.avakio-datatable-header-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.avakio-datatable-header-cell {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--foreground);
+  border-right: 1px solid var(--border);
+  position: relative;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.avakio-datatable-header-cell:last-child {
+  border-right: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.avakio-datatable-header-cell.sorted {
+  background-color: var(--accent);
+}
+
+.avakio-datatable-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.avakio-datatable-header-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avakio-datatable-sort-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.avakio-datatable-resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+  background-color: transparent;
+  transition: background-color 0.2s;
+  z-index: 20;
+}
+
+.avakio-datatable-resize-handle:hover {
+  background-color: var(--primary);
+}
+
+/* Filter Row */
+.avakio-datatable-filter-row {
+  display: flex;
+  background-color: var(--background);
+  position: relative;
+  z-index: 10;
+}
+
+.avakio-datatable-filter-cell {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-right: 1px solid var(--border);
+  position: relative;
+  overflow: visible;
+}
+
+.avakio-datatable-filter-cell:last-child {
+  border-right: none;
+  flex: 1;
+  min-width: 0;
+}
+
+/* DatePicker dropdown in filter */
+.avakio-datatable-datepicker-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 99999;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+  min-width: 280px;
+  max-width: 320px;
+  overflow: hidden;
+}
+
+/* Adjust datepicker container padding in dropdown */
+.avakio-datatable-datepicker-dropdown .avakio-datepicker-container {
+  padding: 12px;
+  border: none;
+  max-width: 100%;
+  overflow: visible;
+  max-height: none;
+}
+
+/* Ensure action buttons are visible in dropdown */
+.avakio-datatable-datepicker-dropdown .avakio-dp-actions {
+  display: flex !important;
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  padding: 0 12px;
+}
+
+.avakio-datatable-datepicker-dropdown .avakio-dp-action-btn {
+  flex: 1;
+  min-height: 36px;
+  color: var(--foreground);
+  background-color: var(--muted);
+  margin-top: 10px;
+}
+
+/* Apply/Cancel buttons in filter */
+.avakio-datepicker-filter-actions {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  margin-top: -5px;
+  margin-bottom: 0;
+  border-top: 1px solid var(--border);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.avakio-datepicker-filter-apply,
+.avakio-datepicker-filter-cancel {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.avakio-datepicker-filter-apply {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.avakio-datepicker-filter-apply:hover {
+  opacity: 0.9;
+}
+
+.avakio-datepicker-filter-cancel {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+.avakio-datepicker-filter-cancel:hover {
+  background-color: var(--accent);
+}
+
+/* Ensure filter row allows overflow for dropdowns */
+.avakio-datatable-filter-row {
+  position: relative;
+  z-index: 10;
+}
+
+/* Date input styling in filter */
+.avakio-datatable-filter-input[type="date"] {
+  padding-right: 8px;
+}
+
+.avakio-datatable-filter-input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.avakio-datatable-filter-input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+.avakio-datatable-filter-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--background);
+  transition: border-color 0.2s;
+}
+
+.avakio-datatable-filter-input-wrapper:focus-within {
+  border-color: var(--primary);
+  outline: 2px solid var(--ring);
+  outline-offset: 0;
+}
+
+.avakio-datatable-filter-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  color: var(--foreground);
+  outline: none;
+  min-width: 0;
+}
+
+.avakio-datatable-filter-input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.avakio-datatable-filter-clear {
+  flex-shrink: 0;
+  padding: 2px;
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.avakio-datatable-filter-clear:hover {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+/* Body */
+.avakio-datatable-body {
+  flex: 1;
+  overflow: auto;
+  min-height: 200px;
+  position: relative;
+  z-index: 1;
+}
+
+.avakio-datatable-body.scroll-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.avakio-datatable-body.scroll-y {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.avakio-datatable-body.scroll-xy {
+  overflow: auto;
+}
+
+.avakio-datatable-rows {
+  min-width: 100%;
+}
+
+/* Row */
+.avakio-datatable-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.15s;
+  cursor: pointer;
+}
+
+.avakio-datatable-row:last-child {
+  border-bottom: none;
+}
+
+.avakio-datatable-row.hover:hover {
+  background-color: var(--muted);
+}
+
+.avakio-datatable-row.selected {
+  background-color: var(--accent);
+}
+
+/* Cell */
+.avakio-datatable-cell {
+  flex-shrink: 0;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--foreground);
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 20px;
+  min-height: 40px;
+}
+
+.avakio-datatable-cell:last-child {
+  border-right: none;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Spanning cells */
+.avakio-datatable-cell[data-colspan] {
+  position: relative;
+  z-index: 1;
+}
+
+.avakio-datatable-cell[data-rowspan] {
+  position: relative;
+  z-index: 1;
+}
+
+/* Adjust width for colspan */
+.avakio-datatable-cell[data-colspan="2"] {
+  flex-grow: 2;
+}
+
+.avakio-datatable-cell[data-colspan="3"] {
+  flex-grow: 3;
+}
+
+.avakio-datatable-cell[data-colspan="4"] {
+  flex-grow: 4;
+}
+
+.avakio-datatable-cell[data-colspan="5"] {
+  flex-grow: 5;
+}
+
+/* Loading State */
+.avakio-datatable-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--muted-foreground);
+}
+
+.avakio-datatable-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--muted);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: avakio-spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes avakio-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Empty State */
+.avakio-datatable-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+
+/* Footer */
+.avakio-datatable-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 2px solid var(--border);
+  background-color: var(--muted);
+  flex-shrink: 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.avakio-datatable-footer-info {
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+.avakio-datatable-pagination {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avakio-datatable-page-size-select {
+  width: 120px;
+  height: 32px;
+  font-size: 13px;
+}
+
+.avakio-datatable-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avakio-datatable-page-info {
+  font-size: 13px;
+  color: var(--foreground);
+  white-space: nowrap;
+  padding: 0 8px;
+}
+
+/* Theme-specific styles */
+
+/* Material Theme */
+[data-admin-theme="material"] .avakio-datatable {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  border-color: #e0e0e0;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="material"] .avakio-datatable-header {
+  background-color: #f5f5f5;
+  border-bottom-color: #e0e0e0;
+}
+
+[data-admin-theme="material"] .avakio-datatable-header-cell {
+  color: #212121;
+  border-right-color: #e0e0e0;
+  font-weight: 600;
+}
+
+[data-admin-theme="material"] .avakio-datatable-header-cell.sorted {
+  background-color: rgba(28, 161, 193, 0.12);
+  color: #0277bd;
+}
+
+[data-admin-theme="material"] .avakio-datatable-filter-row {
+  background-color: #fafafa;
+}
+
+[data-admin-theme="material"] .avakio-datatable-filter-cell {
+  border-right-color: #e0e0e0;
+}
+
+[data-admin-theme="material"] .avakio-datatable-filter-input-wrapper {
+  border-color: #e0e0e0;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="material"] .avakio-datatable-filter-input {
+  color: #212121;
+}
+
+[data-admin-theme="material"] .avakio-datatable-body {
+  background-color: #ffffff;
+}
+
+[data-admin-theme="material"] .avakio-datatable-row {
+  border-bottom-color: #e0e0e0;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="material"] .avakio-datatable-row.selected {
+  background-color: rgba(28, 161, 193, 0.12);
+}
+
+[data-admin-theme="material"] .avakio-datatable-row:hover {
+  background-color: #f5f5f5;
+}
+
+[data-admin-theme="material"] .avakio-datatable-cell {
+  color: #424242;
+  border-right-color: #e0e0e0;
+}
+
+[data-admin-theme="material"] .avakio-datatable-resize-handle:hover {
+  background-color: #1CA1C1;
+}
+
+[data-admin-theme="material"] .avakio-datatable-footer {
+  background-color: #fafafa;
+  border-top-color: #e0e0e0;
+  color: #616161;
+}
+
+[data-admin-theme="material"] .avakio-datatable-footer-info {
+  color: #757575;
+}
+
+[data-admin-theme="material"] .avakio-datatable-page-info {
+  color: #424242;
+  font-weight: 500;
+}
+
+[data-admin-theme="material"] .avakio-datatable-pagination button {
+  border-color: #e0e0e0;
+  background-color: #ffffff;
+  color: #1CA1C1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+[data-admin-theme="material"] .avakio-datatable-pagination button:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  border-color: #1CA1C1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+[data-admin-theme="material"] .avakio-datatable-pagination button:disabled {
+  background-color: #f5f5f5;
+  color: #bdbdbd;
+  border-color: #e0e0e0;
+  opacity: 0.6;
+}
+
+[data-admin-theme="material"] .avakio-datatable-page-size-select {
+  border-color: #e0e0e0;
+  background-color: #ffffff;
+  color: #424242;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+[data-admin-theme="material"] .avakio-datepicker-filter-apply {
+  background-color: #1CA1C1;
+  color: #ffffff;
+}
+
+[data-admin-theme="material"] .avakio-datepicker-filter-apply:hover {
+  background-color: #1890b0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+[data-admin-theme="material"] .avakio-datepicker-filter-cancel {
+  background-color: #f5f5f5;
+  color: #424242;
+}
+
+[data-admin-theme="material"] .avakio-datepicker-filter-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+[data-admin-theme="material"] .avakio-datepicker-filter-actions {
+  background-color: #ffffff;
+  border-top-color: #e0e0e0;
+}
+
+/* Flat Theme */
+[data-admin-theme="flat"] .avakio-datatable,
+[data-admin-theme="flat"] .avakio-datatable-header-cell,
+[data-admin-theme="flat"] .avakio-datatable-cell,
+[data-admin-theme="flat"] .avakio-datatable-filter-input-wrapper,
+[data-admin-theme="flat"] button {
+  border-radius: 0;
+}
+
+[data-admin-theme="flat"] .avakio-datatable {
+  border-width: 2px;
+  border-color: #d0d0d0;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-header {
+  background-color: #eeeeee;
+  border-bottom-color: #d0d0d0;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-header-cell {
+  color: #2e3440;
+  border-right-color: #d0d0d0;
+  font-weight: 600;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-header-cell.sorted {
+  background-color: rgba(94, 129, 172, 0.18);
+  color: #5E81AC;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-filter-row {
+  background-color: #f8f8f8;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-filter-cell {
+  border-right-color: #d0d0d0;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-filter-input-wrapper {
+  border-color: #d0d0d0;
+  border-width: 2px;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-filter-input {
+  color: #2e3440;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-body {
+  background-color: #ffffff;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-row {
+  border-bottom-color: #d0d0d0;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-row.selected {
+  background-color: rgba(94, 129, 172, 0.18);
+}
+
+[data-admin-theme="flat"] .avakio-datatable-row:hover {
+  background-color: rgba(94, 129, 172, 0.1);
+}
+
+[data-admin-theme="flat"] .avakio-datatable-cell {
+  color: #3b4252;
+  border-right-color: #d0d0d0;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-resize-handle:hover {
+  background-color: #5E81AC;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-footer {
+  background-color: #f5f5f5;
+  border-top-color: #d0d0d0;
+  color: #4c566a;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-footer-info {
+  color: #4c566a;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-page-info {
+  color: #2e3440;
+  font-weight: 600;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-pagination button {
+  border-color: #d0d0d0;
+  border-width: 2px;
+  border-radius: 0;
+  background-color: #eceff4;
+  color: #5E81AC;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-pagination button:hover:not(:disabled) {
+  background-color: #5E81AC;
+  color: #ffffff;
+  border-color: #5E81AC;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-pagination button:disabled {
+  background-color: #e5e9f0;
+  color: #d8dee9;
+  border-color: #d0d0d0;
+  opacity: 0.7;
+}
+
+[data-admin-theme="flat"] .avakio-datatable-page-size-select {
+  border-color: #d0d0d0;
+  border-width: 2px;
+  border-radius: 0;
+  background-color: #eceff4;
+  color: #2e3440;
+}
+
+[data-admin-theme="flat"] .avakio-datepicker-filter-apply {
+  background-color: #5E81AC;
+  color: #ffffff;
+  border-radius: 0;
+}
+
+[data-admin-theme="flat"] .avakio-datepicker-filter-apply:hover {
+  background-color: #4d6d8f;
+}
+
+[data-admin-theme="flat"] .avakio-datepicker-filter-cancel {
+  background-color: #e5e9f0;
+  color: #2e3440;
+  border-radius: 0;
+}
+
+[data-admin-theme="flat"] .avakio-datepicker-filter-cancel:hover {
+  background-color: #d8dee9;
+}
+
+[data-admin-theme="flat"] .avakio-datepicker-filter-actions {
+  background-color: #ffffff;
+  border-top-color: #d0d0d0;
+  border-top-width: 2px;
+}
+
+/* Compact Theme */
+[data-admin-theme="compact"] .avakio-datatable {
+  background-color: #ffffff;
+  border-color: #b2dfdb;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-header {
+  background-color: #e0f2f1;
+  border-bottom-color: #b2dfdb;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-header-cell {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #004d40;
+  border-right-color: #b2dfdb;
+  font-weight: 600;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-header-cell.sorted {
+  background-color: rgba(0, 121, 107, 0.15);
+  color: #00796B;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-filter-row {
+  background-color: #f1f8f7;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-cell {
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #1b5e20;
+  border-right-color: #b2dfdb;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-body {
+  background-color: #ffffff;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-row {
+  background-color: #ffffff;
+  border-bottom-color: #b2dfdb;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-filter-cell {
+  padding: 6px 10px;
+  border-right-color: #b2dfdb;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-filter-input {
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #1b5e20;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-filter-input-wrapper {
+  border-color: #b2dfdb;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-footer {
+  padding: 8px 12px;
+  border-top-color: #b2dfdb;
+  background-color: #e0f2f1;
+  color: #004d40;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-footer-info {
+  font-size: 12px;
+  color: #00695c;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-page-info {
+  color: #004d40;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-pagination button {
+  border-color: #b2dfdb;
+  background-color: #ffffff;
+  color: #00796B;
+  padding: 4px 8px;
+  height: 28px;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-pagination button:hover:not(:disabled) {
+  background-color: #e0f2f1;
+  border-color: #00796B;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-pagination button:disabled {
+  background-color: #f5f5f5;
+  color: #b2dfdb;
+  border-color: #b2dfdb;
+  opacity: 0.6;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-page-size-select {
+  border-color: #b2dfdb;
+  background-color: #ffffff;
+  color: #004d40;
+  height: 28px;
+  font-size: 12px;
+}
+
+[data-admin-theme="compact"] .avakio-datatable-row.selected {
+  background-color: rgba(0, 121, 107, 0.15);
+}
+
+[data-admin-theme="compact"] .avakio-datatable-row:hover {
+  background-color: rgba(0, 121, 107, 0.08);
+}
+
+[data-admin-theme="compact"] .avakio-datatable-resize-handle:hover {
+  background-color: #00796B;
+}
+
+[data-admin-theme="compact"] .avakio-datepicker-filter-apply {
+  background-color: #00796B;
+  color: #ffffff;
+  padding: 6px;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-datepicker-filter-apply:hover {
+  background-color: #00695c;
+}
+
+[data-admin-theme="compact"] .avakio-datepicker-filter-cancel {
+  background-color: #e0f2f1;
+  color: #004d40;
+  padding: 6px;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-datepicker-filter-cancel:hover {
+  background-color: #b2dfdb;
+}
+
+[data-admin-theme="compact"] .avakio-datepicker-filter-actions {
+  background-color: #ffffff;
+  border-top-color: #b2dfdb;
+  padding: 10px;
+}
+
+/* Dark Theme */
+[data-admin-theme="dark"] .avakio-datatable {
+  background-color: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-header {
+  background-color: hsl(217.2, 32.6%, 12%);
+  border-bottom-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-header-cell {
+  color: hsl(210, 40%, 98%);
+  border-right-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-header-cell.sorted {
+  background-color: rgba(255, 107, 53, 0.15);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-filter-row {
+  background-color: hsl(222.2, 84%, 4.9%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-filter-cell {
+  border-right-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-filter-input {
+  background-color: hsl(217.2, 32.6%, 12%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-body {
+  background-color: hsl(222.2, 84%, 4.9%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-row {
+  border-bottom-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-row:hover {
+  background-color: hsl(217.2, 32.6%, 12%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-row.selected {
+  background-color: rgba(255, 107, 53, 0.15);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-cell {
+  color: hsl(210, 40%, 98%);
+  border-right-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-resize-handle:hover {
+  background-color: #FF6B35;
+}
+
+[data-admin-theme="dark"] .avakio-datepicker-filter-apply {
+  background-color: #FF6B35;
+  color: #ffffff;
+}
+
+[data-admin-theme="dark"] .avakio-datepicker-filter-apply:hover {
+  background-color: #ff5520;
+}
+
+[data-admin-theme="dark"] .avakio-datepicker-filter-cancel {
+  background-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-datepicker-filter-cancel:hover {
+  background-color: hsl(217.2, 32.6%, 22%);
+}
+
+[data-admin-theme="dark"] .avakio-datepicker-filter-actions {
+  background-color: hsl(222.2, 84%, 4.9%);
+  border-top: 1px solid hsl(217.2, 32.6%, 17.5%);
+}
+
+/* Dark theme datepicker styling */
+[data-admin-theme="dark"] .avakio-datatable-datepicker-dropdown {
+  background-color: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-datepicker-dropdown .avakio-datepicker-container {
+  background-color: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-datepicker-dropdown .avakio-dp-time {
+  border-top-color: hsl(217.2, 32.6%, 17.5%);
+  background-color: hsl(222.2, 84%, 4.9%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-datepicker-dropdown .avakio-dp-time-header,
+[data-admin-theme="dark"] .avakio-datatable-datepicker-dropdown .avakio-dp-time-display {
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-datepicker-dropdown .avakio-dp-time-input {
+  background-color: hsl(217.2, 32.6%, 12%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-datepicker-dropdown .avakio-dp-time-separator {
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-footer {
+  background-color: hsl(217.2, 32.6%, 12%);
+  border-top-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-footer-info {
+  color: hsl(215, 20.2%, 65.1%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-page-info {
+  color: hsl(210, 40%, 98%);
+  font-weight: 500;
+}
+
+[data-admin-theme="dark"] .avakio-datatable-pagination button {
+  border-color: hsl(217.2, 32.6%, 17.5%);
+  background-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-pagination button:hover:not(:disabled) {
+  background-color: hsl(217.2, 32.6%, 22%);
+  border-color: hsl(215, 20.2%, 65.1%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-pagination button:disabled {
+  background-color: hsl(217.2, 32.6%, 12%);
+  color: hsl(217.2, 32.6%, 17.5%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+  opacity: 0.5;
+}
+
+[data-admin-theme="dark"] .avakio-datatable-page-size-select {
+  border-color: hsl(217.2, 32.6%, 17.5%);
+  background-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-datatable-loading,
+[data-admin-theme="dark"] .avakio-datatable-empty {
+  color: hsl(215, 20.2%, 65.1%);
+}
+
+/* Ocean Theme */
+[data-admin-theme="ocean"] .avakio-datatable {
+  border-color: #81d4fa;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-header {
+  background-color: #e1f5fe;
+  border-bottom-color: #81d4fa;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-header-cell {
+  color: #01579b;
+  border-right-color: #81d4fa;
+  font-weight: 600;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-header-cell.sorted {
+  background-color: rgba(2, 119, 189, 0.18);
+  color: #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-filter-row {
+  background-color: #f1f9fe;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-filter-cell {
+  border-right-color: #81d4fa;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-filter-input-wrapper {
+  border-color: #81d4fa;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-filter-input {
+  color: #01579b;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-body {
+  background-color: #ffffff;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-row {
+  border-bottom-color: #b3e5fc;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-row.selected {
+  background-color: rgba(2, 119, 189, 0.18);
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-row:hover {
+  background-color: rgba(2, 119, 189, 0.08);
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-cell {
+  color: #0277BD;
+  border-right-color: #b3e5fc;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-resize-handle:hover {
+  background-color: #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-datepicker-filter-apply {
+  background-color: #0277BD;
+  color: #ffffff;
+}
+
+[data-admin-theme="ocean"] .avakio-datepicker-filter-apply:hover {
+  background-color: #01579b;
+}
+
+[data-admin-theme="ocean"] .avakio-datepicker-filter-cancel {
+  background-color: #e1f5fe;
+  color: #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-datepicker-filter-cancel:hover {
+  background-color: #b3e5fc;
+}
+
+[data-admin-theme="ocean"] .avakio-datepicker-filter-actions {
+  background-color: #ffffff;
+  border-top-color: #81d4fa;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-footer {
+  background-color: #e1f5fe;
+  border-top-color: #81d4fa;
+  color: #01579b;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-footer-info {
+  color: #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-page-info {
+  color: #01579b;
+  font-weight: 600;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-pagination button {
+  border-color: #81d4fa;
+  background-color: #ffffff;
+  color: #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-pagination button:hover:not(:disabled) {
+  background-color: #e1f5fe;
+  border-color: #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-pagination button:disabled {
+  background-color: #f1f9fe;
+  color: #b3e5fc;
+  border-color: #81d4fa;
+  opacity: 0.6;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-page-size-select {
+  border-color: #81d4fa;
+  background-color: #ffffff;
+  color: #01579b;
+}
+
+[data-admin-theme="ocean"] .avakio-datatable-sort-icon {
+  color: #0277BD;
+}
+
+[data-admin-theme="ocean"] button:hover {
+  background-color: #e1f5fe;
+  color: #0277BD;
+}
+
+/* Sunset Theme */
+[data-admin-theme="sunset"] .avakio-datatable {
+  border-color: #ffcc80;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-header {
+  background-color: #fff3e0;
+  border-bottom-color: #ffcc80;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-header-cell {
+  color: #e65100;
+  border-right-color: #ffcc80;
+  font-weight: 600;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-header-cell.sorted {
+  background-color: rgba(255, 87, 34, 0.18);
+  color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-filter-row {
+  background-color: #fffaf5;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-filter-cell {
+  border-right-color: #ffcc80;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-filter-input-wrapper {
+  border-color: #ffcc80;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-filter-input {
+  color: #e65100;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-body {
+  background-color: #ffffff;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-row {
+  border-bottom-color: #ffe0b2;
+  background-color: #ffffff;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-row.selected {
+  background-color: rgba(255, 87, 34, 0.18);
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-row:hover {
+  background-color: rgba(255, 87, 34, 0.08);
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-cell {
+  color: #d84315;
+  border-right-color: #ffe0b2;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-resize-handle:hover {
+  background-color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-footer {
+  background-color: #fff3e0;
+  border-top-color: #ffcc80;
+  color: #e65100;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-footer-info {
+  color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-page-info {
+  color: #e65100;
+  font-weight: 600;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-pagination button {
+  border-color: #ffcc80;
+  background-color: #ffffff;
+  color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-pagination button:hover:not(:disabled) {
+  background-color: #fff3e0;
+  border-color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-pagination button:disabled {
+  background-color: #fff8f0;
+  color: #ffe0b2;
+  border-color: #ffcc80;
+  opacity: 0.6;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-page-size-select {
+  border-color: #ffcc80;
+  background-color: #ffffff;
+  color: #e65100;
+}
+
+[data-admin-theme="sunset"] .avakio-datatable-sort-icon {
+  color: #f57c00;
+}
+
+[data-admin-theme="sunset"] button:hover {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-datepicker-filter-apply {
+  background-color: #f57c00;
+  color: #ffffff;
+}
+
+[data-admin-theme="sunset"] .avakio-datepicker-filter-apply:hover {
+  background-color: #e65100;
+}
+
+[data-admin-theme="sunset"] .avakio-datepicker-filter-cancel {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+[data-admin-theme="sunset"] .avakio-datepicker-filter-cancel:hover {
+  background-color: #ffe0b2;
+}
+
+[data-admin-theme="sunset"] .avakio-datepicker-filter-cancel {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+[data-admin-theme="sunset"] .avakio-datepicker-filter-cancel:hover {
+  background-color: #ffe0b2;
+}
+
+[data-admin-theme="sunset"] .avakio-datepicker-filter-actions {
+  background-color: #ffffff;
+  border-top-color: #ffcc80;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .avakio-datatable-header-cell,
+  .avakio-datatable-cell {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .avakio-datatable-filter-cell {
+    padding: 6px 8px;
+  }
+
+  .avakio-datatable-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .avakio-datatable-footer-info {
+    text-align: center;
+  }
+
+  .avakio-datatable-pagination {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .avakio-datatable-page-size-select {
+    width: 100%;
+  }
+
+  .avakio-datatable-pagination-controls {
+    justify-content: center;
+    width: 100%;
+  }
+}
+

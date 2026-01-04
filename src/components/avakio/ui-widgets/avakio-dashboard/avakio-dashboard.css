@@ -1,0 +1,162 @@
+/* ======================================
+   Avakio Dashboard
+   Webix-like grid dashboard built on AvakioGrid
+   ====================================== */
+
+.avakio-dashboard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--avakio-dashboard-bg, #ffffff);
+  border: 1px solid var(--avakio-dashboard-border, #e5e7eb);
+  border-radius: var(--avakio-dashboard-radius, 10px);
+  overflow: hidden;
+}
+
+/* Panel */
+.avakio-dashboard__panel {
+  width: 100%;
+  height: 100%;
+  background: var(--avakio-dashboard-panel-bg, #ffffff);
+  border: 1px solid var(--avakio-dashboard-panel-border, #e5e7eb);
+  border-radius: var(--avakio-dashboard-panel-radius, 10px);
+  box-shadow: var(--avakio-dashboard-panel-shadow, 0 1px 2px rgba(0, 0, 0, 0.06));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.avakio-dashboard__panel--editable {
+  user-select: none;
+}
+
+.avakio-dashboard__panel--readonly {
+  user-select: text;
+}
+
+.avakio-dashboard__panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--avakio-dashboard-header-bg, #f9fafb);
+  border-bottom: 1px solid var(--avakio-dashboard-panel-border, #e5e7eb);
+  color: var(--avakio-dashboard-header-text, #111827);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.avakio-dashboard__panel-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--avakio-dashboard-header-icon, currentColor);
+}
+
+.avakio-dashboard__panel-title {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avakio-dashboard__panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px;
+  color: var(--avakio-dashboard-text, #1f2937);
+}
+
+/* Resize handle */
+.avakio-dashboard__resize-handle {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 14px;
+  height: 14px;
+  border-right: 2px solid var(--avakio-dashboard-resize-handle, rgba(17, 24, 39, 0.35));
+  border-bottom: 2px solid var(--avakio-dashboard-resize-handle, rgba(17, 24, 39, 0.35));
+  border-bottom-right-radius: 2px;
+  cursor: nwse-resize;
+  opacity: 0.8;
+}
+
+.avakio-dashboard__panel--editable:hover .avakio-dashboard__resize-handle {
+  opacity: 1;
+}
+
+/* ======================================
+   Themes
+   ====================================== */
+
+.avakio-dashboard--material {
+  --avakio-dashboard-bg: #ffffff;
+  --avakio-dashboard-border: #e5e7eb;
+  --avakio-dashboard-text: #1f2937;
+  --avakio-dashboard-header-bg: #f9fafb;
+  --avakio-dashboard-header-text: #111827;
+  --avakio-dashboard-panel-bg: #ffffff;
+  --avakio-dashboard-panel-border: #e5e7eb;
+  --avakio-dashboard-resize-handle: rgba(17, 24, 39, 0.35);
+}
+
+.avakio-dashboard--flat {
+  --avakio-dashboard-bg: #f8fafc;
+  --avakio-dashboard-border: #e2e8f0;
+  --avakio-dashboard-text: #0f172a;
+  --avakio-dashboard-header-bg: #ffffff;
+  --avakio-dashboard-header-text: #0f172a;
+  --avakio-dashboard-panel-bg: #ffffff;
+  --avakio-dashboard-panel-border: #e2e8f0;
+  --avakio-dashboard-resize-handle: rgba(15, 23, 42, 0.35);
+  --avakio-dashboard-panel-shadow: none;
+}
+
+.avakio-dashboard--compact {
+  --avakio-dashboard-bg: #ffffff;
+  --avakio-dashboard-border: #e5e7eb;
+  --avakio-dashboard-text: #111827;
+  --avakio-dashboard-header-bg: #f3f4f6;
+  --avakio-dashboard-header-text: #111827;
+  --avakio-dashboard-panel-bg: #ffffff;
+  --avakio-dashboard-panel-border: #e5e7eb;
+  --avakio-dashboard-panel-radius: 8px;
+  --avakio-dashboard-radius: 8px;
+}
+
+.avakio-dashboard--dark {
+  --avakio-dashboard-bg: #0b1220;
+  --avakio-dashboard-border: #1f2937;
+  --avakio-dashboard-text: #e5e7eb;
+  --avakio-dashboard-header-bg: #111827;
+  --avakio-dashboard-header-text: #f9fafb;
+  --avakio-dashboard-panel-bg: #0f172a;
+  --avakio-dashboard-panel-border: #1f2937;
+  --avakio-dashboard-resize-handle: rgba(249, 250, 251, 0.35);
+  --avakio-dashboard-panel-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.avakio-dashboard--ocean {
+  --avakio-dashboard-bg: #f5fbff;
+  --avakio-dashboard-border: #cfe8f7;
+  --avakio-dashboard-text: #0f2a3a;
+  --avakio-dashboard-header-bg: #e8f6ff;
+  --avakio-dashboard-header-text: #0f2a3a;
+  --avakio-dashboard-panel-bg: #ffffff;
+  --avakio-dashboard-panel-border: #cfe8f7;
+  --avakio-dashboard-resize-handle: rgba(15, 42, 58, 0.35);
+}
+
+.avakio-dashboard--sunset {
+  --avakio-dashboard-bg: #fff7ed;
+  --avakio-dashboard-border: #fed7aa;
+  --avakio-dashboard-text: #3f1d0b;
+  --avakio-dashboard-header-bg: #ffedd5;
+  --avakio-dashboard-header-text: #3f1d0b;
+  --avakio-dashboard-panel-bg: #ffffff;
+  --avakio-dashboard-panel-border: #fed7aa;
+  --avakio-dashboard-resize-handle: rgba(63, 29, 11, 0.35);
+}

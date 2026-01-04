@@ -1,0 +1,353 @@
+/* ================================
+   AVAKIO TREE COMPONENT STYLES
+   ================================ */
+
+.avakio-tree {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  font-size: 14px;
+  outline: none;
+  user-select: none;
+  background: var(--avakio-tree-bg, #ffffff);
+  color: var(--avakio-tree-text, #1f2937);
+  border: 1px solid var(--avakio-tree-border, #e5e7eb);
+  border-radius: 6px;
+}
+
+.avakio-tree:focus-visible {
+  outline: 2px solid var(--avakio-tree-focus-ring, #3b82f6);
+  outline-offset: -2px;
+}
+
+/* Node wrapper */
+.avakio-tree-node-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tree node */
+.avakio-tree-node {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  border-radius: 4px;
+  margin: 1px 4px;
+}
+
+.avakio-tree-node:hover {
+  background: var(--avakio-tree-hover-bg, #f3f4f6);
+}
+
+.avakio-tree-node--selected {
+  background: var(--avakio-tree-selected-bg, #dbeafe) !important;
+  color: var(--avakio-tree-selected-text, #1d4ed8);
+}
+
+.avakio-tree-node--focused {
+  box-shadow: inset 0 0 0 2px var(--avakio-tree-focus-ring, #3b82f6);
+}
+
+.avakio-tree-node--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Toggle icon */
+.avakio-tree-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  color: var(--avakio-tree-toggle-color, #6b7280);
+  transition: transform 0.2s ease, background-color 0.15s ease;
+}
+
+.avakio-tree-toggle--visible {
+  cursor: pointer;
+}
+
+.avakio-tree-toggle--visible:hover {
+  background: var(--avakio-tree-toggle-hover-bg, #e5e7eb);
+  color: var(--avakio-tree-toggle-hover-color, #374151);
+}
+
+/* Checkbox */
+.avakio-tree-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 2px solid var(--avakio-tree-checkbox-border, #9ca3af);
+  border-radius: 4px;
+  background: var(--avakio-tree-checkbox-bg, #ffffff);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.avakio-tree-checkbox:hover {
+  border-color: var(--avakio-tree-checkbox-hover-border, #6b7280);
+}
+
+.avakio-tree-checkbox--checked {
+  background: var(--avakio-tree-checkbox-checked-bg, #3b82f6);
+  border-color: var(--avakio-tree-checkbox-checked-bg, #3b82f6);
+  color: white;
+}
+
+.avakio-tree-checkbox--indeterminate {
+  background: var(--avakio-tree-checkbox-indeterminate-bg, #93c5fd);
+  border-color: var(--avakio-tree-checkbox-indeterminate-bg, #93c5fd);
+  color: white;
+}
+
+/* Icon */
+.avakio-tree-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--avakio-tree-icon-color, #6b7280);
+}
+
+.avakio-tree-node--branch .avakio-tree-icon {
+  color: var(--avakio-tree-folder-color, #f59e0b);
+}
+
+/* Label */
+.avakio-tree-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+/* Edit input */
+.avakio-tree-edit-input {
+  flex: 1;
+  padding: 2px 6px;
+  font-size: inherit;
+  font-family: inherit;
+  border: 1px solid var(--avakio-tree-edit-border, #3b82f6);
+  border-radius: 4px;
+  outline: none;
+  background: var(--avakio-tree-edit-bg, #ffffff);
+  color: inherit;
+}
+
+.avakio-tree-edit-input:focus {
+  box-shadow: 0 0 0 2px var(--avakio-tree-focus-ring, #3b82f6);
+}
+
+/* Children container */
+.avakio-tree-children {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Lines between nodes */
+.avakio-tree--lines .avakio-tree-children {
+  position: relative;
+}
+
+.avakio-tree--lines .avakio-tree-children::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  top: 0;
+  bottom: 16px;
+  width: 1px;
+  background: var(--avakio-tree-line-color, #d1d5db);
+}
+
+.avakio-tree--lines .avakio-tree-children .avakio-tree-node::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  width: 12px;
+  height: 1px;
+  background: var(--avakio-tree-line-color, #d1d5db);
+}
+
+/* ================================
+   THEME: MATERIAL
+   ================================ */
+.avakio-tree--material {
+  --avakio-tree-bg: #ffffff;
+  --avakio-tree-text: #37474f;
+  --avakio-tree-border: #e0e0e0;
+  --avakio-tree-hover-bg: #f5f5f5;
+  --avakio-tree-selected-bg: #e3f2fd;
+  --avakio-tree-selected-text: #1976d2;
+  --avakio-tree-focus-ring: #2196f3;
+  --avakio-tree-toggle-color: #757575;
+  --avakio-tree-toggle-hover-bg: #eeeeee;
+  --avakio-tree-toggle-hover-color: #424242;
+  --avakio-tree-checkbox-border: #bdbdbd;
+  --avakio-tree-checkbox-hover-border: #9e9e9e;
+  --avakio-tree-checkbox-bg: #ffffff;
+  --avakio-tree-checkbox-checked-bg: #2196f3;
+  --avakio-tree-checkbox-indeterminate-bg: #90caf9;
+  --avakio-tree-icon-color: #757575;
+  --avakio-tree-folder-color: #fbc02d;
+  --avakio-tree-edit-border: #2196f3;
+  --avakio-tree-edit-bg: #ffffff;
+  --avakio-tree-line-color: #e0e0e0;
+}
+
+/* ================================
+   THEME: DARK
+   ================================ */
+.avakio-tree--dark {
+  --avakio-tree-bg: #1a1a2e;
+  --avakio-tree-text: #e2e8f0;
+  --avakio-tree-border: #2d2d44;
+  --avakio-tree-hover-bg: #252542;
+  --avakio-tree-selected-bg: #1e3a5f;
+  --avakio-tree-selected-text: #93c5fd;
+  --avakio-tree-focus-ring: #3b82f6;
+  --avakio-tree-toggle-color: #9ca3af;
+  --avakio-tree-toggle-hover-bg: #374151;
+  --avakio-tree-toggle-hover-color: #e5e7eb;
+  --avakio-tree-checkbox-border: #4b5563;
+  --avakio-tree-checkbox-hover-border: #6b7280;
+  --avakio-tree-checkbox-bg: #1f2937;
+  --avakio-tree-checkbox-checked-bg: #3b82f6;
+  --avakio-tree-checkbox-indeterminate-bg: #60a5fa;
+  --avakio-tree-icon-color: #9ca3af;
+  --avakio-tree-folder-color: #fbbf24;
+  --avakio-tree-edit-border: #3b82f6;
+  --avakio-tree-edit-bg: #1f2937;
+  --avakio-tree-line-color: #374151;
+}
+
+/* ================================
+   THEME: OCEAN
+   ================================ */
+.avakio-tree--ocean {
+  --avakio-tree-bg: #f0f7ff;
+  --avakio-tree-text: #1e40af;
+  --avakio-tree-border: #bfdbfe;
+  --avakio-tree-hover-bg: #dbeafe;
+  --avakio-tree-selected-bg: #bfdbfe;
+  --avakio-tree-selected-text: #1d4ed8;
+  --avakio-tree-focus-ring: #3b82f6;
+  --avakio-tree-toggle-color: #60a5fa;
+  --avakio-tree-toggle-hover-bg: #dbeafe;
+  --avakio-tree-toggle-hover-color: #1d4ed8;
+  --avakio-tree-checkbox-border: #93c5fd;
+  --avakio-tree-checkbox-hover-border: #60a5fa;
+  --avakio-tree-checkbox-bg: #ffffff;
+  --avakio-tree-checkbox-checked-bg: #2563eb;
+  --avakio-tree-checkbox-indeterminate-bg: #60a5fa;
+  --avakio-tree-icon-color: #3b82f6;
+  --avakio-tree-folder-color: #f59e0b;
+  --avakio-tree-edit-border: #2563eb;
+  --avakio-tree-edit-bg: #ffffff;
+  --avakio-tree-line-color: #93c5fd;
+}
+
+/* ================================
+   THEME: SUNSET
+   ================================ */
+.avakio-tree--sunset {
+  --avakio-tree-bg: #fffbeb;
+  --avakio-tree-text: #78350f;
+  --avakio-tree-border: #fed7aa;
+  --avakio-tree-hover-bg: #fef3c7;
+  --avakio-tree-selected-bg: #fed7aa;
+  --avakio-tree-selected-text: #b45309;
+  --avakio-tree-focus-ring: #f59e0b;
+  --avakio-tree-toggle-color: #d97706;
+  --avakio-tree-toggle-hover-bg: #fef3c7;
+  --avakio-tree-toggle-hover-color: #92400e;
+  --avakio-tree-checkbox-border: #fbbf24;
+  --avakio-tree-checkbox-hover-border: #f59e0b;
+  --avakio-tree-checkbox-bg: #ffffff;
+  --avakio-tree-checkbox-checked-bg: #f59e0b;
+  --avakio-tree-checkbox-indeterminate-bg: #fbbf24;
+  --avakio-tree-icon-color: #d97706;
+  --avakio-tree-folder-color: #ea580c;
+  --avakio-tree-edit-border: #f59e0b;
+  --avakio-tree-edit-bg: #ffffff;
+  --avakio-tree-line-color: #fcd34d;
+}
+
+/* ================================
+   THEME: FLAT
+   ================================ */
+.avakio-tree--flat {
+  --avakio-tree-bg: #f9fafb;
+  --avakio-tree-text: #374151;
+  --avakio-tree-border: #d1d5db;
+  --avakio-tree-hover-bg: #f3f4f6;
+  --avakio-tree-selected-bg: #e5e7eb;
+  --avakio-tree-selected-text: #111827;
+  --avakio-tree-focus-ring: #6b7280;
+  --avakio-tree-toggle-color: #9ca3af;
+  --avakio-tree-toggle-hover-bg: #e5e7eb;
+  --avakio-tree-toggle-hover-color: #374151;
+  --avakio-tree-checkbox-border: #9ca3af;
+  --avakio-tree-checkbox-hover-border: #6b7280;
+  --avakio-tree-checkbox-bg: #ffffff;
+  --avakio-tree-checkbox-checked-bg: #4b5563;
+  --avakio-tree-checkbox-indeterminate-bg: #9ca3af;
+  --avakio-tree-icon-color: #6b7280;
+  --avakio-tree-folder-color: #d97706;
+  --avakio-tree-edit-border: #6b7280;
+  --avakio-tree-edit-bg: #ffffff;
+  --avakio-tree-line-color: #d1d5db;
+}
+
+/* ================================
+   THEME: COMPACT
+   ================================ */
+.avakio-tree--compact {
+  --avakio-tree-bg: #fafafa;
+  --avakio-tree-text: #3f3f46;
+  --avakio-tree-border: #e4e4e7;
+  --avakio-tree-hover-bg: #f4f4f5;
+  --avakio-tree-selected-bg: #e4e4e7;
+  --avakio-tree-selected-text: #18181b;
+  --avakio-tree-focus-ring: #71717a;
+  --avakio-tree-toggle-color: #a1a1aa;
+  --avakio-tree-toggle-hover-bg: #e4e4e7;
+  --avakio-tree-toggle-hover-color: #3f3f46;
+  --avakio-tree-checkbox-border: #a1a1aa;
+  --avakio-tree-checkbox-hover-border: #71717a;
+  --avakio-tree-checkbox-bg: #ffffff;
+  --avakio-tree-checkbox-checked-bg: #52525b;
+  --avakio-tree-checkbox-indeterminate-bg: #a1a1aa;
+  --avakio-tree-icon-color: #71717a;
+  --avakio-tree-folder-color: #d97706;
+  --avakio-tree-edit-border: #71717a;
+  --avakio-tree-edit-bg: #ffffff;
+  --avakio-tree-line-color: #d4d4d8;
+  font-size: 13px;
+}
+
+.avakio-tree--compact .avakio-tree-node {
+  margin: 0 2px;
+}
+
+.avakio-tree--compact .avakio-tree-toggle {
+  width: 18px;
+  height: 18px;
+}
+
+.avakio-tree--compact .avakio-tree-checkbox {
+  width: 16px;
+  height: 16px;
+}
+

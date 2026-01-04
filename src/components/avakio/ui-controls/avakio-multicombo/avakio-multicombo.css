@@ -1,0 +1,467 @@
+/* Avakio MultiCombo Styles */
+.avakio-multicombo {
+  position: relative;
+  width: 100%;
+  font-family: var(--font-sans);
+}
+
+.avakio-mc-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Input Wrapper */
+.avakio-mc-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 12px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.avakio-mc-input-wrapper:hover {
+  border-color: var(--primary);
+}
+
+.avakio-mc-input-wrapper-open {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.avakio-mc-disabled .avakio-mc-input-wrapper {
+  cursor: not-allowed;
+  background: var(--muted);
+}
+
+.avakio-mc-disabled .avakio-mc-input-wrapper:hover {
+  border-color: var(--border);
+}
+
+/* Input Content */
+.avakio-mc-input-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.avakio-mc-placeholder {
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+
+.avakio-mc-count {
+  font-size: 14px;
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+.avakio-mc-search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--foreground);
+}
+
+.avakio-mc-search-input::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* Chips */
+.avakio-mc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.avakio-mc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--foreground);
+}
+
+.avakio-mc-chip-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.avakio-mc-chip-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+.avakio-mc-chip-remove:hover {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.avakio-mc-chip-more {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+  font-weight: 500;
+  cursor: default;
+}
+
+/* Actions */
+.avakio-mc-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.avakio-mc-clear-btn,
+.avakio-mc-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.avakio-mc-clear-btn:hover,
+.avakio-mc-toggle-btn:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.avakio-mc-toggle-open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown */
+.avakio-mc-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 300px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 50;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Select All */
+.avakio-mc-select-all {
+  border-bottom: 1px solid var(--border);
+  background: var(--muted);
+}
+
+.avakio-mc-select-all-label {
+  font-weight: 600;
+}
+
+/* Options */
+.avakio-mc-options {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.avakio-mc-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.avakio-mc-option:hover {
+  background: var(--muted);
+}
+
+.avakio-mc-option-label {
+  flex: 1;
+  font-size: 14px;
+  color: var(--foreground);
+}
+
+/* Checkbox */
+.avakio-mc-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-radius: 3px;
+  background: var(--background);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.avakio-mc-checkbox-checked {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* No Results */
+.avakio-mc-no-results {
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+
+/* Footer */
+.avakio-mc-footer {
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--muted);
+  font-size: 12px;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+/* Theme-specific overrides */
+
+/* Material Theme */
+[data-admin-theme="material"] .avakio-mc-dropdown {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
+
+[data-admin-theme="material"] .avakio-mc-input-wrapper {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+[data-admin-theme="material"] .avakio-mc-input-wrapper:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+[data-admin-theme="material"] .avakio-mc-chip {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Flat Theme */
+[data-admin-theme="flat"] .avakio-mc-input-wrapper,
+[data-admin-theme="flat"] .avakio-mc-dropdown,
+[data-admin-theme="flat"] .avakio-mc-chip,
+[data-admin-theme="flat"] .avakio-mc-checkbox,
+[data-admin-theme="flat"] .avakio-mc-clear-btn,
+[data-admin-theme="flat"] .avakio-mc-toggle-btn,
+[data-admin-theme="flat"] .avakio-mc-chip-remove {
+  border-radius: 0;
+}
+
+[data-admin-theme="flat"] .avakio-mc-input-wrapper {
+  border-width: 2px;
+}
+
+[data-admin-theme="flat"] .avakio-mc-dropdown {
+  border-width: 2px;
+}
+
+/* Compact Theme */
+[data-admin-theme="compact"] .avakio-mc-input-wrapper {
+  min-height: 36px;
+  padding: 4px 10px;
+}
+
+[data-admin-theme="compact"] .avakio-mc-option {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-mc-option-label {
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-mc-chip {
+  padding: 1px 6px;
+  font-size: 12px;
+}
+
+[data-admin-theme="compact"] .avakio-mc-placeholder,
+[data-admin-theme="compact"] .avakio-mc-count {
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-mc-footer {
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+[data-admin-theme="compact"] .avakio-mc-checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+/* Dark Theme */
+[data-admin-theme="dark"] .avakio-mc-input-wrapper {
+  background: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-mc-dropdown {
+  background: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-mc-select-all {
+  background: hsl(217.2, 32.6%, 12%);
+  border-bottom-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-mc-option:hover {
+  background: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-mc-placeholder,
+[data-admin-theme="dark"] .avakio-mc-option-label,
+[data-admin-theme="dark"] .avakio-mc-count {
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-mc-chip {
+  background: hsl(217.2, 32.6%, 17.5%);
+  border-color: hsl(217.2, 32.6%, 25%);
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-mc-chip-remove:hover {
+  background: hsl(217.2, 32.6%, 25%);
+}
+
+[data-admin-theme="dark"] .avakio-mc-footer {
+  background: hsl(217.2, 32.6%, 12%);
+  border-top-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(215, 20.2%, 65.1%);
+}
+
+[data-admin-theme="dark"] .avakio-mc-no-results {
+  color: hsl(215, 20.2%, 65.1%);
+}
+
+/* Ocean Theme */
+[data-admin-theme="ocean"] .avakio-mc-input-wrapper {
+  border-color: hsl(205, 100%, 85%);
+}
+
+[data-admin-theme="ocean"] .avakio-mc-input-wrapper:hover {
+  border-color: hsl(205, 100%, 45%);
+}
+
+[data-admin-theme="ocean"] .avakio-mc-input-wrapper-open {
+  border-color: hsl(205, 100%, 45%);
+  box-shadow: 0 0 0 1px hsl(205, 100%, 45%);
+}
+
+[data-admin-theme="ocean"] .avakio-mc-checkbox-checked {
+  background: hsl(205, 100%, 45%);
+  border-color: hsl(205, 100%, 45%);
+}
+
+[data-admin-theme="ocean"] .avakio-mc-chip-more {
+  background: hsl(205, 100%, 45%);
+  border-color: hsl(205, 100%, 45%);
+}
+
+[data-admin-theme="ocean"] .avakio-mc-select-all-label {
+  color: hsl(205, 100%, 35%);
+}
+
+[data-admin-theme="ocean"] .avakio-mc-footer {
+  background: hsl(205, 100%, 97%);
+  color: hsl(205, 100%, 35%);
+}
+
+/* Sunset Theme */
+[data-admin-theme="sunset"] .avakio-mc-input-wrapper {
+  border-color: hsl(14, 100%, 85%);
+}
+
+[data-admin-theme="sunset"] .avakio-mc-input-wrapper:hover {
+  border-color: hsl(14, 100%, 57%);
+}
+
+[data-admin-theme="sunset"] .avakio-mc-input-wrapper-open {
+  border-color: hsl(14, 100%, 57%);
+  box-shadow: 0 0 0 1px hsl(14, 100%, 57%);
+}
+
+[data-admin-theme="sunset"] .avakio-mc-checkbox-checked {
+  background: hsl(14, 100%, 57%);
+  border-color: hsl(14, 100%, 57%);
+}
+
+[data-admin-theme="sunset"] .avakio-mc-chip-more {
+  background: hsl(14, 100%, 57%);
+  border-color: hsl(14, 100%, 57%);
+}
+
+[data-admin-theme="sunset"] .avakio-mc-select-all-label {
+  color: hsl(14, 100%, 40%);
+}
+
+[data-admin-theme="sunset"] .avakio-mc-footer {
+  background: hsl(14, 100%, 97%);
+  color: hsl(14, 100%, 40%);
+}
+
+/* Scrollbar styling */
+.avakio-mc-options::-webkit-scrollbar {
+  width: 8px;
+}
+
+.avakio-mc-options::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+.avakio-mc-options::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.avakio-mc-options::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .avakio-mc-chip-label {
+    max-width: 100px;
+  }
+  
+  .avakio-mc-dropdown {
+    max-height: 250px;
+  }
+}
+

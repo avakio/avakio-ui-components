@@ -1,0 +1,451 @@
+/* ===================================
+   AVAKIO MULTITEXT - STYLES
+   dynamic multi-field text input
+   =================================== */
+
+/* Base Component */
+.avakio-multitext {
+  --multitext-primary: #1CA1C1;
+  --multitext-bg: #ffffff;
+  --multitext-border: #d1d5db;
+  --multitext-border-focus: #1CA1C1;
+  --multitext-text: #1e293b;
+  --multitext-placeholder: #94a3b8;
+  --multitext-label: #374151;
+  --multitext-disabled-bg: #f1f5f9;
+  --multitext-disabled-text: #94a3b8;
+  --multitext-error: #dc2626;
+  --multitext-error-bg: #fef2f2;
+  --multitext-btn-bg: #f8fafc;
+  --multitext-btn-hover: #e2e8f0;
+  --multitext-btn-active: #cbd5e1;
+  --multitext-remove-color: #ef4444;
+  --multitext-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --multitext-shadow-focus: 0 0 0 3px rgba(28, 161, 193, 0.15);
+  --multitext-radius: 6px;
+  --multitext-transition: all 0.15s ease;
+
+  display: flex;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: var(--multitext-text);
+  box-sizing: border-box;
+}
+
+.avakio-multitext *,
+.avakio-multitext *::before,
+.avakio-multitext *::after {
+  box-sizing: border-box;
+}
+
+/* Label Position: Left (default) */
+.avakio-multitext--label-left {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Label Position: Top */
+.avakio-multitext--label-top {
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Hidden State */
+.avakio-multitext--hidden {
+  display: none;
+}
+
+/* Label */
+.avakio-multitext__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--multitext-label);
+  flex-shrink: 0;
+  padding-top: 8px;
+  line-height: 1.4;
+}
+
+.avakio-multitext--label-top .avakio-multitext__label {
+  padding-top: 0;
+}
+
+.avakio-multitext__required {
+  color: var(--multitext-error);
+  margin-left: 2px;
+}
+
+/* Fields Container */
+.avakio-multitext__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Field Row */
+.avakio-multitext__field-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Field Number */
+.avakio-multitext__field-number {
+  font-size: 13px;
+  color: var(--multitext-placeholder);
+  min-width: 24px;
+  text-align: right;
+}
+
+/* Input Wrapper */
+.avakio-multitext__input-wrapper {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--multitext-border);
+  border-radius: var(--multitext-radius);
+  background: var(--multitext-bg);
+  box-shadow: var(--multitext-shadow);
+  overflow: hidden;
+  transition: var(--multitext-transition);
+}
+
+.avakio-multitext__input-wrapper:hover:not(.avakio-multitext--disabled .avakio-multitext__input-wrapper) {
+  border-color: var(--multitext-primary);
+}
+
+.avakio-multitext__input-wrapper:focus-within {
+  border-color: var(--multitext-border-focus);
+  box-shadow: var(--multitext-shadow-focus);
+}
+
+/* Input */
+.avakio-multitext__input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--multitext-text);
+  outline: none;
+  line-height: 1.4;
+}
+
+.avakio-multitext__input::placeholder {
+  color: var(--multitext-placeholder);
+}
+
+.avakio-multitext__input:disabled {
+  background: var(--multitext-disabled-bg);
+  color: var(--multitext-disabled-text);
+  cursor: not-allowed;
+}
+
+/* Add Button */
+.avakio-multitext__add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 10px;
+  border: none;
+  border-left: 1px solid var(--multitext-border);
+  background: var(--multitext-btn-bg);
+  color: var(--multitext-primary);
+  cursor: pointer;
+  transition: var(--multitext-transition);
+  flex-shrink: 0;
+}
+
+.avakio-multitext__add-btn:hover:not(:disabled) {
+  background: var(--multitext-btn-hover);
+}
+
+.avakio-multitext__add-btn:active:not(:disabled) {
+  background: var(--multitext-btn-active);
+}
+
+.avakio-multitext__add-btn:disabled {
+  color: var(--multitext-disabled-text);
+  cursor: not-allowed;
+}
+
+.avakio-multitext__add-btn-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Remove Button */
+.avakio-multitext__remove-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  border: none;
+  border-left: 1px solid var(--multitext-border);
+  background: var(--multitext-btn-bg);
+  color: var(--multitext-remove-color);
+  cursor: pointer;
+  transition: var(--multitext-transition);
+  flex-shrink: 0;
+}
+
+.avakio-multitext__remove-btn:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.avakio-multitext__remove-btn:active:not(:disabled) {
+  background: #fee2e2;
+}
+
+.avakio-multitext__remove-btn:disabled {
+  color: var(--multitext-disabled-text);
+  cursor: not-allowed;
+}
+
+/* Bottom Label */
+.avakio-multitext__bottom-label {
+  font-size: 12px;
+  color: var(--multitext-placeholder);
+  margin-top: 2px;
+}
+
+/* Error State */
+.avakio-multitext--invalid .avakio-multitext__input-wrapper {
+  border-color: var(--multitext-error);
+  background: var(--multitext-error-bg);
+}
+
+.avakio-multitext--invalid .avakio-multitext__input-wrapper:focus-within {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+.avakio-multitext__error {
+  font-size: 12px;
+  color: var(--multitext-error);
+  margin-top: 4px;
+}
+
+/* Disabled State */
+.avakio-multitext--disabled .avakio-multitext__label {
+  color: var(--multitext-disabled-text);
+}
+
+.avakio-multitext--disabled .avakio-multitext__input-wrapper {
+  background: var(--multitext-disabled-bg);
+  cursor: not-allowed;
+}
+
+/* Readonly State */
+.avakio-multitext--readonly .avakio-multitext__input {
+  cursor: default;
+}
+
+/* ===================================
+   THEME: MATERIAL (Default)
+   =================================== */
+.avakio-multitext--material,
+[data-admin-theme="material"] .avakio-multitext {
+  --multitext-primary: #1CA1C1;
+  --multitext-bg: #ffffff;
+  --multitext-border: #d1d5db;
+  --multitext-border-focus: #1CA1C1;
+  --multitext-text: #1e293b;
+  --multitext-placeholder: #94a3b8;
+  --multitext-label: #374151;
+  --multitext-disabled-bg: #f1f5f9;
+  --multitext-disabled-text: #94a3b8;
+  --multitext-error: #dc2626;
+  --multitext-error-bg: #fef2f2;
+  --multitext-btn-bg: #f8fafc;
+  --multitext-btn-hover: #e2e8f0;
+  --multitext-btn-active: #cbd5e1;
+  --multitext-remove-color: #ef4444;
+  --multitext-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --multitext-shadow-focus: 0 0 0 3px rgba(28, 161, 193, 0.15);
+}
+
+/* ===================================
+   THEME: FLAT
+   =================================== */
+.avakio-multitext--flat,
+[data-admin-theme="flat"] .avakio-multitext {
+  --multitext-primary: #5E81AC;
+  --multitext-bg: #ffffff;
+  --multitext-border: #d8dee9;
+  --multitext-border-focus: #5E81AC;
+  --multitext-text: #2e3440;
+  --multitext-placeholder: #9ca3af;
+  --multitext-label: #3b4252;
+  --multitext-disabled-bg: #eceff4;
+  --multitext-disabled-text: #9ca3af;
+  --multitext-error: #bf616a;
+  --multitext-error-bg: #fff5f5;
+  --multitext-btn-bg: #eceff4;
+  --multitext-btn-hover: #e5e9f0;
+  --multitext-btn-active: #d8dee9;
+  --multitext-remove-color: #bf616a;
+  --multitext-shadow: none;
+  --multitext-shadow-focus: 0 0 0 2px rgba(94, 129, 172, 0.2);
+  --multitext-radius: 4px;
+}
+
+/* ===================================
+   THEME: COMPACT
+   =================================== */
+.avakio-multitext--compact,
+[data-admin-theme="compact"] .avakio-multitext {
+  --multitext-primary: #00796B;
+  --multitext-bg: #ffffff;
+  --multitext-border: #c5ccd3;
+  --multitext-border-focus: #00796B;
+  --multitext-text: #263238;
+  --multitext-placeholder: #90a4ae;
+  --multitext-label: #455a64;
+  --multitext-disabled-bg: #eceff1;
+  --multitext-disabled-text: #90a4ae;
+  --multitext-error: #c62828;
+  --multitext-error-bg: #ffebee;
+  --multitext-btn-bg: #eceff1;
+  --multitext-btn-hover: #cfd8dc;
+  --multitext-btn-active: #b0bec5;
+  --multitext-remove-color: #c62828;
+  --multitext-shadow: none;
+  --multitext-shadow-focus: 0 0 0 2px rgba(0, 121, 107, 0.15);
+  --multitext-radius: 3px;
+}
+
+[data-admin-theme="compact"] .avakio-multitext__input,
+.avakio-multitext--compact .avakio-multitext__input {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-multitext__label,
+.avakio-multitext--compact .avakio-multitext__label {
+  font-size: 13px;
+  padding-top: 6px;
+}
+
+[data-admin-theme="compact"] .avakio-multitext__fields,
+.avakio-multitext--compact .avakio-multitext__fields {
+  gap: 6px;
+}
+
+[data-admin-theme="compact"] .avakio-multitext__add-btn,
+[data-admin-theme="compact"] .avakio-multitext__remove-btn,
+.avakio-multitext--compact .avakio-multitext__add-btn,
+.avakio-multitext--compact .avakio-multitext__remove-btn {
+  padding: 0 8px;
+}
+
+/* ===================================
+   THEME: DARK
+   =================================== */
+.avakio-multitext--dark,
+[data-admin-theme="dark"] .avakio-multitext {
+  --multitext-primary: #3b82f6;
+  --multitext-bg: hsl(222, 47%, 14%);
+  --multitext-border: hsl(217, 33%, 22%);
+  --multitext-border-focus: #3b82f6;
+  --multitext-text: hsl(210, 40%, 96%);
+  --multitext-placeholder: hsl(215, 20%, 50%);
+  --multitext-label: hsl(210, 40%, 80%);
+  --multitext-disabled-bg: hsl(222, 47%, 11%);
+  --multitext-disabled-text: hsl(215, 20%, 45%);
+  --multitext-error: #f87171;
+  --multitext-error-bg: rgba(248, 113, 113, 0.1);
+  --multitext-btn-bg: hsl(222, 47%, 18%);
+  --multitext-btn-hover: hsl(222, 47%, 22%);
+  --multitext-btn-active: hsl(222, 47%, 26%);
+  --multitext-remove-color: #f87171;
+  --multitext-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --multitext-shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* ===================================
+   THEME: OCEAN
+   =================================== */
+.avakio-multitext--ocean,
+[data-admin-theme="ocean"] .avakio-multitext {
+  --multitext-primary: #0277BD;
+  --multitext-bg: #ffffff;
+  --multitext-border: #b3e5fc;
+  --multitext-border-focus: #0277BD;
+  --multitext-text: #01579b;
+  --multitext-placeholder: #4fc3f7;
+  --multitext-label: #0277BD;
+  --multitext-disabled-bg: #e1f5fe;
+  --multitext-disabled-text: #4fc3f7;
+  --multitext-error: #d32f2f;
+  --multitext-error-bg: #ffebee;
+  --multitext-btn-bg: #e1f5fe;
+  --multitext-btn-hover: #b3e5fc;
+  --multitext-btn-active: #81d4fa;
+  --multitext-remove-color: #d32f2f;
+  --multitext-shadow: 0 1px 3px rgba(2, 119, 189, 0.1);
+  --multitext-shadow-focus: 0 0 0 3px rgba(2, 119, 189, 0.2);
+}
+
+/* ===================================
+   THEME: SUNSET
+   =================================== */
+.avakio-multitext--sunset,
+[data-admin-theme="sunset"] .avakio-multitext {
+  --multitext-primary: #f57c00;
+  --multitext-bg: #fffbf5;
+  --multitext-border: #ffe0b2;
+  --multitext-border-focus: #f57c00;
+  --multitext-text: #e65100;
+  --multitext-placeholder: #ffb74d;
+  --multitext-label: #ef6c00;
+  --multitext-disabled-bg: #fff3e0;
+  --multitext-disabled-text: #ffb74d;
+  --multitext-error: #d32f2f;
+  --multitext-error-bg: #ffebee;
+  --multitext-btn-bg: #fff3e0;
+  --multitext-btn-hover: #ffe0b2;
+  --multitext-btn-active: #ffcc80;
+  --multitext-remove-color: #d32f2f;
+  --multitext-shadow: 0 1px 3px rgba(245, 124, 0, 0.1);
+  --multitext-shadow-focus: 0 0 0 3px rgba(245, 124, 0, 0.2);
+}
+
+/* ===================================
+   ANIMATIONS
+   =================================== */
+@keyframes avakio-multitext-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.avakio-multitext__field-row {
+  animation: avakio-multitext-slide-in 0.15s ease-out;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+@media (max-width: 640px) {
+  .avakio-multitext--label-left {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .avakio-multitext--label-left .avakio-multitext__label {
+    width: auto !important;
+    padding-top: 0;
+  }
+}
+

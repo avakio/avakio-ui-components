@@ -1,0 +1,297 @@
+/* AvakioHint - Step-by-step hint/tour component */
+
+/* Base styles */
+.avakio-hint {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* Overlay mask */
+.avakio-hint-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.avakio-hint-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Highlight border around target element */
+.avakio-hint-highlight {
+  position: absolute;
+  border: 2px solid var(--avakio-hint-highlight-color, #1CA1C1);
+  border-radius: 8px;
+  box-shadow: 0 0 0 4px rgba(28, 161, 193, 0.3);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  animation: avakio-hint-pulse 2s infinite;
+}
+
+@keyframes avakio-hint-pulse {
+  0% {
+    box-shadow: 0 0 0 4px rgba(28, 161, 193, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(28, 161, 193, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(28, 161, 193, 0.3);
+  }
+}
+
+/* Popup container */
+.avakio-hint-popup {
+  position: absolute;
+  background: var(--avakio-hint-popup-bg, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  min-width: 280px;
+  max-width: 400px;
+  pointer-events: auto;
+  transition: top 0.3s ease, left 0.3s ease;
+  z-index: 10001;
+}
+
+/* Close button */
+.avakio-hint-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--avakio-hint-close-color, #999);
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.avakio-hint-close:hover {
+  background: var(--avakio-hint-close-hover-bg, #f0f0f0);
+  color: var(--avakio-hint-close-hover-color, #333);
+}
+
+/* Title */
+.avakio-hint-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--avakio-hint-title-color, #333);
+  margin-bottom: 12px;
+  padding-right: 24px;
+}
+
+/* Text content */
+.avakio-hint-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--avakio-hint-text-color, #666);
+  margin-bottom: 16px;
+}
+
+/* Footer */
+.avakio-hint-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Step indicator */
+.avakio-hint-step-indicator {
+  font-size: 13px;
+  color: var(--avakio-hint-step-color, #999);
+  font-weight: 500;
+}
+
+/* Buttons container */
+.avakio-hint-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Button base */
+.avakio-hint-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+/* Previous button */
+.avakio-hint-btn-prev {
+  background: var(--avakio-hint-btn-prev-bg, #f5f5f5);
+  color: var(--avakio-hint-btn-prev-color, #666);
+}
+
+.avakio-hint-btn-prev:hover {
+  background: var(--avakio-hint-btn-prev-hover-bg, #e0e0e0);
+}
+
+/* Next button */
+.avakio-hint-btn-next {
+  background: var(--avakio-hint-btn-next-bg, #1CA1C1);
+  color: var(--avakio-hint-btn-next-color, #fff);
+}
+
+.avakio-hint-btn-next:hover {
+  background: var(--avakio-hint-btn-next-hover-bg, #1790ad);
+}
+
+/* ==================== THEMES ==================== */
+
+/* Material Theme (default) */
+.avakio-hint-theme-material {
+  --avakio-hint-highlight-color: var(--avakio-accent-primary);
+  --avakio-hint-popup-bg: var(--avakio-bg-primary);
+  --avakio-hint-title-color: var(--avakio-text-primary);
+  --avakio-hint-text-color: var(--avakio-text-secondary);
+  --avakio-hint-step-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-close-hover-color: var(--avakio-text-primary);
+  --avakio-hint-btn-prev-bg: var(--avakio-bg-secondary);
+  --avakio-hint-btn-prev-color: var(--avakio-text-secondary);
+  --avakio-hint-btn-prev-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-btn-next-bg: var(--avakio-accent-primary);
+  --avakio-hint-btn-next-color: var(--avakio-text-white);
+  --avakio-hint-btn-next-hover-bg: var(--avakio-accent-secondary);
+}
+
+/* Flat Theme */
+.avakio-hint-theme-flat {
+  --avakio-hint-highlight-color: var(--avakio-accent-primary);
+  --avakio-hint-popup-bg: var(--avakio-bg-primary);
+  --avakio-hint-title-color: var(--avakio-text-primary);
+  --avakio-hint-text-color: var(--avakio-text-secondary);
+  --avakio-hint-step-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-close-hover-color: var(--avakio-text-primary);
+  --avakio-hint-btn-prev-bg: var(--avakio-bg-secondary);
+  --avakio-hint-btn-prev-color: var(--avakio-text-secondary);
+  --avakio-hint-btn-prev-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-btn-next-bg: var(--avakio-accent-primary);
+  --avakio-hint-btn-next-color: var(--avakio-text-white);
+  --avakio-hint-btn-next-hover-bg: var(--avakio-accent-secondary);
+}
+
+/* Compact Theme */
+.avakio-hint-theme-compact {
+  --avakio-hint-highlight-color: var(--avakio-accent-primary);
+  --avakio-hint-popup-bg: var(--avakio-bg-primary);
+  --avakio-hint-title-color: var(--avakio-text-primary);
+  --avakio-hint-text-color: var(--avakio-text-secondary);
+  --avakio-hint-step-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-close-hover-color: var(--avakio-text-primary);
+  --avakio-hint-btn-prev-bg: var(--avakio-bg-secondary);
+  --avakio-hint-btn-prev-color: var(--avakio-text-secondary);
+  --avakio-hint-btn-prev-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-btn-next-bg: var(--avakio-accent-primary);
+  --avakio-hint-btn-next-color: var(--avakio-text-white);
+  --avakio-hint-btn-next-hover-bg: var(--avakio-accent-secondary);
+}
+
+.avakio-hint-theme-compact .avakio-hint-popup {
+  padding: 16px;
+  min-width: 240px;
+  max-width: 320px;
+}
+
+.avakio-hint-theme-compact .avakio-hint-title {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.avakio-hint-theme-compact .avakio-hint-text {
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.avakio-hint-theme-compact .avakio-hint-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+/* Dark Theme */
+.avakio-hint-theme-dark {
+  --avakio-hint-highlight-color: var(--avakio-accent-primary);
+  --avakio-hint-popup-bg: var(--avakio-bg-tertiary);
+  --avakio-hint-title-color: var(--avakio-text-white);
+  --avakio-hint-text-color: var(--avakio-text-secondary);
+  --avakio-hint-step-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-close-hover-color: var(--avakio-text-white);
+  --avakio-hint-btn-prev-bg: var(--avakio-bg-hover);
+  --avakio-hint-btn-prev-color: var(--avakio-text-secondary);
+  --avakio-hint-btn-prev-hover-bg: var(--avakio-bg-selected);
+  --avakio-hint-btn-next-bg: var(--avakio-accent-primary);
+  --avakio-hint-btn-next-color: var(--avakio-text-white);
+  --avakio-hint-btn-next-hover-bg: var(--avakio-accent-secondary);
+}
+
+.avakio-hint-theme-dark .avakio-hint-overlay svg rect[fill="rgba(0, 0, 0, 0.5)"] {
+  fill: rgba(0, 0, 0, 0.7);
+}
+
+/* Ocean Theme */
+.avakio-hint-theme-ocean {
+  --avakio-hint-highlight-color: var(--avakio-accent-primary);
+  --avakio-hint-popup-bg: var(--avakio-bg-primary);
+  --avakio-hint-title-color: var(--avakio-accent-secondary);
+  --avakio-hint-text-color: var(--avakio-text-secondary);
+  --avakio-hint-step-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-close-hover-color: var(--avakio-accent-secondary);
+  --avakio-hint-btn-prev-bg: var(--avakio-bg-secondary);
+  --avakio-hint-btn-prev-color: var(--avakio-accent-primary);
+  --avakio-hint-btn-prev-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-btn-next-bg: var(--avakio-accent-primary);
+  --avakio-hint-btn-next-color: var(--avakio-text-white);
+  --avakio-hint-btn-next-hover-bg: var(--avakio-accent-secondary);
+}
+
+/* Sunset Theme */
+.avakio-hint-theme-sunset {
+  --avakio-hint-highlight-color: var(--avakio-accent-primary);
+  --avakio-hint-popup-bg: var(--avakio-bg-primary);
+  --avakio-hint-title-color: var(--avakio-accent-secondary);
+  --avakio-hint-text-color: var(--avakio-text-secondary);
+  --avakio-hint-step-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-color: var(--avakio-text-tertiary);
+  --avakio-hint-close-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-close-hover-color: var(--avakio-accent-secondary);
+  --avakio-hint-btn-prev-bg: var(--avakio-bg-secondary);
+  --avakio-hint-btn-prev-color: var(--avakio-accent-secondary);
+  --avakio-hint-btn-prev-hover-bg: var(--avakio-bg-hover);
+  --avakio-hint-btn-next-bg: var(--avakio-accent-primary);
+  --avakio-hint-btn-next-color: var(--avakio-text-white);
+  --avakio-hint-btn-next-hover-bg: var(--avakio-accent-secondary);
+}
+

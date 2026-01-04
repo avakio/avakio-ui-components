@@ -1,0 +1,316 @@
+/* ===================================
+   AVAKIO GRID - BASE STYLES
+   =================================== */
+
+.avakio-grid {
+  --grid-bg: var(--avakio-bg-primary);
+  --grid-border: var(--avakio-border-secondary);
+  --grid-cell-bg: var(--avakio-bg-primary);
+  --grid-cell-border: var(--avakio-border-primary);
+  --grid-cell-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --grid-cell-hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --grid-cell-radius: 8px;
+  --grid-text: var(--avakio-text-primary);
+  --grid-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  background: var(--grid-bg);
+  border: 1px solid var(--grid-border);
+  border-radius: 8px;
+  box-sizing: border-box;
+  overflow: auto;
+  transition: var(--grid-transition);
+}
+
+/* ===================================
+   GRID CELL STYLES
+   =================================== */
+
+.avakio-grid-cell {
+  background: var(--grid-cell-bg);
+  border: 1px solid var(--grid-cell-border);
+  border-radius: var(--grid-cell-radius);
+  box-shadow: var(--grid-cell-shadow);
+  box-sizing: border-box;
+  overflow: hidden;
+  /* Smooth transitions for position, size, and visual properties */
+  transition: 
+    left 0.15s ease-out,
+    top 0.15s ease-out,
+    width 0.15s ease-out,
+    height 0.15s ease-out,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.avakio-grid-cell:hover {
+  box-shadow: var(--grid-cell-hover-shadow);
+}
+
+.avakio-grid-cell-content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make direct children fill the cell content area */
+.avakio-grid-cell-content > * {
+  flex: 1;
+  min-height: 0;
+}
+
+.avakio-grid-cell-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ===================================
+   STATE MODIFIERS
+   =================================== */
+
+.avakio-grid-hidden {
+  display: none !important;
+}
+
+.avakio-grid-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Container borderless - removes only the view/container border */
+.avakio-grid-borderless {
+  border: none !important;
+  background: transparent !important;
+}
+
+/* Cell borderless - removes only the cell borders */
+.avakio-grid-cell-borderless .avakio-grid-cell {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.avakio-grid-cell-borderless .avakio-grid-cell:hover {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* ===================================
+   THEME: MATERIAL (DEFAULT)
+   =================================== */
+
+.avakio-grid-theme-material {
+  --grid-bg: var(--avakio-bg-secondary);
+  --grid-border: var(--avakio-border-primary);
+  --grid-cell-bg: var(--avakio-bg-primary);
+  --grid-cell-border: var(--avakio-border-primary);
+  --grid-cell-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --grid-cell-hover-shadow: 0 4px 12px var(--avakio-accent-light);
+  --grid-text: var(--avakio-text-primary);
+}
+
+.avakio-grid-theme-material .avakio-grid-cell:hover {
+  border-color: var(--avakio-accent-primary);
+}
+
+/* ===================================
+   THEME: FLAT
+   =================================== */
+
+.avakio-grid-theme-flat {
+  --grid-bg: var(--avakio-bg-secondary);
+  --grid-border: var(--avakio-border-primary);
+  --grid-cell-bg: var(--avakio-bg-primary);
+  --grid-cell-border: var(--avakio-border-secondary);
+  --grid-cell-shadow: none;
+  --grid-cell-hover-shadow: none;
+  --grid-cell-radius: 4px;
+  --grid-text: var(--avakio-text-primary);
+}
+
+.avakio-grid-theme-flat .avakio-grid-cell:hover {
+  border-color: var(--avakio-accent-primary);
+  background: var(--avakio-bg-secondary);
+}
+
+/* ===================================
+   THEME: COMPACT
+   =================================== */
+
+.avakio-grid-theme-compact {
+  --grid-bg: var(--avakio-bg-secondary);
+  --grid-border: var(--avakio-border-primary);
+  --grid-cell-bg: var(--avakio-bg-primary);
+  --grid-cell-border: var(--avakio-border-primary);
+  --grid-cell-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --grid-cell-hover-shadow: 0 2px 8px var(--avakio-accent-light);
+  --grid-cell-radius: 4px;
+  --grid-text: var(--avakio-text-primary);
+}
+
+.avakio-grid-theme-compact .avakio-grid-cell-content {
+  padding: 8px;
+}
+
+.avakio-grid-theme-compact .avakio-grid-cell:hover {
+  border-color: var(--avakio-accent-primary);
+}
+
+/* ===================================
+   THEME: DARK
+   =================================== */
+
+.avakio-grid-theme-dark {
+  --grid-bg: var(--avakio-bg-primary);
+  --grid-border: var(--avakio-bg-secondary);
+  --grid-cell-bg: var(--avakio-bg-secondary);
+  --grid-cell-border: var(--avakio-border-primary);
+  --grid-cell-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --grid-cell-hover-shadow: 0 4px 16px var(--avakio-accent-light);
+  --grid-text: var(--avakio-text-primary);
+}
+
+.avakio-grid-theme-dark .avakio-grid-cell:hover {
+  border-color: var(--avakio-accent-primary);
+  background: var(--avakio-bg-hover);
+}
+
+/* ===================================
+   THEME: OCEAN
+   =================================== */
+
+.avakio-grid-theme-ocean {
+  --grid-bg: linear-gradient(135deg, var(--avakio-bg-primary) 0%, var(--avakio-bg-secondary) 100%);
+  --grid-border: var(--avakio-border-primary);
+  --grid-cell-bg: rgba(255, 255, 255, 0.9);
+  --grid-cell-border: var(--avakio-border-secondary);
+  --grid-cell-shadow: 0 2px 8px var(--avakio-accent-light);
+  --grid-cell-hover-shadow: 0 4px 16px var(--avakio-accent-light);
+  --grid-text: var(--avakio-text-primary);
+}
+
+.avakio-grid-theme-ocean .avakio-grid-cell:hover {
+  border-color: var(--avakio-accent-primary);
+  background: rgba(255, 255, 255, 1);
+}
+
+/* ===================================
+   THEME: SUNSET
+   =================================== */
+
+.avakio-grid-theme-sunset {
+  --grid-bg: linear-gradient(135deg, var(--avakio-bg-primary) 0%, var(--avakio-bg-secondary) 100%);
+  --grid-border: var(--avakio-border-primary);
+  --grid-cell-bg: rgba(255, 255, 255, 0.95);
+  --grid-cell-border: var(--avakio-border-secondary);
+  --grid-cell-shadow: 0 2px 8px var(--avakio-accent-light);
+  --grid-cell-hover-shadow: 0 4px 16px var(--avakio-accent-light);
+  --grid-text: var(--avakio-text-primary);
+}
+
+.avakio-grid-theme-sunset .avakio-grid-cell:hover {
+  border-color: var(--avakio-accent-primary);
+  background: rgba(255, 255, 255, 1);
+}
+
+/* ===================================
+   ANIMATIONS
+   =================================== */
+
+@keyframes avakio-grid-cell-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.avakio-grid-cell {
+  animation: avakio-grid-cell-enter 0.3s ease-out;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .avakio-grid-cell-content {
+    padding: 8px;
+  }
+}
+
+/* ===================================
+   DRAGGABLE CELLS
+   =================================== */
+
+.avakio-grid-draggable {
+  user-select: none;
+}
+
+.avakio-grid-cell-draggable {
+  cursor: grab;
+}
+
+.avakio-grid-cell-draggable:active {
+  cursor: grabbing;
+}
+
+.avakio-grid-cell-dragging {
+  cursor: grabbing !important;
+  opacity: 0.9;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+  /* Disable transitions while dragging for immediate response */
+  transition: 
+    box-shadow 0.2s ease,
+    opacity 0.2s ease !important;
+}
+
+/* When dragging is active, other cells should have reduced transitions */
+.avakio-grid-dragging .avakio-grid-cell:not(.avakio-grid-cell-dragging) {
+  transition: 
+    left 0.2s ease-out,
+    top 0.2s ease-out,
+    width 0.15s ease-out,
+    height 0.15s ease-out,
+    opacity 0.2s ease;
+  opacity: 0.7;
+}
+
+/* Drag handle indicator (optional visual cue) */
+.avakio-grid-cell-draggable::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='5' r='1'/%3E%3Ccircle cx='9' cy='12' r='1'/%3E%3Ccircle cx='9' cy='19' r='1'/%3E%3Ccircle cx='15' cy='5' r='1'/%3E%3Ccircle cx='15' cy='12' r='1'/%3E%3Ccircle cx='15' cy='19' r='1'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.avakio-grid-cell-draggable:hover::before {
+  opacity: 0.8;
+}
+
+.avakio-grid-cell-dragging::before {
+  opacity: 1;
+}
+
+/* Theme-specific drag handle colors */
+.avakio-grid-theme-dark .avakio-grid-cell-draggable::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='9' cy='5' r='1'/%3E%3Ccircle cx='9' cy='12' r='1'/%3E%3Ccircle cx='9' cy='19' r='1'/%3E%3Ccircle cx='15' cy='5' r='1'/%3E%3Ccircle cx='15' cy='12' r='1'/%3E%3Ccircle cx='15' cy='19' r='1'/%3E%3C/svg%3E");
+}
+

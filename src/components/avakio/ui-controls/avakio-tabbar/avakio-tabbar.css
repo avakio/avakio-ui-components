@@ -1,0 +1,418 @@
+/* ===================================
+   AVAKIO TABBAR - BASE STYLES
+   =================================== */
+
+.avakio-tabbar {
+  --tabbar-primary: #1ca1c1;
+  --tabbar-primary-strong: #0f7b93;
+  --tabbar-surface: #f8fafc;
+  --tabbar-surface-strong: #eef2f7;
+  --tabbar-border: #d1d5db;
+  --tabbar-text: #0f172a;
+  --tabbar-muted: #6b7280;
+  --tabbar-close: #9ca3af;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--tabbar-text);
+}
+
+.avakio-tabbar-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--tabbar-text);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 6px;
+}
+
+.avakio-tabbar-required {
+  color: #ef4444;
+}
+
+.avakio-tabbar-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  min-width: 0; /* Allow wrapper to shrink */
+  overflow: hidden; /* Prevent any overflow from showing */
+}
+
+/* Scroll navigation buttons */
+.avakio-tabbar-scroll-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  min-width: 28px;
+  background: var(--tabbar-surface);
+  border: 1px solid var(--tabbar-border);
+  color: var(--tabbar-muted);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.avakio-tabbar-scroll-left {
+  border-radius: 10px 0 0 10px;
+  border-right: none;
+}
+
+.avakio-tabbar-scroll-right {
+  border-radius: 0 10px 10px 0;
+  border-left: none;
+}
+
+.avakio-tabbar-scroll-btn:hover {
+  background: var(--tabbar-surface-strong);
+  color: var(--tabbar-primary-strong);
+}
+
+.avakio-tabbar-scroll-btn:active {
+  background: color-mix(in srgb, var(--tabbar-primary) 15%, var(--tabbar-surface));
+}
+
+.avakio-tabbar-track {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  background: var(--tabbar-surface);
+  border: 1px solid var(--tabbar-border);
+  border-radius: 10px;
+  padding: 6px;
+  overflow: scroll;
+  overflow-y: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  flex: 1;
+  min-width: 0; /* Allow flex item to shrink below content size */
+}
+
+/* Hide scrollbar in webkit/blink browsers (Chrome, Safari, Edge) */
+.avakio-tabbar-track::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+/* Adjust border radius when scroll buttons are present */
+.avakio-tabbar-track[data-has-scroll-left="true"] {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.avakio-tabbar-track[data-has-scroll-right="true"] {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.avakio-tabbar-track[data-scrollable="false"] {
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+
+.avakio-tabbar-track::-webkit-scrollbar-thumb {
+  background-color: var(--tabbar-border);
+  border-radius: 999px;
+}
+
+.avakio-tabbar-track::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.avakio-tabbar-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--tabbar-muted);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  user-select: none;
+  outline: none;
+}
+
+.avakio-tabbar-tab:focus-visible {
+  outline: 2px solid var(--tabbar-primary);
+  outline-offset: 2px;
+}
+
+.avakio-tabbar-tab[data-disabled="true"],
+.avakio-tabbar-tab[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.avakio-tabbar-tab:hover {
+  color: var(--tabbar-primary-strong);
+  background: var(--tabbar-surface-strong);
+}
+
+.avakio-tabbar-tab.active,
+.avakio-tabbar-tab[data-active="true"] {
+  color: var(--tabbar-primary-strong);
+  background: color-mix(in srgb, var(--tabbar-primary) 12%, #ffffff);
+  border-color: color-mix(in srgb, var(--tabbar-primary) 30%, var(--tabbar-border));
+  box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.avakio-tabbar[data-type="top"] .avakio-tabbar-tab.active::after,
+.avakio-tabbar[data-type="top"] .avakio-tabbar-tab[data-active="true"]::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -6px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--tabbar-primary);
+}
+
+.avakio-tabbar[data-type="bottom"] .avakio-tabbar-tab.active::after,
+.avakio-tabbar[data-type="bottom"] .avakio-tabbar-tab[data-active="true"]::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: -6px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--tabbar-primary);
+}
+
+.avakio-tabbar[data-align="center"] .avakio-tabbar-track {
+  justify-content: center;
+}
+
+.avakio-tabbar[data-align="justify"] .avakio-tabbar-tab,
+.avakio-tabbar[data-fill="true"] .avakio-tabbar-tab {
+  flex: 1 1 0;
+  justify-content: center;
+}
+
+.avakio-tabbar[data-size="sm"] .avakio-tabbar-tab {
+  padding: 8px 12px;
+  font-size: 13px;
+  gap: 6px;
+  border-radius: 7px;
+}
+
+.avakio-tabbar-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avakio-tabbar-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.avakio-tabbar-text {
+  line-height: 1.2;
+}
+
+.avakio-tabbar-badge {
+  background: var(--tabbar-primary);
+  color: #ffffff;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.avakio-tabbar-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--tabbar-close);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.avakio-tabbar-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--tabbar-primary-strong);
+}
+
+.avakio-tabbar-tab:disabled,
+.avakio-tabbar-tab[data-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  color: #9ca3af;
+}
+
+.avakio-tabbar-tab:disabled:hover,
+.avakio-tabbar-tab[data-disabled="true"]:hover {
+  background: transparent;
+}
+
+.avakio-tabbar[data-error="true"] .avakio-tabbar-track {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.12);
+}
+
+.avakio-tabbar-error {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #ef4444;
+}
+
+/* ===================================
+   THEME: MATERIAL (#1CA1C1)
+   =================================== */
+
+[data-admin-theme="material"] .avakio-tabbar {
+  --tabbar-primary: #1ca1c1;
+  --tabbar-primary-strong: #0f7b93;
+  --tabbar-surface: #f4fbfd;
+  --tabbar-surface-strong: #e7f7fc;
+  --tabbar-border: #c8e7f0;
+  --tabbar-text: #0b2f3a;
+  --tabbar-muted: #255c6b;
+  --tabbar-close: #6b7280;
+}
+
+/* ===================================
+   THEME: FLAT (#5E81AC)
+   =================================== */
+
+[data-admin-theme="flat"] .avakio-tabbar {
+  --tabbar-primary: #5e81ac;
+  --tabbar-primary-strong: #46678e;
+  --tabbar-surface: #f3f6fb;
+  --tabbar-surface-strong: #e6edf7;
+  --tabbar-border: #cfd8e6;
+  --tabbar-text: #1f2a3d;
+  --tabbar-muted: #42526a;
+  --tabbar-close: #6b7280;
+}
+
+/* ===================================
+   THEME: COMPACT (#00796B)
+   =================================== */
+
+[data-admin-theme="compact"] .avakio-tabbar {
+  --tabbar-primary: #00796b;
+  --tabbar-primary-strong: #005f55;
+  --tabbar-surface: #f1f7f6;
+  --tabbar-surface-strong: #e1f1ef;
+  --tabbar-border: #b7d6d1;
+  --tabbar-text: #0b2c28;
+  --tabbar-muted: #1f5a52;
+  --tabbar-close: #5b6b71;
+}
+
+[data-admin-theme="compact"] .avakio-tabbar-track {
+  padding: 4px;
+  gap: 6px;
+}
+
+[data-admin-theme="compact"] .avakio-tabbar-tab {
+  padding: 8px 12px;
+  border-radius: 7px;
+  font-size: 13px;
+}
+
+/* ===================================
+   THEME: DARK
+   =================================== */
+
+[data-admin-theme="dark"] .avakio-tabbar {
+  --tabbar-primary: hsl(217, 91%, 60%);
+  --tabbar-primary-strong: hsl(217, 100%, 78%);
+  --tabbar-surface: hsl(222, 47%, 11%);
+  --tabbar-surface-strong: hsl(222, 47%, 13%);
+  --tabbar-border: hsl(217, 33%, 17%);
+  --tabbar-text: hsl(210, 40%, 96%);
+  --tabbar-muted: hsl(215, 20%, 80%);
+  --tabbar-close: hsl(215, 20%, 70%);
+}
+
+[data-admin-theme="dark"] .avakio-tabbar-track {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+[data-admin-theme="dark"] .avakio-tabbar-tab:hover {
+  background: hsl(217, 33%, 20%);
+}
+
+[data-admin-theme="dark"] .avakio-tabbar-tab.active,
+[data-admin-theme="dark"] .avakio-tabbar-tab[data-active="true"] {
+  background: hsla(217, 91%, 60%, 0.16);
+  border-color: hsla(217, 91%, 60%, 0.5);
+  box-shadow: 0 10px 25px -15px rgba(0, 0, 0, 0.75), 0 1px 1px rgba(255, 255, 255, 0.08);
+}
+
+/* ===================================
+   THEME: OCEAN (#0277BD)
+   =================================== */
+
+[data-admin-theme="ocean"] .avakio-tabbar {
+  --tabbar-primary: #0277bd;
+  --tabbar-primary-strong: #015c93;
+  --tabbar-surface: #f1f7fd;
+  --tabbar-surface-strong: #e2effb;
+  --tabbar-border: #bfd8f1;
+  --tabbar-text: #0f2740;
+  --tabbar-muted: #244f74;
+  --tabbar-close: #6b7280;
+}
+
+/* ===================================
+   THEME: SUNSET (#f57c00)
+   =================================== */
+
+[data-admin-theme="sunset"] .avakio-tabbar {
+  --tabbar-primary: #f57c00;
+  --tabbar-primary-strong: #c35f00;
+  --tabbar-surface: #fff8f1;
+  --tabbar-surface-strong: #ffeeda;
+  --tabbar-border: #f4d3ad;
+  --tabbar-text: #4a2e0f;
+  --tabbar-muted: #8c5416;
+  --tabbar-close: #7a5a46;
+}
+
+[data-admin-theme="sunset"] .avakio-tabbar-tab.active,
+[data-admin-theme="sunset"] .avakio-tabbar-tab[data-active="true"] {
+  box-shadow: 0 10px 22px -12px rgba(245, 124, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Ensure scrollbar is completely hidden across all browsers */
+.avakio-tabbar-track,
+.avakio-tabbar-track * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.avakio-tabbar-track::-webkit-scrollbar,
+.avakio-tabbar-track *::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+

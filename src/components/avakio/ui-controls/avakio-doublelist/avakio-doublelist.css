@@ -1,0 +1,355 @@
+/* ===================================
+   AVAKIO DOUBLELIST - BASE
+   =================================== */
+
+.avakio-doublelist {
+  --dl-primary: #1ca1c1;
+  --dl-primary-hover: #0f7b93;
+  --dl-primary-light: rgba(28, 161, 193, 0.1);
+  --dl-surface: #ffffff;
+  --dl-surface-secondary: #f8fafc;
+  --dl-border: #e2e8f0;
+  --dl-border-focus: #1ca1c1;
+  --dl-text: #0f172a;
+  --dl-text-muted: #64748b;
+  --dl-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --dl-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --dl-radius: 8px;
+  --dl-radius-sm: 6px;
+  
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--dl-text);
+}
+
+.avakio-doublelist-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Panel (left/right) */
+.avakio-doublelist-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  background: var(--dl-surface);
+  border: 1px solid var(--dl-border);
+  border-radius: var(--dl-radius);
+  overflow: hidden;
+}
+
+/* Labels */
+.avakio-doublelist-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--dl-text);
+  background: var(--dl-surface-secondary);
+}
+
+.avakio-doublelist-label-top {
+  border-bottom: 1px solid var(--dl-border);
+}
+
+.avakio-doublelist-label-bottom {
+  border-top: 1px solid var(--dl-border);
+  font-weight: 500;
+  color: var(--dl-text-muted);
+  font-size: 12px;
+}
+
+.avakio-doublelist-count {
+  font-weight: 500;
+  color: var(--dl-text-muted);
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+/* Search */
+.avakio-doublelist-search {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--dl-border);
+  background: var(--dl-surface);
+}
+
+.avakio-doublelist-search-icon {
+  color: var(--dl-text-muted);
+  flex-shrink: 0;
+  min-width: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+.avakio-doublelist-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 4px 8px;
+  font-size: 13px;
+  color: var(--dl-text);
+}
+
+.avakio-doublelist-search-input::placeholder {
+  color: var(--dl-text-muted);
+}
+
+/* List container */
+.avakio-doublelist-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--dl-surface);
+  transition: background-color 0.15s ease;
+}
+
+.avakio-doublelist-list-dragover {
+  background: var(--dl-primary-light);
+}
+
+/* List items */
+.avakio-doublelist-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--dl-border);
+  transition: background-color 0.1s ease, opacity 0.1s ease;
+  user-select: none;
+}
+
+.avakio-doublelist-item:last-child {
+  border-bottom: none;
+}
+
+.avakio-doublelist-item:hover {
+  background: var(--dl-surface-secondary);
+}
+
+.avakio-doublelist-item-selected {
+  background: var(--dl-primary-light);
+}
+
+.avakio-doublelist-item-selected:hover {
+  background: var(--dl-primary-light);
+}
+
+.avakio-doublelist-item-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.avakio-doublelist-item-dragging {
+  opacity: 0.5;
+  background: var(--dl-primary-light);
+}
+
+.avakio-doublelist-drag-handle {
+  color: var(--dl-text-muted);
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.avakio-doublelist-drag-handle:active {
+  cursor: grabbing;
+}
+
+.avakio-doublelist-item-text {
+  flex: 1;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Empty state */
+.avakio-doublelist-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 80px;
+  color: var(--dl-text-muted);
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* Buttons container */
+.avakio-doublelist-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.avakio-doublelist-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--dl-border);
+  border-radius: var(--dl-radius-sm);
+  background: var(--dl-surface);
+  color: var(--dl-text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.avakio-doublelist-btn:hover:not(:disabled) {
+  background: var(--dl-primary);
+  border-color: var(--dl-primary);
+  color: white;
+  box-shadow: var(--dl-shadow);
+}
+
+.avakio-doublelist-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.avakio-doublelist-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Scrollbar styling */
+.avakio-doublelist-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.avakio-doublelist-list::-webkit-scrollbar-track {
+  background: var(--dl-surface-secondary);
+}
+
+.avakio-doublelist-list::-webkit-scrollbar-thumb {
+  background: var(--dl-border);
+  border-radius: 3px;
+}
+
+.avakio-doublelist-list::-webkit-scrollbar-thumb:hover {
+  background: var(--dl-text-muted);
+}
+
+/* ===================================
+   THEMES
+   =================================== */
+
+/* Material Theme (default) */
+[data-admin-theme="material"] .avakio-doublelist,
+.avakio-doublelist[data-admin-theme="material"] {
+  --dl-primary: #1ca1c1;
+  --dl-primary-hover: #0f7b93;
+  --dl-primary-light: rgba(28, 161, 193, 0.1);
+  --dl-surface: #ffffff;
+  --dl-surface-secondary: #f8fafc;
+  --dl-border: #e2e8f0;
+  --dl-border-focus: #1ca1c1;
+  --dl-text: #0f172a;
+  --dl-text-muted: #64748b;
+}
+
+/* Flat Theme */
+[data-admin-theme="flat"] .avakio-doublelist,
+.avakio-doublelist[data-admin-theme="flat"] {
+  --dl-primary: #5e81ac;
+  --dl-primary-hover: #46678e;
+  --dl-primary-light: rgba(94, 129, 172, 0.1);
+  --dl-surface: #f7f9fb;
+  --dl-surface-secondary: #ecf0f3;
+  --dl-border: #cfd8e6;
+  --dl-border-focus: #5e81ac;
+  --dl-text: #1f2a3d;
+  --dl-text-muted: #42526a;
+}
+
+/* Compact Theme */
+[data-admin-theme="compact"] .avakio-doublelist,
+.avakio-doublelist[data-admin-theme="compact"] {
+  --dl-primary: #00796b;
+  --dl-primary-hover: #005f55;
+  --dl-primary-light: rgba(0, 121, 107, 0.1);
+  --dl-surface: #f4faf8;
+  --dl-surface-secondary: #e8f5f0;
+  --dl-border: #b7d6d1;
+  --dl-border-focus: #00796b;
+  --dl-text: #0b2c28;
+  --dl-text-muted: #1f5a52;
+}
+
+[data-admin-theme="compact"] .avakio-doublelist-item {
+  padding: 8px 10px;
+}
+
+[data-admin-theme="compact"] .avakio-doublelist-label {
+  padding: 8px 10px;
+}
+
+[data-admin-theme="compact"] .avakio-doublelist-btn {
+  width: 32px;
+  height: 32px;
+}
+
+/* Dark Theme */
+[data-admin-theme="dark"] .avakio-doublelist,
+.avakio-doublelist[data-admin-theme="dark"] {
+  --dl-primary: hsl(217, 91%, 60%);
+  --dl-primary-hover: hsl(217, 100%, 70%);
+  --dl-primary-light: hsla(217, 91%, 60%, 0.15);
+  --dl-surface: hsl(222, 47%, 11%);
+  --dl-surface-secondary: hsl(222, 47%, 14%);
+  --dl-border: hsl(217, 33%, 20%);
+  --dl-border-focus: hsl(217, 91%, 60%);
+  --dl-text: hsl(210, 40%, 96%);
+  --dl-text-muted: hsl(215, 20%, 65%);
+}
+
+[data-admin-theme="dark"] .avakio-doublelist-search-input {
+  color: hsl(210, 40%, 96%);
+}
+
+[data-admin-theme="dark"] .avakio-doublelist-list::-webkit-scrollbar-track {
+  background: hsl(222, 47%, 14%);
+}
+
+[data-admin-theme="dark"] .avakio-doublelist-list::-webkit-scrollbar-thumb {
+  background: hsl(217, 33%, 25%);
+}
+
+/* Ocean Theme */
+[data-admin-theme="ocean"] .avakio-doublelist,
+.avakio-doublelist[data-admin-theme="ocean"] {
+  --dl-primary: #0277bd;
+  --dl-primary-hover: #015c93;
+  --dl-primary-light: rgba(2, 119, 189, 0.1);
+  --dl-surface: #f1f7fd;
+  --dl-surface-secondary: #e3f0fa;
+  --dl-border: #bfd8f1;
+  --dl-border-focus: #0277bd;
+  --dl-text: #0f2740;
+  --dl-text-muted: #244f74;
+}
+
+/* Sunset Theme */
+[data-admin-theme="sunset"] .avakio-doublelist,
+.avakio-doublelist[data-admin-theme="sunset"] {
+  --dl-primary: #f57c00;
+  --dl-primary-hover: #c35f00;
+  --dl-primary-light: rgba(245, 124, 0, 0.1);
+  --dl-surface: #fff8f1;
+  --dl-surface-secondary: #fff0e0;
+  --dl-border: #f4d3ad;
+  --dl-border-focus: #f57c00;
+  --dl-text: #4a2e0f;
+  --dl-text-muted: #8c5416;
+}
+

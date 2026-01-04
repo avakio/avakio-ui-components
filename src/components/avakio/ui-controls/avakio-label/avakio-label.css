@@ -1,0 +1,139 @@
+/* ===========================
+   Base Label Styles
+   =========================== */
+
+.avakio-label {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--avakio-text-primary);
+  background-color: transparent;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: default;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.avakio-label span {
+  display: inline-block;
+}
+
+/* Auto-width */
+.avakio-label-autowidth {
+  width: auto;
+  display: inline-flex;
+}
+
+/* Alignment */
+.avakio-label-align-left {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.avakio-label-align-center {
+  justify-content: center;
+  text-align: center;
+}
+
+.avakio-label-align-right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* Disabled state */
+.avakio-label-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===========================
+   Theme: Material
+   =========================== */
+
+.avakio-label-theme-material,
+[data-admin-theme="material"] .avakio-label {
+  color: var(--avakio-text-primary);
+  font-weight: 500;
+  background-color: transparent;
+}
+
+/* ===========================
+   Theme: Flat
+   =========================== */
+
+.avakio-label-theme-flat,
+[data-admin-theme="flat"] .avakio-label {
+  color: var(--avakio-text-primary);
+  font-weight: 500;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+/* ===========================
+   Theme: Compact
+   =========================== */
+
+.avakio-label-theme-compact,
+[data-admin-theme="compact"] .avakio-label {
+  color: var(--avakio-text-primary);
+  font-size: 14px;
+  padding: 8px;
+  font-weight: 500;
+  background-color: transparent;
+}
+
+/* ===========================
+   Theme: Dark
+   =========================== */
+
+.avakio-label-theme-dark,
+[data-admin-theme="dark"] .avakio-label {
+  color: var(--avakio-text-primary);
+  background-color: transparent;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* ===========================
+   Theme: Ocean
+   =========================== */
+
+.avakio-label-theme-ocean,
+[data-admin-theme="ocean"] .avakio-label {
+  color: var(--avakio-text-primary);
+  background-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* ===========================
+   Theme: Sunset
+   =========================== */
+
+.avakio-label-theme-sunset,
+[data-admin-theme="sunset"] .avakio-label {
+  color: var(--avakio-text-primary);
+  background-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* ===========================
+   Responsive Design
+   =========================== */
+
+@media (max-width: 640px) {
+  .avakio-label {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+  
+  .avakio-label-theme-compact {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+}
+

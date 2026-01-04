@@ -1,0 +1,336 @@
+/* ================================
+   AVAKIO ACCORDION COMPONENT STYLES
+   ================================ */
+
+.avakio-accordion {
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  font-size: 14px;
+  background: var(--avakio-accordion-bg, #ffffff);
+  color: var(--avakio-accordion-text, #1f2937);
+  border: 1px solid var(--avakio-accordion-border, #e5e7eb);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Horizontal layout */
+.avakio-accordion--cols {
+  flex-direction: row;
+}
+
+.avakio-accordion--cols .avakio-accordion-item {
+  flex: 1;
+  min-width: 0;
+  border-bottom: none;
+  border-right: 1px solid var(--avakio-accordion-border, #e5e7eb);
+}
+
+.avakio-accordion--cols .avakio-accordion-item:last-child {
+  border-right: none;
+}
+
+.avakio-accordion--cols .avakio-accordion-item--expanded {
+  flex: 3;
+}
+
+.avakio-accordion--cols .avakio-accordion-header {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  padding: 16px 8px;
+  min-height: 100px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avakio-accordion--cols .avakio-accordion-toggle {
+  transform: rotate(90deg);
+  margin-bottom: 8px;
+}
+
+.avakio-accordion--cols .avakio-accordion-item--expanded .avakio-accordion-toggle {
+  transform: rotate(90deg);
+}
+
+.avakio-accordion--cols .avakio-accordion-icon {
+  margin-bottom: 8px;
+}
+
+.avakio-accordion--cols .avakio-accordion-content {
+  max-width: 0;
+  max-height: none !important;
+  overflow: hidden;
+  transition: max-width 0.3s ease;
+}
+
+.avakio-accordion--cols .avakio-accordion-item--expanded .avakio-accordion-content {
+  max-width: 100%;
+}
+
+/* Accordion item */
+.avakio-accordion-item {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--avakio-accordion-border, #e5e7eb);
+  transition: flex 0.3s ease;
+}
+
+.avakio-accordion-item:last-child {
+  border-bottom: none;
+}
+
+.avakio-accordion-item--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.avakio-accordion-item--no-header .avakio-accordion-content {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Accordion header */
+.avakio-accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+  background: var(--avakio-accordion-header-bg, #f9fafb);
+  border-bottom: 1px solid var(--avakio-accordion-border, #e5e7eb);
+  transition: background-color 0.2s ease;
+  outline: none;
+}
+
+.avakio-accordion-header:hover {
+  background: var(--avakio-accordion-header-hover-bg, #f3f4f6);
+}
+
+.avakio-accordion-header:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--avakio-accordion-focus-ring, #3b82f6);
+}
+
+.avakio-accordion-item--expanded .avakio-accordion-header {
+  background: var(--avakio-accordion-header-active-bg, #eff6ff);
+}
+
+.avakio-accordion-item--disabled .avakio-accordion-header {
+  cursor: not-allowed;
+}
+
+/* Toggle icon */
+.avakio-accordion-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--avakio-accordion-toggle-color, #6b7280);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.avakio-accordion-item--expanded .avakio-accordion-toggle {
+  color: var(--avakio-accordion-toggle-active-color, #3b82f6);
+}
+
+/* Custom icon */
+.avakio-accordion-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--avakio-accordion-icon-color, #6b7280);
+}
+
+.avakio-accordion-item--expanded .avakio-accordion-icon {
+  color: var(--avakio-accordion-icon-active-color, #3b82f6);
+}
+
+/* Header text */
+.avakio-accordion-header-text {
+  flex: 1;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avakio-accordion-item--expanded .avakio-accordion-header-text {
+  color: var(--avakio-accordion-header-active-text, #1d4ed8);
+}
+
+/* Content panel */
+.avakio-accordion-content {
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  overflow: hidden;
+}
+
+.avakio-accordion--animated .avakio-accordion-content {
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.avakio-accordion-item--expanded .avakio-accordion-content {
+  overflow: visible;
+}
+
+/* Body */
+.avakio-accordion-body {
+  padding: 16px;
+  background: var(--avakio-accordion-body-bg, #ffffff);
+}
+
+/* ================================
+   THEME: MATERIAL
+   ================================ */
+.avakio-accordion--material {
+  --avakio-accordion-bg: #ffffff;
+  --avakio-accordion-text: #37474f;
+  --avakio-accordion-border: #e0e0e0;
+  --avakio-accordion-header-bg: #fafafa;
+  --avakio-accordion-header-hover-bg: #f5f5f5;
+  --avakio-accordion-header-active-bg: #e3f2fd;
+  --avakio-accordion-header-active-text: #1976d2;
+  --avakio-accordion-toggle-color: #757575;
+  --avakio-accordion-toggle-active-color: #2196f3;
+  --avakio-accordion-icon-color: #757575;
+  --avakio-accordion-icon-active-color: #2196f3;
+  --avakio-accordion-body-bg: #ffffff;
+  --avakio-accordion-focus-ring: #2196f3;
+}
+
+/* ================================
+   THEME: DARK
+   ================================ */
+.avakio-accordion--dark {
+  --avakio-accordion-bg: #1a1a2e;
+  --avakio-accordion-text: #e2e8f0;
+  --avakio-accordion-border: #2d2d44;
+  --avakio-accordion-header-bg: #16162a;
+  --avakio-accordion-header-hover-bg: #252542;
+  --avakio-accordion-header-active-bg: #1e3a5f;
+  --avakio-accordion-header-active-text: #93c5fd;
+  --avakio-accordion-toggle-color: #9ca3af;
+  --avakio-accordion-toggle-active-color: #60a5fa;
+  --avakio-accordion-icon-color: #9ca3af;
+  --avakio-accordion-icon-active-color: #60a5fa;
+  --avakio-accordion-body-bg: #1a1a2e;
+  --avakio-accordion-focus-ring: #3b82f6;
+}
+
+/* ================================
+   THEME: OCEAN
+   ================================ */
+.avakio-accordion--ocean {
+  --avakio-accordion-bg: #f0f7ff;
+  --avakio-accordion-text: #1e40af;
+  --avakio-accordion-border: #bfdbfe;
+  --avakio-accordion-header-bg: #eff6ff;
+  --avakio-accordion-header-hover-bg: #dbeafe;
+  --avakio-accordion-header-active-bg: #bfdbfe;
+  --avakio-accordion-header-active-text: #1d4ed8;
+  --avakio-accordion-toggle-color: #60a5fa;
+  --avakio-accordion-toggle-active-color: #2563eb;
+  --avakio-accordion-icon-color: #3b82f6;
+  --avakio-accordion-icon-active-color: #1d4ed8;
+  --avakio-accordion-body-bg: #ffffff;
+  --avakio-accordion-focus-ring: #2563eb;
+}
+
+/* ================================
+   THEME: SUNSET
+   ================================ */
+.avakio-accordion--sunset {
+  --avakio-accordion-bg: #fffbeb;
+  --avakio-accordion-text: #78350f;
+  --avakio-accordion-border: #fed7aa;
+  --avakio-accordion-header-bg: #fef3c7;
+  --avakio-accordion-header-hover-bg: #fde68a;
+  --avakio-accordion-header-active-bg: #fed7aa;
+  --avakio-accordion-header-active-text: #b45309;
+  --avakio-accordion-toggle-color: #d97706;
+  --avakio-accordion-toggle-active-color: #ea580c;
+  --avakio-accordion-icon-color: #d97706;
+  --avakio-accordion-icon-active-color: #ea580c;
+  --avakio-accordion-body-bg: #fffbeb;
+  --avakio-accordion-focus-ring: #f59e0b;
+}
+
+/* ================================
+   THEME: FLAT
+   ================================ */
+.avakio-accordion--flat {
+  --avakio-accordion-bg: #f9fafb;
+  --avakio-accordion-text: #374151;
+  --avakio-accordion-border: #d1d5db;
+  --avakio-accordion-header-bg: #f3f4f6;
+  --avakio-accordion-header-hover-bg: #e5e7eb;
+  --avakio-accordion-header-active-bg: #e5e7eb;
+  --avakio-accordion-header-active-text: #111827;
+  --avakio-accordion-toggle-color: #9ca3af;
+  --avakio-accordion-toggle-active-color: #374151;
+  --avakio-accordion-icon-color: #6b7280;
+  --avakio-accordion-icon-active-color: #374151;
+  --avakio-accordion-body-bg: #ffffff;
+  --avakio-accordion-focus-ring: #6b7280;
+}
+
+/* ================================
+   THEME: COMPACT
+   ================================ */
+.avakio-accordion--compact {
+  --avakio-accordion-bg: #fafafa;
+  --avakio-accordion-text: #3f3f46;
+  --avakio-accordion-border: #e4e4e7;
+  --avakio-accordion-header-bg: #f4f4f5;
+  --avakio-accordion-header-hover-bg: #e4e4e7;
+  --avakio-accordion-header-active-bg: #e4e4e7;
+  --avakio-accordion-header-active-text: #18181b;
+  --avakio-accordion-toggle-color: #a1a1aa;
+  --avakio-accordion-toggle-active-color: #52525b;
+  --avakio-accordion-icon-color: #71717a;
+  --avakio-accordion-icon-active-color: #3f3f46;
+  --avakio-accordion-body-bg: #ffffff;
+  --avakio-accordion-focus-ring: #71717a;
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+.avakio-accordion--compact .avakio-accordion-header {
+  padding: 8px 12px;
+}
+
+.avakio-accordion--compact .avakio-accordion-body {
+  padding: 12px;
+}
+
+.avakio-accordion--compact .avakio-accordion-toggle {
+  width: 16px;
+  height: 16px;
+}
+
+/* Wide type styling (no border between items) */
+.avakio-accordion--wide .avakio-accordion-item {
+  margin-bottom: 8px;
+  border: 1px solid var(--avakio-accordion-border, #e5e7eb);
+  border-radius: 6px;
+}
+
+.avakio-accordion--wide .avakio-accordion-item:last-child {
+  margin-bottom: 0;
+}
+
+.avakio-accordion--wide .avakio-accordion-header {
+  border-radius: 6px 6px 0 0;
+}
+
+.avakio-accordion--wide .avakio-accordion-item--expanded .avakio-accordion-header {
+  border-radius: 6px 6px 0 0;
+}
+
+.avakio-accordion--wide .avakio-accordion-body {
+  border-radius: 0 0 6px 6px;
+}
+

@@ -1,0 +1,600 @@
+/* Avakio DatePicker Styles */
+
+/* ================================
+   DROPDOWN TRIGGER STYLES
+   ================================ */
+
+.avakio-dp,
+.avakio-dp-popover {
+  --dp-surface: var(--avakio-bg-primary, var(--background));
+  --dp-border: var(--avakio-border-primary, var(--border));
+  --dp-text: var(--avakio-text-primary, var(--foreground));
+  --dp-muted: var(--avakio-text-secondary, var(--muted-foreground));
+  --dp-primary: var(--avakio-accent-primary, var(--primary));
+  --dp-primary-strong: var(--avakio-accent-hover, var(--primary));
+  --dp-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--dp-text);
+}
+
+.avakio-dp-trigger {
+  width: 100%;
+  min-width: 240px;
+  border-radius: var(--dp-radius);
+  border: 1px solid var(--dp-border);
+  background: linear-gradient(180deg, var(--dp-surface) 0%, color-mix(in srgb, var(--dp-surface) 95%, var(--dp-border)) 100%);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.avakio-dp-trigger:hover {
+  border-color: color-mix(in srgb, var(--dp-primary) 30%, var(--dp-border));
+}
+
+.avakio-dp-trigger-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dp-muted);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.avakio-dp-trigger-value {
+  font-weight: 700;
+  color: var(--dp-text);
+  font-size: 14px;
+}
+
+.avakio-dp-placeholder {
+  color: var(--dp-muted);
+  font-weight: 400;
+}
+
+.avakio-dp-popover {
+  width: min(380px, 92vw);
+  background: var(--dp-surface);
+  border: 1px solid var(--dp-border);
+  border-radius: var(--dp-radius);
+  box-shadow: 0 20px 35px -30px rgba(0, 0, 0, 0.35);
+  padding: 0;
+  overflow: hidden;
+}
+
+.avakio-dp-popover .avakio-datepicker-container {
+  border: none;
+  border-radius: 0;
+  max-width: none;
+}
+
+.avakio-dp-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--dp-border);
+  background: color-mix(in srgb, var(--dp-surface) 95%, var(--dp-border));
+}
+
+.avakio-dp-footer-action {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--dp-border);
+  background: var(--dp-surface);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--dp-text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.avakio-dp-footer-action:hover {
+  border-color: color-mix(in srgb, var(--dp-primary) 30%, var(--dp-border));
+}
+
+.avakio-dp-footer-action-primary {
+  background: var(--dp-primary);
+  border-color: var(--dp-primary);
+  color: white;
+}
+
+.avakio-dp-footer-action-primary:hover {
+  background: var(--dp-primary-strong);
+  border-color: var(--dp-primary-strong);
+}
+
+/* ================================
+   INLINE CALENDAR STYLES
+   ================================ */
+
+.avakio-datepicker-container {
+  width: 100%;
+  max-width: 360px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: var(--font-sans);
+}
+
+/* Navigation */
+.avakio-dp-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.avakio-dp-nav-btn {
+  padding: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--foreground);
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.avakio-dp-nav-btn:hover {
+  background: var(--muted);
+}
+
+.avakio-dp-nav-label {
+  font-size: 16px; 
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* Weekdays */
+.avakio-dp-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.avakio-dp-weekday {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  padding: 8px 4px;
+}
+
+/* Calendar Days */
+.avakio-dp-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.avakio-dp-day {
+  aspect-ratio: 1;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--foreground);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avakio-dp-day:hover {
+  background: var(--muted);
+  border-color: var(--border);
+}
+
+.avakio-dp-day-outside {
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}
+
+.avakio-dp-day-today {
+  border-color: var(--primary);
+  font-weight: 600;
+}
+
+.avakio-dp-day-selected {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+}
+
+.avakio-dp-day-selected:hover {
+  background: var(--primary);
+  opacity: 0.9;
+}
+
+/* Time Picker */
+.avakio-dp-time {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.avakio-dp-time-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--foreground);
+}
+
+.avakio-dp-time-display {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.avakio-dp-time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.avakio-dp-time-input {
+  flex: 1;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px;
+  height: 40px;
+}
+
+.avakio-dp-time-separator {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.avakio-dp-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.avakio-dp-action-btn {
+  flex: 1;
+}
+
+.avakio-dp-hint {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Theme-specific overrides */
+
+/* Material Theme */
+[data-admin-theme="material"] .avakio-datepicker-container {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+[data-admin-theme="material"] .avakio-dp-day:hover {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Flat Theme */
+[data-admin-theme="flat"] .avakio-datepicker-container,
+[data-admin-theme="flat"] .avakio-dp-day,
+[data-admin-theme="flat"] .avakio-dp-nav-btn,
+[data-admin-theme="flat"] .avakio-dp-time-input,
+[data-admin-theme="flat"] .avakio-dp-clear-btn,
+[data-admin-theme="flat"] .avakio-dp-action-btn {
+  border-radius: 0;
+}
+
+[data-admin-theme="flat"] .avakio-datepicker-container {
+  border-width: 2px;
+}
+
+/* Compact Theme */
+[data-admin-theme="compact"] .avakio-datepicker-container {
+  padding: 12px;
+  max-width: 320px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-nav {
+  margin-bottom: 12px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-nav-label {
+  font-size: 15px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-weekday {
+  padding: 6px 4px;
+  font-size: 11px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-day {
+  padding: 6px;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-time {
+  padding-top: 12px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-time-input {
+  height: 36px;
+  padding: 6px;
+  font-size: 14px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-time-display {
+  font-size: 13px;
+}
+
+/* Dark Theme */
+[data-admin-theme="dark"] .avakio-datepicker-container {
+  background: hsl(222.2, 84%, 4.9%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-nav-label,
+[data-admin-theme="dark"] .avakio-dp-day,
+[data-admin-theme="dark"] .avakio-dp-time-display {
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-weekday {
+  color: hsl(215, 20.2%, 65.1%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-nav-btn {
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-nav-btn:hover {
+  background: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-day:hover {
+  background: hsl(217.2, 32.6%, 17.5%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-day-outside {
+  color: hsl(215, 20.2%, 35%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-time {
+  border-top-color: hsl(217.2, 32.6%, 17.5%);
+  background-color: hsl(222.2, 84%, 4.9%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-time-header {
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-time-input {
+  background: hsl(217.2, 32.6%, 12%);
+  border-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-time-separator {
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-actions {
+  background-color: hsl(222.2, 84%, 4.9%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-action-btn {
+  background-color: hsl(217.2, 32.6%, 17.5%);
+  color: hsl(210, 40%, 98%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-action-btn:hover {
+  background-color: hsl(217.2, 32.6%, 22%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-hint {
+  color: hsl(215, 20.2%, 65.1%);
+}
+
+/* Ocean Theme */
+[data-admin-theme="ocean"] .avakio-datepicker-container {
+  border-color: hsl(205, 100%, 85%);
+}
+
+[data-admin-theme="ocean"] .avakio-dp-nav-label {
+  color: hsl(205, 100%, 35%);
+}
+
+[data-admin-theme="ocean"] .avakio-dp-day-selected {
+  background: hsl(205, 100%, 45%);
+  color: white;
+}
+
+[data-admin-theme="ocean"] .avakio-dp-day-today {
+  border-color: hsl(205, 100%, 45%);
+  color: hsl(205, 100%, 45%);
+  font-weight: 600;
+}
+
+[data-admin-theme="ocean"] .avakio-dp-time-header {
+  color: hsl(205, 100%, 35%);
+}
+
+[data-admin-theme="ocean"] .avakio-dp-action-btn:hover {
+  background: hsl(205, 100%, 95%);
+  color: hsl(205, 100%, 45%);
+}
+
+/* Sunset Theme */
+[data-admin-theme="sunset"] .avakio-datepicker-container {
+  border-color: hsl(14, 100%, 85%);
+}
+
+[data-admin-theme="sunset"] .avakio-dp-nav-label {
+  color: hsl(14, 100%, 40%);
+}
+
+[data-admin-theme="sunset"] .avakio-dp-day-selected {
+  background: hsl(14, 100%, 57%);
+  color: white;
+}
+
+[data-admin-theme="sunset"] .avakio-dp-day-today {
+  border-color: hsl(14, 100%, 57%);
+  color: hsl(14, 100%, 57%);
+  font-weight: 600;
+}
+
+[data-admin-theme="sunset"] .avakio-dp-time-header {
+  color: hsl(14, 100%, 40%);
+}
+
+[data-admin-theme="sunset"] .avakio-dp-action-btn:hover {
+  background: hsl(14, 100%, 95%);
+  color: hsl(14, 100%, 57%);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .avakio-datepicker-container {
+    max-width: 100%;
+  }
+  
+  .avakio-dp-day {
+    font-size: 13px;
+    padding: 6px;
+  }
+  
+  .avakio-dp-weekday {
+    font-size: 11px;
+  }
+  
+  .avakio-dp-trigger {
+    min-width: auto;
+  }
+  
+  .avakio-dp-popover {
+    width: 96vw;
+  }
+}
+
+/* ================================
+   DROPDOWN THEME OVERRIDES
+   ================================ */
+
+[data-admin-theme="material"] .avakio-dp,
+[data-admin-theme="material"] .avakio-dp-popover,
+.avakio-dp[data-admin-theme="material"],
+.avakio-dp-popover[data-admin-theme="material"] {
+  --dp-primary: var(--avakio-accent-primary);
+  --dp-primary-strong: var(--avakio-accent-hover);
+  --dp-surface: var(--avakio-bg-primary);
+  --dp-border: var(--avakio-border-primary);
+  --dp-text: var(--avakio-text-primary);
+  --dp-muted: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="flat"] .avakio-dp,
+[data-admin-theme="flat"] .avakio-dp-popover,
+.avakio-dp[data-admin-theme="flat"],
+.avakio-dp-popover[data-admin-theme="flat"] {
+  --dp-primary: var(--avakio-accent-primary);
+  --dp-primary-strong: var(--avakio-accent-hover);
+  --dp-surface: var(--avakio-bg-primary);
+  --dp-border: var(--avakio-border-primary);
+  --dp-text: var(--avakio-text-primary);
+  --dp-muted: var(--avakio-text-secondary);
+  --dp-radius: 4px;
+}
+
+[data-admin-theme="flat"] .avakio-dp-footer-action {
+  border-radius: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-dp,
+[data-admin-theme="compact"] .avakio-dp-popover,
+.avakio-dp[data-admin-theme="compact"],
+.avakio-dp-popover[data-admin-theme="compact"] {
+  --dp-primary: var(--avakio-accent-primary);
+  --dp-primary-strong: var(--avakio-accent-hover);
+  --dp-surface: var(--avakio-bg-primary);
+  --dp-border: var(--avakio-border-primary);
+  --dp-text: var(--avakio-text-primary);
+  --dp-muted: var(--avakio-text-secondary);
+  --dp-radius: 8px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-trigger {
+  padding: 8px 12px;
+  min-width: 200px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-trigger-label,
+[data-admin-theme="compact"] .avakio-dp-trigger-value {
+  font-size: 12px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-footer {
+  padding: 8px 12px;
+}
+
+[data-admin-theme="compact"] .avakio-dp-footer-action {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+[data-admin-theme="dark"] .avakio-dp,
+[data-admin-theme="dark"] .avakio-dp-popover,
+.avakio-dp[data-admin-theme="dark"],
+.avakio-dp-popover[data-admin-theme="dark"] {
+  --dp-primary: var(--avakio-accent-primary);
+  --dp-primary-strong: var(--avakio-accent-hover);
+  --dp-surface: var(--avakio-bg-primary);
+  --dp-border: var(--avakio-border-primary);
+  --dp-text: var(--avakio-text-primary);
+  --dp-muted: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="dark"] .avakio-dp-trigger {
+  background: linear-gradient(180deg, var(--dp-surface) 0%, color-mix(in srgb, var(--dp-surface) 90%, black) 100%);
+}
+
+[data-admin-theme="dark"] .avakio-dp-popover {
+  box-shadow: 0 20px 35px -30px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+[data-admin-theme="ocean"] .avakio-dp,
+[data-admin-theme="ocean"] .avakio-dp-popover,
+.avakio-dp[data-admin-theme="ocean"],
+.avakio-dp-popover[data-admin-theme="ocean"] {
+  --dp-primary: var(--avakio-accent-primary);
+  --dp-primary-strong: var(--avakio-accent-hover);
+  --dp-surface: var(--avakio-bg-primary);
+  --dp-border: var(--avakio-border-primary);
+  --dp-text: var(--avakio-text-primary);
+  --dp-muted: var(--avakio-text-secondary);
+}
+
+[data-admin-theme="sunset"] .avakio-dp,
+[data-admin-theme="sunset"] .avakio-dp-popover,
+.avakio-dp[data-admin-theme="sunset"],
+.avakio-dp-popover[data-admin-theme="sunset"] {
+  --dp-primary: var(--avakio-accent-primary);
+  --dp-primary-strong: var(--avakio-accent-hover);
+  --dp-surface: var(--avakio-bg-primary);
+  --dp-border: var(--avakio-border-primary);
+  --dp-text: var(--avakio-text-primary);
+  --dp-muted: var(--avakio-text-secondary);
+}
+

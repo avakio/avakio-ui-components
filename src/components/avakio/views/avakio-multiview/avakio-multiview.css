@@ -1,0 +1,514 @@
+/* AvakioMultiview Base Styles */
+.avakio-multiview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 0; /* Important for flex children with overflow */
+  background-color: var(--avakio-bg-primary, #fff);
+}
+
+.avakio-multiview-hidden {
+  display: none !important;
+}
+
+.avakio-multiview-cells {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Ensure proper stacking context for animations */
+  isolation: isolate;
+}
+
+/* Cell Base */
+.avakio-multiview-cell {
+  position: absolute;
+  inset: 0; /* Explicitly fills the container */
+  box-sizing: border-box;
+  overflow: auto;
+  background-color: var(--avakio-bg-primary, #fff);
+  transform: translateZ(0);
+  /* Default state - use opacity instead of visibility for better animation support */
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.avakio-multiview-cell-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+.avakio-multiview-cell-active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 2 !important;
+}
+
+/* ========================================
+   SLIDE ANIMATION - LEFT DIRECTION
+   (New view enters from right, old exits to left)
+   ======================================== */
+.avakio-multiview-animate-slide .avakio-multiview-cell-entering-left {
+  animation: slideEnterFromRight var(--animation-duration, 300ms) ease-out both !important;
+  transform: translateX(100%);
+  opacity: 1 !important;
+  z-index: 3 !important;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.avakio-multiview-animate-slide .avakio-multiview-cell-leaving-left {
+  animation: slideExitToLeft var(--animation-duration, 300ms) ease-out both !important;
+  transform: translateX(0);
+  opacity: 1 !important;
+  pointer-events: none;
+  z-index: 2 !important;
+  will-change: transform, opacity;
+}
+
+/* ========================================
+   SLIDE ANIMATION - RIGHT DIRECTION
+   (New view enters from left, old exits to right)
+   ======================================== */
+.avakio-multiview-animate-slide .avakio-multiview-cell-entering-right {
+  animation: slideEnterFromLeft var(--animation-duration, 300ms) ease-out both !important;
+  transform: translateX(-100%);
+  opacity: 1 !important;
+  z-index: 3 !important;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.avakio-multiview-animate-slide .avakio-multiview-cell-leaving-right {
+  animation: slideExitToRight var(--animation-duration, 300ms) ease-out both !important;
+  transform: translateX(0);
+  opacity: 1 !important;
+  pointer-events: none;
+  z-index: 2 !important;
+  will-change: transform, opacity;
+}
+
+/* ========================================
+   SLIDE ANIMATION - TOP DIRECTION
+   (New view enters from bottom, old exits to top)
+   ======================================== */
+.avakio-multiview-animate-slide .avakio-multiview-cell-entering-top {
+  animation: slideEnterFromBottom var(--animation-duration, 300ms) ease-out both !important;
+  transform: translateY(100%);
+  opacity: 1 !important;
+  z-index: 3 !important;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.avakio-multiview-animate-slide .avakio-multiview-cell-leaving-top {
+  animation: slideExitToTop var(--animation-duration, 300ms) ease-out both !important;
+  transform: translateY(0);
+  opacity: 1 !important;
+  pointer-events: none;
+  z-index: 2 !important;
+  will-change: transform, opacity;
+}
+
+/* ========================================
+   SLIDE ANIMATION - BOTTOM DIRECTION
+   (New view enters from top, old exits to bottom)
+   ======================================== */
+.avakio-multiview-animate-slide .avakio-multiview-cell-entering-bottom {
+  animation: slideEnterFromTop var(--animation-duration, 300ms) ease-out both !important;
+  transform: translateY(-100%);
+  opacity: 1 !important;
+  z-index: 3 !important;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.avakio-multiview-animate-slide .avakio-multiview-cell-leaving-bottom {
+  animation: slideExitToBottom var(--animation-duration, 300ms) ease-out both !important;
+  transform: translateY(0);
+  opacity: 1 !important;
+  pointer-events: none;
+  z-index: 2 !important;
+  will-change: transform, opacity;
+}
+
+/* Slide Keyframes - Horizontal */
+@keyframes slideEnterFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideEnterFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideExitToLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideExitToRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 1;
+  }
+}
+
+/* Slide Keyframes - Vertical */
+@keyframes slideEnterFromBottom {
+  0% {
+    transform: translateY(100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideEnterFromTop {
+  0% {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideExitToTop {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideExitToBottom {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   FLIP ANIMATION - HORIZONTAL (default)
+   ======================================== */
+.avakio-multiview-animate-flip {
+  perspective: 1200px;
+}
+
+.avakio-multiview-animate-flip .avakio-multiview-cells {
+  transform-style: preserve-3d;
+}
+
+.avakio-multiview-animate-flip .avakio-multiview-cell {
+  backface-visibility: hidden;
+}
+
+/* Horizontal Flip (rotateY) - Default */
+.avakio-multiview-animate-flip.avakio-multiview-flip-horizontal .avakio-multiview-cell-entering-left,
+.avakio-multiview-animate-flip.avakio-multiview-flip-horizontal .avakio-multiview-cell-entering-top {
+  animation: flipInFromRightY var(--animation-duration, 300ms) ease-out forwards !important;
+  opacity: 1 !important;
+  z-index: 3 !important;
+  will-change: transform, opacity;
+}
+
+.avakio-multiview-animate-flip.avakio-multiview-flip-horizontal .avakio-multiview-cell-entering-right,
+.avakio-multiview-animate-flip.avakio-multiview-flip-horizontal .avakio-multiview-cell-entering-bottom {
+  animation: flipInFromLeftY var(--animation-duration, 300ms) ease-out forwards !important;
+  opacity: 1 !important;
+  z-index: 3 !important;
+  will-change: transform, opacity;
+}
+
+.avakio-multiview-animate-flip.avakio-multiview-flip-horizontal .avakio-multiview-cell-leaving-left,
+.avakio-multiview-animate-flip.avakio-multiview-flip-horizontal .avakio-multiview-cell-leaving-top {
+  animation: flipOutToLeftY var(--animation-duration, 300ms) ease-out forwards !important;
+  opacity: 1 !important;
+  pointer-events: none;
+  z-index: 2 !important;
+  will-change: transform, opacity;
+}
+
+.avakio-multiview-animate-flip.avakio-multiview-flip-horizontal .avakio-multiview-cell-leaving-right,
+.avakio-multiview-animate-flip.avakio-multiview-flip-horizontal .avakio-multiview-cell-leaving-bottom {
+  animation: flipOutToRightY var(--animation-duration, 300ms) ease-out forwards !important;
+  opacity: 1 !important;
+  pointer-events: none;
+  z-index: 2 !important;
+  will-change: transform, opacity;
+}
+
+/* Vertical Flip (rotateX) */
+.avakio-multiview-animate-flip.avakio-multiview-flip-vertical .avakio-multiview-cell-entering-left,
+.avakio-multiview-animate-flip.avakio-multiview-flip-vertical .avakio-multiview-cell-entering-top {
+  animation: flipInFromBottomX var(--animation-duration, 300ms) ease-out forwards !important;
+  opacity: 1 !important;
+  z-index: 3 !important;
+  will-change: transform, opacity;
+}
+
+.avakio-multiview-animate-flip.avakio-multiview-flip-vertical .avakio-multiview-cell-entering-right,
+.avakio-multiview-animate-flip.avakio-multiview-flip-vertical .avakio-multiview-cell-entering-bottom {
+  animation: flipInFromTopX var(--animation-duration, 300ms) ease-out forwards !important;
+  opacity: 1 !important;
+  z-index: 3 !important;
+  will-change: transform, opacity;
+}
+
+.avakio-multiview-animate-flip.avakio-multiview-flip-vertical .avakio-multiview-cell-leaving-left,
+.avakio-multiview-animate-flip.avakio-multiview-flip-vertical .avakio-multiview-cell-leaving-top {
+  animation: flipOutToTopX var(--animation-duration, 300ms) ease-out forwards !important;
+  opacity: 1 !important;
+  pointer-events: none;
+  z-index: 2 !important;
+  will-change: transform, opacity;
+}
+
+.avakio-multiview-animate-flip.avakio-multiview-flip-vertical .avakio-multiview-cell-leaving-right,
+.avakio-multiview-animate-flip.avakio-multiview-flip-vertical .avakio-multiview-cell-leaving-bottom {
+  animation: flipOutToBottomX var(--animation-duration, 300ms) ease-out forwards !important;
+  opacity: 1 !important;
+  pointer-events: none;
+  z-index: 2 !important;
+  will-change: transform, opacity;
+}
+
+/* Horizontal Flip Keyframes (rotateY) */
+@keyframes flipInFromRightY {
+  from {
+    transform: rotateY(-90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flipInFromLeftY {
+  from {
+    transform: rotateY(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flipOutToLeftY {
+  from {
+    transform: rotateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: rotateY(90deg);
+    opacity: 0;
+  }
+}
+
+@keyframes flipOutToRightY {
+  from {
+    transform: rotateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: rotateY(-90deg);
+    opacity: 0;
+  }
+}
+
+/* Vertical Flip Keyframes (rotateX) */
+@keyframes flipInFromBottomX {
+  from {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flipInFromTopX {
+  from {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flipOutToTopX {
+  from {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+}
+
+@keyframes flipOutToBottomX {
+  from {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   NO ANIMATION
+   ======================================== */
+.avakio-multiview-animate-none .avakio-multiview-cell {
+  transition: none !important;
+  animation: none !important;
+}
+
+.avakio-multiview-animate-none .avakio-multiview-cell-entering-left,
+.avakio-multiview-animate-none .avakio-multiview-cell-entering-right,
+.avakio-multiview-animate-none .avakio-multiview-cell-entering-top,
+.avakio-multiview-animate-none .avakio-multiview-cell-entering-bottom {
+  animation: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  z-index: 2 !important;
+}
+
+.avakio-multiview-animate-none .avakio-multiview-cell-leaving-left,
+.avakio-multiview-animate-none .avakio-multiview-cell-leaving-right,
+.avakio-multiview-animate-none .avakio-multiview-cell-leaving-top,
+.avakio-multiview-animate-none .avakio-multiview-cell-leaving-bottom {
+  animation: none !important;
+  transform: none !important;
+  opacity: 0 !important;
+  display: none !important;
+}
+
+.avakio-multiview-animate-none .avakio-multiview-cell-hidden {
+  display: none;
+}
+
+/* ========================================
+   FIT BIGGEST MODE
+   ======================================== */
+.avakio-multiview-fit-biggest .avakio-multiview-cells {
+  display: grid;
+  grid-template-areas: "cell";
+}
+
+.avakio-multiview-fit-biggest .avakio-multiview-cell {
+  grid-area: cell;
+  position: relative;
+}
+
+/* ========================================
+   THEME STYLES
+   ======================================== */
+
+/* Material Theme */
+.avakio-multiview-theme-material {
+  background-color: var(--avakio-bg-primary);
+  color: var(--avakio-text-primary);
+}
+
+.avakio-multiview-theme-material .avakio-multiview-cell {
+  background-color: var(--avakio-bg-primary);
+}
+
+/* Flat Theme */
+.avakio-multiview-theme-flat {
+  background-color: var(--avakio-bg-secondary);
+  color: var(--avakio-text-primary);
+}
+
+.avakio-multiview-theme-flat .avakio-multiview-cell {
+  background-color: var(--avakio-bg-secondary);
+}
+
+/* Compact Theme */
+.avakio-multiview-theme-compact {
+  background-color: var(--avakio-bg-secondary);
+  color: var(--avakio-text-primary);
+  font-size: 13px;
+}
+
+.avakio-multiview-theme-compact .avakio-multiview-cell {
+  background-color: var(--avakio-bg-secondary);
+}
+
+/* Dark Theme */
+.avakio-multiview-theme-dark {
+  background-color: var(--avakio-bg-tertiary);
+  color: var(--avakio-text-white);
+}
+
+.avakio-multiview-theme-dark .avakio-multiview-cell {
+  background-color: var(--avakio-bg-tertiary);
+}
+
+/* Ocean Theme */
+.avakio-multiview-theme-ocean {
+  background-color: var(--avakio-bg-secondary);
+  color: var(--avakio-text-primary);
+}
+
+.avakio-multiview-theme-ocean .avakio-multiview-cell {
+  background-color: var(--avakio-bg-secondary);
+}
+
+/* Sunset Theme */
+.avakio-multiview-theme-sunset {
+  background-color: var(--avakio-bg-secondary);
+  color: var(--avakio-text-primary);
+}
+
+.avakio-multiview-theme-sunset .avakio-multiview-cell {
+  background-color: var(--avakio-bg-secondary);
+}
+

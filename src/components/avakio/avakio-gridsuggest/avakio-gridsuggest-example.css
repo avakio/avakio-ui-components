@@ -1,0 +1,382 @@
+/* ===================================
+   AVAKIO GRIDSUGGEST EXAMPLE STYLES
+   =================================== */
+
+.avakio-gridsuggest-example-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #f9fafb;
+  min-height: 100vh;
+}
+
+.avakio-gridsuggest-example-header {
+  margin-bottom: 32px;
+}
+
+.avakio-gridsuggest-example-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.avakio-gridsuggest-example-description {
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.avakio-gridsuggest-example-card {
+  margin-bottom: 24px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.avakio-gridsuggest-example-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.avakio-gridsuggest-example-card-description {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.avakio-gridsuggest-example-selected {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #f0f9ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1e40af;
+}
+
+.avakio-gridsuggest-example-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.avakio-gridsuggest-example-features li {
+  font-size: 14px;
+  color: #374151;
+  padding: 8px 0;
+}
+
+.avakio-gridsuggest-example-table-container {
+  overflow-x: auto;
+}
+
+.avakio-gridsuggest-example-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.avakio-gridsuggest-example-table th {
+  text-align: left;
+  padding: 12px;
+  background-color: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.avakio-gridsuggest-example-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #6b7280;
+}
+
+.avakio-gridsuggest-example-table code {
+  background-color: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: #1f2937;
+}
+
+.space-y-4 > * + * {
+  margin-top: 16px;
+}
+
+/* ===================================
+   THEME: MATERIAL
+   =================================== */
+
+[data-admin-theme="material"] .avakio-gridsuggest-example-title {
+  color: #1a1a1a;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-example-description {
+  color: #616161;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-example-card {
+  background-color: #ffffff;
+  border-color: #e0e0e0;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-example-card-title {
+  color: #1a1a1a;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-example-card-description {
+  color: #616161;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-example-selected {
+  background-color: #e0f7fa;
+  border-color: #b2ebf2;
+  color: #00838f;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-example-table th {
+  background-color: #f5f5f5;
+  color: #1a1a1a;
+}
+
+[data-admin-theme="material"] .avakio-gridsuggest-example-table td {
+  color: #616161;
+}
+
+/* ===================================
+   THEME: FLAT
+   =================================== */
+
+[data-admin-theme="flat"] .avakio-gridsuggest-example-container {
+  background-color: #eceff4;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-example-title {
+  color: #2e3440;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-example-description {
+  color: #4c566a;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-example-card {
+  background-color: #ffffff;
+  border-radius: 4px;
+  border-color: #d8dee9;
+  box-shadow: 0 1px 3px rgba(46, 52, 64, 0.1);
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-example-card-title {
+  color: #2e3440;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-example-card-description {
+  color: #5e81ac;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-example-selected {
+  background-color: #eceff4;
+  border-color: #d8dee9;
+  color: #5e81ac;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-example-table th {
+  background-color: #eceff4;
+  color: #2e3440;
+}
+
+[data-admin-theme="flat"] .avakio-gridsuggest-example-table td {
+  color: #4c566a;
+}
+
+/* ===================================
+   THEME: COMPACT
+   =================================== */
+
+[data-admin-theme="compact"] .avakio-gridsuggest-example-container {
+  padding: 16px;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-example-title {
+  font-size: 28px;
+  color: #1a1a1a;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-example-description {
+  font-size: 14px;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-example-card {
+  margin-bottom: 16px;
+  background-color: #ffffff;
+  border-radius: 4px;
+  border-color: #e0e0e0;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-example-card-title {
+  font-size: 16px;
+  color: #1a1a1a;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-example-card-description {
+  font-size: 13px;
+  color: #616161;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-example-selected {
+  background-color: #e0f2f1;
+  border-color: #b2dfdb;
+  color: #00695c;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-example-table th {
+  background-color: #f5f5f5;
+  color: #1a1a1a;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-gridsuggest-example-table td {
+  color: #616161;
+  font-size: 13px;
+}
+
+/* ===================================
+   THEME: DARK
+   =================================== */
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-container {
+  background-color: hsl(222, 47%, 11%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-title {
+  color: hsl(210, 40%, 96%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-description {
+  color: hsl(215, 20%, 65%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-card {
+  background-color: hsl(217, 33%, 17%);
+  border-color: hsl(215, 28%, 25%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-card-title {
+  color: hsl(210, 40%, 96%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-card-description {
+  color: hsl(215, 20%, 65%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-selected {
+  background-color: hsl(217, 91%, 20%);
+  border-color: hsl(217, 91%, 30%);
+  color: hsl(213, 97%, 87%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-features li {
+  color: hsl(215, 20%, 65%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-table th {
+  background-color: hsl(222, 47%, 11%);
+  color: hsl(210, 40%, 96%);
+  border-bottom-color: hsl(215, 28%, 25%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-table td {
+  color: hsl(215, 20%, 65%);
+  border-bottom-color: hsl(215, 28%, 25%);
+}
+
+[data-admin-theme="dark"] .avakio-gridsuggest-example-table code {
+  background-color: hsl(222, 47%, 11%);
+  color: hsl(210, 40%, 96%);
+}
+
+/* ===================================
+   THEME: OCEAN
+   =================================== */
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-example-title {
+  color: #01579B;
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-example-description {
+  color: #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-example-card {
+  background-color: #ffffff;
+  border-color: #b3e5fc;
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-example-card-title {
+  color: #01579B;
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-example-card-description {
+  color: #0277BD;
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-example-selected {
+  background-color: #e1f5fe;
+  border-color: #b3e5fc;
+  color: #01579b;
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-example-table th {
+  background-color: #e1f5fe;
+  color: #01579b;
+}
+
+[data-admin-theme="ocean"] .avakio-gridsuggest-example-table td {
+  color: #0277BD;
+}
+
+/* ===================================
+   THEME: SUNSET
+   =================================== */
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-example-title {
+  color: #E65100;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-example-description {
+  color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-example-card {
+  background-color: #ffffff;
+  border-color: #ffe0b2;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-example-card-title {
+  color: #E65100;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-example-card-description {
+  color: #f57c00;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-example-selected {
+  background-color: #fff3e0;
+  border-color: #ffe0b2;
+  color: #e65100;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-example-table th {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+[data-admin-theme="sunset"] .avakio-gridsuggest-example-table td {
+  color: #f57c00;
+}
+

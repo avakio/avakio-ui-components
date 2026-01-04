@@ -1,0 +1,271 @@
+/* =====================================================
+   AVAKIO FIELDSET - Core Styles
+   ===================================================== */
+
+.avakio-fieldset {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.avakio-fieldset-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  margin-left: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  background: inherit;
+  line-height: 1.4;
+}
+
+.avakio-fieldset-legend-clickable {
+  cursor: pointer;
+  user-select: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-left: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.avakio-fieldset-legend-clickable:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.avakio-fieldset-collapse-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: #666;
+}
+
+.avakio-fieldset-chevron {
+  transition: transform 0.2s ease;
+}
+
+.avakio-fieldset-chevron-collapsed {
+  transform: rotate(-90deg);
+}
+
+.avakio-fieldset-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.avakio-fieldset-label-text {
+  font-weight: 500;
+}
+
+.avakio-fieldset-body {
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.3s ease;
+}
+
+/* Collapsed state */
+.avakio-fieldset-collapsed .avakio-fieldset-body {
+  max-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* Borderless variant */
+.avakio-fieldset-borderless {
+  border: none;
+}
+
+.avakio-fieldset-borderless .avakio-fieldset-legend {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* Disabled state */
+.avakio-fieldset-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* =====================================================
+   MATERIAL THEME
+   ===================================================== */
+.avakio-fieldset-theme-material {
+  border-color: #e0e0e0;
+  background: transparent;
+}
+
+.avakio-fieldset-theme-material .avakio-fieldset-legend {
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.avakio-fieldset-theme-material .avakio-fieldset-collapse-icon {
+  color: #1976d2;
+}
+
+.avakio-fieldset-theme-material .avakio-fieldset-legend-clickable:hover {
+  background-color: rgba(25, 118, 210, 0.08);
+}
+
+/* =====================================================
+   FLAT THEME
+   ===================================================== */
+.avakio-fieldset-theme-flat {
+  border-color: #ddd;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.avakio-fieldset-theme-flat .avakio-fieldset-legend {
+  color: #555;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.avakio-fieldset-theme-flat .avakio-fieldset-collapse-icon {
+  color: #888;
+}
+
+.avakio-fieldset-theme-flat .avakio-fieldset-legend-clickable:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+/* =====================================================
+   COMPACT THEME
+   ===================================================== */
+.avakio-fieldset-theme-compact {
+  border-color: #ccc;
+  border-radius: 3px;
+}
+
+.avakio-fieldset-theme-compact .avakio-fieldset-legend {
+  color: #444;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0 6px;
+}
+
+.avakio-fieldset-theme-compact .avakio-fieldset-legend-clickable {
+  padding: 2px 6px;
+}
+
+.avakio-fieldset-theme-compact .avakio-fieldset-collapse-icon {
+  color: #666;
+  width: 14px;
+  height: 14px;
+}
+
+.avakio-fieldset-theme-compact .avakio-fieldset-chevron {
+  width: 10px;
+  height: 10px;
+}
+
+/* =====================================================
+   DARK THEME
+   ===================================================== */
+.avakio-fieldset-theme-dark {
+  border-color: #444;
+  background: #1e1e1e;
+}
+
+.avakio-fieldset-theme-dark .avakio-fieldset-legend {
+  color: #e0e0e0;
+  background: #1e1e1e;
+}
+
+.avakio-fieldset-theme-dark .avakio-fieldset-collapse-icon {
+  color: #aaa;
+}
+
+.avakio-fieldset-theme-dark .avakio-fieldset-legend-clickable:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.avakio-fieldset-theme-dark .avakio-fieldset-body {
+  color: #d0d0d0;
+}
+
+/* =====================================================
+   OCEAN THEME
+   ===================================================== */
+.avakio-fieldset-theme-ocean {
+  border-color: #4a9ebb;
+  background: linear-gradient(135deg, rgba(74, 158, 187, 0.05) 0%, rgba(58, 134, 160, 0.05) 100%);
+  border-radius: 8px;
+}
+
+.avakio-fieldset-theme-ocean .avakio-fieldset-legend {
+  color: #2980b9;
+  font-weight: 500;
+  background: transparent;
+}
+
+.avakio-fieldset-theme-ocean .avakio-fieldset-collapse-icon {
+  color: #3498db;
+}
+
+.avakio-fieldset-theme-ocean .avakio-fieldset-legend-clickable:hover {
+  background-color: rgba(52, 152, 219, 0.12);
+}
+
+/* =====================================================
+   SUNSET THEME
+   ===================================================== */
+.avakio-fieldset-theme-sunset {
+  border-color: #e67e22;
+  background: linear-gradient(135deg, rgba(230, 126, 34, 0.05) 0%, rgba(211, 84, 0, 0.05) 100%);
+  border-radius: 8px;
+}
+
+.avakio-fieldset-theme-sunset .avakio-fieldset-legend {
+  color: #d35400;
+  font-weight: 500;
+  background: transparent;
+}
+
+.avakio-fieldset-theme-sunset .avakio-fieldset-collapse-icon {
+  color: #e67e22;
+}
+
+.avakio-fieldset-theme-sunset .avakio-fieldset-legend-clickable:hover {
+  background-color: rgba(230, 126, 34, 0.12);
+}
+
+/* =====================================================
+   FOCUS STATES (Accessibility)
+   ===================================================== */
+.avakio-fieldset:focus-within:not(.avakio-fieldset-borderless) {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.15);
+}
+
+.avakio-fieldset-theme-dark:focus-within:not(.avakio-fieldset-borderless) {
+  border-color: #64b5f6;
+  box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.25);
+}
+
+.avakio-fieldset-theme-ocean:focus-within:not(.avakio-fieldset-borderless) {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.avakio-fieldset-theme-sunset:focus-within:not(.avakio-fieldset-borderless) {
+  border-color: #e67e22;
+  box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.2);
+}
+

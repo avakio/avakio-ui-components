@@ -1,0 +1,396 @@
+/* ======================================
+   Avakio Chart - CSS Styles
+   ====================================== */
+
+.avakio-chart {
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--avakio-chart-bg, #ffffff);
+  border-radius: var(--avakio-chart-radius, 8px);
+  overflow: hidden;
+}
+
+.avakio-chart__svg {
+  display: block;
+}
+
+/* ======================================
+   Title
+   ====================================== */
+
+.avakio-chart__title-text {
+  font-size: 16px;
+  font-weight: 600;
+  fill: var(--avakio-chart-title-color, #1a1a1a);
+}
+
+.avakio-chart__subtitle-text {
+  font-size: 12px;
+  font-weight: 400;
+  fill: var(--avakio-chart-subtitle-color, #666666);
+}
+
+/* ======================================
+   Axes
+   ====================================== */
+
+.avakio-chart__axis-line {
+  stroke: var(--avakio-chart-axis-color, #e0e0e0);
+  stroke-width: 1;
+}
+
+.avakio-chart__tick {
+  stroke: var(--avakio-chart-axis-color, #e0e0e0);
+  stroke-width: 1;
+}
+
+.avakio-chart__grid-line {
+  stroke: var(--avakio-chart-grid-color, #f0f0f0);
+  stroke-width: 1;
+  stroke-dasharray: 4, 4;
+}
+
+.avakio-chart__axis-label {
+  font-size: 11px;
+  fill: var(--avakio-chart-label-color, #666666);
+}
+
+.avakio-chart__axis-title {
+  font-size: 12px;
+  font-weight: 500;
+  fill: var(--avakio-chart-title-color, #333333);
+}
+
+/* ======================================
+   Data Labels
+   ====================================== */
+
+.avakio-chart__data-label {
+  font-size: 11px;
+  font-weight: 500;
+  fill: var(--avakio-chart-label-color, #333333);
+}
+
+/* ======================================
+   Line Chart
+   ====================================== */
+
+.avakio-chart__line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-width 0.2s ease;
+}
+
+.avakio-chart__area {
+  transition: fill-opacity 0.2s ease;
+}
+
+.avakio-chart__marker {
+  transition: r 0.2s ease, transform 0.2s ease;
+}
+
+.avakio-chart__marker:hover {
+  transform: scale(1.2);
+}
+
+/* ======================================
+   Bar Chart
+   ====================================== */
+
+.avakio-chart__bar {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.avakio-chart__bar:hover,
+.avakio-chart__bar--hovered {
+  opacity: 0.85;
+  filter: brightness(1.1);
+}
+
+/* ======================================
+   Pie/Donut Chart
+   ====================================== */
+
+.avakio-chart__pie-slice {
+  transition: transform 0.2s ease, filter 0.2s ease;
+  transform-origin: center;
+}
+
+.avakio-chart__pie-slice:hover,
+.avakio-chart__pie-slice--hovered {
+  filter: brightness(1.1);
+}
+
+.avakio-chart__pie-label {
+  font-size: 11px;
+  fill: var(--avakio-chart-label-color, #333333);
+}
+
+.avakio-chart__donut-text {
+  font-size: 18px;
+  font-weight: 600;
+  fill: var(--avakio-chart-title-color, #1a1a1a);
+}
+
+/* ======================================
+   Scatter Chart
+   ====================================== */
+
+.avakio-chart__scatter-point {
+  transition: r 0.2s ease, opacity 0.2s ease;
+}
+
+.avakio-chart__scatter-point:hover {
+  opacity: 1;
+  r: 8;
+}
+
+/* ======================================
+   Radar Chart
+   ====================================== */
+
+.avakio-chart__radar-level {
+  fill: none;
+}
+
+.avakio-chart__radar-axis {
+  stroke-width: 1;
+}
+
+.avakio-chart__radar-label {
+  font-size: 11px;
+  fill: var(--avakio-chart-label-color, #666666);
+}
+
+.avakio-chart__radar-polygon {
+  transition: fill-opacity 0.2s ease;
+}
+
+.avakio-chart__radar-polygon:hover {
+  fill-opacity: 0.35;
+}
+
+.avakio-chart__radar-point {
+  transition: r 0.2s ease;
+}
+
+.avakio-chart__radar-point:hover {
+  r: 6;
+}
+
+/* ======================================
+   Legend
+   ====================================== */
+
+.avakio-chart__legend-item {
+  transition: opacity 0.2s ease;
+}
+
+.avakio-chart__legend-item:hover {
+  opacity: 0.8;
+}
+
+.avakio-chart__legend-item--hidden {
+  opacity: 0.5;
+}
+
+.avakio-chart__legend-text {
+  font-size: 12px;
+  fill: var(--avakio-chart-legend-color, #333333);
+}
+
+/* ======================================
+   Tooltip
+   ====================================== */
+
+.avakio-chart__tooltip {
+  position: absolute;
+  padding: 8px 12px;
+  background: var(--avakio-chart-tooltip-bg, rgba(0, 0, 0, 0.85));
+  color: var(--avakio-chart-tooltip-color, #ffffff);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  pointer-events: none;
+  z-index: 1000;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-100%);
+}
+
+.avakio-chart__tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 10px;
+  border: 6px solid transparent;
+  border-top-color: var(--avakio-chart-tooltip-bg, rgba(0, 0, 0, 0.85));
+}
+
+/* ======================================
+   THEME: Material (Default)
+   ====================================== */
+
+.avakio-chart--material {
+  --avakio-chart-bg: #ffffff;
+  --avakio-chart-title-color: #212121;
+  --avakio-chart-subtitle-color: #757575;
+  --avakio-chart-label-color: #616161;
+  --avakio-chart-axis-color: #e0e0e0;
+  --avakio-chart-grid-color: #f5f5f5;
+  --avakio-chart-legend-color: #424242;
+  --avakio-chart-tooltip-bg: rgba(33, 33, 33, 0.9);
+  --avakio-chart-tooltip-color: #ffffff;
+  --avakio-chart-radius: 8px;
+}
+
+/* ======================================
+   THEME: Dark
+   ====================================== */
+
+.avakio-chart--dark {
+  --avakio-chart-bg: #1e1e1e;
+  --avakio-chart-title-color: #e0e0e0;
+  --avakio-chart-subtitle-color: #9e9e9e;
+  --avakio-chart-label-color: #b0b0b0;
+  --avakio-chart-axis-color: #3d3d3d;
+  --avakio-chart-grid-color: #2d2d2d;
+  --avakio-chart-legend-color: #c0c0c0;
+  --avakio-chart-tooltip-bg: rgba(60, 60, 60, 0.95);
+  --avakio-chart-tooltip-color: #ffffff;
+  --avakio-chart-radius: 8px;
+}
+
+.avakio-chart--dark .avakio-chart__radar-level,
+.avakio-chart--dark .avakio-chart__radar-axis {
+  stroke: #444444;
+}
+
+/* ======================================
+   THEME: Ocean
+   ====================================== */
+
+.avakio-chart--ocean {
+  --avakio-chart-bg: #f8fafc;
+  --avakio-chart-title-color: #0c4a6e;
+  --avakio-chart-subtitle-color: #64748b;
+  --avakio-chart-label-color: #475569;
+  --avakio-chart-axis-color: #cbd5e1;
+  --avakio-chart-grid-color: #e2e8f0;
+  --avakio-chart-legend-color: #334155;
+  --avakio-chart-tooltip-bg: rgba(15, 23, 42, 0.9);
+  --avakio-chart-tooltip-color: #ffffff;
+  --avakio-chart-radius: 12px;
+}
+
+/* ======================================
+   THEME: Sunset
+   ====================================== */
+
+.avakio-chart--sunset {
+  --avakio-chart-bg: #fffbf5;
+  --avakio-chart-title-color: #7c2d12;
+  --avakio-chart-subtitle-color: #a16207;
+  --avakio-chart-label-color: #78350f;
+  --avakio-chart-axis-color: #fed7aa;
+  --avakio-chart-grid-color: #fef3e2;
+  --avakio-chart-legend-color: #92400e;
+  --avakio-chart-tooltip-bg: rgba(124, 45, 18, 0.9);
+  --avakio-chart-tooltip-color: #ffffff;
+  --avakio-chart-radius: 8px;
+}
+
+/* ======================================
+   THEME: Flat
+   ====================================== */
+
+.avakio-chart--flat {
+  --avakio-chart-bg: #fafafa;
+  --avakio-chart-title-color: #262626;
+  --avakio-chart-subtitle-color: #737373;
+  --avakio-chart-label-color: #525252;
+  --avakio-chart-axis-color: #d4d4d4;
+  --avakio-chart-grid-color: #e5e5e5;
+  --avakio-chart-legend-color: #404040;
+  --avakio-chart-tooltip-bg: rgba(38, 38, 38, 0.9);
+  --avakio-chart-tooltip-color: #ffffff;
+  --avakio-chart-radius: 4px;
+}
+
+/* ======================================
+   THEME: Compact
+   ====================================== */
+
+.avakio-chart--compact {
+  --avakio-chart-bg: #ffffff;
+  --avakio-chart-title-color: #171717;
+  --avakio-chart-subtitle-color: #6b7280;
+  --avakio-chart-label-color: #4b5563;
+  --avakio-chart-axis-color: #e5e7eb;
+  --avakio-chart-grid-color: #f3f4f6;
+  --avakio-chart-legend-color: #374151;
+  --avakio-chart-tooltip-bg: rgba(17, 24, 39, 0.9);
+  --avakio-chart-tooltip-color: #ffffff;
+  --avakio-chart-radius: 6px;
+}
+
+.avakio-chart--compact .avakio-chart__title-text {
+  font-size: 14px;
+}
+
+.avakio-chart--compact .avakio-chart__subtitle-text {
+  font-size: 11px;
+}
+
+.avakio-chart--compact .avakio-chart__axis-label {
+  font-size: 10px;
+}
+
+.avakio-chart--compact .avakio-chart__legend-text {
+  font-size: 11px;
+}
+
+/* ======================================
+   Animation
+   ====================================== */
+
+@keyframes avakio-chart-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.avakio-chart__series-group,
+.avakio-chart__bar-group,
+.avakio-chart__pie,
+.avakio-chart__scatter-group,
+.avakio-chart__radar {
+  animation: avakio-chart-fade-in 0.3s ease-out;
+}
+
+/* ======================================
+   Responsive
+   ====================================== */
+
+@media (max-width: 600px) {
+  .avakio-chart__axis-label {
+    font-size: 10px;
+  }
+  
+  .avakio-chart__legend-text {
+    font-size: 11px;
+  }
+  
+  .avakio-chart__pie-label {
+    font-size: 10px;
+  }
+  
+  .avakio-chart__donut-text {
+    font-size: 14px;
+  }
+}
+

@@ -1,0 +1,137 @@
+.avakio-googlemap {
+  --agm-bg: #f8fafc;
+  --agm-border: #e2e8f0;
+  --agm-text: #0f172a;
+  --agm-muted: #475569;
+  --agm-surface: #ffffff;
+  --agm-pill: #0f172a;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--agm-text);
+  background: var(--agm-bg);
+  padding: 16px;
+  border: 1px solid var(--agm-border);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.avakio-googlemap-canvas,
+.avakio-googlemap-embed {
+  width: 100%;
+  min-height: var(--agm-height, 360px);
+  border: 1px solid var(--agm-border);
+  border-radius: 10px;
+  background: var(--agm-surface);
+}
+
+.avakio-googlemap-canvas {
+  overflow: hidden;
+}
+
+.avakio-googlemap-embed {
+  outline: none;
+}
+
+.avakio-googlemap-markerlist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.avakio-googlemap-markeritem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--agm-border);
+  border-radius: 10px;
+  background: var(--agm-surface);
+}
+
+.avakio-googlemap-markerbadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--agm-pill);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.avakio-googlemap-markertext {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--agm-muted);
+  font-size: 13px;
+}
+
+.avakio-googlemap-markertext strong {
+  color: var(--agm-text);
+  font-size: 14px;
+}
+
+[data-admin-theme="material"] .avakio-googlemap,
+.avakio-googlemap[data-admin-theme="material"] {
+  --agm-bg: #f8fafc;
+  --agm-border: #e2e8f0;
+  --agm-text: #0f172a;
+  --agm-muted: #475569;
+  --agm-surface: #ffffff;
+  --agm-pill: #1ca1c1;
+}
+
+[data-admin-theme="flat"] .avakio-googlemap,
+.avakio-googlemap[data-admin-theme="flat"] {
+  --agm-bg: #f7f9fb;
+  --agm-border: #cfd8e6;
+  --agm-text: #1f2a3d;
+  --agm-muted: #42526a;
+  --agm-surface: #ffffff;
+  --agm-pill: #5e81ac;
+}
+
+[data-admin-theme="compact"] .avakio-googlemap,
+.avakio-googlemap[data-admin-theme="compact"] {
+  --agm-bg: #f4faf8;
+  --agm-border: #b7d6d1;
+  --agm-text: #0b2c28;
+  --agm-muted: #1f5a52;
+  --agm-surface: #ffffff;
+  --agm-pill: #00796b;
+}
+
+[data-admin-theme="dark"] .avakio-googlemap,
+.avakio-googlemap[data-admin-theme="dark"] {
+  --agm-bg: #0b1221;
+  --agm-border: #1f2937;
+  --agm-text: #e2e8f0;
+  --agm-muted: #cbd5e1;
+  --agm-surface: #111827;
+  --agm-pill: #60a5fa;
+}
+
+[data-admin-theme="ocean"] .avakio-googlemap,
+.avakio-googlemap[data-admin-theme="ocean"] {
+  --agm-bg: #f1f7fd;
+  --agm-border: #bfd8f1;
+  --agm-text: #0f2740;
+  --agm-muted: #244f74;
+  --agm-surface: #ffffff;
+  --agm-pill: #0277bd;
+}
+
+[data-admin-theme="sunset"] .avakio-googlemap,
+.avakio-googlemap[data-admin-theme="sunset"] {
+  --agm-bg: #fff8f1;
+  --agm-border: #f4d3ad;
+  --agm-text: #4a2e0f;
+  --agm-muted: #8c5416;
+  --agm-surface: #ffffff;
+  --agm-pill: #f57c00;
+}
+

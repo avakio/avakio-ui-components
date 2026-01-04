@@ -1,0 +1,320 @@
+/* AvakioToggleButton Styles */
+
+.avakio-toggle-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--avakio-border-primary, #d1d5db);
+  border-radius: var(--avakio-border-radius, 6px);
+  background-color: var(--avakio-bg-secondary, #f9fafb);
+  color: var(--avakio-text-primary, #1f2937);
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+  position: relative;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.avakio-toggle-button:hover:not(:disabled) {
+  background-color: var(--avakio-bg-hover, #f3f4f6);
+  border-color: var(--avakio-border-hover, #9ca3af);
+}
+
+.avakio-toggle-button:focus-visible {
+  box-shadow: 0 0 0 2px var(--avakio-focus-ring, rgba(59, 130, 246, 0.5));
+}
+
+.avakio-toggle-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Pressed State */
+.avakio-toggle-button-pressed {
+  background-color: var(--avakio-primary, #3b82f6);
+  border-color: var(--avakio-primary, #3b82f6);
+  color: var(--avakio-text-white, #ffffff);
+}
+
+.avakio-toggle-button-pressed:hover:not(:disabled) {
+  background-color: var(--avakio-primary-hover, #2563eb);
+  border-color: var(--avakio-primary-hover, #2563eb);
+}
+
+/* Disabled State */
+.avakio-toggle-button-disabled,
+.avakio-toggle-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Size Variants */
+.avakio-toggle-button-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+  min-height: 28px;
+}
+
+.avakio-toggle-button-md {
+  padding: 8px 16px;
+  font-size: 14px;
+  min-height: 36px;
+}
+
+.avakio-toggle-button-lg {
+  padding: 12px 24px;
+  font-size: 16px;
+  min-height: 44px;
+}
+
+/* Block Style */
+.avakio-toggle-button-block {
+  display: flex;
+  width: 100%;
+}
+
+/* Autowidth */
+.avakio-toggle-button-autowidth {
+  width: auto;
+  white-space: nowrap;
+}
+
+/* Inner Container */
+.avakio-toggle-button-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Icon */
+.avakio-toggle-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avakio-toggle-button-sm .avakio-toggle-button-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.avakio-toggle-button-md .avakio-toggle-button-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.avakio-toggle-button-lg .avakio-toggle-button-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Label */
+.avakio-toggle-button-label {
+  flex-grow: 1;
+  text-align: center;
+}
+
+/* Image */
+.avakio-toggle-button-image {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.avakio-toggle-button-sm .avakio-toggle-button-image {
+  width: 16px;
+  height: 16px;
+}
+
+.avakio-toggle-button-lg .avakio-toggle-button-image {
+  width: 24px;
+  height: 24px;
+}
+
+/* Hotkey */
+.avakio-toggle-button-hotkey {
+  font-size: 0.75em;
+  opacity: 0.6;
+  margin-left: 8px;
+  padding: 2px 6px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.avakio-toggle-button-pressed .avakio-toggle-button-hotkey {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Type: Icon Only */
+.avakio-toggle-button-type-icon {
+  padding: 8px;
+  min-width: 36px;
+  aspect-ratio: 1;
+}
+
+.avakio-toggle-button-type-icon.avakio-toggle-button-sm {
+  padding: 6px;
+  min-width: 28px;
+}
+
+.avakio-toggle-button-type-icon.avakio-toggle-button-lg {
+  padding: 12px;
+  min-width: 44px;
+}
+
+.avakio-toggle-button-type-icon .avakio-toggle-button-inner {
+  gap: 4px;
+}
+
+/* Type: Icon Top */
+.avakio-toggle-button-type-icon-top {
+  flex-direction: column;
+  padding: 12px 16px;
+}
+
+.avakio-toggle-button-type-icon-top .avakio-toggle-button-inner {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.avakio-toggle-button-type-icon-top .avakio-toggle-button-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.avakio-toggle-button-type-icon-top.avakio-toggle-button-sm .avakio-toggle-button-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.avakio-toggle-button-type-icon-top.avakio-toggle-button-lg .avakio-toggle-button-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Type: Image */
+.avakio-toggle-button-type-image .avakio-toggle-button-image {
+  width: 24px;
+  height: 24px;
+}
+
+/* Type: Image Top */
+.avakio-toggle-button-type-image-top {
+  flex-direction: column;
+  padding: 12px 16px;
+}
+
+.avakio-toggle-button-type-image-top .avakio-toggle-button-inner {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.avakio-toggle-button-type-image-top .avakio-toggle-button-image {
+  width: 32px;
+  height: 32px;
+}
+
+/* ========================================
+   THEME STYLES
+   ======================================== */
+
+/* Material Theme (Default) */
+[data-admin-theme="material"] .avakio-toggle-button,
+.avakio-toggle-button[data-admin-theme="material"] {
+  background-color: var(--avakio-bg-secondary);
+  border-color: var(--avakio-border-primary);
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="material"] .avakio-toggle-button-pressed,
+.avakio-toggle-button-pressed[data-admin-theme="material"] {
+  background-color: var(--avakio-primary);
+  border-color: var(--avakio-primary);
+  color: var(--avakio-text-white);
+}
+
+/* Dark Theme */
+[data-admin-theme="dark"] .avakio-toggle-button,
+.avakio-toggle-button[data-admin-theme="dark"] {
+  background-color: var(--avakio-bg-tertiary, #374151);
+  border-color: var(--avakio-border-primary, #4b5563);
+  color: var(--avakio-text-primary, #f9fafb);
+}
+
+[data-admin-theme="dark"] .avakio-toggle-button:hover:not(:disabled),
+.avakio-toggle-button[data-admin-theme="dark"]:hover:not(:disabled) {
+  background-color: var(--avakio-bg-hover, #4b5563);
+  border-color: var(--avakio-border-hover, #6b7280);
+}
+
+[data-admin-theme="dark"] .avakio-toggle-button-pressed,
+.avakio-toggle-button-pressed[data-admin-theme="dark"] {
+  background-color: var(--avakio-primary, #3b82f6);
+  border-color: var(--avakio-primary, #3b82f6);
+  color: #ffffff;
+}
+
+/* Ocean Theme */
+[data-admin-theme="ocean"] .avakio-toggle-button,
+.avakio-toggle-button[data-admin-theme="ocean"] {
+  background-color: var(--avakio-bg-secondary);
+  border-color: var(--avakio-border-primary);
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="ocean"] .avakio-toggle-button-pressed,
+.avakio-toggle-button-pressed[data-admin-theme="ocean"] {
+  background-color: var(--avakio-primary, #0ea5e9);
+  border-color: var(--avakio-primary, #0ea5e9);
+  color: #ffffff;
+}
+
+/* Sunset Theme */
+[data-admin-theme="sunset"] .avakio-toggle-button,
+.avakio-toggle-button[data-admin-theme="sunset"] {
+  background-color: var(--avakio-bg-secondary);
+  border-color: var(--avakio-border-primary);
+  color: var(--avakio-text-primary);
+}
+
+[data-admin-theme="sunset"] .avakio-toggle-button-pressed,
+.avakio-toggle-button-pressed[data-admin-theme="sunset"] {
+  background-color: var(--avakio-primary, #f97316);
+  border-color: var(--avakio-primary, #f97316);
+  color: #ffffff;
+}
+
+/* Flat Theme */
+[data-admin-theme="flat"] .avakio-toggle-button,
+.avakio-toggle-button[data-admin-theme="flat"] {
+  border-radius: 0;
+  border-color: var(--avakio-border-primary);
+}
+
+/* Compact Theme */
+[data-admin-theme="compact"] .avakio-toggle-button,
+.avakio-toggle-button[data-admin-theme="compact"] {
+  font-size: 12px;
+  padding: 4px 8px;
+  min-height: 24px;
+}
+
+[data-admin-theme="compact"] .avakio-toggle-button.avakio-toggle-button-md {
+  padding: 6px 12px;
+  min-height: 28px;
+}
+
+[data-admin-theme="compact"] .avakio-toggle-button.avakio-toggle-button-lg {
+  padding: 8px 16px;
+  min-height: 32px;
+}
+

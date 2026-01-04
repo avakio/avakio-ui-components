@@ -1,0 +1,290 @@
+/* ======================================
+   Avakio Chart Example - CSS Styles
+   ====================================== */
+
+.avakio-chart-demo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 48px;
+  min-height: 100%;
+  background: var(--avakio-chart-demo-bg, #f8f9fa);
+}
+
+/* ======================================
+   Sticky Header
+   ====================================== */
+
+.avakio-chart-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--avakio-chart-demo-header-bg, #ffffff);
+  border-bottom: 1px solid var(--avakio-chart-demo-border, #e0e0e0);
+  margin: -16px -16px 0 -16px;
+  padding: 16px;
+}
+
+.avakio-chart-tabbar-container {
+  margin-top: 16px;
+  padding-top: 8px;
+  border-top: 1px solid var(--avakio-chart-demo-border, #f0f0f0);
+}
+
+/* ======================================
+   Demo Sections
+   ====================================== */
+
+.avakio-chart-demo-section {
+  scroll-margin-top: 180px;
+}
+
+.avakio-chart-demo-wrapper {
+  padding: 16px;
+  background: var(--avakio-chart-demo-card-bg, #ffffff);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.avakio-chart-demo-wrapper:last-child {
+  margin-bottom: 0;
+}
+
+.avakio-chart-demo-title {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--avakio-chart-demo-title-color, #333333);
+}
+
+/* ======================================
+   Grid Layout
+   ====================================== */
+
+.avakio-chart-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .avakio-chart-demo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ======================================
+   API Reference
+   ====================================== */
+
+.avakio-chart-api-reference {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.api-section h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--avakio-chart-demo-title-color, #333333);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--avakio-chart-demo-accent, #4285F4);
+}
+
+.api-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.api-table th {
+  text-align: left;
+  padding: 12px 16px;
+  background: var(--avakio-chart-demo-table-header, #f5f5f5);
+  color: var(--avakio-chart-demo-text, #333333);
+  font-weight: 600;
+  border-bottom: 2px solid var(--avakio-chart-demo-border, #e0e0e0);
+}
+
+.api-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--avakio-chart-demo-border, #e0e0e0);
+  color: var(--avakio-chart-demo-text, #666666);
+}
+
+.api-table tr:hover td {
+  background: var(--avakio-chart-demo-hover, #f9f9f9);
+}
+
+.api-table code {
+  background: var(--avakio-chart-demo-code-bg, #f0f0f0);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  font-size: 12px;
+  color: var(--avakio-chart-demo-code-color, #d63384);
+}
+
+/* ======================================
+   THEME: Material (Default)
+   ====================================== */
+
+[data-admin-theme="material"] .avakio-chart-demo-container,
+.avakio-chart-demo-container {
+  --avakio-chart-demo-bg: #fafafa;
+  --avakio-chart-demo-header-bg: #ffffff;
+  --avakio-chart-demo-card-bg: #ffffff;
+  --avakio-chart-demo-border: #e0e0e0;
+  --avakio-chart-demo-title-color: #212121;
+  --avakio-chart-demo-text: #424242;
+  --avakio-chart-demo-accent: #1976d2;
+  --avakio-chart-demo-table-header: #f5f5f5;
+  --avakio-chart-demo-hover: #fafafa;
+  --avakio-chart-demo-code-bg: #f5f5f5;
+  --avakio-chart-demo-code-color: #1976d2;
+}
+
+/* ======================================
+   THEME: Dark
+   ====================================== */
+
+[data-admin-theme="dark"] .avakio-chart-demo-container {
+  --avakio-chart-demo-bg: #121212;
+  --avakio-chart-demo-header-bg: #1e1e1e;
+  --avakio-chart-demo-card-bg: #1e1e1e;
+  --avakio-chart-demo-border: #333333;
+  --avakio-chart-demo-title-color: #e0e0e0;
+  --avakio-chart-demo-text: #b0b0b0;
+  --avakio-chart-demo-accent: #64b5f6;
+  --avakio-chart-demo-table-header: #2d2d2d;
+  --avakio-chart-demo-hover: #252525;
+  --avakio-chart-demo-code-bg: #2d2d2d;
+  --avakio-chart-demo-code-color: #64b5f6;
+}
+
+/* ======================================
+   THEME: Ocean
+   ====================================== */
+
+[data-admin-theme="ocean"] .avakio-chart-demo-container {
+  --avakio-chart-demo-bg: #f0f9ff;
+  --avakio-chart-demo-header-bg: #ffffff;
+  --avakio-chart-demo-card-bg: #ffffff;
+  --avakio-chart-demo-border: #bae6fd;
+  --avakio-chart-demo-title-color: #0c4a6e;
+  --avakio-chart-demo-text: #0369a1;
+  --avakio-chart-demo-accent: #0284c7;
+  --avakio-chart-demo-table-header: #e0f2fe;
+  --avakio-chart-demo-hover: #f0f9ff;
+  --avakio-chart-demo-code-bg: #e0f2fe;
+  --avakio-chart-demo-code-color: #0369a1;
+}
+
+/* ======================================
+   THEME: Sunset
+   ====================================== */
+
+[data-admin-theme="sunset"] .avakio-chart-demo-container {
+  --avakio-chart-demo-bg: #fffbeb;
+  --avakio-chart-demo-header-bg: #ffffff;
+  --avakio-chart-demo-card-bg: #ffffff;
+  --avakio-chart-demo-border: #fde68a;
+  --avakio-chart-demo-title-color: #92400e;
+  --avakio-chart-demo-text: #b45309;
+  --avakio-chart-demo-accent: #d97706;
+  --avakio-chart-demo-table-header: #fef3c7;
+  --avakio-chart-demo-hover: #fffbeb;
+  --avakio-chart-demo-code-bg: #fef3c7;
+  --avakio-chart-demo-code-color: #b45309;
+}
+
+/* ======================================
+   THEME: Flat
+   ====================================== */
+
+[data-admin-theme="flat"] .avakio-chart-demo-container {
+  --avakio-chart-demo-bg: #fafafa;
+  --avakio-chart-demo-header-bg: #ffffff;
+  --avakio-chart-demo-card-bg: #ffffff;
+  --avakio-chart-demo-border: #e5e5e5;
+  --avakio-chart-demo-title-color: #262626;
+  --avakio-chart-demo-text: #525252;
+  --avakio-chart-demo-accent: #737373;
+  --avakio-chart-demo-table-header: #f5f5f5;
+  --avakio-chart-demo-hover: #fafafa;
+  --avakio-chart-demo-code-bg: #f5f5f5;
+  --avakio-chart-demo-code-color: #525252;
+}
+
+/* ======================================
+   THEME: Compact
+   ====================================== */
+
+[data-admin-theme="compact"] .avakio-chart-demo-container {
+  --avakio-chart-demo-bg: #f9fafb;
+  --avakio-chart-demo-header-bg: #ffffff;
+  --avakio-chart-demo-card-bg: #ffffff;
+  --avakio-chart-demo-border: #e5e7eb;
+  --avakio-chart-demo-title-color: #111827;
+  --avakio-chart-demo-text: #4b5563;
+  --avakio-chart-demo-accent: #6366f1;
+  --avakio-chart-demo-table-header: #f3f4f6;
+  --avakio-chart-demo-hover: #f9fafb;
+  --avakio-chart-demo-code-bg: #f3f4f6;
+  --avakio-chart-demo-code-color: #6366f1;
+}
+
+[data-admin-theme="compact"] .avakio-chart-demo-wrapper {
+  padding: 12px;
+}
+
+[data-admin-theme="compact"] .avakio-chart-demo-title {
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+[data-admin-theme="compact"] .api-table {
+  font-size: 12px;
+}
+
+[data-admin-theme="compact"] .api-table th,
+[data-admin-theme="compact"] .api-table td {
+  padding: 8px 12px;
+}
+
+/* ======================================
+   Responsive
+   ====================================== */
+
+@media (max-width: 768px) {
+  .avakio-chart-demo-container {
+    gap: 16px;
+  }
+  
+  .avakio-chart-sticky-header {
+    position: relative;
+    margin: 0;
+    padding: 12px;
+  }
+  
+  .avakio-chart-demo-section {
+    scroll-margin-top: 16px;
+  }
+  
+  .avakio-chart-demo-wrapper {
+    padding: 12px;
+  }
+  
+  .api-table {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .api-table th,
+  .api-table td {
+    padding: 8px 12px;
+    white-space: nowrap;
+  }
+}
+

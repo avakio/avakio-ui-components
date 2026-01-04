@@ -1,0 +1,254 @@
+/* ===========================
+   Avakio Global Theme Variables
+   =========================== */
+
+/* Base/Default Theme Variables */
+:root {
+  --avakio-text-primary: #333333;
+  --avakio-text-secondary: #6b7280;
+  --avakio-text-tertiary: #9ca3af;
+  --avakio-text-disabled: #a0aec0;
+  --avakio-text-error: #ef4444;
+  --avakio-text-white: #ffffff;
+  
+  --avakio-bg-primary: #ffffff;
+  --avakio-bg-secondary: #f9fafb;
+  --avakio-bg-tertiary: #f3f4f6;
+  --avakio-bg-hover: #f0f0f0;
+  --avakio-bg-selected: #e0f2fe;
+  --avakio-bg-selected-hover: #bae6fd;
+  --avakio-bg-disabled: #f7fafc;
+  --avakio-bg-input: #ffffff;
+  
+  --avakio-border-primary: #d1d5db;
+  --avakio-border-secondary: #e5e7eb;
+  --avakio-border-hover: #9ca3af;
+  --avakio-border-focus: #3b82f6;
+  --avakio-border-error: #ef4444;
+  
+  --avakio-accent-primary: #1ca1c1;
+  --avakio-accent-secondary: #0ea5e9;
+  --avakio-accent-hover: #158ba8;
+  --avakio-accent-light: #e0f7fa;
+  --avakio-accent-selected: #0891b2;
+  
+  --avakio-code-bg: #f3f4f6;
+  --avakio-code-text: #dc2626;
+}
+
+/* ===========================
+   Material Theme
+   =========================== */
+[data-admin-theme="material"] {
+  --avakio-text-primary: #212121;
+  --avakio-text-secondary: #4a5568;
+  --avakio-text-tertiary: #718096;
+  --avakio-text-disabled: #a0aec0;
+  --avakio-text-error: #e53e3e;
+  --avakio-text-white: #ffffff;
+  
+  --avakio-bg-primary: #ffffff;
+  --avakio-bg-secondary: #fafafa;
+  --avakio-bg-tertiary: #f5f5f5;
+  --avakio-bg-hover: #f0f0f0;
+  --avakio-bg-selected: #e0f7fa;
+  --avakio-bg-selected-hover: #b2ebf2;
+  --avakio-bg-disabled: #f7fafc;
+  --avakio-bg-input: #ffffff;
+  
+  --avakio-border-primary: #e0e0e0;
+  --avakio-border-secondary: #90caf9;
+  --avakio-border-hover: #64b5f6;
+  --avakio-border-focus: #1976d2;
+  --avakio-border-error: #e53e3e;
+  
+  --avakio-accent-primary: #1ca1c1;
+  --avakio-accent-secondary: #1976d2;
+  --avakio-accent-hover: #158ba8;
+  --avakio-accent-light: #e0f7fa;
+  --avakio-accent-selected: #00838f;
+  
+  --avakio-code-bg: #f5f5f5;
+  --avakio-code-text: #d32f2f;
+}
+
+/* ===========================
+   Flat Theme
+   =========================== */
+[data-admin-theme="flat"] {
+  --avakio-text-primary: #2c3e50;
+  --avakio-text-secondary: #495057;
+  --avakio-text-tertiary: #6b7280;
+  --avakio-text-disabled: #a0aec0;
+  --avakio-text-error: #e53e3e;
+  --avakio-text-white: #ffffff;
+  
+  --avakio-bg-primary: #f8f9fa;
+  --avakio-bg-secondary: #eceff4;
+  --avakio-bg-tertiary: #e5e9f0;
+  --avakio-bg-hover: #e5e9f0;
+  --avakio-bg-selected: #eceff4;
+  --avakio-bg-selected-hover: #e5e9f0;
+  --avakio-bg-disabled: #f7fafc;
+  --avakio-bg-input: #eceff4;
+  
+  --avakio-border-primary: #bdc3c7;
+  --avakio-border-secondary: #d8dee9;
+  --avakio-border-hover: #5e81ac;
+  --avakio-border-focus: #5e81ac;
+  --avakio-border-error: #e53e3e;
+  
+  --avakio-accent-primary: #5e81ac;
+  --avakio-accent-secondary: #5e81ac;
+  --avakio-accent-hover: #4c6a94;
+  --avakio-accent-light: #eceff4;
+  --avakio-accent-selected: #5e81ac;
+  
+  --avakio-code-bg: #ecf0f1;
+  --avakio-code-text: #e74c3c;
+}
+
+/* ===========================
+   Compact Theme
+   =========================== */
+[data-admin-theme="compact"] {
+  --avakio-text-primary: #212121;
+  --avakio-text-secondary: #424242;
+  --avakio-text-tertiary: #757575;
+  --avakio-text-disabled: #a0aec0;
+  --avakio-text-error: #e53e3e;
+  --avakio-text-white: #ffffff;
+  
+  --avakio-bg-primary: #fafafa;
+  --avakio-bg-secondary: #f5f5f5;
+  --avakio-bg-tertiary: #f0f0f0;
+  --avakio-bg-hover: #f0f0f0;
+  --avakio-bg-selected: #e0f2f1;
+  --avakio-bg-selected-hover: #b2dfdb;
+  --avakio-bg-disabled: #f7fafc;
+  --avakio-bg-input: #ffffff;
+  
+  --avakio-border-primary: #cccccc;
+  --avakio-border-secondary: #80cbc4;
+  --avakio-border-hover: #4db6ac;
+  --avakio-border-focus: #00796b;
+  --avakio-border-error: #e53e3e;
+  
+  --avakio-accent-primary: #00796b;
+  --avakio-accent-secondary: #00796b;
+  --avakio-accent-hover: #005f54;
+  --avakio-accent-light: #e0f2f1;
+  --avakio-accent-selected: #00695c;
+  
+  --avakio-code-bg: #f0f0f0;
+  --avakio-code-text: #c62828;
+}
+
+/* ===========================
+   Dark Theme
+   =========================== */
+[data-admin-theme="dark"] {
+  --avakio-text-primary: #e0e0e0;
+  --avakio-text-secondary: #cbd5e0;
+  --avakio-text-tertiary: #a0aec0;
+  --avakio-text-disabled: #4a5568;
+  --avakio-text-error: #ef5350;
+  --avakio-text-white: #ffffff;
+  
+  --avakio-bg-primary: #1e1e1e;
+  --avakio-bg-secondary: #2d3748;
+  --avakio-bg-tertiary: #1a202c;
+  --avakio-bg-hover: #374151;
+  --avakio-bg-selected: #374151;
+  --avakio-bg-selected-hover: #4a5568;
+  --avakio-bg-disabled: #1a202c;
+  --avakio-bg-input: #2d3748;
+  
+  --avakio-border-primary: #3a3a3a;
+  --avakio-border-secondary: #4a5568;
+  --avakio-border-hover: #60a5fa;
+  --avakio-border-focus: #60a5fa;
+  --avakio-border-error: #ef5350;
+  
+  --avakio-accent-primary: #3b82f6;
+  --avakio-accent-secondary: #60a5fa;
+  --avakio-accent-hover: #2563eb;
+  --avakio-accent-light: #1e3a8a;
+  --avakio-accent-selected: #60a5fa;
+  
+  --avakio-code-bg: #2d2d2d;
+  --avakio-code-text: #ef5350;
+}
+
+/* ===========================
+   Ocean Theme
+   =========================== */
+[data-admin-theme="ocean"] {
+  --avakio-text-primary: #01579b;
+  --avakio-text-secondary: #0277bd;
+  --avakio-text-tertiary: #4fc3f7;
+  --avakio-text-disabled: #a0aec0;
+  --avakio-text-error: #e53e3e;
+  --avakio-text-white: #ffffff;
+  
+  --avakio-bg-primary: #f0f8ff;
+  --avakio-bg-secondary: #e1f5fe;
+  --avakio-bg-tertiary: #b3e5fc;
+  --avakio-bg-hover: #b3e5fc;
+  --avakio-bg-selected: #e1f5fe;
+  --avakio-bg-selected-hover: #b3e5fc;
+  --avakio-bg-disabled: #f7fafc;
+  --avakio-bg-input: #e1f5fe;
+  
+  --avakio-border-primary: #81d4fa;
+  --avakio-border-secondary: #81d4fa;
+  --avakio-border-hover: #0277bd;
+  --avakio-border-focus: #0277bd;
+  --avakio-border-error: #e53e3e;
+  
+  --avakio-accent-primary: #0277bd;
+  --avakio-accent-secondary: #0277bd;
+  --avakio-accent-hover: #01579b;
+  --avakio-accent-light: #e1f5fe;
+  --avakio-accent-selected: #01579b;
+  
+  --avakio-code-bg: #e1f5fe;
+  --avakio-code-text: #0277bd;
+}
+
+/* ===========================
+   Sunset Theme
+   =========================== */
+[data-admin-theme="sunset"] {
+  --avakio-text-primary: #bf360c;
+  --avakio-text-secondary: #e65100;
+  --avakio-text-tertiary: #ff9800;
+  --avakio-text-disabled: #a0aec0;
+  --avakio-text-error: #e53e3e;
+  --avakio-text-white: #ffffff;
+  
+  --avakio-bg-primary: #fff8f0;
+  --avakio-bg-secondary: #fff3e0;
+  --avakio-bg-tertiary: #ffe0b2;
+  --avakio-bg-hover: #ffe0b2;
+  --avakio-bg-selected: #fff3e0;
+  --avakio-bg-selected-hover: #ffe0b2;
+  --avakio-bg-disabled: #f7fafc;
+  --avakio-bg-input: #fff3e0;
+  
+  --avakio-border-primary: #ffccbc;
+  --avakio-border-secondary: #ffab91;
+  --avakio-border-hover: #ff9800;
+  --avakio-border-focus: #f57c00;
+  --avakio-border-error: #e53e3e;
+  
+  --avakio-accent-primary: #f57c00;
+  --avakio-accent-secondary: #ff9800;
+  --avakio-accent-hover: #e65100;
+  --avakio-accent-light: #fff3e0;
+  --avakio-accent-selected: #e65100;
+  
+  --avakio-code-bg: #ffe0b2;
+  --avakio-code-text: #e65100;
+}
+
