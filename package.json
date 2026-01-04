@@ -1,18 +1,36 @@
 {
   "name": "avakio-ui-components",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "main": "./dist/avakio-ui-components.umd.cjs",
+  "module": "./dist/avakio-ui-components.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/avakio-ui-components.js",
+      "require": "./dist/avakio-ui-components.umd.cjs"
+    },
+    "./styles": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:lib": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
   "dependencies": {
     "lucide-react": "^0.562.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -26,6 +44,7 @@
     "globals": "^16.5.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vite-plugin-dts": "^4.5.4"
   }
 }

@@ -13,7 +13,9 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": false,
     "moduleDetection": "force",
-    "noEmit": true,
+    "declaration": true,
+    "declarationDir": "./dist",
+    "emitDeclarationOnly": true,
     "jsx": "react-jsx",
 
     /* Linting */
@@ -31,5 +33,5 @@
     }
   },
   "include": ["src"],
-  "exclude": ["**/*.test.tsx", "**/*.test.ts", "**/*.spec.tsx", "**/*.spec.ts"]
+  "exclude": ["**/*.test.tsx", "**/*.test.ts", "**/*.spec.tsx", "**/*.spec.ts", "src/examples/**/*", "src/main.tsx", "src/App.tsx", "src/components-showcase.tsx"]
 }
