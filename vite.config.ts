@@ -6,6 +6,8 @@ import dts from 'vite-plugin-dts'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // For GitHub Pages deployment - change 'avakio-ui-components' to your repo name
+  base: process.env.NODE_ENV === 'production' ? '/avakio-ui-components/' : '/',
   plugins: [
     react(),
     dts({
