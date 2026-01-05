@@ -235,6 +235,16 @@ When `mentions` is enabled:
 2. Select a user to insert `@"User Name"` into the text
 3. Mentions are highlighted in the displayed text
 4. Use `onUserMentioned` callback to handle mention notifications
+5. Press Enter to send comment (works even with mentions dropdown open)
+6. Press Escape to close the mentions dropdown without sending
+
+## Keyboard Shortcuts
+
+| Key | Action |
+|-----|--------|
+| Enter | Send comment (when `sendAction='enter'`) |
+| Shift+Enter | Send comment (when `sendAction='shift+enter'`) or new line |
+| Escape | Close mentions dropdown |
 
 ## Accessibility
 

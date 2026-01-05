@@ -3,7 +3,6 @@ import { AvakioComment, AvakioCommentRef, AvakioCommentTheme, CommentItem, Comme
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
 import { AvakioRichSelect } from '../../components/avakio/ui-controls/avakio-richselect/avakio-richselect';
-import { AvakioText } from '../../components/avakio/ui-controls/avakio-text/avakio-text';
 import { AvakioCheckbox } from '../../components/avakio/ui-controls/avakio-checkbox/avakio-checkbox';
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
 import { AvakioDataTable } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
@@ -66,9 +65,15 @@ const sampleComments: CommentItem[] = [
   },
   {
     id: 4,
-    user_id: 1,
+    user_id: 4,
     date: new Date(Date.now() - 3600000),
     text: "Perfect, thanks for the feedback everyone.",
+  },
+  {
+    id: 5,
+    user_id: 5,
+    date: new Date(Date.now() - 3600000),
+    text: "OK.",
   },
 ];
 
@@ -266,6 +271,7 @@ export function AvakioCommentExample() {
                     currentUser={1}
                     width={320}
                     height={250}
+                    theme={t}
                   />
                 </div>
               ))}
@@ -560,7 +566,6 @@ export function AvakioCommentExample() {
                 />
                 <div style={{ 
                   padding: '24px', 
-                  background: '#f9f9f9', 
                   borderRadius: '8px',
                   display: 'flex',
                   justifyContent: 'center'
@@ -642,6 +647,7 @@ export function AvakioCommentExample() {
       <section 
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-comment-demo-section"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

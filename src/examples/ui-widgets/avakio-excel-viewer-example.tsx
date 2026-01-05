@@ -495,6 +495,7 @@ const columns = [
         <section 
           ref={(el) => { sectionRefs.current['docs'] = el; }}
           className="avakio-excel-viewer-example-section"
+          data-section="docs"
         >
           <h2 className="avakio-excel-viewer-example-section-title">Documentation</h2>
           

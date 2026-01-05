@@ -4,22 +4,27 @@ import path from 'path'
 import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
 
+// Check if we're building the library or the app
+const isLibBuild = process.env.BUILD_MODE === 'lib'
+
 // https://vite.dev/config/
 export default defineConfig({
   // For GitHub Pages deployment - change 'avakio-ui-components' to your repo name
   base: process.env.NODE_ENV === 'production' ? '/avakio-ui-components/' : '/',
+  server: {
+    port: 5000,
+  },
   plugins: [
     react(),
-    dts({
-      insertTypesEntry: true,
-    })
+    ...(isLibBuild ? [dts({ insertTypesEntry: true })] : [])
   ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
-  build: {
+  build: isLibBuild ? {
+    // Library build configuration
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'AvakioUIComponents',
@@ -36,6 +41,10 @@ export default defineConfig({
       }
     },
     cssCodeSplit: false,
+    sourcemap: true
+  } : {
+    // App build configuration (for deployment)
+    outDir: 'dist',
     sourcemap: true
   }
 })

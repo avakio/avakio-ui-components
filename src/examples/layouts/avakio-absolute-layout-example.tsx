@@ -486,6 +486,7 @@ layoutRef.current?.reconstruct(newCellsArray);`}
         <section 
           ref={(el) => { sectionRefs.current['docs'] = el; }}
           className="avakio-absolute-layout-example-section"
+          data-section="docs"
         >
           <h2 className="avakio-absolute-layout-example-section-title">Documentation</h2>
           

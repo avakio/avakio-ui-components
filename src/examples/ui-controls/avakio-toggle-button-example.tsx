@@ -787,6 +787,7 @@ export function AvakioToggleButtonExample({ theme = 'material' }: { theme?: stri
       <section 
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-toggle-button-demo-section"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

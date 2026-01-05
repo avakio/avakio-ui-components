@@ -391,6 +391,7 @@ export function AvakioGageExample() {
       <section 
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-gage-demo-section"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

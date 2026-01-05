@@ -671,7 +671,7 @@ export default function ComponentsShowcasePage() {
       content: (
         <div style={{ padding: '20px' }} data-admin-theme={theme}>
           <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>Data Presentation</h2>
-          <p style={{ color: '#666' }}>Select a specific data presentation component from the sidebar submenu.</p>
+          <p style={{ color: '#666' }}>Data widgets are used to present data of a specified type on the page. Such widgets manage the space allocated for their data and provide functionality for its access and configuration.</p>
         </div>
       ),
     },

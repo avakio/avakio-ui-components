@@ -109,7 +109,7 @@
 }
 
 .avakio-button-primary:hover:not(:disabled) {
-  filter: brightness(1.03);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--btn-primary) 85%, #000) 0%, color-mix(in srgb, var(--btn-primary-strong) 85%, #000) 100%);
 }
 
 .avakio-button-secondary {

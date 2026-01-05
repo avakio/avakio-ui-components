@@ -946,6 +946,7 @@ export function AvakioSegmentedButtonExample() {
       <section
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-segmented-demo-section"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

@@ -1142,11 +1142,6 @@
   color: #0277BD;
 }
 
-[data-admin-theme="ocean"] button:hover {
-  background-color: #e1f5fe;
-  color: #0277BD;
-}
-
 /* Sunset Theme */
 [data-admin-theme="sunset"] .avakio-datatable {
   border-color: #ffcc80;
@@ -1252,11 +1247,6 @@
 }
 
 [data-admin-theme="sunset"] .avakio-datatable-sort-icon {
-  color: #f57c00;
-}
-
-[data-admin-theme="sunset"] button:hover {
-  background-color: #fff3e0;
   color: #f57c00;
 }
 

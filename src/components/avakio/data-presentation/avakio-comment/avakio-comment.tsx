@@ -1,5 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import { MoreVertical, Send, Edit2, Trash2, X, Check } from 'lucide-react';
+import { AvakioText, AvakioTextRef } from '../../ui-controls/avakio-text/avakio-text';
+import { AvakioButton } from '../../ui-controls/avakio-button/avakio-button';
 import './avakio-comment.css';
 
 export type AvakioCommentTheme = 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset';
@@ -163,8 +165,9 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
     ref
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLTextAreaElement>(null);
+    const inputRef = useRef<AvakioTextRef>(null);
     const listRef = useRef<HTMLDivElement>(null);
+    const prevInitialDataRef = useRef<CommentItem[]>(initialData);
     
     const [comments, setComments] = useState<CommentItem[]>(initialData);
     const [disabled, setDisabled] = useState(disabledProp);
@@ -176,9 +179,17 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
     const [mentionSearch, setMentionSearch] = useState('');
     const [currentUserId, setCurrentUserId] = useState<string | number | undefined>(currentUser);
 
-    // Sync with props
+    // Sync with props - only when the initialData prop actually changes (not just reference)
     useEffect(() => {
-      setComments(initialData);
+      // Compare the previous initialData IDs with current initialData IDs
+      const prevIds = prevInitialDataRef.current.map(c => c.id).sort().join(',');
+      const newIds = initialData.map(c => c.id).sort().join(',');
+      
+      // Only reset if the external data source changed
+      if (prevIds !== newIds) {
+        setComments(initialData);
+        prevInitialDataRef.current = initialData;
+      }
     }, [initialData]);
 
     useEffect(() => {
@@ -214,13 +225,18 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
 
     // Handle sending a comment
     const handleSend = useCallback(() => {
-      if (!inputValue.trim() || disabled || readonly) return;
+      // Get current value directly from input to avoid stale closure
+      const currentInputValue = inputRef.current?.getValue() ?? inputValue;
+      
+      if (!currentInputValue.trim() || disabled || readonly) {
+        return;
+      }
 
       const newComment: CommentItem = {
         id: generateId(),
         user_id: currentUserId,
         date: new Date(),
-        text: inputValue.trim(),
+        text: currentInputValue.trim(),
       };
 
       setComments(prev => [...prev, newComment]);
@@ -252,32 +268,56 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
     }, [inputValue, disabled, readonly, currentUserId, mentions, users, mode, onAdd, onUserMentioned]);
 
     // Handle key press in input
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      // Close mentions dropdown on Escape
+      if (showMentions && e.key === 'Escape') {
+        e.preventDefault();
+        setShowMentions(false);
+        setMentionSearch('');
+        return;
+      }
+
+      // Handle Enter to send comment
       if (sendAction === 'enter' && e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
+        // Close mentions dropdown and send
+        setShowMentions(false);
+        setMentionSearch('');
         handleSend();
       } else if (sendAction === 'shift+enter' && e.key === 'Enter' && e.shiftKey) {
         e.preventDefault();
-        handleSend();
-      }
-
-      // Handle mentions
-      if (mentions && e.key === '@') {
-        setShowMentions(true);
+        setShowMentions(false);
         setMentionSearch('');
+        handleSend();
       }
     };
 
     // Handle input change
-    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const value = e.target.value;
+    const handleInputChange = (value: string) => {
       setInputValue(value);
 
-      // Handle mention search
-      if (mentions && showMentions) {
+      // Handle mentions - detect @ symbol and show dropdown
+      if (mentions) {
+        // Find the last @ that could be starting a mention
         const atIndex = value.lastIndexOf('@');
         if (atIndex !== -1) {
-          setMentionSearch(value.slice(atIndex + 1));
+          const afterAt = value.slice(atIndex + 1);
+          // Show dropdown if:
+          // 1. There's no closing quote (not a completed mention)
+          // 2. There's no space before any quote (still typing)
+          const hasCompletedMention = afterAt.match(/^"[^"]*"\s/);
+          if (!hasCompletedMention && !afterAt.includes('" ')) {
+            setShowMentions(true);
+            // Extract search text (remove leading quote if present)
+            const searchText = afterAt.startsWith('"') ? '' : afterAt;
+            setMentionSearch(searchText);
+          } else {
+            setShowMentions(false);
+            setMentionSearch('');
+          }
+        } else {
+          setShowMentions(false);
+          setMentionSearch('');
         }
       }
     };
@@ -424,13 +464,15 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
         <div ref={listRef} className="avakio-comment-list">
           {/* More button at top for chat mode */}
           {mode === 'chat' && hasMore && (
-            <button 
+            <AvakioButton
+              variant="secondary"
+              size="sm"
+              label={moreButtonLabel}
               className="avakio-comment-more-btn"
               onClick={onLoadMore}
               disabled={disabled}
-            >
-              {moreButtonLabel}
-            </button>
+              theme={theme}
+            />
           )}
 
           {sortedComments.map((comment) => {
@@ -461,22 +503,33 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
                     {/* Menu for owner */}
                     {isOwner && !readonly && !isEditing && (
                       <div className="avakio-comment-menu-wrapper">
-                        <button
+                        <AvakioButton
+                          variant="ghost"
+                          size="sm"
+                          buttonType="icon"
+                          icon={<MoreVertical size={16} />}
                           className="avakio-comment-menu-btn"
                           onClick={() => setActiveMenuId(activeMenuId === comment.id ? null : comment.id)}
-                        >
-                          <MoreVertical size={16} />
-                        </button>
+                          theme={theme}
+                        />
                         {activeMenuId === comment.id && (
                           <div className="avakio-comment-menu">
-                            <button onClick={() => handleEditStart(comment)}>
-                              <Edit2 size={14} />
-                              Edit
-                            </button>
-                            <button onClick={() => handleDelete(comment.id)}>
-                              <Trash2 size={14} />
-                              Delete
-                            </button>
+                            <AvakioButton
+                              variant="ghost"
+                              size="sm"
+                              icon={<Edit2 size={14} />}
+                              label="Edit"
+                              onClick={() => handleEditStart(comment)}
+                              theme={theme}
+                            />
+                            <AvakioButton
+                              variant="ghost"
+                              size="sm"
+                              icon={<Trash2 size={14} />}
+                              label="Delete"
+                              onClick={() => handleDelete(comment.id)}
+                              theme={theme}
+                            />
                           </div>
                         )}
                       </div>
@@ -486,25 +539,34 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
                   {/* Comment text or edit mode */}
                   {isEditing ? (
                     <div className="avakio-comment-edit">
-                      <textarea
+                      <AvakioText
                         value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
+                        onChange={(value) => setEditValue(value)}
+                        multiline
+                        rows={2}
                         className="avakio-comment-edit-input"
-                        autoFocus
+                        theme={theme}
+                        textWidth="100%"
                       />
                       <div className="avakio-comment-edit-actions">
-                        <button 
+                        <AvakioButton
+                          variant="primary"
+                          size="sm"
+                          buttonType="icon"
+                          icon={<Check size={14} />}
                           className="avakio-comment-edit-save"
                           onClick={() => handleEditSave(comment.id)}
-                        >
-                          <Check size={14} />
-                        </button>
-                        <button 
+                          theme={theme}
+                        />
+                        <AvakioButton
+                          variant="ghost"
+                          size="sm"
+                          buttonType="icon"
+                          icon={<X size={14} />}
                           className="avakio-comment-edit-cancel"
                           onClick={handleEditCancel}
-                        >
-                          <X size={14} />
-                        </button>
+                          theme={theme}
+                        />
                       </div>
                     </div>
                   ) : (
@@ -519,13 +581,15 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
 
           {/* More button at bottom for default mode */}
           {mode === 'default' && hasMore && (
-            <button 
+            <AvakioButton
+              variant="secondary"
+              size="sm"
+              label={moreButtonLabel}
               className="avakio-comment-more-btn"
               onClick={onLoadMore}
               disabled={disabled}
-            >
-              {moreButtonLabel}
-            </button>
+              theme={theme}
+            />
           )}
 
           {/* Empty state */}
@@ -540,7 +604,7 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
         {!readonly && (
           <div className="avakio-comment-input-area">
             <div className="avakio-comment-input-wrapper">
-              <textarea
+              <AvakioText
                 ref={inputRef}
                 value={inputValue}
                 onChange={handleInputChange}
@@ -548,36 +612,43 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
                 placeholder={placeholder}
                 className="avakio-comment-input"
                 disabled={disabled}
+                multiline
                 rows={1}
+                theme={theme}
+                textWidth="100%"
               />
               
               {/* Mentions dropdown */}
               {showMentions && filteredMentionUsers.length > 0 && (
                 <div className="avakio-comment-mentions">
                   {filteredMentionUsers.map(user => (
-                    <button
+                    <AvakioButton
                       key={user.id}
+                      variant="ghost"
                       className="avakio-comment-mention-item"
                       onClick={() => insertMention(user)}
+                      theme={theme}
                     >
                       <div className="avakio-comment-mention-avatar">
                         {defaultRenderAvatar(user)}
                       </div>
                       <span>{user.value}</span>
-                    </button>
+                    </AvakioButton>
                   ))}
                 </div>
               )}
             </div>
             
             {(keepButtonVisible || inputValue.trim()) && (
-              <button
+              <AvakioButton
+                variant="primary"
+                buttonType="icon"
+                icon={<Send size={18} />}
                 className="avakio-comment-send-btn"
                 onClick={handleSend}
                 disabled={disabled || !inputValue.trim()}
-              >
-                <Send size={18} />
-              </button>
+                theme={theme}
+              />
             )}
           </div>
         )}

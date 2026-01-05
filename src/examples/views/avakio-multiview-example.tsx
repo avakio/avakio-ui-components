@@ -665,6 +665,7 @@ export function AvakioMultiviewExample() {
       <section
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-multiview-demo-section avakio-hide-on-mobile"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

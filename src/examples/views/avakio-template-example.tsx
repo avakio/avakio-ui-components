@@ -569,6 +569,7 @@ export function AvakioTemplateExample() {
       <section 
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-template-demo-section avakio-hide-on-mobile"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

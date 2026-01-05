@@ -749,6 +749,7 @@ export function AvakioSwitchButtonExample() {
       <section 
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-switch-button-demo-section"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

@@ -774,6 +774,7 @@ export function AvakioFormExample() {
             sectionRefs.current['docs'] = el;
           }}
           className="avakio-form-demo-section"
+          data-section="docs"
         >
           <AvakioTemplate
             type="section"

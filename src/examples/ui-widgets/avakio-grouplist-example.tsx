@@ -536,6 +536,7 @@ export function AvakioGroupListExample() {
       <section 
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-grouplist-demo-section"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

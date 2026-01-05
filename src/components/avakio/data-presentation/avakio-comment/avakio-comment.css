@@ -21,12 +21,14 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  align-items: stretch;
 }
 
 /* Comment Item */
 .avakio-comment-item {
   display: flex;
   gap: 12px;
+  width: 100%;
 }
 
 /* Avatar */
@@ -127,22 +129,16 @@
   margin-left: auto;
 }
 
-.avakio-comment-menu-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: transparent;
-  border-radius: 4px;
-  cursor: pointer;
+.avakio-comment-menu-btn.avakio-button {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  padding: 0 !important;
   color: #888;
-  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.avakio-comment-menu-btn:hover {
-  background: #f0f0f0;
+.avakio-comment-menu-btn.avakio-button:hover {
+  background: #f0f0f0 !important;
   color: #333;
 }
 
@@ -157,33 +153,28 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   min-width: 120px;
   padding: 4px;
-}
-
-.avakio-comment-menu button {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+}
+
+.avakio-comment-menu .avakio-button {
+  justify-content: flex-start !important;
   width: 100%;
-  padding: 8px 12px;
-  border: none;
-  background: transparent;
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
   font-size: 13px;
-  color: #333;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.15s ease;
 }
 
-.avakio-comment-menu button:hover {
-  background: #f5f5f5;
+.avakio-comment-menu .avakio-button:hover {
+  background: #f5f5f5 !important;
 }
 
-.avakio-comment-menu button:last-child {
-  color: #d32f2f;
+.avakio-comment-menu .avakio-button:last-child {
+  color: #d32f2f !important;
 }
 
-.avakio-comment-menu button:last-child:hover {
-  background: #ffebee;
+.avakio-comment-menu .avakio-button:last-child:hover {
+  background: #ffebee !important;
 }
 
 /* Edit Mode */
@@ -193,8 +184,11 @@
   gap: 8px;
 }
 
-.avakio-comment-edit-input {
+.avakio-comment-edit-input.avakio-text {
   width: 100%;
+}
+
+.avakio-comment-edit-input .avakio-text-input {
   padding: 8px 12px;
   border: 1px solid #1976d2;
   border-radius: 6px;
@@ -205,7 +199,7 @@
   font-family: inherit;
 }
 
-.avakio-comment-edit-input:focus {
+.avakio-comment-edit-input .avakio-text-input:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
 }
@@ -215,58 +209,51 @@
   gap: 8px;
 }
 
-.avakio-comment-edit-save,
-.avakio-comment-edit-cancel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
+.avakio-comment-edit-save.avakio-button,
+.avakio-comment-edit-cancel.avakio-button {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  padding: 0 !important;
+  border-radius: 4px !important;
 }
 
-.avakio-comment-edit-save {
-  background: #4caf50;
-  color: #fff;
+.avakio-comment-edit-save.avakio-button {
+  background: #4caf50 !important;
+  color: #fff !important;
 }
 
-.avakio-comment-edit-save:hover {
-  background: #388e3c;
+.avakio-comment-edit-save.avakio-button:hover {
+  background: #388e3c !important;
 }
 
-.avakio-comment-edit-cancel {
-  background: #e0e0e0;
-  color: #666;
+.avakio-comment-edit-cancel.avakio-button {
+  background: #e0e0e0 !important;
+  color: #666 !important;
 }
 
-.avakio-comment-edit-cancel:hover {
-  background: #bdbdbd;
+.avakio-comment-edit-cancel.avakio-button:hover {
+  background: #bdbdbd !important;
 }
 
 /* More Button */
-.avakio-comment-more-btn {
+.avakio-comment-more-btn.avakio-button {
   align-self: center;
-  padding: 8px 16px;
-  border: 1px solid #e0e0e0;
-  background: #f5f5f5;
-  border-radius: 20px;
+  padding: 8px 16px !important;
+  border: 1px solid #e0e0e0 !important;
+  background: #f5f5f5 !important;
+  border-radius: 20px !important;
   font-size: 13px;
-  color: #666;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  color: #666 !important;
 }
 
-.avakio-comment-more-btn:hover:not(:disabled) {
-  background: #e0e0e0;
-  border-color: #ccc;
+.avakio-comment-more-btn.avakio-button:hover:not(:disabled) {
+  background: #e0e0e0 !important;
+  border-color: #ccc !important;
 }
 
-.avakio-comment-more-btn:disabled {
+.avakio-comment-more-btn.avakio-button:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
 }
 
 /* Empty State */
@@ -280,20 +267,31 @@
 /* Input Area */
 .avakio-comment-input-area {
   display: flex;
-  align-items: flex-end;
+  flex-direction: row;
+  align-items: center;
   gap: 12px;
   padding: 12px 16px;
   border-top: 1px solid #e0e0e0;
   background: #fafafa;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .avakio-comment-input-wrapper {
   flex: 1;
   position: relative;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
-.avakio-comment-input {
+.avakio-comment-input.avakio-text {
   width: 100%;
+  flex: 1;
+}
+
+.avakio-comment-input .avakio-text-input {
   padding: 10px 14px;
   border: 1px solid #e0e0e0;
   border-radius: 20px;
@@ -305,13 +303,18 @@
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.avakio-comment-input:focus {
+.avakio-comment-input .avakio-text-input:focus {
   outline: none;
-  border-color: #1976d2;
+}
+
+/* Material theme input focus (explicit blue) */
+.avakio-comment-theme-material .avakio-comment-input .avakio-text-input:focus,
+.avakio-comment-theme-material .avakio-comment-input.avakio-text .avakio-text-input:focus {
+  border-color: #1976d2 !important;
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
 }
 
-.avakio-comment-input:disabled {
+.avakio-comment-input .avakio-text-input:disabled {
   background: #f5f5f5;
   cursor: not-allowed;
 }
@@ -329,24 +332,26 @@
   border-radius: 8px;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
   margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
 }
 
-.avakio-comment-mention-item {
-  display: flex;
+.avakio-comment-mention-item.avakio-button {
+  display: flex !important;
   align-items: center;
+  justify-content: flex-start !important;
   gap: 10px;
   width: 100%;
-  padding: 8px 12px;
+  padding: 8px 12px !important;
   border: none;
-  background: transparent;
+  background: transparent !important;
   font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
+  color: #333 !important;
+  border-radius: 0 !important;
 }
 
-.avakio-comment-mention-item:hover {
-  background: #f5f5f5;
+.avakio-comment-mention-item.avakio-button:hover {
+  background: #f5f5f5 !important;
 }
 
 .avakio-comment-mention-avatar {
@@ -362,28 +367,34 @@
 }
 
 /* Send Button */
-.avakio-comment-send-btn {
-  display: flex;
+.avakio-comment-send-btn.avakio-button {
+  --btn-primary: #1976d2;
+  --btn-primary-strong: #1565c0;
+  display: flex !important;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: #1976d2;
-  color: #fff;
-  border-radius: 50%;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  border: none !important;
+  border-radius: 50% !important;
   cursor: pointer;
   transition: background-color 0.15s ease, transform 0.15s ease;
+  flex-shrink: 0;
+  padding: 0 !important;
+  box-shadow: none !important;
 }
 
-.avakio-comment-send-btn:hover:not(:disabled) {
-  background: #1565c0;
+.avakio-comment-send-btn.avakio-button:hover:not(:disabled) {
   transform: scale(1.05);
 }
 
-.avakio-comment-send-btn:disabled {
-  background: #bdbdbd;
+.avakio-comment-send-btn.avakio-button:disabled {
+  --btn-primary: #e0e0e0;
+  --btn-primary-strong: #e0e0e0;
+  color: #9e9e9e !important;
   cursor: not-allowed;
+  transform: none;
 }
 
 /* Borderless */
@@ -419,12 +430,14 @@
   color: #1976d2;
 }
 
-.avakio-comment-theme-material .avakio-comment-send-btn {
-  background: #1976d2;
+.avakio-comment-theme-material .avakio-comment-send-btn.avakio-button {
+  --btn-primary: #1976d2;
+  --btn-primary-strong: #1565c0;
 }
 
-.avakio-comment-theme-material .avakio-comment-send-btn:hover:not(:disabled) {
-  background: #1565c0;
+.avakio-comment-theme-material .avakio-comment-send-btn.avakio-button:hover:not(:disabled) {
+  --btn-primary: #1565c0;
+  --btn-primary-strong: #0d47a1;
 }
 
 .avakio-comment-theme-material .avakio-comment-mention {
@@ -451,17 +464,20 @@
   letter-spacing: 0.5px;
 }
 
-.avakio-comment-theme-flat .avakio-comment-input {
-  border-radius: 4px;
+.avakio-comment-theme-flat .avakio-comment-input .avakio-text-input,
+.avakio-comment-theme-flat .avakio-comment-input.avakio-text .avakio-text-input {
+  border-radius: 4px !important;
 }
 
-.avakio-comment-theme-flat .avakio-comment-send-btn {
-  background: #5e81ac;
-  border-radius: 4px;
+.avakio-comment-theme-flat .avakio-comment-send-btn.avakio-button {
+  --btn-primary: #5e81ac;
+  --btn-primary-strong: #4c6d91;
+  border-radius: 4px !important;
 }
 
-.avakio-comment-theme-flat .avakio-comment-send-btn:hover:not(:disabled) {
-  background: #4c6d91;
+.avakio-comment-theme-flat .avakio-comment-send-btn.avakio-button:hover:not(:disabled) {
+  --btn-primary: #4c6d91;
+  --btn-primary-strong: #3d5a80;
 }
 
 /* =====================================================
@@ -498,19 +514,23 @@
   padding: 8px 12px;
 }
 
-.avakio-comment-theme-compact .avakio-comment-input {
-  padding: 8px 12px;
+.avakio-comment-theme-compact .avakio-comment-input .avakio-text-input,
+.avakio-comment-theme-compact .avakio-comment-input.avakio-text .avakio-text-input {
+  padding: 8px 12px !important;
   font-size: 13px;
 }
 
-.avakio-comment-theme-compact .avakio-comment-send-btn {
-  width: 32px;
-  height: 32px;
-  background: #00796b;
+.avakio-comment-theme-compact .avakio-comment-send-btn.avakio-button {
+  --btn-primary: #00796b;
+  --btn-primary-strong: #00695c;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
 }
 
-.avakio-comment-theme-compact .avakio-comment-send-btn:hover:not(:disabled) {
-  background: #00695c;
+.avakio-comment-theme-compact .avakio-comment-send-btn.avakio-button:hover:not(:disabled) {
+  --btn-primary: #00695c;
+  --btn-primary-strong: #004d40;
 }
 
 /* =====================================================
@@ -580,14 +600,16 @@
   background: #252525;
 }
 
-.avakio-comment-theme-dark .avakio-comment-input {
-  background: #1e1e1e;
-  border-color: #444;
-  color: #e0e0e0;
+.avakio-comment-theme-dark .avakio-comment-input .avakio-text-input,
+.avakio-comment-theme-dark .avakio-comment-input.avakio-text .avakio-text-input {
+  background: #1e1e1e !important;
+  border-color: #444 !important;
+  color: #e0e0e0 !important;
 }
 
-.avakio-comment-theme-dark .avakio-comment-input:focus {
-  border-color: #64b5f6;
+.avakio-comment-theme-dark .avakio-comment-input .avakio-text-input:focus,
+.avakio-comment-theme-dark .avakio-comment-input.avakio-text .avakio-text-input:focus {
+  border-color: #64b5f6 !important;
   box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.2);
 }
 
@@ -604,12 +626,14 @@
   background: #333;
 }
 
-.avakio-comment-theme-dark .avakio-comment-send-btn {
-  background: #3b82f6;
+.avakio-comment-theme-dark .avakio-comment-send-btn.avakio-button {
+  --btn-primary: #3b82f6;
+  --btn-primary-strong: #2563eb;
 }
 
-.avakio-comment-theme-dark .avakio-comment-send-btn:hover:not(:disabled) {
-  background: #2563eb;
+.avakio-comment-theme-dark .avakio-comment-send-btn.avakio-button:hover:not(:disabled) {
+  --btn-primary: #2563eb;
+  --btn-primary-strong: #1d4ed8;
 }
 
 .avakio-comment-theme-dark .avakio-comment-more-btn {
@@ -626,10 +650,11 @@
   color: #888;
 }
 
-.avakio-comment-theme-dark .avakio-comment-edit-input {
-  background: #1e1e1e;
-  border-color: #64b5f6;
-  color: #e0e0e0;
+.avakio-comment-theme-dark .avakio-comment-edit-input .avakio-text-input,
+.avakio-comment-theme-dark .avakio-comment-edit-input.avakio-text .avakio-text-input {
+  background: #1e1e1e !important;
+  border-color: #64b5f6 !important;
+  color: #e0e0e0 !important;
 }
 
 .avakio-comment-theme-dark .avakio-comment-status {
@@ -666,21 +691,25 @@
   background: rgba(74, 158, 187, 0.05);
 }
 
-.avakio-comment-theme-ocean .avakio-comment-input {
-  border-color: rgba(74, 158, 187, 0.3);
+.avakio-comment-theme-ocean .avakio-comment-input .avakio-text-input,
+.avakio-comment-theme-ocean .avakio-comment-input.avakio-text .avakio-text-input {
+  border-color: rgba(74, 158, 187, 0.3) !important;
 }
 
-.avakio-comment-theme-ocean .avakio-comment-input:focus {
-  border-color: #3498db;
+.avakio-comment-theme-ocean .avakio-comment-input .avakio-text-input:focus,
+.avakio-comment-theme-ocean .avakio-comment-input.avakio-text .avakio-text-input:focus {
+  border-color: #3498db !important;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
-.avakio-comment-theme-ocean .avakio-comment-send-btn {
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+.avakio-comment-theme-ocean .avakio-comment-send-btn.avakio-button {
+  --btn-primary: #3498db;
+  --btn-primary-strong: #2980b9;
 }
 
-.avakio-comment-theme-ocean .avakio-comment-send-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #2980b9 0%, #1f6a9f 100%);
+.avakio-comment-theme-ocean .avakio-comment-send-btn.avakio-button:hover:not(:disabled) {
+  --btn-primary: #2980b9;
+  --btn-primary-strong: #1f6a9f;
 }
 
 /* =====================================================
@@ -713,20 +742,24 @@
   background: rgba(230, 126, 34, 0.05);
 }
 
-.avakio-comment-theme-sunset .avakio-comment-input {
-  border-color: rgba(230, 126, 34, 0.3);
+.avakio-comment-theme-sunset .avakio-comment-input .avakio-text-input,
+.avakio-comment-theme-sunset .avakio-comment-input.avakio-text .avakio-text-input {
+  border-color: rgba(230, 126, 34, 0.3) !important;
 }
 
-.avakio-comment-theme-sunset .avakio-comment-input:focus {
-  border-color: #e67e22;
+.avakio-comment-theme-sunset .avakio-comment-input .avakio-text-input:focus,
+.avakio-comment-theme-sunset .avakio-comment-input.avakio-text .avakio-text-input:focus {
+  border-color: #e67e22 !important;
   box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.2);
 }
 
-.avakio-comment-theme-sunset .avakio-comment-send-btn {
-  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+.avakio-comment-theme-sunset .avakio-comment-send-btn.avakio-button {
+  --btn-primary: #e67e22;
+  --btn-primary-strong: #d35400;
 }
 
-.avakio-comment-theme-sunset .avakio-comment-send-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #d35400 0%, #b94600 100%);
+.avakio-comment-theme-sunset .avakio-comment-send-btn.avakio-button:hover:not(:disabled) {
+  --btn-primary: #d35400;
+  --btn-primary-strong: #b94600;
 }
 

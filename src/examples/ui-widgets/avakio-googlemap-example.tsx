@@ -296,6 +296,7 @@ export function AvakioGoogleMapExample() {
       <section 
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-googlemap-demo-section"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

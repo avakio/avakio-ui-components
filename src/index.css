@@ -41,22 +41,36 @@ h1 {
   line-height: 1.1;
 }
 
-button {
+/* Only apply to generic buttons, not custom component buttons */
+button:not([class*="avakio-"]):not([class*="btn"]) {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #f9f9f9;
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
+button:not([class*="avakio-"]):not([class*="btn"]):hover {
   border-color: #646cff;
 }
-button:focus,
-button:focus-visible {
+button:not([class*="avakio-"]):not([class*="btn"]):focus,
+button:not([class*="avakio-"]):not([class*="btn"]):focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Hide documentation section on small screens (< 600px) */
+@media (max-width: 599px) {
+  .example-docs-section,
+  [data-section="docs"] {
+    display: none !important;
+  }
+  
+  /* Also hide the docs tab in the tab navigation */
+  [data-value="docs"] {
+    display: none !important;
+  }
 }
 

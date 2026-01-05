@@ -483,6 +483,7 @@ export function AvakioBulletGraphExample() {
       <section 
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-bullet-graph-demo-section"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

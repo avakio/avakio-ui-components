@@ -79,8 +79,10 @@ export interface AvakioTextProps {
   onFocus?: (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   /** onEnter callback */
   onEnter?: (value: string) => void;
-  /** onKeyPress callback */
+  /** onKeyPress callback (deprecated, use onKeyDown) */
   onKeyPress?: (event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  /** onKeyDown callback */
+  onKeyDown?: (event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   /** onClick callback for the entire component */
   onClick?: () => void;
   /** Padding (number for all sides, string for CSS, or [top, right, bottom, left]) */
@@ -156,6 +158,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       onFocus,
       onEnter,
       onKeyPress,
+      onKeyDown,
       onClick,
       padding,
       margin,
@@ -292,6 +295,16 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
 
       if (onKeyPress) {
         onKeyPress(e);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      if (e.key === 'Enter' && !multiline && onEnter) {
+        onEnter(currentValue);
+      }
+
+      if (onKeyDown) {
+        onKeyDown(e);
       }
     };
 
@@ -437,6 +450,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
                 onBlur={handleBlur as any}
                 onFocus={handleFocus as any}
                 onKeyPress={handleKeyPress as any}
+                onKeyDown={handleKeyDown as any}
               />
             ) : (
               <input
@@ -459,6 +473,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
                 onBlur={handleBlur as any}
                 onFocus={handleFocus as any}
                 onKeyPress={handleKeyPress as any}
+                onKeyDown={handleKeyDown as any}
               />
             )}
             {icon && iconPosition === 'right' && !hasActionButton && (

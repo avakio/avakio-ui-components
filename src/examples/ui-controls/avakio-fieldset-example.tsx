@@ -746,6 +746,7 @@ export function AvakioFieldsetExample({ theme = 'material' }: { theme?: string }
       <section 
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-fieldset-demo-section"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"

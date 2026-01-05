@@ -356,6 +356,7 @@ export function AvakioMultiComboExample({ theme = 'material' }: { theme?: string
       <section 
         ref={(el) => { sectionRefs.current['docs'] = el; }}
         className="avakio-multicombo-demo-section"
+        data-section="docs"
       >
         <AvakioTemplate
           type="section"
