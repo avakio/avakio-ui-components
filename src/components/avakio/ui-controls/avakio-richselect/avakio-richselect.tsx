@@ -21,7 +21,6 @@ export interface AvakioRichSelectProps {
   readonly?: boolean;
   template?: (option: AvakioRichSelectOption) => React.ReactNode;
   width?: number | string;
-  maxHeight?: number;
   yCount?: number; // Number of visible items in the list
   required?: boolean;
   error?: string;

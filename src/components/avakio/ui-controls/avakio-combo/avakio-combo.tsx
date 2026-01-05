@@ -24,7 +24,6 @@ export interface AvakioComboProps {
   customFilter?: (option: AvakioComboOption, inputValue: string) => boolean;
   template?: (option: AvakioComboOption) => React.ReactNode;
   width?: number | string;
-  maxHeight?: number;
   required?: boolean;
   error?: string;
   className?: string;

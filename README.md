@@ -85,23 +85,118 @@ Advanced specialized components:
 
 ## 🚀 Getting Started
 
+### Prerequisites
+
+- Node.js 18+ 
+- npm 9+
+
 ### Installation
 
 ```bash
+# Install dependencies
 npm install
+
+# Install API server dependencies (optional, for full showcase)
+npm run api:install
 ```
 
-### Development
+---
+
+## 🖥️ Running the Showcase
+
+The showcase is an interactive demo that displays all components with live examples.
+
+### Development Mode (Frontend Only)
 
 ```bash
 npm run dev
 ```
 
-### Build
+This starts the Vite dev server at **http://localhost:5000**
+
+### Development Mode (Full Stack)
+
+To run the showcase with the mock API backend (required for some components like DataTable):
+
+```bash
+npm run dev:full
+```
+
+This runs both:
+- Frontend at **http://localhost:5000**
+- API server at **http://localhost:3001**
+
+### API Server Only
+
+```bash
+npm run api
+```
+
+---
+
+## 🔨 Building the Project
+
+### Build for Deployment (Showcase App)
+
+Builds the showcase application for production deployment:
 
 ```bash
 npm run build
 ```
+
+Output: `dist/` folder ready for static hosting
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+### Deploy to GitHub Pages
+
+```bash
+npm run deploy
+```
+
+---
+
+## 📦 Building as a Library
+
+To build the components as a reusable npm package:
+
+### Windows
+
+```bash
+npm run build:lib
+```
+
+### macOS / Linux
+
+```bash
+BUILD_MODE=lib npm run build:lib
+```
+
+This generates:
+- `dist/avakio-ui-components.js` - ES module
+- `dist/avakio-ui-components.umd.cjs` - UMD module
+- `dist/style.css` - All component styles
+- `dist/index.d.ts` - TypeScript definitions
+
+---
+
+## 📜 Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server (port 5000) |
+| `npm run dev:full` | Start frontend + API server |
+| `npm run api` | Start API server only (port 3001) |
+| `npm run api:install` | Install API server dependencies |
+| `npm run build` | Build showcase for production |
+| `npm run build:lib` | Build as npm library package |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
+| `npm run deploy` | Deploy to GitHub Pages |
 
 ## 📖 Usage
 
