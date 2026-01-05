@@ -175,6 +175,20 @@ export interface AvakioPropertyProps {
   id?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioProperty({

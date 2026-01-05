@@ -212,7 +212,7 @@ export function AvakioTreeExample() {
   return (
     <div className="avakio-tree-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-tree-sticky-header">
+      <div className="avakio-example-sticky-header">
         <AvakioViewHeader
           label="UI Widgets"
           title="Tree Component"
@@ -220,13 +220,14 @@ export function AvakioTreeExample() {
           isSticky={false}
         />
 
-        <div className="avakio-tree-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="tree-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

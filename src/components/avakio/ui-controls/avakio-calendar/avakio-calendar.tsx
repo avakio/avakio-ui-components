@@ -27,6 +27,20 @@ export interface AvakioCalendarProps {
   id?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 function isSameDay(date1: Date, date2: Date): boolean {
@@ -65,6 +79,8 @@ export function AvakioCalendar({
   onMonthChange,
   id,
   testId,
+  minWidth,
+  minHeight,
 }: AvakioCalendarProps) {
   // Initialize view to the first selected date's month, or today if no selection
   const getInitialViewDate = () => {

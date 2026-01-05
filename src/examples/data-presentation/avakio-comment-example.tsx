@@ -87,6 +87,7 @@ export function AvakioCommentExample() {
   const [playgroundReadonly, setPlaygroundReadonly] = useState(false);
   const [playgroundBorderless, setPlaygroundBorderless] = useState(false);
   const [playgroundDisabled, setPlaygroundDisabled] = useState(false);
+  const [playgroundHidden, setPlaygroundHidden] = useState(false);
   const [playgroundMentions, setPlaygroundMentions] = useState(true);
   const [playgroundKeepButton, setPlaygroundKeepButton] = useState(false);
   const [playgroundMode, setPlaygroundMode] = useState<string>('default');
@@ -131,24 +132,38 @@ export function AvakioCommentExample() {
   }
 
   const propsData: PropDoc[] = [
-    { id: 1, name: 'data', type: 'CommentItem[]', defaultValue: '[]', description: 'Array of comment objects with id, user_id, date, and text' },
-    { id: 2, name: 'users', type: 'CommentUser[]', defaultValue: '[]', description: 'Array of user objects with id, value, image, and status' },
-    { id: 3, name: 'currentUser', type: 'string | number', defaultValue: 'undefined', description: 'Current user ID - their comments can be edited/deleted' },
-    { id: 4, name: 'mode', type: "'default' | 'chat'", defaultValue: "'default'", description: 'Display mode - default shows oldest first, chat shows newest first' },
-    { id: 5, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Read-only mode - hides input and disables editing' },
-    { id: 6, name: 'sendAction', type: "'enter' | 'shift+enter'", defaultValue: "'enter'", description: 'Key combination to send a comment' },
-    { id: 7, name: 'placeholder', type: 'string', defaultValue: "'Write a comment...'", description: 'Placeholder text for the input' },
-    { id: 8, name: 'mentions', type: 'boolean', defaultValue: 'false', description: 'Enable @mentions functionality' },
-    { id: 9, name: 'keepButtonVisible', type: 'boolean', defaultValue: 'false', description: 'Keep send button always visible' },
-    { id: 10, name: 'hasMore', type: 'boolean', defaultValue: 'false', description: 'Show "Load more" button' },
-    { id: 11, name: 'moreButtonLabel', type: 'string', defaultValue: "'Load more comments'", description: 'Label for the more button' },
-    { id: 12, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove border from component' },
-    { id: 13, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable the component' },
-    { id: 14, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: 'undefined', description: 'Theme variant' },
-    { id: 15, name: 'onAdd', type: '(comment: CommentItem) => void', defaultValue: 'undefined', description: 'Callback when a comment is added' },
-    { id: 16, name: 'onDelete', type: '(id: string | number) => void', defaultValue: 'undefined', description: 'Callback when a comment is deleted' },
-    { id: 17, name: 'onEdit', type: '(comment: CommentItem) => void', defaultValue: 'undefined', description: 'Callback when a comment is edited' },
-    { id: 18, name: 'onUserMentioned', type: '(userId, comment) => void', defaultValue: 'undefined', description: 'Callback when a user is mentioned' },
+    { id: 1, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID' },
+    { id: 2, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes' },
+    { id: 3, name: 'data', type: 'CommentItem[]', defaultValue: '[]', description: 'Array of comment objects with id, user_id, date, and text' },
+    { id: 4, name: 'users', type: 'CommentUser[]', defaultValue: '[]', description: 'Array of user objects with id, value, image, and status' },
+    { id: 5, name: 'currentUser', type: 'string | number', defaultValue: 'undefined', description: 'Current user ID - their comments can be edited/deleted' },
+    { id: 6, name: 'mode', type: "'default' | 'chat'", defaultValue: "'default'", description: 'Display mode - default shows oldest first, chat shows newest first' },
+    { id: 7, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Read-only mode - hides input and disables editing' },
+    { id: 8, name: 'sendAction', type: "'enter' | 'shift+enter'", defaultValue: "'enter'", description: 'Key combination to send a comment' },
+    { id: 9, name: 'placeholder', type: 'string', defaultValue: "'Write a comment...'", description: 'Placeholder text for the input' },
+    { id: 10, name: 'mentions', type: 'boolean', defaultValue: 'false', description: 'Enable @mentions functionality' },
+    { id: 11, name: 'keepButtonVisible', type: 'boolean', defaultValue: 'false', description: 'Keep send button always visible' },
+    { id: 12, name: 'hasMore', type: 'boolean', defaultValue: 'false', description: 'Show "Load more" button' },
+    { id: 13, name: 'moreButtonLabel', type: 'string', defaultValue: "'Load more comments'", description: 'Label for the more button' },
+    { id: 14, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove border from component' },
+    { id: 15, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable the component' },
+    { id: 16, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden' },
+    { id: 17, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: 'undefined', description: 'Theme variant' },
+    { id: 18, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the component' },
+    { id: 19, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the component' },
+    { id: 20, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width' },
+    { id: 21, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height' },
+    { id: 22, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width' },
+    { id: 23, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height' },
+    { id: 24, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name' },
+    { id: 25, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom CSS styles' },
+    { id: 26, name: 'onAdd', type: '(comment: CommentItem) => void', defaultValue: 'undefined', description: 'Callback when a comment is added' },
+    { id: 27, name: 'onDelete', type: '(id: string | number) => void', defaultValue: 'undefined', description: 'Callback when a comment is deleted' },
+    { id: 28, name: 'onEdit', type: '(comment: CommentItem) => void', defaultValue: 'undefined', description: 'Callback when a comment is edited' },
+    { id: 29, name: 'onUserMentioned', type: '(userId, comment) => void', defaultValue: 'undefined', description: 'Callback when a user is mentioned' },
+    { id: 30, name: 'onLoadMore', type: '() => void', defaultValue: 'undefined', description: 'Callback when more comments are requested' },
+    { id: 31, name: 'dateFormatter', type: '(date: Date | string) => string', defaultValue: 'undefined', description: 'Custom date formatter' },
+    { id: 32, name: 'renderAvatar', type: '(user?: CommentUser) => ReactNode', defaultValue: 'undefined', description: 'Custom avatar renderer' },
   ];
 
   const refMethodsData: PropDoc[] = [
@@ -178,7 +193,7 @@ export function AvakioCommentExample() {
   return (
     <div className="avakio-comment-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-comment-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Widgets"
@@ -188,13 +203,14 @@ export function AvakioCommentExample() {
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-comment-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="comment-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]} 
             size="sm"
             scrollable
           />
@@ -481,7 +497,7 @@ export function AvakioCommentExample() {
                 data={sampleComments.slice(0, 2)}
                 users={sampleUsers}
                 currentUser={1}
-                width={400}
+                width={400}                
                 height={300}
                 onAdd={handleAdd}
                 onDelete={handleDelete}
@@ -513,21 +529,17 @@ export function AvakioCommentExample() {
                 </AvakioButton>
                 <AvakioButton onClick={() => commentRef.current?.disable()}>
                   disable()
-                </AvakioButton>
-                
-                {/* Event Log */}
-                <div style={{ marginTop: '16px', padding: '12px', background: '#f5f5f5', borderRadius: '6px', fontSize: '12px' }}>
-                  <strong>Event Log:</strong>
-                  <div style={{ marginTop: '8px', maxHeight: '100px', overflow: 'auto' }}>
-                    {eventLog.length === 0 ? (
-                      <div style={{ color: '#888' }}>No events yet...</div>
-                    ) : (
-                      eventLog.map((log, i) => (
-                        <div key={i} style={{ padding: '2px 0', color: '#666' }}>{log}</div>
-                      ))
-                    )}
-                  </div>
-                </div>
+                </AvakioButton>                                
+              </div>
+            </div>,
+            <div key="event-log" style={{ marginTop: '16px', padding: '12px', background: '#f5f5f5', borderRadius: '6px', fontSize: '12px' }}>
+              <strong>Event Log:</strong>
+              <div style={{ marginTop: '8px', maxHeight: '100px', overflow: 'auto' }}>
+                {eventLog.length === 0 ? (<div style={{ color: '#888' }}>No events yet...</div>) : (
+                  eventLog.map((log, i) => (
+                    <div key={i} style={{ padding: '2px 0', color: '#666' }}>{log}</div>
+                  ))
+                )}
               </div>
             </div>,
           ]}
@@ -558,7 +570,7 @@ export function AvakioCommentExample() {
           rows={[
             <div key="playground" style={{ display: 'flex', gap: '32px', flexWrap: 'wrap' }}>
               {/* Preview */}
-              <div style={{ flex: 1, minWidth: 400, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ flex: 1, minWidth: 300, display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <AvakioTemplate
                   type="clean"
                   borderType="clean"
@@ -577,11 +589,13 @@ export function AvakioCommentExample() {
                     readonly={playgroundReadonly}
                     borderless={playgroundBorderless}
                     disabled={playgroundDisabled}
+                    hidden={playgroundHidden}
                     mentions={playgroundMentions}
                     keepButtonVisible={playgroundKeepButton}
                     mode={playgroundMode as any}
                     sendAction={playgroundSendAction as any}
                     width={400}
+                    minWidth={300}
                     height={350}
                   />
                 </div>
@@ -626,6 +640,11 @@ export function AvakioCommentExample() {
                   label="Disabled"
                   checked={playgroundDisabled}
                   onChange={setPlaygroundDisabled}
+                />
+                <AvakioCheckbox
+                  label="Hidden"
+                  checked={playgroundHidden}
+                  onChange={setPlaygroundHidden}
                 />
                 <AvakioCheckbox
                   label="Enable Mentions"
@@ -674,7 +693,7 @@ export function AvakioCommentExample() {
               data={propsData}
               columns={propsColumns}
               select={false}
-              height={500}
+              height={700}
             />,
           ]}
         />

@@ -21,8 +21,20 @@ export interface AvakioColorPickerProps {
   allowCustomInput?: boolean;
   showPreview?: boolean;
   className?: string;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 const normalizeHex = (hex: string) => {
@@ -54,6 +66,8 @@ export function AvakioColorPicker({
   allowCustomInput = true,
   showPreview = true,
   className = '',
+  minWidth,
+  minHeight,
   testId,
 }: AvakioColorPickerProps) {
   const isControlled = value !== undefined;
@@ -119,6 +133,10 @@ export function AvakioColorPicker({
         className,
       ].filter(Boolean).join(' ')}
       data-color={currentColor}
+      style={{
+        ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+        ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+      }}
     >
       {(label || description || error) && (
         <div className="avakio-colorpicker-header">

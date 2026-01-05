@@ -33,7 +33,9 @@ body {
 
 #root {
   width: 100%;
+  max-width: 100vw;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -72,5 +74,78 @@ button:not([class*="avakio-"]):not([class*="btn"]):focus-visible {
   [data-value="docs"] {
     display: none !important;
   }
+}
+
+/* ========================================
+   Mobile Header Layout - Center title
+   ======================================== */
+@media (max-width: 767px) {
+  .header-title-container {
+    text-align: center;
+  }
+  
+  .header-title-text {
+    justify-content: center;
+    padding-left: 60px; /* Space for dongle button on left */
+    padding-right: 16px;
+  }
+}
+
+/* ========================================
+   Global Example Page Sticky Header Styles
+   ======================================== */
+
+/* Example page container */
+.avakio-example-container {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  background: var(--avakio-bg-primary, #ffffff);
+}
+
+/* Sticky header for example pages (ViewHeader + TabBar) */
+.avakio-example-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--avakio-bg-primary, #ffffff);
+  border-bottom: 1px solid var(--avakio-border, #e5e7eb);
+}
+
+/* Remove sticky header on mobile */
+@media (max-width: 767px) {
+  .avakio-example-sticky-header {
+    position: relative;
+    top: auto;
+  }
+}
+
+/* Tab bar container inside sticky header */
+.avakio-example-tabbar-container {
+  background: var(--avakio-bg-primary, #ffffff);
+}
+
+/* Section scroll margin to account for sticky header */
+.avakio-example-section {
+  scroll-margin-top: 180px;
+}
+
+/* Theme-specific backgrounds for sticky header */
+[data-admin-theme="dark"] .avakio-example-sticky-header,
+[data-admin-theme="dark"] .avakio-example-tabbar-container {
+  background: var(--avakio-bg-primary, #1a1a2e);
+  border-color: var(--avakio-border, #2d2d44);
+}
+
+[data-admin-theme="ocean"] .avakio-example-sticky-header,
+[data-admin-theme="ocean"] .avakio-example-tabbar-container {
+  background: var(--avakio-bg-primary, #f0f9ff);
+  border-color: var(--avakio-border, #bae6fd);
+}
+
+[data-admin-theme="sunset"] .avakio-example-sticky-header,
+[data-admin-theme="sunset"] .avakio-example-tabbar-container {
+  background: var(--avakio-bg-primary, #fffbeb);
+  border-color: var(--avakio-border, #fde68a);
 }
 

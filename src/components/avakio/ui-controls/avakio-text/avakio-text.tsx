@@ -89,8 +89,22 @@ export interface AvakioTextProps {
   padding?: string | number | [number, number, number, number];
   /** Margin (number for all sides, string for CSS, or [top, right, bottom, left]) */
   margin?: string | number | [number, number, number, number];
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
   /** Width of the text input/textarea (e.g., '100%', '200px') */
   textWidth?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Component ID */
+  id?: string;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export interface AvakioTextRef {

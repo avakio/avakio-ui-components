@@ -42,6 +42,22 @@ export interface AvakioSliderProps {
   testId?: string;
   /** Theme */
   theme?: string;
+  /** Padding (number for all sides, string for CSS, or [top, right, bottom, left]) */
+  padding?: string | number | [number, number, number, number];
+  /** Margin (number for all sides, string for CSS, or [top, right, bottom, left]) */
+  margin?: string | number | [number, number, number, number];
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 function clamp(val: number, min: number, max: number) {
@@ -68,6 +84,10 @@ export function AvakioSlider({
   id,
   testId,
   theme,
+  padding,
+  margin,
+  minWidth,
+  minHeight,
 }: AvakioSliderProps) {
   const isControlled = value !== undefined;
   
@@ -166,15 +186,37 @@ export function AvakioSlider({
     }
   }, [disabled, range, min, max, step, currentRange, handleRangeChange]);
 
+  // Handle padding
+  const paddingStyle = padding
+    ? typeof padding === 'number'
+      ? `${padding}px`
+      : Array.isArray(padding)
+      ? `${padding[0]}px ${padding[1]}px ${padding[2]}px ${padding[3]}px`
+      : padding
+    : undefined;
+
+  // Handle margin
+  const marginStyle = margin
+    ? typeof margin === 'number'
+      ? `${margin}px`
+      : Array.isArray(margin)
+      ? `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`
+      : margin
+    : undefined;
+
   // CSS custom properties for range progress
   const sliderStyle = range
     ? {
         ["--slider-progress-start" as string]: `${lowPercent}%`,
         ["--slider-progress-end" as string]: `${highPercent}%`,
         ["--slider-progress" as string]: `${highPercent}%`,
+        ...(paddingStyle && { padding: paddingStyle }),
+        ...(marginStyle && { margin: marginStyle }),
       }
     : {
         ["--slider-progress" as string]: `${highPercent}%`,
+        ...(paddingStyle && { padding: paddingStyle }),
+        ...(marginStyle && { margin: marginStyle }),
       };
 
   return (

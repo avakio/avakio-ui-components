@@ -761,7 +761,7 @@ export default function ComponentsShowcasePage() {
       type="clean"
       height="100vh"
       width="100%"
-      css={{ height: '100vh', width: '100%', minWidth: '100%', display: 'flex', flexDirection: 'column' }}
+      css={{ height: '100vh', width: '100%', maxWidth: '100vw', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
       data-admin-theme={theme}
       rows={[        
         // Header
@@ -809,9 +809,10 @@ export default function ComponentsShowcasePage() {
                 borderless={true}
                 gravity={1}
                 padding="0 0 10px 0"
-                type='header'                    
+                type='header'
+                className="header-title-container"                    
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>            
+                <div className="header-title-text" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>            
                   <AvakioLabel
                     id="WebAppMainLayoutHeaderTitleLabel"
                     label="Avakio UI Components Showcase"

@@ -16,10 +16,24 @@ export interface AvakioResizerProps {
   className?: string;
   /** Inline styles */
   css?: React.CSSProperties;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
   /** ID of the component */
   id?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 /**
@@ -49,6 +63,13 @@ export function AvakioResizer({
   onResizeEnd,
   className = '',
   css,
+  minWidth,
+  minHeight,
+  maxWidth,
+  maxHeight,
+  borderless = false,
+  disabled = false,
+  hidden = false,
   id,
   testId,
 }: AvakioResizerProps) {
@@ -114,10 +135,22 @@ export function AvakioResizer({
     `avakio-resizer-${direction}`,
     `avakio-resizer-theme-${theme}`,
     isDragging ? 'avakio-resizer-dragging' : '',
+    borderless && 'avakio-resizer-borderless',
+    disabled && 'avakio-resizer-disabled',
+    hidden && 'avakio-resizer-hidden',
     className,
   ]
     .filter(Boolean)
     .join(' ');
+
+  const containerStyle: React.CSSProperties = {
+    ...css,
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+    ...(hidden && { display: 'none' }),
+  };
 
   return (
     <div
@@ -126,11 +159,12 @@ export function AvakioResizer({
       data-testid={testId}
       className={classes}
       data-admin-theme={theme}
-      onMouseDown={handleMouseDown}
-      style={css}
+      onMouseDown={disabled ? undefined : handleMouseDown}
+      style={containerStyle}
       role="separator"
       aria-orientation={direction === 'horizontal' ? 'horizontal' : 'vertical'}
       aria-label="Resizer"
+      aria-disabled={disabled}
     >
       <div className="avakio-resizer-handle" />
     </div>

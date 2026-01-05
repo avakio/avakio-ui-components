@@ -78,6 +78,22 @@ export interface AvakioRadioProps {
   onFocus?: (e: React.FocusEvent) => void;
   /** Callback when blurred */
   onBlur?: (e: React.FocusEvent) => void;
+  /** Padding (number for all sides, string for CSS, or [top, right, bottom, left]) */
+  padding?: string | number | [number, number, number, number];
+  /** Margin (number for all sides, string for CSS, or [top, right, bottom, left]) */
+  margin?: string | number | [number, number, number, number];
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export interface AvakioRadioRef {
@@ -152,6 +168,8 @@ export const AvakioRadio = forwardRef<AvakioRadioRef, AvakioRadioProps>(
       onClick,
       onFocus,
       onBlur,
+      padding,
+      margin,
     },
     ref
   ) => {
@@ -295,10 +313,30 @@ export const AvakioRadio = forwardRef<AvakioRadioRef, AvakioRadioProps>(
       className,
     ].filter(Boolean).join(' ');
 
+    // Handle padding
+    const paddingStyle = padding
+      ? typeof padding === 'number'
+        ? `${padding}px`
+        : Array.isArray(padding)
+        ? `${padding[0]}px ${padding[1]}px ${padding[2]}px ${padding[3]}px`
+        : padding
+      : undefined;
+
+    // Handle margin
+    const marginStyle = margin
+      ? typeof margin === 'number'
+        ? `${margin}px`
+        : Array.isArray(margin)
+        ? `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`
+        : margin
+      : undefined;
+
     const containerStyle: React.CSSProperties = {
       ...(css && typeof css === 'object' && !Array.isArray(css) ? css : {}),
       ...(width ? { width: typeof width === 'number' ? `${width}px` : width } : {}),
       ...(height ? { height: typeof height === 'number' ? `${height}px` : height } : {}),
+      ...(paddingStyle && { padding: paddingStyle }),
+      ...(marginStyle && { margin: marginStyle }),
     };
 
     return (

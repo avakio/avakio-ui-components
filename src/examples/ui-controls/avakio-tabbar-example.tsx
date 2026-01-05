@@ -84,7 +84,7 @@ export function AvakioTabBarExample({ theme = 'material' }: { theme?: string }) 
   return (
     <div className="avakio-tabbar-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-tabbar-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Controls"
@@ -94,13 +94,14 @@ export function AvakioTabBarExample({ theme = 'material' }: { theme?: string }) 
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-tabbar-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="tabbar-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

@@ -72,8 +72,14 @@ export interface AvakioMultitextProps {
   height?: number | string;
   /** Minimum width */
   minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Whether the component is hidden */
+  hidden?: boolean;
   /** Input alignment */
   inputAlign?: 'left' | 'center' | 'right';
   /** Input width */

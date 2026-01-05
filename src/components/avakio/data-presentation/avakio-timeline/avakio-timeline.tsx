@@ -22,6 +22,22 @@ export type AvakioTimelineProps = {
   dense?: boolean;
   orientation?: "vertical" | "horizontal";
   variant?: "default" | "split" | "colorband";
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Component ID */
+  id?: string;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 };
 
 export function AvakioTimeline({
@@ -33,17 +49,42 @@ export function AvakioTimeline({
   dense,
   orientation = "vertical",
   variant = "default",
+  minWidth,
+  minHeight,
+  maxWidth,
+  maxHeight,
+  borderless = false,
+  disabled = false,
+  hidden = false,
+  id,
 }: AvakioTimelineProps) {
-  const rootClasses = ["avakio-timeline", dense ? "is-dense" : "", className || ""].filter(Boolean);
+  const rootClasses = [
+    "avakio-timeline",
+    dense ? "is-dense" : "",
+    borderless && "avakio-timeline-borderless",
+    disabled && "avakio-timeline-disabled",
+    hidden && "avakio-timeline-hidden",
+    className || ""
+  ].filter(Boolean);
   if (orientation === "horizontal") rootClasses.push("is-horizontal");
   if (orientation === "vertical" && variant === "split") rootClasses.push("is-vertical-split");
   if (orientation === "horizontal" && variant === "colorband") rootClasses.push("is-horizontal-colorband");
 
+  const containerStyle: React.CSSProperties = {
+    ...style,
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+    ...(hidden && { display: 'none' }),
+  };
+
   const vertical = (
     <div
+      id={id}
       className={rootClasses.join(" ").trim()}
       data-admin-theme={theme}
-      style={style}
+      style={containerStyle}
     >
       {items.map((item, idx) => {
         const isLast = idx === items.length - 1;

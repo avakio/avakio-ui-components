@@ -261,7 +261,7 @@ export function AvakioMultiviewExample() {
   return (
     <div className="avakio-multiview-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-multiview-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="Views"
@@ -271,13 +271,14 @@ export function AvakioMultiviewExample() {
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-multiview-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="multiview-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

@@ -62,6 +62,16 @@ export interface AvakioCommentProps {
   width?: number | string;
   /** Height of the component */
   height?: number | string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Whether the component is hidden */
+  hidden?: boolean;
   /** Disabled state */
   disabled?: boolean;
   /** Callback when a comment is added */
@@ -153,6 +163,11 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
       className = '',
       width,
       height,
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+      hidden = false,
       disabled: disabledProp = false,
       onAdd,
       onDelete,
@@ -441,6 +456,7 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
       borderless && 'avakio-comment-borderless',
       disabled && 'avakio-comment-disabled',
       readonly && 'avakio-comment-readonly',
+      hidden && 'avakio-comment-hidden',
       className,
     ].filter(Boolean).join(' ');
 
@@ -449,6 +465,11 @@ export const AvakioComment = forwardRef<AvakioCommentRef, AvakioCommentProps>(
       ...(css && typeof css === 'object' && !Array.isArray(css) ? css : {}),
       width: typeof width === 'number' ? `${width}px` : width,
       height: typeof height === 'number' ? `${height}px` : height,
+      ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+      ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+      ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+      ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+      ...(hidden && { display: 'none' }),
     };
 
     return (

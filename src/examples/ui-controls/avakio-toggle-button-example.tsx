@@ -173,7 +173,7 @@ export function AvakioToggleButtonExample({ theme = 'material' }: { theme?: stri
   return (
     <div className="avakio-toggle-button-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-toggle-button-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Controls"
@@ -183,13 +183,14 @@ export function AvakioToggleButtonExample({ theme = 'material' }: { theme?: stri
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-toggle-button-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="toggle-button-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

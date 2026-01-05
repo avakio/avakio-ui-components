@@ -164,6 +164,7 @@ export function AvakioExcelViewerExample() {
           options={TAB_OPTIONS}
           value={activeSection}
           onChange={handleTabChange}
+          padding={[6, 16, 16, 16]}
         />
       </div>
 

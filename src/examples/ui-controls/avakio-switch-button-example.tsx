@@ -160,7 +160,7 @@ export function AvakioSwitchButtonExample() {
   return (
     <div className="avakio-switch-button-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-switch-button-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Controls"
@@ -170,13 +170,14 @@ export function AvakioSwitchButtonExample() {
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-switch-button-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="switch-button-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

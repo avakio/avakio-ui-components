@@ -408,6 +408,11 @@
   pointer-events: none;
 }
 
+/* Hidden */
+.avakio-comment-hidden {
+  display: none !important;
+}
+
 /* Readonly */
 .avakio-comment-readonly .avakio-comment-input-area {
   display: none;

@@ -17,8 +17,20 @@ export interface AvakioCheckboxProps extends Omit<React.InputHTMLAttributes<HTML
   padding?: string | number | [number, number, number, number];
   /** Margin (number for all sides, string for CSS, or [top, right, bottom, left]) */
   margin?: string | number | [number, number, number, number];
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioCheckbox({
@@ -38,6 +50,8 @@ export function AvakioCheckbox({
   onChange,
   padding,
   margin,
+  minWidth,
+  minHeight,
   testId,
   ...rest
 }: AvakioCheckboxProps) {
@@ -101,6 +115,8 @@ export function AvakioCheckbox({
   const containerStyle: React.CSSProperties = {
     ...(paddingStyle && { padding: paddingStyle }),
     ...(marginStyle && { margin: marginStyle }),
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
   };
 
   return (

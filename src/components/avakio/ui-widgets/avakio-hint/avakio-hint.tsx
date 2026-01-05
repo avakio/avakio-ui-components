@@ -63,6 +63,20 @@ export interface AvakioHintProps {
   onPrevious?: (step: number) => void;
   /** Callback when step changes */
   onStepChange?: (step: number) => void;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export interface AvakioHintRef {
@@ -105,6 +119,13 @@ export const AvakioHint = forwardRef<AvakioHintRef, AvakioHintProps>((props, ref
     onNext,
     onPrevious,
     onStepChange,
+    minWidth,
+    minHeight,
+    maxWidth,
+    maxHeight,
+    borderless = false,
+    disabled = false,
+    hidden = false,
   } = props;
 
   const [steps, setSteps] = useState<AvakioHintStep[]>(initialSteps);
@@ -435,11 +456,29 @@ export const AvakioHint = forwardRef<AvakioHintRef, AvakioHintProps>((props, ref
   const showPrev = prevButton !== false && !isFirstStep;
   const showNext = nextButton !== false;
 
+  // Don't render if hidden or disabled
+  if (hidden || disabled) return null;
+
+  const hintClassName = [
+    'avakio-hint',
+    `avakio-hint-theme-${theme}`,
+    borderless && 'avakio-hint-borderless',
+  ].filter(Boolean).join(' ');
+
+  const popupStyle: React.CSSProperties = {
+    top: popupPosition.top,
+    left: popupPosition.left,
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+  };
+
   return createPortal(
     <div
       id={id}
       data-testid={testId}
-      className={`avakio-hint avakio-hint-theme-${theme}`}
+      className={hintClassName}
     >
       {/* Overlay with cutout */}
       <div className="avakio-hint-overlay">
@@ -488,10 +527,7 @@ export const AvakioHint = forwardRef<AvakioHintRef, AvakioHintProps>((props, ref
       <div
         ref={popupRef}
         className="avakio-hint-popup"
-        style={{
-          top: popupPosition.top,
-          left: popupPosition.left,
-        }}
+        style={popupStyle}
       >
         <button
           className="avakio-hint-close"

@@ -72,6 +72,20 @@ export interface AvakioSchedulerProps {
   id?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 export function AvakioScheduler({
   events = [],
@@ -95,6 +109,13 @@ export function AvakioScheduler({
   className,
   id,
   testId,
+  minWidth,
+  minHeight,
+  maxWidth,
+  maxHeight,
+  borderless = false,
+  disabled = false,
+  hidden = false,
 }: AvakioSchedulerProps) {
   const [view, setView] = useState<AvakioSchedulerView>(defaultView);
   const [anchor, setAnchor] = useState<Date>(
@@ -334,8 +355,24 @@ export function AvakioScheduler({
     return events.map((evt) => renderEventPill(evt));
   };
 
+  const containerClassName = [
+    'avakio-scheduler',
+    borderless && 'avakio-scheduler-borderless',
+    disabled && 'avakio-scheduler-disabled',
+    hidden && 'avakio-scheduler-hidden',
+    className,
+  ].filter(Boolean).join(' ');
+
+  const containerStyle: React.CSSProperties = {
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+    ...(hidden && { display: 'none' }),
+  };
+
   return (
-    <div id={id} data-testid={testId} className={["avakio-scheduler", className || ""].join(" ")}>
+    <div id={id} data-testid={testId} className={containerClassName} style={containerStyle}>
       <div className="avakio-sch-toolbar">
         <div className="avakio-sch-nav">
           <button onClick={() => go(-1)} className="avakio-sch-btn">Prev</button>

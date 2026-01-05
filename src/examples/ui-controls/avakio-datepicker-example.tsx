@@ -50,7 +50,7 @@ export function AvakioDatePickerExample({ theme = 'material' }: { theme?: string
   return (
     <div className="avakio-datepicker-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-datepicker-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Controls"
@@ -60,13 +60,14 @@ export function AvakioDatePickerExample({ theme = 'material' }: { theme?: string
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-datepicker-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="datepicker-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={(val) => setActiveSection(val)}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

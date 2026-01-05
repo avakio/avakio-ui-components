@@ -59,6 +59,10 @@ export interface AvakioGroupListProps {
   width?: number | string;
   /** Height of the component */
   height?: number | string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
   /** Enable scrolling */
   scroll?: boolean;
   /** Additional CSS class */
@@ -69,6 +73,16 @@ export interface AvakioGroupListProps {
   id?: string;
   /** Test ID for testing */
   testId?: string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioGroupList({
@@ -88,6 +102,13 @@ export function AvakioGroupList({
   backLabel = "Back",
   width,
   height,
+  minWidth,
+  minHeight,
+  maxWidth,
+  maxHeight,
+  borderless = false,
+  disabled = false,
+  hidden = false,
   scroll = true,
   className,
   style,
@@ -322,16 +343,24 @@ export function AvakioGroupList({
     'avakio-grouplist',
     animating && `avakio-grouplist-animating avakio-grouplist-${animationDirection}`,
     scroll && 'avakio-grouplist-scroll',
+    borderless && 'avakio-grouplist-borderless',
+    disabled && 'avakio-grouplist-disabled',
+    hidden && 'avakio-grouplist-hidden',
     className,
-  ].filter(Boolean).join(' '), [animating, animationDirection, scroll, className]);
+  ].filter(Boolean).join(' '), [animating, animationDirection, scroll, borderless, disabled, hidden, className]);
 
   // Build styles
   const containerStyle: React.CSSProperties = useMemo(() => ({
     ...style,
     ...(width !== undefined ? { width: typeof width === 'number' ? `${width}px` : width } : {}),
     ...(height !== undefined ? { height: typeof height === 'number' ? `${height}px` : height } : {}),
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+    ...(hidden && { display: 'none' }),
     ...(animate ? { '--grouplist-animation-duration': `${animationDuration}ms` } as React.CSSProperties : {}),
-  }), [style, width, height, animate, animationDuration]);
+  }), [style, width, height, minWidth, minHeight, maxWidth, maxHeight, hidden, animate, animationDuration]);
 
   return (
     <div

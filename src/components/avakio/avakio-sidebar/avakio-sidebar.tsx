@@ -34,6 +34,20 @@ export interface AvakioSidebarProps {
   id?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 interface ItemState {
@@ -61,6 +75,13 @@ export function AvakioSidebar({
   dongleIcon,
   id,
   testId,
+  minWidth,
+  minHeight,
+  maxWidth,
+  maxHeight,
+  borderless = false,
+  disabled = false,
+  hidden = false,
 }: AvakioSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(collapsed);
   const [openItems, setOpenItems] = useState<ItemState>({});
@@ -261,6 +282,28 @@ export function AvakioSidebar({
     );
   };
 
+  const sidebarClassName = [
+    'avakio-sidebar',
+    isCollapsed ? 'collapsed' : 'expanded',
+    `position-${position}`,
+    isMobile ? 'mobile' : 'desktop',
+    borderless && 'avakio-sidebar-borderless',
+    disabled && 'avakio-sidebar-disabled',
+    hidden && 'avakio-sidebar-hidden',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const sidebarStyle: React.CSSProperties = {
+    width: isCollapsed ? `${collapsedWidth}px` : `${width}px`,
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+    ...(hidden && { display: 'none' }),
+  };
+
   return (
     <>
       {/* Mobile overlay */}
@@ -291,18 +334,9 @@ export function AvakioSidebar({
       <div
         id={id}
         data-testid={testId}
-        className={[
-          'avakio-sidebar',
-          isCollapsed ? 'collapsed' : 'expanded',
-          `position-${position}`,
-          isMobile ? 'mobile' : 'desktop',
-          className,
-        ]
-          .filter(Boolean)
-          .join(' ')}
-        style={{
-          width: isCollapsed ? `${collapsedWidth}px` : `${width}px`,
-        }}
+        className={sidebarClassName}
+        style={sidebarStyle}
+        aria-disabled={disabled}
       >
         <div className="avakio-sidebar-content">{data.map((item) => renderItem(item))}</div>
       </div>

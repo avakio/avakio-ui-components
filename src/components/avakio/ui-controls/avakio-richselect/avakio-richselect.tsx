@@ -31,8 +31,20 @@ export interface AvakioRichSelectProps {
   padding?: string | number | [number, number, number, number];
   /** Margin - can be a number (all sides), string, or array [top, right, bottom, left] */
   margin?: string | number | [number, number, number, number];
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioRichSelect({
@@ -56,6 +68,8 @@ export function AvakioRichSelect({
   clearable = true,
   padding,
   margin,
+  minWidth,
+  minHeight,
   testId,
 }: AvakioRichSelectProps) {
   const [isOpen, setIsOpen] = useState(false);

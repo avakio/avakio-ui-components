@@ -156,6 +156,18 @@ export interface AvakioExcelViewerProps {
   onSort?: (column: AvakioExcelViewerColumn, direction: 'asc' | 'desc') => void;
   /** Callback when data is loaded */
   onDataLoad?: (data: Record<string, any>[]) => void;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export interface AvakioExcelViewerRef {

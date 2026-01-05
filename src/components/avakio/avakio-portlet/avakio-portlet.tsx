@@ -27,9 +27,39 @@ export interface AvakioPortletBoardProps {
   id?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
-export function AvakioPortletBoard({ columns, items, onMove, className, style, theme, id, testId }: AvakioPortletBoardProps) {
+export function AvakioPortletBoard({ 
+  columns, 
+  items, 
+  onMove, 
+  className, 
+  style, 
+  theme, 
+  id, 
+  testId,
+  minWidth,
+  minHeight,
+  maxWidth,
+  maxHeight,
+  borderless = false,
+  disabled = false,
+  hidden = false,
+}: AvakioPortletBoardProps) {
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
   const grouped = useMemo(() => {
@@ -64,12 +94,29 @@ export function AvakioPortletBoard({ columns, items, onMove, className, style, t
     setDraggingId(null);
   };
 
+  const containerClassName = [
+    'avakio-portlet',
+    borderless && 'avakio-portlet-borderless',
+    disabled && 'avakio-portlet-disabled',
+    hidden && 'avakio-portlet-hidden',
+    className,
+  ].filter(Boolean).join(' ');
+
+  const containerStyle: React.CSSProperties = {
+    ...style,
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+    ...(hidden && { display: 'none' }),
+  };
+
   return (
     <div
       id={id}
       data-testid={testId}
-      className={["avakio-portlet", className].filter(Boolean).join(" ")}
-      style={style}
+      className={containerClassName}
+      style={containerStyle}
       data-admin-theme={theme}
     >
       <div className="avakio-portlet-grid">

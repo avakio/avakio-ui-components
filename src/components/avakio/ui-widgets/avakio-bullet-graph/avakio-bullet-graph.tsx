@@ -61,8 +61,20 @@ export interface AvakioBulletGraphProps {
   id?: string;
   /** Test ID for testing */
   testId?: string;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
   /** Additional CSS class */
   className?: string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 const DEFAULT_BANDS: AvakioBulletGraphBand[] = [
@@ -94,6 +106,8 @@ export function AvakioBulletGraph({
   disabled = false,
   id,
   testId,
+  minWidth,
+  minHeight,
   className,
 }: AvakioBulletGraphProps) {
   const [animatedValue, setAnimatedValue] = useState(minRange);
@@ -109,14 +123,26 @@ export function AvakioBulletGraph({
   useEffect(() => {
     if (!smoothFlow || flowTime === 0) {
       setAnimatedValue(clampedValue);
+      prevValueRef.current = clampedValue;
       return;
     }
 
     const startValue = prevValueRef.current;
     const endValue = clampedValue;
+    
+    // Skip animation if values are the same (with small epsilon for floating point)
+    if (Math.abs(startValue - endValue) < 0.001) {
+      prevValueRef.current = endValue;
+      return;
+    }
+    
     const startTime = performance.now();
+    let rafId: number | null = null;
+    let isCancelled = false;
 
     const animate = (currentTime: number) => {
+      if (isCancelled) return;
+      
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / flowTime, 1);
       
@@ -126,24 +152,30 @@ export function AvakioBulletGraph({
       
       setAnimatedValue(currentValue);
 
-      if (progress < 1) {
-        animationRef.current = requestAnimationFrame(animate);
+      if (progress < 1 && !isCancelled) {
+        rafId = requestAnimationFrame(animate);
+        animationRef.current = rafId;
       } else {
         prevValueRef.current = endValue;
+        animationRef.current = null;
       }
     };
 
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
     }
-    animationRef.current = requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
+    animationRef.current = rafId;
 
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+      isCancelled = true;
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        animationRef.current = null;
       }
     };
-  }, [clampedValue, flowTime, smoothFlow]);
+  }, [clampedValue, flowTime]);
 
   // Calculate percentage position
   const getPercentage = (val: number) => {

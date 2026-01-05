@@ -135,6 +135,10 @@ export interface AvakioChartProps {
   width?: number | string;
   /** Height */
   height?: number | string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
   /** Padding */
   padding?: AvakioChartPadding;
   /** Enable animation */
@@ -169,6 +173,16 @@ export interface AvakioChartProps {
   onHover?: (point: AvakioChartDataPoint | null, series: AvakioChartSeries | null, index: number | null) => void;
   /** Callback when legend item is clicked */
   onLegendClick?: (series: AvakioChartSeries, visible: boolean) => void;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export interface AvakioChartRef {
@@ -333,6 +347,13 @@ export const AvakioChart = forwardRef<AvakioChartRef, AvakioChartProps>((props, 
     onClick,
     onHover,
     onLegendClick,
+    minWidth,
+    minHeight,
+    maxWidth,
+    maxHeight,
+    borderless = false,
+    disabled = false,
+    hidden = false,
   } = props;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1321,10 +1342,25 @@ export const AvakioChart = forwardRef<AvakioChartRef, AvakioChartProps>((props, 
     }
   };
 
+  const containerClassName = [
+    'avakio-chart',
+    `avakio-chart--${theme}`,
+    `avakio-chart--${type}`,
+    borderless && 'avakio-chart--borderless',
+    disabled && 'avakio-chart--disabled',
+    hidden && 'avakio-chart--hidden',
+    className,
+  ].filter(Boolean).join(' ');
+
   const containerStyle: React.CSSProperties = {
     width,
     height,
     ...style,
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+    ...(hidden && { display: 'none' }),
   };
 
   return (
@@ -1332,7 +1368,7 @@ export const AvakioChart = forwardRef<AvakioChartRef, AvakioChartProps>((props, 
       ref={containerRef}
       id={id}
       data-testid={testId}
-      className={`avakio-chart avakio-chart--${theme} avakio-chart--${type} ${className || ''}`}
+      className={containerClassName}
       style={containerStyle}
     >
       <svg

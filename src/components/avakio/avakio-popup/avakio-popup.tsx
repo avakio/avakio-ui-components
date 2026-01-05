@@ -23,6 +23,20 @@ export type AvakioPopupProps = {
   id?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 };
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
@@ -46,6 +60,13 @@ export function AvakioPopup({
   children,
   id,
   testId,
+  minWidth,
+  minHeight,
+  maxWidth,
+  maxHeight,
+  borderless = false,
+  disabled = false,
+  hidden = false,
 }: AvakioPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState({ top: 0, left: 0 });
@@ -111,7 +132,26 @@ export function AvakioPopup({
     return () => document.removeEventListener("mousedown", handleClick, true);
   }, [open, closeOnOutside, onClose]);
 
-  if (!open) return null;
+  if (!open || hidden) return null;
+
+  const popupClassName = [
+    'avakio-popup',
+    borderless && 'avakio-popup-borderless',
+    disabled && 'avakio-popup-disabled',
+    className,
+  ].filter(Boolean).join(' ');
+
+  const popupStyle: React.CSSProperties = {
+    top: coords.top,
+    left: coords.left,
+    width: width ?? `${numericWidth}px`,
+    height,
+    ...style,
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+  };
 
   const popupNode = (
     <>
@@ -126,15 +166,10 @@ export function AvakioPopup({
         ref={popupRef}
         id={id}
         data-testid={testId}
-        className={["avakio-popup", className || ""].join(" ").trim()}
+        className={popupClassName}
         data-admin-theme={theme}
-        style={{
-          top: coords.top,
-          left: coords.left,
-          width: width ?? `${numericWidth}px`,
-          height,
-          ...style,
-        }}
+        style={popupStyle}
+        aria-disabled={disabled}
       >
         {children}
       </div>

@@ -22,6 +22,10 @@ export interface AvakioFieldsetProps {
   width?: number | string;
   /** Height of the fieldset */
   height?: number | string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
   /** Horizontal padding (left and right) */
   paddingX?: number;
   /** Vertical padding (top and bottom) */
@@ -75,6 +79,8 @@ export const AvakioFieldset = forwardRef<AvakioFieldsetRef, AvakioFieldsetProps>
       disabled: disabledProp = false,
       width,
       height,
+      minWidth,
+      minHeight,
       paddingX = 18,
       paddingY = 16,
       css,

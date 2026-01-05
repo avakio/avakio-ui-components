@@ -50,7 +50,7 @@ export function AvakioSliderExample({ theme = 'material' }: { theme?: string }) 
   return (
     <div className="avakio-slider-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-slider-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Controls"
@@ -60,13 +60,14 @@ export function AvakioSliderExample({ theme = 'material' }: { theme?: string }) 
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-slider-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="slider-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

@@ -26,6 +26,20 @@ export interface AvakioViewHeaderProps {
   style?: React.CSSProperties;
   /** Whether the header should stick to the top when scrolling */
   isSticky?: boolean;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export const AvakioViewHeader: React.FC<AvakioViewHeaderProps> = ({
@@ -41,12 +55,33 @@ export const AvakioViewHeader: React.FC<AvakioViewHeaderProps> = ({
   className = '',
   style = {},
   isSticky = true,
+  minWidth,
+  minHeight,
+  maxWidth,
+  maxHeight,
+  borderless = false,
+  disabled = false,
+  hidden = false,
 }) => {
-  const wrapperStyle = isSticky ? { position: 'sticky' as const, top: 0, zIndex: 1000 } : {};
+  const wrapperStyle: React.CSSProperties = {
+    ...(isSticky ? { position: 'sticky' as const, top: 0, zIndex: 1000 } : {}),
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+    ...(hidden && { display: 'none' }),
+  };
+  
+  const wrapperClassName = [
+    borderless && 'avakio-view-header-borderless',
+    disabled && 'avakio-view-header-disabled',
+    hidden && 'avakio-view-header-hidden',
+  ].filter(Boolean).join(' ');
   
   // Only set data-admin-theme if theme is explicitly provided
   const wrapperProps: React.HTMLAttributes<HTMLDivElement> & { 'data-admin-theme'?: string } = {
     style: wrapperStyle,
+    className: wrapperClassName || undefined,
   };
   if (theme) {
     wrapperProps['data-admin-theme'] = theme;

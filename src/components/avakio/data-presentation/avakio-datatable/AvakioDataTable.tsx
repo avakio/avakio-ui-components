@@ -1,14 +1,17 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { ChevronUp, ChevronDown, ChevronsUpDown, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
-import { Input } from '../../../ui/input';
-// Button component not available
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../ui/select';
+import { AvakioText } from '../../ui-controls/avakio-text/avakio-text';
+import { AvakioButton } from '../../ui-controls/avakio-button/avakio-button';
+import { AvakioRichSelect } from '../../ui-controls/avakio-richselect/avakio-richselect';
 import './avakio-datatable.css';
-import { Button } from '../../../ui/button';
 
 export interface AvakioColumn<T = any> {
   id: string;
   header: string;
+  /** Allow header text to wrap to multiple lines */
+  headerWrap?: boolean;
+  /** Column will fill the remaining available space */
+  fillspace?: boolean;
   width?: number | string;
   minWidth?: number;
   maxWidth?: number;
@@ -69,6 +72,20 @@ export interface AvakioDataTableProps<T = any> {
   onPageSizeChange?: (pageSize: number) => void;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioDataTable<T extends Record<string, any>>({
@@ -347,21 +364,87 @@ export function AvakioDataTable<T extends Record<string, any>>({
     };
   }, [resizingColumn, resizeStartX, resizeStartWidth]);
 
-  // Notify selection changes
+  // Notify selection changes - only when selectedRows actually changes
+  const prevSelectedRowsRef = useRef<Set<number>>(new Set());
   useEffect(() => {
-    if (onSelectChange) {
-      const selected = Array.from(selectedRows).map(index => paginatedData[index]).filter(Boolean);
-      onSelectChange(selected);
-    }
-  }, [selectedRows, paginatedData, onSelectChange]);
+    if (!onSelectChange) return;
+    
+    // Check if selection actually changed
+    const prevSet = prevSelectedRowsRef.current;
+    const currentSet = selectedRows;
+    
+    const sameSize = prevSet.size === currentSet.size;
+    const sameContent = sameSize && Array.from(prevSet).every(v => currentSet.has(v));
+    
+    if (sameContent) return;
+    
+    prevSelectedRowsRef.current = new Set(selectedRows);
+    const selected = Array.from(selectedRows).map(index => paginatedData[index]).filter(Boolean);
+    onSelectChange(selected);
+  }, [selectedRows]);
+
+  const visibleColumns = columns.filter(col => !col.hidden);
 
   // Get column width
   const getColumnWidth = (column: AvakioColumn<T>) => {
     const customWidth = columnWidths[column.id];
     if (customWidth) return `${customWidth}px`;
     if (column.width) return typeof column.width === 'number' ? `${column.width}px` : column.width;
-    return 'auto';
+    return '150px'; // Default width instead of 'auto'
   };
+
+  // Find the first column with fillspace
+  const fillspaceColumnId = useMemo(() => {
+    const col = visibleColumns.find(c => c.fillspace);
+    return col?.id;
+  }, [visibleColumns]);
+
+  // Minimum allowed column width
+  const MIN_COLUMN_WIDTH = 60;
+
+  // Get effective minWidth (enforce minimum of 60px)
+  const getEffectiveMinWidth = (column: AvakioColumn<T>): number | undefined => {
+    if (column.minWidth === undefined) return undefined;
+    return Math.max(column.minWidth, MIN_COLUMN_WIDTH);
+  };
+
+  // Get column style with flex
+  const getColumnStyle = (column: AvakioColumn<T>): React.CSSProperties => {
+    const effectiveMinWidth = getEffectiveMinWidth(column);
+    
+    // If this column has fillspace and is the first one with it
+    if (column.fillspace && column.id === fillspaceColumnId) {
+      return {
+        flex: '1 1 auto',
+        minWidth: effectiveMinWidth ? `${effectiveMinWidth}px` : '100px',
+        maxWidth: column.maxWidth ? `${column.maxWidth}px` : undefined,
+      };
+    }
+    
+    const width = getColumnWidth(column);
+    // If minWidth is set, allow column to shrink (flex-shrink: 1)
+    // Otherwise, keep fixed width (flex-shrink: 0)
+    const flexShrink = effectiveMinWidth ? 1 : 0;
+    return {
+      flex: `0 ${flexShrink} ${width}`,
+      width: width,
+      minWidth: effectiveMinWidth ? `${effectiveMinWidth}px` : undefined,
+      maxWidth: column.maxWidth ? `${column.maxWidth}px` : undefined,
+    };
+  };
+
+  // Calculate total minimum width of all columns for horizontal scroll threshold
+  const totalMinWidth = useMemo(() => {
+    return visibleColumns.reduce((total, column) => {
+      const effectiveMinWidth = getEffectiveMinWidth(column);
+      if (effectiveMinWidth) {
+        return total + effectiveMinWidth;
+      }
+      // Use the column width or default
+      const width = columnWidths[column.id] || (typeof column.width === 'number' ? column.width : 150);
+      return total + width;
+    }, 0);
+  }, [visibleColumns, columnWidths]);
 
   // Render cell content
   const renderCell = (column: AvakioColumn<T>, row: T) => {
@@ -377,8 +460,6 @@ export function AvakioDataTable<T extends Record<string, any>>({
     return value !== null && value !== undefined ? String(value) : '';
   };
 
-  const visibleColumns = columns.filter(col => !col.hidden);
-
   return (
     <div
       id={id}
@@ -389,19 +470,21 @@ export function AvakioDataTable<T extends Record<string, any>>({
         width: typeof width === 'number' ? `${width}px` : width,
       }}
     >
-      {/* Header */}
-      <div className="avakio-datatable-header" style={{ minHeight: `${headerHeight}px` }}>
+      {/* Scroll Container - single horizontal scroll for header and body */}
+      <div className="avakio-datatable-scroll-container">
+        {/* Content wrapper - ensures header and body have same width */}
+        <div className="avakio-datatable-content" style={{ minWidth: `${totalMinWidth}px` }}>
+        {/* Header */}
+        <div className="avakio-datatable-header" style={{ minHeight: `${headerHeight}px` }}>
         <div className="avakio-datatable-header-row">
-          {visibleColumns.map((column) => (
+          {visibleColumns.map((column, colIndex) => (
             <div
               key={column.id}
               className={`avakio-datatable-header-cell ${column.headerCssClass || ''} ${
                 sortColumn === column.id ? 'sorted' : ''
               }`}
               style={{
-                width: getColumnWidth(column),
-                minWidth: column.minWidth ? `${column.minWidth}px` : undefined,
-                maxWidth: column.maxWidth ? `${column.maxWidth}px` : undefined,
+                ...getColumnStyle(column),
                 textAlign: column.align || 'left',
               }}
             >
@@ -409,7 +492,7 @@ export function AvakioDataTable<T extends Record<string, any>>({
                 className="avakio-datatable-header-content"
                 onClick={() => sortable && column.sort !== false && handleSort(column.id)}
               >
-                <span className="avakio-datatable-header-text">{column.header}</span>
+                <span className={`avakio-datatable-header-text ${column.headerWrap ? 'avakio-datatable-header-text-wrap' : ''}`}>{column.header}</span>
                 {sortable && column.sort !== false && (
                   <span className="avakio-datatable-sort-icon">
                     {sortColumn === column.id ? (
@@ -437,39 +520,29 @@ export function AvakioDataTable<T extends Record<string, any>>({
         {/* Filter Row */}
         {filterable && (
           <div className="avakio-datatable-filter-row">
-            {visibleColumns.map((column) => (
+            {visibleColumns.map((column, colIndex) => (
               <div
                 key={column.id}
                 className="avakio-datatable-filter-cell"
-                style={{
-                  width: getColumnWidth(column),
-                  minWidth: column.minWidth ? `${column.minWidth}px` : undefined,
-                  maxWidth: column.maxWidth ? `${column.maxWidth}px` : undefined,
-                }}
+                style={getColumnStyle(column)}
               >
                 {column.filterable !== false && (
                   <>
                     {column.filterComponent ? (
                       column.filterComponent(filters[column.id], (value) => handleFilter(column.id, value))
                     ) : (
-                      <div className="avakio-datatable-filter-input-wrapper">
-                        <Search className="h-3 w-3 text-muted-foreground" />
-                        <input
-                          type="text"
-                          className="avakio-datatable-filter-input"
-                          placeholder="Filter..."
-                          value={filters[column.id] || ''}
-                          onChange={(e) => handleFilter(column.id, e.target.value)}
-                        />
-                        {filters[column.id] && (
-                          <button
-                            className="avakio-datatable-filter-clear"
-                            onClick={() => handleFilter(column.id, '')}
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        )}
-                      </div>
+                      <AvakioText
+                        type="text"
+                        placeholder="Filter..."
+                        value={filters[column.id] || ''}
+                        onChange={(value) => handleFilter(column.id, value)}
+                        clear={true}
+                        icon={<Search className="h-3 w-3" />}
+                        iconPosition="left"
+                        className="avakio-datatable-filter-input"
+                        height={28}
+                        width="100%"
+                      />
                     )}
                   </>
                 )}
@@ -482,9 +555,6 @@ export function AvakioDataTable<T extends Record<string, any>>({
       {/* Body */}
       <div
         className={`avakio-datatable-body ${scroll ? `scroll-${scroll}` : ''} scrollbar-visible`}
-        style={{
-          height: typeof height === 'number' ? `${height - headerHeight - (paging ? 50 : 0)}px` : 'auto',
-        }}
       >
         {loading ? (
           <div className="avakio-datatable-loading">
@@ -512,7 +582,7 @@ export function AvakioDataTable<T extends Record<string, any>>({
                 onClick={(e) => handleRowClick(row, rowIndex, e)}
                 onDoubleClick={() => handleRowDoubleClick(row, rowIndex)}
               >
-                {visibleColumns.map((column) => {
+                {visibleColumns.map((column, colIndex) => {
                   const cellKey = `${rowId}-${column.id}`;
                   const spanInfo = spanMap.get(cellKey);
                   
@@ -532,9 +602,7 @@ export function AvakioDataTable<T extends Record<string, any>>({
                       key={column.id}
                       className={cellClasses}
                       style={{
-                        width: getColumnWidth(column),
-                        minWidth: column.minWidth ? `${column.minWidth}px` : undefined,
-                        maxWidth: column.maxWidth ? `${column.maxWidth}px` : undefined,
+                        ...getColumnStyle(column),
                         textAlign: column.align || 'left',
                       }}
                       {...(spanInfo?.colspan && spanInfo.colspan > 1 ? { 'data-colspan': spanInfo.colspan } : {})}
@@ -550,6 +618,8 @@ export function AvakioDataTable<T extends Record<string, any>>({
           </div>
         )}
       </div>
+      </div>
+      </div>
 
       {/* Footer with Pagination */}
       {paging && !loading && paginatedData.length > 0 && (
@@ -560,9 +630,16 @@ export function AvakioDataTable<T extends Record<string, any>>({
             {totalCount || sortedData.length} records
           </div>
           <div className="avakio-datatable-pagination">
-            <Select
+            <AvakioRichSelect
               value={String(localPageSize)}
-              onValueChange={(value) => {
+              options={[
+                { id: '5', value: '5 / page' },
+                { id: '10', value: '10 / page' },
+                { id: '20', value: '20 / page' },
+                { id: '50', value: '50 / page' },
+                { id: '100', value: '100 / page' },
+              ]}
+              onChange={(value) => {
                 const newPageSize = Number(value);
                 setLocalPageSize(newPageSize);
                 setPage(1);
@@ -570,20 +647,13 @@ export function AvakioDataTable<T extends Record<string, any>>({
                   onPageSizeChange(newPageSize);
                 }
               }}
-            >
-              <SelectTrigger className="avakio-datatable-page-size-select">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">10 / page</SelectItem>
-                <SelectItem value="20">20 / page</SelectItem>
-                <SelectItem value="50">50 / page</SelectItem>
-                <SelectItem value="100">100 / page</SelectItem>
-              </SelectContent>
-            </Select>
+              className="avakio-datatable-page-size-select"
+              clearable={false}
+              width={130}
+            />
 
             <div className="avakio-datatable-pagination-controls">
-              <Button
+              <AvakioButton
                 variant="outline"
                 size="sm"
                 onClick={() => {
@@ -592,15 +662,16 @@ export function AvakioDataTable<T extends Record<string, any>>({
                   onPageChange?.(newPage);
                 }}
                 disabled={page === 1}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
+                icon={<ChevronLeft className="h-4 w-4" />}
+                buttonType="icon"
+                style={{ height: '32px', width: '32px', padding: 0 }}
+              />
 
               <span className="avakio-datatable-page-info">
                 Page {page} of {totalPages}
               </span>
 
-              <Button
+              <AvakioButton
                 variant="outline"
                 size="sm"
                 onClick={() => {
@@ -609,9 +680,10 @@ export function AvakioDataTable<T extends Record<string, any>>({
                   onPageChange?.(newPage);
                 }}
                 disabled={page === totalPages}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
+                icon={<ChevronRight className="h-4 w-4" />}
+                buttonType="icon"
+                style={{ height: '32px', width: '32px', padding: 0 }}
+              />
             </div>
           </div>
         </div>

@@ -178,7 +178,7 @@ export function AvakioCommentExample() {
   return (
     <div className="avakio-comment-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-comment-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Widgets"
@@ -188,13 +188,14 @@ export function AvakioCommentExample() {
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-comment-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="comment-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

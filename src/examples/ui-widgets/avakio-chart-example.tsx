@@ -274,7 +274,7 @@ export function AvakioChartExample() {
   return (
     <div className="avakio-chart-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-chart-sticky-header">
+      <div className="avakio-example-sticky-header">
         <AvakioViewHeader
           label="UI Widgets"
           title="Chart Component"
@@ -282,13 +282,14 @@ export function AvakioChartExample() {
           isSticky={false}
         />
 
-        <div className="avakio-chart-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="chart-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

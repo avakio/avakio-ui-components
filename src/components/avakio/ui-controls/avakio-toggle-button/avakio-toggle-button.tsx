@@ -62,6 +62,18 @@ export interface AvakioToggleButtonProps {
   padding?: string | number | [number, number, number, number];
   /** Margin (number for all sides, string for CSS, or [top, right, bottom, left]) */
   margin?: string | number | [number, number, number, number];
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
   /** Callback when value changes */
   onChange?: (value: boolean) => void;
   /** Callback when clicked */
@@ -124,6 +136,8 @@ export const AvakioToggleButton = forwardRef<AvakioToggleButtonRef, AvakioToggle
       height,
       padding,
       margin,
+      minWidth,
+      minHeight,
       onChange,
       onClick,
       onFocus,

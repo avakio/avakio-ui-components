@@ -16,6 +16,10 @@ export interface AvakioLabelProps {
   width?: number | string;
   /** Height of the label */
   height?: number | string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
   /** Theme variant */
   theme?: 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset';
   /** CSS class name */

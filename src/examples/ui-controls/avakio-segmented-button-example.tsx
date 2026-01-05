@@ -157,7 +157,7 @@ export function AvakioSegmentedButtonExample() {
   return (
     <div className="avakio-segmented-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-segmented-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Controls"
@@ -167,13 +167,14 @@ export function AvakioSegmentedButtonExample() {
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-segmented-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="segmented-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

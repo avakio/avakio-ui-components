@@ -46,8 +46,20 @@ export interface AvakioGridSuggestProps {
   className?: string;
   editable?: boolean; // Allow typing/filtering like combo
   filterMode?: 'startsWith' | 'contains';
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioGridSuggest({
@@ -71,6 +83,8 @@ export function AvakioGridSuggest({
   className = '',
   editable = true,
   filterMode = 'contains',
+  minWidth,
+  minHeight,
   testId,
 }: AvakioGridSuggestProps) {
   const [isOpen, setIsOpen] = useState(false);

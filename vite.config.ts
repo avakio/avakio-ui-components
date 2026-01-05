@@ -13,6 +13,14 @@ export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/avakio-ui-components/' : '/',
   server: {
     port: 5000,
+    // Proxy API requests to the mock backend server
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   plugins: [
     react(),

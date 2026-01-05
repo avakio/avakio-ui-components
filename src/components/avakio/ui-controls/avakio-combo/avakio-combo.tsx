@@ -28,8 +28,20 @@ export interface AvakioComboProps {
   required?: boolean;
   error?: string;
   className?: string;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioCombo({
@@ -52,6 +64,8 @@ export function AvakioCombo({
   required = false,
   error,
   className = '',
+  minWidth,
+  minHeight,
   testId,
 }: AvakioComboProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -220,7 +234,11 @@ export function AvakioCombo({
       ref={containerRef}
       data-testid={testId}
       className={`avakio-combo-wrapper ${className}`}
-      style={{ width: width || '100%' }}
+      style={{
+        width: width || '100%',
+        ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+        ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+      }}
     >
       {label && (
         <label

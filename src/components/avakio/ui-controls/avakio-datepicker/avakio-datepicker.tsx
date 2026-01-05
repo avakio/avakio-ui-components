@@ -21,6 +21,20 @@ export interface AvakioDatePickerProps {
   placeholder?: string;
   /** Use inline calendar instead of dropdown (legacy mode) */
   inline?: boolean;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 const formatDisplayDate = (value: string | null | undefined, showTime: boolean) => {

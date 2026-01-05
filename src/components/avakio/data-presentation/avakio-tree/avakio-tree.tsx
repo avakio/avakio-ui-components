@@ -68,6 +68,10 @@ export interface AvakioTreeProps {
   width?: number | string;
   /** Height */
   height?: number | string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
   /** CSS class */
   className?: string;
   /** Inline styles */
@@ -90,6 +94,16 @@ export interface AvakioTreeProps {
   onEdit?: (id: string | number, newValue: string, node: AvakioTreeNode) => void;
   /** Callback on context menu */
   onContext?: (id: string | number, node: AvakioTreeNode, e: React.MouseEvent) => void;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export interface AvakioTreeRef {
@@ -202,6 +216,13 @@ export const AvakioTree = forwardRef<AvakioTreeRef, AvakioTreeProps>(
       itemHeight = 32,
       width,
       height,
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+      borderless = false,
+      disabled = false,
+      hidden = false,
       className = '',
       style,
       onSelect,
@@ -781,8 +802,22 @@ export const AvakioTree = forwardRef<AvakioTreeRef, AvakioTreeProps>(
       'avakio-tree',
       `avakio-tree--${effectiveTheme}`,
       showLines && 'avakio-tree--lines',
+      borderless && 'avakio-tree--borderless',
+      disabled && 'avakio-tree--disabled',
+      hidden && 'avakio-tree--hidden',
       className,
     ].filter(Boolean).join(' ');
+
+    const containerStyle: React.CSSProperties = {
+      width,
+      height,
+      ...style,
+      ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+      ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+      ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+      ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+      ...(hidden && { display: 'none' }),
+    };
 
     return (
       <div
@@ -790,19 +825,16 @@ export const AvakioTree = forwardRef<AvakioTreeRef, AvakioTreeProps>(
         id={treeId}
         data-testid={testId}
         className={containerClasses}
-        style={{
-          width,
-          height,
-          ...style,
-        }}
+        style={containerStyle}
         role="tree"
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
+        tabIndex={disabled ? -1 : 0}
+        onKeyDown={disabled ? undefined : handleKeyDown}
         onFocus={() => {
           if (focusedId === null && data.length > 0) {
             setFocusedId(data[0].id);
           }
         }}
+        aria-disabled={disabled}
       >
         {data.map((node) => renderNode(node, 0))}
       </div>

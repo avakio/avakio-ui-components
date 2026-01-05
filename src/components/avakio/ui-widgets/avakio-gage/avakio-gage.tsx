@@ -20,10 +20,24 @@ export interface AvakioGageProps {
   target?: number;
   className?: string;
   style?: React.CSSProperties;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
   /** ID of the component */
   id?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioGage({
@@ -45,6 +59,13 @@ export function AvakioGage({
   target,
   className,
   style,
+  minWidth,
+  minHeight,
+  maxWidth,
+  maxHeight,
+  borderless = false,
+  disabled = false,
+  hidden = false,
   id,
   testId,
 }: AvakioGageProps) {
@@ -73,11 +94,24 @@ export function AvakioGage({
     return `${prefix}${base}${suffix}`;
   }, [clamped, formatValue, prefix, suffix, showValue]);
 
-  const mergedClass = ["avakio-gage", `avakio-gage-${size}`, className].filter(Boolean).join(" ");
+  const mergedClass = [
+    "avakio-gage",
+    `avakio-gage-${size}`,
+    borderless && "avakio-gage-borderless",
+    disabled && "avakio-gage-disabled",
+    hidden && "avakio-gage-hidden",
+    className
+  ].filter(Boolean).join(" ");
+  
   const styleVars: React.CSSProperties = {
     ...style,
     ...(color ? { ["--gg-fill" as string]: color } : null),
     ...(trackColor ? { ["--gg-track" as string]: trackColor } : null),
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+    ...(hidden && { display: 'none' }),
   };
 
   return (

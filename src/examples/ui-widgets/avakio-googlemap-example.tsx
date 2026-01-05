@@ -69,7 +69,7 @@ export function AvakioGoogleMapExample() {
   return (
     <div className="avakio-googlemap-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-googlemap-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Widgets"
@@ -79,13 +79,14 @@ export function AvakioGoogleMapExample() {
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-googlemap-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="googlemap-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

@@ -63,12 +63,26 @@ export interface AvakioMultiviewProps {
   width?: number | string;
   /** Height */
   height?: number | string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
   /** Fired when view changes */
   onViewChange?: (newViewId: string, oldViewId: string) => void;
   /** Fired when a view is shown */
   onViewShow?: (viewId: string) => void;
   /** Fired before going back */
   onBeforeBack?: (currentViewId: string) => boolean | void;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export interface AvakioMultiviewRef {
@@ -128,6 +142,13 @@ export const AvakioMultiview = forwardRef<AvakioMultiviewRef, AvakioMultiviewPro
       css,
       width,
       height,
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+      borderless = false,
+      disabled = false,
+      hidden: hiddenProp = false,
       onViewChange,
       onViewShow,
       onBeforeBack,
@@ -359,7 +380,9 @@ export const AvakioMultiview = forwardRef<AvakioMultiviewRef, AvakioMultiviewPro
       animateConfig.type === 'flip' && `avakio-multiview-flip-${animateConfig.flipDirection}`,
       fitBiggest && 'avakio-multiview-fit-biggest',
       isAnimating && 'avakio-multiview-animating',
-      hidden && 'avakio-multiview-hidden',
+      borderless && 'avakio-multiview-borderless',
+      disabled && 'avakio-multiview-disabled',
+      (hidden || hiddenProp) && 'avakio-multiview-hidden',
       className,
     ]
       .filter(Boolean)
@@ -371,6 +394,11 @@ export const AvakioMultiview = forwardRef<AvakioMultiviewRef, AvakioMultiviewPro
       width: width,
       height: height,
       '--animation-duration': `${animationDuration}ms`,
+      ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+      ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+      ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+      ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+      ...((hidden || hiddenProp) && { display: 'none' }),
     } as CSSProperties;
 
     // Determine which cells to render

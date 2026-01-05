@@ -77,8 +77,14 @@ export interface AvakioSegmentedButtonProps {
   height?: number | string;
   /** Minimum width */
   minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Whether the component is hidden */
+  hidden?: boolean;
   /** Connect to multiview (for switching views) */
   multiview?: boolean;
   /** Tooltip text */
@@ -99,6 +105,10 @@ export interface AvakioSegmentedButtonProps {
   onOptionAdd?: (option: AvakioSegmentedOption) => void;
   /** Callback when an option is removed */
   onOptionRemove?: (id: string | number) => void;
+  /** Padding (number for all sides, string for CSS, or [top, right, bottom, left]) */
+  padding?: string | number | [number, number, number, number];
+  /** Margin (number for all sides, string for CSS, or [top, right, bottom, left]) */
+  margin?: string | number | [number, number, number, number];
 }
 
 export interface AvakioSegmentedButtonRef {
@@ -198,6 +208,8 @@ export const AvakioSegmentedButton = forwardRef<AvakioSegmentedButtonRef, Avakio
       onAfterTabClick,
       onOptionAdd,
       onOptionRemove,
+      padding,
+      margin,
     },
     ref
   ) => {
@@ -431,6 +443,24 @@ export const AvakioSegmentedButton = forwardRef<AvakioSegmentedButtonRef, Avakio
       onChange, onOptionAdd, onOptionRemove
     ]);
 
+    // Handle padding
+    const paddingStyle = padding
+      ? typeof padding === 'number'
+        ? `${padding}px`
+        : Array.isArray(padding)
+        ? `${padding[0]}px ${padding[1]}px ${padding[2]}px ${padding[3]}px`
+        : padding
+      : undefined;
+
+    // Handle margin
+    const marginStyle = margin
+      ? typeof margin === 'number'
+        ? `${margin}px`
+        : Array.isArray(margin)
+        ? `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`
+        : margin
+      : undefined;
+
     // Build container styles
     const containerStyles: React.CSSProperties = {
       ...(css && typeof css === 'object' && !Array.isArray(css) ? css : {}),
@@ -439,6 +469,8 @@ export const AvakioSegmentedButton = forwardRef<AvakioSegmentedButtonRef, Avakio
       ...(minWidth !== undefined && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
       ...(maxWidth !== undefined && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
       ...(visible === false && { display: 'none' }),
+      ...(paddingStyle && { padding: paddingStyle }),
+      ...(marginStyle && { margin: marginStyle }),
     };
 
     // Build input container styles

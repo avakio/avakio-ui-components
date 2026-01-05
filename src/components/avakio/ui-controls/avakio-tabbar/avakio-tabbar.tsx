@@ -39,6 +39,22 @@ export interface AvakioTabBarProps {
   className?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Padding (number for all sides, string for CSS, or [top, right, bottom, left]) */
+  padding?: string | number | [number, number, number, number];
+  /** Margin (number for all sides, string for CSS, or [top, right, bottom, left]) */
+  margin?: string | number | [number, number, number, number];
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioTabBar({
@@ -62,6 +78,10 @@ export function AvakioTabBar({
   disabled = false,
   className = '',
   testId,
+  padding,
+  margin,
+  minWidth,
+  minHeight,
 }: AvakioTabBarProps) {
   const [internalValue, setInternalValue] = useState<string | number | null>(value ?? null);
   const [closedIds, setClosedIds] = useState<Set<string | number>>(new Set());
@@ -250,11 +270,35 @@ export function AvakioTabBar({
     }
   };
 
+  // Handle padding
+  const paddingStyle = padding
+    ? typeof padding === 'number'
+      ? `${padding}px`
+      : Array.isArray(padding)
+      ? `${padding[0]}px ${padding[1]}px ${padding[2]}px ${padding[3]}px`
+      : padding
+    : undefined;
+
+  // Handle margin
+  const marginStyle = margin
+    ? typeof margin === 'number'
+      ? `${margin}px`
+      : Array.isArray(margin)
+      ? `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`
+      : margin
+    : undefined;
+
+  const containerStyle: React.CSSProperties = {
+    ...(paddingStyle && { padding: paddingStyle }),
+    ...(marginStyle && { margin: marginStyle }),
+  };
+
   return (
     <div
       id={id}
       data-testid={testId}
       className={`avakio-tabbar ${className}`.trim()}
+      style={containerStyle}
       data-type={type}
       data-align={align}
       data-size={size}

@@ -55,12 +55,26 @@ export interface AvakioGoogleMapProps {
   height?: number | string;
   className?: string;
   style?: React.CSSProperties;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
   apiKey?: string | null;
   theme?: AvakioTheme;
   /** ID of the component */
   id?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioGoogleMap({
@@ -71,6 +85,13 @@ export function AvakioGoogleMap({
   height = 360,
   className,
   style,
+  minWidth,
+  minHeight,
+  maxWidth,
+  maxHeight,
+  borderless = false,
+  disabled = false,
+  hidden = false,
   apiKey,
   theme,
   id,
@@ -131,12 +152,30 @@ export function AvakioGoogleMap({
 
   const heightValue = typeof height === "number" ? `${height}px` : height;
 
+  const containerClassName = [
+    "avakio-googlemap",
+    borderless && "avakio-googlemap-borderless",
+    disabled && "avakio-googlemap-disabled",
+    hidden && "avakio-googlemap-hidden",
+    className,
+  ].filter(Boolean).join(" ");
+
+  const containerStyle: React.CSSProperties = {
+    ...style,
+    ["--agm-height" as string]: heightValue,
+    ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+    ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+    ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+    ...(hidden && { display: 'none' }),
+  };
+
   return (
     <div
       id={id}
       data-testid={testId}
-      className={["avakio-googlemap", className].filter(Boolean).join(" ")}
-      style={{ ...style, ["--agm-height" as string]: heightValue }}
+      className={containerClassName}
+      style={containerStyle}
       data-admin-theme={theme}
     >
       {resolvedApiKey ? (

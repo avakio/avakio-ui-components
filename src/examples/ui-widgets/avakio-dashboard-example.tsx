@@ -115,7 +115,7 @@ export function AvakioDashboardExample() {
 
   return (
     <div className="avakio-dashboard-example-container">
-      <div className="avakio-dashboard-example-sticky-header">
+      <div className="avakio-example-sticky-header">
         <AvakioViewHeader
           label="UI Widgets"
           title="Dashboard Component"
@@ -123,13 +123,14 @@ export function AvakioDashboardExample() {
           isSticky={false}
         />
 
-        <div className="avakio-dashboard-example-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="dashboard-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

@@ -248,7 +248,7 @@ export function AvakioGroupListExample() {
   return (
     <div className="avakio-grouplist-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-grouplist-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Widgets"
@@ -258,13 +258,14 @@ export function AvakioGroupListExample() {
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-grouplist-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="grouplist-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

@@ -55,6 +55,10 @@ export interface AvakioAccordionProps {
   width?: number | string;
   /** Height */
   height?: number | string;
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
   /** CSS class */
   className?: string;
   /** Inline styles */
@@ -65,6 +69,16 @@ export interface AvakioAccordionProps {
   onCollapse?: (id: string | number) => void;
   /** Callback when state changes */
   onChange?: (expandedIds: (string | number)[]) => void;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export interface AvakioAccordionRef {
@@ -105,6 +119,13 @@ export const AvakioAccordion = forwardRef<AvakioAccordionRef, AvakioAccordionPro
       animate = true,
       width,
       height,
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+      borderless = false,
+      disabled = false,
+      hidden = false,
       className = '',
       style,
       onExpand,
@@ -341,6 +362,9 @@ export const AvakioAccordion = forwardRef<AvakioAccordionRef, AvakioAccordionPro
       `avakio-accordion--${theme}`,
       `avakio-accordion--${type}`,
       animate && 'avakio-accordion--animated',
+      borderless && 'avakio-accordion--borderless',
+      disabled && 'avakio-accordion--disabled',
+      hidden && 'avakio-accordion--hidden',
       className,
     ]
       .filter(Boolean)
@@ -351,6 +375,11 @@ export const AvakioAccordion = forwardRef<AvakioAccordionRef, AvakioAccordionPro
       width: typeof width === 'number' ? `${width}px` : width,
       height: typeof height === 'number' ? `${height}px` : height,
       ...style,
+      ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+      ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+      ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+      ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+      ...(hidden && { display: 'none' }),
     };
 
     return (

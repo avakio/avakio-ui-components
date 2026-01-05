@@ -99,7 +99,7 @@ export function AvakioDoubleListExample() {
   return (
     <div className="avakio-doublelist-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-doublelist-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Controls"
@@ -109,13 +109,14 @@ export function AvakioDoubleListExample() {
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-doublelist-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="doublelist-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

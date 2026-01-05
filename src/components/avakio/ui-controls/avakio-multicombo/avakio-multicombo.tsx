@@ -21,6 +21,18 @@ interface AvakioMultiComboProps {
   id?: string;
   /** Test ID for testing purposes */
   testId?: string;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioMultiCombo({
@@ -33,7 +45,9 @@ export function AvakioMultiCombo({
   maxDisplayItems = 3,
   disabled = false,
   id,
-  testId
+  testId,
+  minWidth,
+  minHeight,
 }: AvakioMultiComboProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

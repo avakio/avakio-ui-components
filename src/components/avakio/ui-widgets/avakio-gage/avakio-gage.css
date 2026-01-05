@@ -145,3 +145,21 @@
   --gg-muted: #8c5416;
 }
 
+/* ===================================
+   AVAKIO GAGE - STATE MODIFIERS
+   =================================== */
+.avakio-gage-borderless {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.avakio-gage-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.avakio-gage-hidden {
+  display: none !important;
+}
+

@@ -1,0 +1,165 @@
+/* DataTable Example Demo Styles */
+
+.avakio-datatable-demo-container {
+  min-height: 100vh;
+  padding-bottom: 48px;
+}
+
+.avakio-datatable-demo-section {
+  margin-bottom: 32px;
+}
+
+.avakio-datatable-demo-section:last-child {
+  margin-bottom: 0;
+}
+
+/* DatePicker filter dropdown */
+.avakio-datatable-datepicker-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  margin-top: 4px;
+  padding: 8px;
+}
+
+.avakio-datepicker-filter-actions {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 8px;
+}
+
+.avakio-datepicker-filter-apply,
+.avakio-datepicker-filter-cancel {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.avakio-datepicker-filter-apply {
+  background: #3b82f6;
+  color: white;
+}
+
+.avakio-datepicker-filter-apply:hover {
+  background: #2563eb;
+}
+
+.avakio-datepicker-filter-cancel {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.avakio-datepicker-filter-cancel:hover {
+  background: #e5e7eb;
+}
+
+/* Filter input wrapper */
+.avakio-datatable-filter-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  background: white;
+}
+
+.avakio-datatable-filter-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  background: transparent;
+}
+
+.avakio-datatable-filter-clear {
+  padding: 2px 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.avakio-datatable-filter-clear:hover {
+  color: #374151;
+}
+
+/* Code blocks */
+.avakio-datatable-demo-section pre {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  line-height: 1.5;
+}
+
+.avakio-datatable-demo-section code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+/* Badge styles */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-default {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Event log */
+.event-log {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.event-log-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.event-log-content {
+  max-height: 100px;
+  overflow: auto;
+}
+
+.event-log-entry {
+  padding: 2px 0;
+  color: #666;
+}
+
+.event-log-empty {
+  color: #888;
+}

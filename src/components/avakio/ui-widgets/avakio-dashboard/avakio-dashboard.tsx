@@ -75,6 +75,11 @@ export interface AvakioDashboardProps {
   width?: number | string;
   height?: number | string;
 
+  /** Minimum width */
+  minWidth?: number | string;
+  /** Minimum height */
+  minHeight?: number | string;
+
   theme?: AvakioDashboardTheme;
 
   /** Widgets to render */
@@ -95,6 +100,16 @@ export interface AvakioDashboardProps {
   onDragEnd?: (widget: AvakioDashboardWidget, newPosition: { x: number; y: number }) => void;
   onResizeStart?: (widget: AvakioDashboardWidget) => void;
   onResizeEnd?: (widget: AvakioDashboardWidget, newSize: { dx: number; dy: number }) => void;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is disabled */
+  disabled?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export interface AvakioDashboardRef {
@@ -141,6 +156,13 @@ export const AvakioDashboard = forwardRef<AvakioDashboardRef, AvakioDashboardPro
       paddingY,
       width,
       height,
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+      borderless = false,
+      disabled = false,
+      hidden = false,
       theme = 'material',
       widgets: widgetsProp,
       editable = true,
@@ -487,10 +509,24 @@ export const AvakioDashboard = forwardRef<AvakioDashboardRef, AvakioDashboardPro
       });
     }, [widgets, dragHandle, editable, beginResize]);
 
+    const containerClassName = [
+      'avakio-dashboard',
+      `avakio-dashboard--${theme}`,
+      borderless && 'avakio-dashboard--borderless',
+      disabled && 'avakio-dashboard--disabled',
+      hidden && 'avakio-dashboard--hidden',
+      className,
+    ].filter(Boolean).join(' ');
+
     const containerStyle: CSSProperties = {
       width,
       height,
       ...(style && typeof style === 'object' && !Array.isArray(style) ? style : {}),
+      ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
+      ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+      ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
+      ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+      ...(hidden && { display: 'none' }),
     };
 
     return (
@@ -498,7 +534,7 @@ export const AvakioDashboard = forwardRef<AvakioDashboardRef, AvakioDashboardPro
         ref={containerRef}
         id={id}
         data-testid={testId}
-        className={['avakio-dashboard', `avakio-dashboard--${theme}`, className].filter(Boolean).join(' ')}
+        className={containerClassName}
         data-admin-theme={theme}
         style={containerStyle}
         onPointerMove={handlePointerMove}

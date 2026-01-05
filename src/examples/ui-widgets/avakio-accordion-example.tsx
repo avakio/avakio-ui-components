@@ -347,7 +347,7 @@ export const AvakioAccordionExample: React.FC = () => {
   return (
     <div className="avakio-accordion-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-accordion-sticky-header">
+      <div className="avakio-example-sticky-header">
         <AvakioViewHeader
           label="UI Widgets"
           title="Accordion Component"
@@ -355,13 +355,14 @@ export const AvakioAccordionExample: React.FC = () => {
           isSticky={false}
         />
 
-        <div className="avakio-accordion-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="accordion-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

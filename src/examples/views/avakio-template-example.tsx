@@ -100,7 +100,7 @@ export function AvakioTemplateExample() {
   return (    
     <div className="avakio-template-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-template-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="Views"
@@ -110,13 +110,14 @@ export function AvakioTemplateExample() {
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-template-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="template-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

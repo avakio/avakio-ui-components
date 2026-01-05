@@ -181,7 +181,7 @@ export function AvakioFormExample() {
   return (
     <div className="avakio-form-demo-container">
       {/* Sticky Header + Tab Navigation */}
-      <div className="avakio-form-sticky-header">
+      <div className="avakio-example-sticky-header">
         {/* Header */}
         <AvakioViewHeader
           label="UI Widgets"
@@ -191,13 +191,14 @@ export function AvakioFormExample() {
         />
 
         {/* Tab Navigation */}
-        <div className="avakio-form-tabbar-container">
+        <div className="avakio-example-tabbar-container">
           <AvakioTabBar
             id="form-demo-tabs"
             value={activeSection}
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />

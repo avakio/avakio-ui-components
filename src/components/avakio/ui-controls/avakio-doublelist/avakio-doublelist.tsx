@@ -40,6 +40,18 @@ export interface AvakioDoubleListProps {
   testId?: string;
   /** Custom class name */
   className?: string;
+  /** Minimum width */
+  minWidth?: string | number;
+  /** Minimum height */
+  minHeight?: string | number;
+  /** Whether the component is borderless */
+  borderless?: boolean;
+  /** Whether the component is hidden */
+  hidden?: boolean;
+  /** Maximum height */
+  maxHeight?: number | string;
+  /** Maximum width */
+  maxWidth?: number | string;
 }
 
 export function AvakioDoubleList({
@@ -58,6 +70,8 @@ export function AvakioDoubleList({
   id,
   testId,
   className,
+  minWidth,
+  minHeight,
 }: AvakioDoubleListProps) {
   const [leftSearch, setLeftSearch] = useState('');
   const [rightSearch, setRightSearch] = useState('');
