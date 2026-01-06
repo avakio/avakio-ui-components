@@ -44,6 +44,8 @@ export interface AvakioRichSelectProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioRichSelect({
@@ -70,6 +72,7 @@ export function AvakioRichSelect({
   minWidth,
   minHeight,
   testId,
+  style,
 }: AvakioRichSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -214,6 +217,7 @@ export function AvakioRichSelect({
         margin: Array.isArray(margin) 
           ? `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`
           : typeof margin === 'number' ? `${margin}px` : margin,
+        ...style,
       }}
       data-disabled={disabled}
       data-readonly={readonly}

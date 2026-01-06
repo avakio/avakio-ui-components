@@ -105,6 +105,8 @@ export interface AvakioTextProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export interface AvakioTextRef {
@@ -177,6 +179,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       padding,
       margin,
       textWidth,
+      style,
     },
     ref
   ) => {
@@ -404,6 +407,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       height: typeof height === 'number' ? `${height}px` : height,
       ...(paddingStyle && { padding: paddingStyle }),
       ...(marginStyle && { margin: marginStyle }),
+      ...style,
     };
 
     const containerClasses = [

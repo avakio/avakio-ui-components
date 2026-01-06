@@ -44,6 +44,8 @@ export interface AvakioFieldsetProps {
   onCollapse?: (collapsed: boolean) => void;
   /** Icon to display before the label */
   icon?: ReactNode;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export interface AvakioFieldsetRef {
@@ -90,6 +92,7 @@ export const AvakioFieldset = forwardRef<AvakioFieldsetRef, AvakioFieldsetProps>
       collapsed: collapsedProp,
       onCollapse,
       icon,
+      style,
     },
     ref
   ) => {
@@ -161,6 +164,7 @@ export const AvakioFieldset = forwardRef<AvakioFieldsetRef, AvakioFieldsetProps>
       ...(css && typeof css === 'object' && !Array.isArray(css) ? css : {}),
       width: typeof width === 'number' ? `${width}px` : width,
       height: typeof height === 'number' ? `${height}px` : height,
+      ...style,
     };
 
     const bodyStyles: React.CSSProperties = {

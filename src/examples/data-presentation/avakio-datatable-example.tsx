@@ -8,7 +8,6 @@ import { AvakioCheckbox } from '../../components/avakio/ui-controls/avakio-check
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
-import { AvakioCombo } from '../../components/avakio/ui-controls/avakio-combo/avakio-combo';
 import { AvakioDatePicker } from '../../components/avakio/ui-controls/avakio-datepicker/avakio-datepicker';
 import { 
   Table2,
@@ -17,117 +16,8 @@ import {
   Play,
   Server,
   Filter,
-  Calendar,
 } from 'lucide-react';
 import './avakio-datatable-example.css';
-
-// DatePicker Filter Component - defined outside to prevent recreation on every render
-const DatePickerFilter = React.memo(({ value, onChange }: { value: any; onChange: (value: any) => void }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [tempValue, setTempValue] = useState(value || "");
-  const containerRef = useRef<HTMLDivElement>(null);
-  const initializedRef = useRef(false);
-
-  // Sync tempValue when external value changes
-  useEffect(() => {
-    if (initializedRef.current) {
-      setTempValue(value || "");
-    }
-    initializedRef.current = true;
-  }, [value]);
-
-  const displayValue = value ? (() => {
-    const date = new Date(value);
-    if (isNaN(date.getTime())) return value;
-    return date.toISOString().split('T')[0];
-  })() : "";
-
-  useEffect(() => {
-    if (!isOpen) return;
-    
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
-
-  const handleDateChange = useCallback((newValue: string) => {
-    setTempValue(newValue);
-  }, []);
-
-  const handleApply = useCallback(() => {
-    if (tempValue) {
-      const date = new Date(tempValue);
-      if (!isNaN(date.getTime())) {
-        onChange(date.toISOString());
-      }
-    }
-    setIsOpen(false);
-  }, [tempValue, onChange]);
-
-  const handleClear = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setTempValue("");
-    onChange("");
-  }, [onChange]);
-
-  const handleCancel = useCallback(() => {
-    setTempValue(value || "");
-    setIsOpen(false);
-  }, [value]);
-
-  return (
-    <div ref={containerRef} className="relative">
-      <div 
-        className="avakio-datatable-filter-input-wrapper cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <Calendar className="h-3 w-3 text-muted-foreground" />
-        <input
-          type="text"
-          className="avakio-datatable-filter-input cursor-pointer"
-          placeholder="Select date..."
-          value={displayValue}
-          readOnly
-        />
-        {value && (
-          <button
-            className="avakio-datatable-filter-clear"
-            onClick={handleClear}
-          >
-            ✕
-          </button>
-        )}
-      </div>
-      {isOpen && (
-        <div className="avakio-datatable-datepicker-dropdown">
-          <AvakioDatePicker
-            value={tempValue}
-            onChange={handleDateChange}
-          />
-          <div className="avakio-datepicker-filter-actions">
-            <button
-              className="avakio-datepicker-filter-apply"
-              onClick={handleApply}
-            >
-              Apply
-            </button>
-            <button
-              className="avakio-datepicker-filter-cancel"
-              onClick={handleCancel}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-});
 
 // Tab options for navigation
 const TAB_OPTIONS = [
@@ -404,9 +294,14 @@ export function AvakioDataTableExample() {
       filterable: true,
       template: (row) => (
         <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            row.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
-          }`}
+          style={{
+            padding: '2px 8px',
+            borderRadius: '9999px',
+            fontSize: '12px',
+            fontWeight: 500,
+            backgroundColor: row.status === "active" ? '#dcfce7' : '#f3f4f6',
+            color: row.status === "active" ? '#166534' : '#374151',
+          }}
         >
           {row.status}
         </span>
@@ -470,18 +365,27 @@ export function AvakioDataTableExample() {
       filterable: true,
       filterType: 'combo' as const,
       filterComponent: (value, onChange) => (
-        <AvakioCombo
+        <AvakioRichSelect
           options={customerStatusOptions}
           value={value || ''}
-          onChange={onChange}
-          placeholder="Filter status..."
+          onChange={(selectedValue) => {
+            console.log('Status filter changed:', selectedValue);
+            onChange(selectedValue);
+          }}
+          placeholder="Filter..."
+          clearable={true}
         />
       ),
       template: (row) => (
         <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            row.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
-          }`}
+          style={{
+            padding: '2px 8px',
+            borderRadius: '9999px',
+            fontSize: '12px',
+            fontWeight: 500,
+            backgroundColor: row.status === "active" ? '#dcfce7' : '#f3f4f6',
+            color: row.status === "active" ? '#166534' : '#374151',
+          }}
         >
           {row.status}
         </span>
@@ -490,12 +394,18 @@ export function AvakioDataTableExample() {
     {
       id: "joinDate",
       header: "Join Date",
-      width: 140,
+      width: 180,
       sort: true,
       filterable: true,
       filterType: 'date' as const,
       filterComponent: (value, onChange) => (
-        <DatePickerFilter value={value} onChange={onChange} />
+        <AvakioDatePicker
+          value={value || ''}
+          onChange={onChange}
+          placeholder="filter..."
+          clearable={true}
+          size="compact"
+        />
       ),
       template: (row) => row.joinDate,
     },
@@ -505,7 +415,7 @@ export function AvakioDataTableExample() {
       width: 120,
       sort: true,
       template: (row) => (
-        <span className={row.revenue >= 200000 ? "text-green-600 font-medium" : ""}>
+        <span style={row.revenue >= 200000 ? { color: '#16a34a', fontWeight: 500 } : undefined}>
           ${row.revenue.toLocaleString()}
         </span>
       ),
@@ -883,7 +793,16 @@ export function AvakioDataTableExample() {
   id: "status",
   header: "Status",
   template: (row) => (
-    <span className={\`badge \${row.status === 'active' ? 'badge-success' : 'badge-default'}\`}>
+    <span
+      style={{
+        padding: '2px 8px',
+        borderRadius: '9999px',
+        fontSize: '12px',
+        fontWeight: 500,
+        backgroundColor: row.status === 'active' ? '#dcfce7' : '#f3f4f6',
+        color: row.status === 'active' ? '#166534' : '#374151',
+      }}
+    >
       {row.status}
     </span>
   ),
@@ -1096,7 +1015,16 @@ const columns: AvakioColumn<Customer>[] = [
     header: "Status", 
     width: 100,
     template: (row) => (
-      <span className={\`badge \${row.status === 'active' ? 'badge-success' : 'badge-default'}\`}>
+      <span
+        style={{
+          padding: '2px 8px',
+          borderRadius: '9999px',
+          fontSize: '12px',
+          fontWeight: 500,
+          backgroundColor: row.status === 'active' ? '#dcfce7' : '#f3f4f6',
+          color: row.status === 'active' ? '#166534' : '#374151',
+        }}
+      >
         {row.status}
       </span>
     ),

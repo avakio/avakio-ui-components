@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { ChevronDown, X, Search } from 'lucide-react';
 import './avakio-combo.css';
 
@@ -41,6 +41,8 @@ export interface AvakioComboProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioCombo({
@@ -66,6 +68,7 @@ export function AvakioCombo({
   minWidth,
   minHeight,
   testId,
+  style,
 }: AvakioComboProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -76,12 +79,13 @@ export function AvakioCombo({
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Normalize options to AvakioComboOption format
-  const normalizedOptions: AvakioComboOption[] = options.map((opt) => {
-    if (typeof opt === 'string') {
-      return { id: opt, value: opt };
-    }
-    return opt;
-  });
+  const normalizedOptions: AvakioComboOption[] = useMemo(() => 
+    options.map((opt) => {
+      if (typeof opt === 'string') {
+        return { id: opt, value: opt };
+      }
+      return opt;
+    }), [options]);
 
   // Initialize selected option based on value prop
   useEffect(() => {
@@ -97,7 +101,7 @@ export function AvakioCombo({
       setSelectedOption(null);
       setInputValue('');
     }
-  }, [value]);
+  }, [value, normalizedOptions]);
 
   // Filter options based on input
   const filteredOptions = normalizedOptions.filter((option) => {
@@ -237,6 +241,7 @@ export function AvakioCombo({
         width: width || '100%',
         ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
         ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+        ...style,
       }}
     >
       {label && (

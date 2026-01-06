@@ -5,7 +5,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   background-color: var(--background);
-  overflow: hidden;
+  overflow: visible;
   font-family: var(--font-sans);
 }
 
@@ -31,6 +31,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  overflow: visible;
 }
 
 .avakio-datatable-header-row {
@@ -118,7 +119,7 @@
   padding: 8px 8px;
   border-right: 1px solid var(--border);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   box-sizing: border-box;
   min-width: 0;
 }
@@ -126,7 +127,19 @@
 .avakio-datatable-filter-cell:last-child {
   border-right: none;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
+}
+
+/* Allow combo/select dropdown to overflow filter cell */
+.avakio-datatable-filter-cell .avakio-combo-wrapper,
+.avakio-datatable-filter-cell .avakio-richselect-wrapper {
+  position: relative;
+}
+
+.avakio-datatable-filter-cell .avakio-combo-dropdown,
+.avakio-datatable-filter-cell .avakio-richselect-dropdown {
+  position: absolute;
+  z-index: 99999;
 }
 
 /* DatePicker dropdown in filter */
@@ -141,11 +154,22 @@
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
   min-width: 280px;
   max-width: 320px;
-  overflow: hidden;
+  overflow: visible;
+}
+
+/* AvakioDatePicker popover in filter cell */
+.avakio-datatable-filter-cell .avakio-dp-popover {
+  z-index: 99999;
+  min-width: 260px;
+}
+
+.avakio-datatable-filter-cell .avakio-popover-root {
+  position: static;
 }
 
 /* Adjust datepicker container padding in dropdown */
-.avakio-datatable-datepicker-dropdown .avakio-datepicker-container {
+.avakio-datatable-datepicker-dropdown .avakio-datepicker-container,
+.avakio-datatable-filter-cell .avakio-datepicker-container {
   padding: 12px;
   border: none;
   max-width: 100%;
@@ -216,6 +240,7 @@
 .avakio-datatable-filter-row {
   position: relative;
   z-index: 10;
+  overflow: visible;
 }
 
 /* Date input styling in filter */

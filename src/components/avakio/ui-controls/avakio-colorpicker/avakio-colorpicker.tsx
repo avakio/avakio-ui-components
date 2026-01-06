@@ -35,6 +35,8 @@ export interface AvakioColorPickerProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 const normalizeHex = (hex: string) => {
@@ -69,6 +71,7 @@ export function AvakioColorPicker({
   minWidth,
   minHeight,
   testId,
+  style,
 }: AvakioColorPickerProps) {
   const isControlled = value !== undefined;
   const [internal, setInternal] = useState<string>(normalizeHex(defaultValue) || '#1ca1c1');
@@ -136,6 +139,7 @@ export function AvakioColorPicker({
       style={{
         ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
         ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+        ...style,
       }}
     >
       {(label || description || error) && (

@@ -86,6 +86,8 @@ export interface AvakioDataTableProps<T = any> {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioDataTable<T extends Record<string, any>>({
@@ -122,6 +124,7 @@ export function AvakioDataTable<T extends Record<string, any>>({
   onPageChange,
   onPageSizeChange,
   testId,
+  style,
 }: AvakioDataTableProps<T>) {
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [sortColumn, setSortColumn] = useState<string | null>(null);
@@ -468,6 +471,7 @@ export function AvakioDataTable<T extends Record<string, any>>({
       style={{
         height: typeof height === 'number' ? `${height}px` : height,
         width: typeof width === 'number' ? `${width}px` : width,
+        ...style,
       }}
     >
       {/* Scroll Container - single horizontal scroll for header and body */}
@@ -497,12 +501,12 @@ export function AvakioDataTable<T extends Record<string, any>>({
                   <span className="avakio-datatable-sort-icon">
                     {sortColumn === column.id ? (
                       sortDirection === 'asc' ? (
-                        <ChevronUp className="h-4 w-4" />
+                        <ChevronUp size={16} />
                       ) : (
-                        <ChevronDown className="h-4 w-4" />
+                        <ChevronDown size={16} />
                       )
                     ) : (
-                      <ChevronsUpDown className="h-4 w-4 opacity-40" />
+                      <ChevronsUpDown size={16} style={{ opacity: 0.4 }} />
                     )}
                   </span>
                 )}
@@ -537,7 +541,7 @@ export function AvakioDataTable<T extends Record<string, any>>({
                         value={filters[column.id] || ''}
                         onChange={(value) => handleFilter(column.id, value)}
                         clear={true}
-                        icon={<Search className="h-3 w-3" />}
+                        icon={<Search size={12} />}
                         iconPosition="left"
                         className="avakio-datatable-filter-input"
                         height={28}
@@ -662,7 +666,7 @@ export function AvakioDataTable<T extends Record<string, any>>({
                   onPageChange?.(newPage);
                 }}
                 disabled={page === 1}
-                icon={<ChevronLeft className="h-4 w-4" />}
+                icon={<ChevronLeft size={16} />}
                 buttonType="icon"
                 style={{ height: '32px', width: '32px', padding: 0 }}
               />
@@ -680,7 +684,7 @@ export function AvakioDataTable<T extends Record<string, any>>({
                   onPageChange?.(newPage);
                 }}
                 disabled={page === totalPages}
-                icon={<ChevronRight className="h-4 w-4" />}
+                icon={<ChevronRight size={16} />}
                 buttonType="icon"
                 style={{ height: '32px', width: '32px', padding: 0 }}
               />

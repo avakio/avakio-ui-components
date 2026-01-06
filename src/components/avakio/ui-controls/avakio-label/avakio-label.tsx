@@ -52,6 +52,8 @@ export interface AvakioLabelProps {
   border?: string;
   /** Border radius */
   borderRadius?: string | number;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export interface AvakioLabelRef {
@@ -103,6 +105,7 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       margin,
       border,
       borderRadius,
+      style,
     },
     ref
   ) => {
@@ -161,6 +164,7 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       border,
       borderRadius,
       display: isVisible ? undefined : 'none',
+      ...style,
     };
 
     // Handle click

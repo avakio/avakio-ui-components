@@ -58,6 +58,8 @@ export interface AvakioSliderProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 function clamp(val: number, min: number, max: number) {
@@ -88,6 +90,7 @@ export function AvakioSlider({
   margin,
   minWidth,
   minHeight,
+  style,
 }: AvakioSliderProps) {
   const isControlled = value !== undefined;
   
@@ -212,11 +215,13 @@ export function AvakioSlider({
         ["--slider-progress" as string]: `${highPercent}%`,
         ...(paddingStyle && { padding: paddingStyle }),
         ...(marginStyle && { margin: marginStyle }),
+        ...style,
       }
     : {
         ["--slider-progress" as string]: `${highPercent}%`,
         ...(paddingStyle && { padding: paddingStyle }),
         ...(marginStyle && { margin: marginStyle }),
+        ...style,
       };
 
   return (

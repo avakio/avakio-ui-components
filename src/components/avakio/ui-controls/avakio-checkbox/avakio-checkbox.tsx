@@ -31,6 +31,8 @@ export interface AvakioCheckboxProps extends Omit<React.InputHTMLAttributes<HTML
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioCheckbox({
@@ -53,6 +55,7 @@ export function AvakioCheckbox({
   minWidth,
   minHeight,
   testId,
+  style,
   ...rest
 }: AvakioCheckboxProps) {
   const isControlled = checked !== undefined;
@@ -117,6 +120,7 @@ export function AvakioCheckbox({
     ...(marginStyle && { margin: marginStyle }),
     ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
     ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...style,
   };
 
   return (

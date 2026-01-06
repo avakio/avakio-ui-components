@@ -75,7 +75,10 @@ export interface AvakioLayoutProps {
   
   /** Test ID for testing purposes */
   testId?: string;
-  
+
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
+
   /** Gap between items (CSS gap property) */
   gap?: number | string;
   
@@ -122,6 +125,7 @@ export function AvakioLayout({
   justify = 'start',
   onResize,
   autoResize = false,
+  style,
 }: AvakioLayoutProps) {
   const layoutRef = useRef<HTMLDivElement>(null);
   const [responsiveMode, setResponsiveMode] = useState(false);
@@ -206,6 +210,7 @@ export function AvakioLayout({
     justifyContent: justify,
     flex: gravity,
     ...(css && typeof css === 'object' && !Array.isArray(css) ? css : {}),
+    ...style,
   };
 
   // Handle padding

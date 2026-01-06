@@ -86,6 +86,8 @@ export interface AvakioTemplateProps {
   
   /** Callback on click */
   onClick?: (e: React.MouseEvent) => void;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export interface AvakioTemplateRef {
@@ -153,6 +155,7 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
       onLoad,
       onChange,
       onClick,
+      style,
     },
     ref
   ) => {
@@ -318,6 +321,7 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
         ? `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`
         : typeof margin === 'number' ? `${margin}px` : margin,
       ...(css && typeof css === 'object' && !Array.isArray(css) ? css : {}),
+      ...style,
     };
 
     return (

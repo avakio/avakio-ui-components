@@ -60,6 +60,8 @@ export interface AvakioGridSuggestProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioGridSuggest({
@@ -86,6 +88,7 @@ export function AvakioGridSuggest({
   minWidth,
   minHeight,
   testId,
+  style,
 }: AvakioGridSuggestProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -288,7 +291,7 @@ export function AvakioGridSuggest({
       ref={containerRef}
       data-testid={testId}
       className={`avakio-gridsuggest ${className}`}
-      style={{ width }}
+      style={{ width, ...style }}
       data-disabled={disabled}
       data-readonly={readonly}
       data-error={!!error}

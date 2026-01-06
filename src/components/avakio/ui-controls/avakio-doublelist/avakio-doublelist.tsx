@@ -52,6 +52,8 @@ export interface AvakioDoubleListProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioDoubleList({
@@ -72,6 +74,7 @@ export function AvakioDoubleList({
   className,
   minWidth,
   minHeight,
+  style,
 }: AvakioDoubleListProps) {
   const [leftSearch, setLeftSearch] = useState('');
   const [rightSearch, setRightSearch] = useState('');
@@ -286,6 +289,7 @@ export function AvakioDoubleList({
         disabled && 'avakio-doublelist-disabled',
         className
       )}
+      style={style}
     >
       {/* Left Panel */}
       <div className="avakio-doublelist-panel">

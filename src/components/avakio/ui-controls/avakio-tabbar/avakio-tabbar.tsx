@@ -55,6 +55,8 @@ export interface AvakioTabBarProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioTabBar({
@@ -82,6 +84,7 @@ export function AvakioTabBar({
   margin,
   minWidth,
   minHeight,
+  style,
 }: AvakioTabBarProps) {
   const [internalValue, setInternalValue] = useState<string | number | null>(value ?? null);
   const [closedIds, setClosedIds] = useState<Set<string | number>>(new Set());
@@ -291,6 +294,7 @@ export function AvakioTabBar({
   const containerStyle: React.CSSProperties = {
     ...(paddingStyle && { padding: paddingStyle }),
     ...(marginStyle && { margin: marginStyle }),
+    ...style,
   };
 
   return (

@@ -75,6 +75,8 @@ export interface AvakioBulletGraphProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 const DEFAULT_BANDS: AvakioBulletGraphBand[] = [
@@ -109,6 +111,7 @@ export function AvakioBulletGraph({
   minWidth,
   minHeight,
   className,
+  style,
 }: AvakioBulletGraphProps) {
   const [animatedValue, setAnimatedValue] = useState(minRange);
   const animationRef = useRef<number | null>(null);
@@ -244,6 +247,7 @@ export function AvakioBulletGraph({
       style={{
         '--bg-label-width': `${labelWidth}px`,
         '--bg-label-height': `${labelHeight}px`,
+        ...style,
       } as React.CSSProperties}
     >
       {/* Label Section */}

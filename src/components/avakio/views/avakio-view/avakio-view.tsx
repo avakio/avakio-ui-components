@@ -70,6 +70,8 @@ export interface AvakioViewProps {
   onFocus?: () => void;
   onBlur?: () => void;
   onKeyPress?: (e: React.KeyboardEvent) => void;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioView({
@@ -99,6 +101,7 @@ export function AvakioView({
   onFocus,
   onBlur,
   onKeyPress,
+  style,
 }: AvakioViewProps) {
   const viewRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(!hidden);
@@ -184,6 +187,7 @@ export function AvakioView({
         : typeof padding === 'number' ? `${padding}px` : padding 
     }),
     ...(typeof gravity !== 'undefined' && { flex: gravity }),
+    ...style,
   };
 
   // Build class names

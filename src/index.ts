@@ -1,6 +1,9 @@
 // Avakio UI Components Library
 // Main entry point for all components
 
+// Base Props
+export * from './components/avakio/base/avakio-base-props';
+
 // Core Components
 export * from './components/avakio/avakio-popup/avakio-popup';
 export * from './components/avakio/avakio-portlet/avakio-portlet';

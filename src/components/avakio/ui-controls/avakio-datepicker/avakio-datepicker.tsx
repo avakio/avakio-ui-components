@@ -1,40 +1,28 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import React, { useState, useMemo, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { ChevronLeft, ChevronRight, Clock, Calendar as CalendarIcon, X, Copy } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { AvakioButton } from '../avakio-button/avakio-button';
 import { cn } from '@/lib/utils';
+import { 
+  AvakioControlledProps, 
+  AvakioBaseRef, 
+  useAvakioBase,
+  formatSize,
+  computeBaseStyles,
+  computeLabelStyles,
+  AVAKIO_BASE_DEFAULTS 
+} from '../../base/avakio-base-props';
 import './avakio-datepicker.css';
 
-export interface AvakioDatePickerProps {
-  value?: string;
-  onChange: (value: string) => void;
-  className?: string;
-  showTime?: boolean; // If false, only returns date (YYYY-MM-DD), if true returns full ISO datetime
-  /** ID of the component */
-  id?: string;
-  /** Test ID for testing purposes */
-  testId?: string;
-  /** Label displayed in the trigger button */
-  label?: string;
-  /** Placeholder when no date is selected */
-  placeholder?: string;
+export interface AvakioDatePickerProps extends AvakioControlledProps<string> {
+  /** If false, only returns date (YYYY-MM-DD), if true returns full ISO datetime */
+  showTime?: boolean;
   /** Use inline calendar instead of dropdown (legacy mode) */
   inline?: boolean;
-  /** Minimum width */
-  minWidth?: string | number;
-  /** Minimum height */
-  minHeight?: string | number;
-  /** Whether the component is borderless */
-  borderless?: boolean;
-  /** Whether the component is disabled */
-  disabled?: boolean;
-  /** Whether the component is hidden */
-  hidden?: boolean;
-  /** Maximum height */
-  maxHeight?: number | string;
-  /** Maximum width */
-  maxWidth?: number | string;
+  /** Size variant - 'default' for normal, 'compact' for filter/table use */
+  size?: 'default' | 'compact';
+  /** Enable copy button to copy the value to clipboard */
+  enableValueCopyButton?: boolean;
 }
 
 const formatDisplayDate = (value: string | null | undefined, showTime: boolean) => {
@@ -58,12 +46,16 @@ function AvakioDatePickerCalendar({
   value, 
   onChange, 
   className, 
-  showTime = true 
+  showTime = true,
+  onDateSelect,
+  onCancel
 }: { 
   value?: string; 
   onChange: (value: string) => void; 
   className?: string; 
   showTime?: boolean;
+  onDateSelect?: () => void;
+  onCancel?: () => void;
 }) {
   const selectedDate = value ? new Date(value) : null;
   const [viewDate, setViewDate] = useState(selectedDate || new Date());
@@ -73,7 +65,7 @@ function AvakioDatePickerCalendar({
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  const weekDays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const { year, month } = useMemo(() => ({
     year: viewDate.getFullYear(),
@@ -148,6 +140,8 @@ function AvakioDatePickerCalendar({
       const month = String(newDate.getMonth() + 1).padStart(2, '0');
       const day = String(newDate.getDate()).padStart(2, '0');
       onChange(`${year}-${month}-${day}`);
+      // Close the dropdown after date selection (not for time mode)
+      onDateSelect?.();
     }
   };
 
@@ -194,23 +188,25 @@ function AvakioDatePickerCalendar({
     <div className={cn('avakio-datepicker-container', className)}>
       {/* Navigation */}
       <div className="avakio-dp-nav">
-        <button
-          type="button"
+        <AvakioButton
+          variant="ghost"
+          size="sm"
+          buttonType="icon"
+          icon={<ChevronLeft size={16} />}
           onClick={handlePrevMonth}
           className="avakio-dp-nav-btn"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
+        />
         <div className="avakio-dp-nav-label">
           {monthNames[month]} {year}
         </div>
-        <button
-          type="button"
+        <AvakioButton
+          variant="ghost"
+          size="sm"
+          buttonType="icon"
+          icon={<ChevronRight size={16} />}
           onClick={handleNextMonth}
           className="avakio-dp-nav-btn"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
+        />
       </div>
 
       {/* Weekday headers */}
@@ -225,9 +221,10 @@ function AvakioDatePickerCalendar({
       {/* Calendar grid */}
       <div className="avakio-dp-days">
         {calendarDays.map((dayInfo, index) => (
-          <button
+          <AvakioButton
             key={index}
-            type="button"
+            variant={isSelected(dayInfo.date) ? 'primary' : 'ghost'}
+            size="sm"
             onClick={() => handleDateSelect(dayInfo.date)}
             className={cn(
               'avakio-dp-day',
@@ -235,9 +232,8 @@ function AvakioDatePickerCalendar({
               isSelected(dayInfo.date) && 'avakio-dp-day-selected',
               isToday(dayInfo.date) && !isSelected(dayInfo.date) && 'avakio-dp-day-today'
             )}
-          >
-            {dayInfo.day}
-          </button>
+            label={String(dayInfo.day)}
+          />
         ))}
       </div>
 
@@ -245,7 +241,7 @@ function AvakioDatePickerCalendar({
       {showTime && (
       <div className="avakio-dp-time">
         <div className="avakio-dp-time-header">
-          <Clock className="h-4 w-4" />
+          <Clock size={16} />
           <span className="avakio-dp-time-display">
             {selectedDate ? (
               (() => {
@@ -259,33 +255,63 @@ function AvakioDatePickerCalendar({
           </span>
         </div>
         <div className="avakio-dp-time-inputs">
-          <Input
+          <input
             type="number"
-            min="0"
-            max="23"
             placeholder="00"
             value={selectedDate ? selectedDate.getHours().toString().padStart(2, '0') : ''}
             onChange={(e) => {
               if (!e.target.value) return;
-              const hours = Math.max(0, Math.min(23, parseInt(e.target.value) || 0));
+              let hours = parseInt(e.target.value) || 0;
+              // Wrap around: if user types value > 23, wrap to 0-23 range
+              hours = ((hours % 24) + 24) % 24;
               const minutes = selectedDate ? selectedDate.getMinutes() : 0;
               handleTimeChange(hours, minutes);
+            }}
+            onKeyDown={(e) => {
+              if (!selectedDate) return;
+              const currentHours = selectedDate.getHours();
+              if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                // Wrap from 0 to 23
+                const newHours = currentHours === 0 ? 23 : currentHours - 1;
+                handleTimeChange(newHours, selectedDate.getMinutes());
+              } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                // Wrap from 23 to 0
+                const newHours = currentHours === 23 ? 0 : currentHours + 1;
+                handleTimeChange(newHours, selectedDate.getMinutes());
+              }
             }}
             className="avakio-dp-time-input"
             disabled={!selectedDate}
           />
           <span className="avakio-dp-time-separator">:</span>
-          <Input
+          <input
             type="number"
-            min="0"
-            max="59"
             placeholder="00"
             value={selectedDate ? selectedDate.getMinutes().toString().padStart(2, '0') : ''}
             onChange={(e) => {
               if (!e.target.value) return;
-              const minutes = Math.max(0, Math.min(59, parseInt(e.target.value) || 0));
+              let minutes = parseInt(e.target.value) || 0;
+              // Wrap around: if user types value > 59, wrap to 0-59 range
+              minutes = ((minutes % 60) + 60) % 60;
               const hours = selectedDate ? selectedDate.getHours() : 0;
               handleTimeChange(hours, minutes);
+            }}
+            onKeyDown={(e) => {
+              if (!selectedDate) return;
+              const currentMinutes = selectedDate.getMinutes();
+              if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                // Wrap from 0 to 59
+                const newMinutes = currentMinutes === 0 ? 59 : currentMinutes - 1;
+                handleTimeChange(selectedDate.getHours(), newMinutes);
+              } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                // Wrap from 59 to 0
+                const newMinutes = currentMinutes === 59 ? 0 : currentMinutes + 1;
+                handleTimeChange(selectedDate.getHours(), newMinutes);
+              }
             }}
             className="avakio-dp-time-input"
             disabled={!selectedDate}
@@ -299,44 +325,147 @@ function AvakioDatePickerCalendar({
 
       {/* Action buttons - always visible */}
       <div className="avakio-dp-actions">
-        <Button
-          type="button"
-          variant="ghost"
+        <AvakioButton
+          variant="outline"
           size="sm"
           onClick={handleToday}
           className="avakio-dp-action-btn"
-        >
-          Today
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
+          label="Today"
+        />
+        <AvakioButton
+          variant="outline"
           size="sm"
           onClick={handleClear}
           className="avakio-dp-action-btn"
-        >
-          Clear
-        </Button>
+          label="Clear"
+        />
       </div>
+
+      {/* OK/Cancel buttons for time mode */}
+      {showTime && (onDateSelect || onCancel) && (
+        <div className="avakio-dp-confirm-actions">
+          {onCancel && (
+            <AvakioButton
+              variant="outline"
+              size="sm"
+              onClick={onCancel}
+              className="avakio-dp-confirm-btn"
+              label="Cancel"
+            />
+          )}
+          {onDateSelect && (
+            <AvakioButton
+              variant="primary"
+              size="sm"
+              onClick={onDateSelect}
+              className="avakio-dp-confirm-btn"
+              label="OK"
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }
 
 // Main exported component - dropdown version by default
-export function AvakioDatePicker({ 
-  value, 
-  onChange, 
-  className, 
-  showTime = true, 
-  id, 
-  testId,
-  label = "Date",
-  placeholder = "Select date",
-  inline = false
-}: AvakioDatePickerProps) {
+export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePickerProps>(function AvakioDatePicker(props, ref) {
+  const {
+    value,
+    onChange,
+    className, 
+    showTime = false, 
+    id, 
+    testId,
+    label,
+    placeholder = "",
+    inline = false,
+    size = 'default',
+    clearable = AVAKIO_BASE_DEFAULTS.clearable,
+    style,
+    labelWidth = AVAKIO_BASE_DEFAULTS.labelWidth,
+    labelPosition = AVAKIO_BASE_DEFAULTS.labelPosition,
+    labelAlign = AVAKIO_BASE_DEFAULTS.labelAlign,
+    enableValueCopyButton = false,
+    invalid = false,
+    invalidMessage,
+    borderless = AVAKIO_BASE_DEFAULTS.borderless,
+    hidden = AVAKIO_BASE_DEFAULTS.hidden,
+    disabled = AVAKIO_BASE_DEFAULTS.disabled,
+    readonly = AVAKIO_BASE_DEFAULTS.readonly,
+    minWidth,
+    minHeight,
+    width,
+    height,
+    bottomPadding,
+    bottomLabel,
+    tooltip,
+    required,
+    align,
+    inputAlign,
+    inputWidth,
+    inputHeight,
+    // Event handlers
+    onBlur,
+    onFocus,
+    onItemClick,
+    onKeyPress,
+    onAfterRender,
+    onBeforeRender,
+    onViewShow,
+    onViewResize,
+    onAfterScroll,
+    validate,
+  } = props;
+
+  // Use the base hook for common functionality
+  const {
+    rootRef,
+    inputRef,
+    isDisabled,
+    isHidden,
+    methods,
+    getRefMethods,
+    eventHandlers,
+  } = useAvakioBase<string>({
+    initialValue: value,
+    onChange: (newVal, oldVal) => onChange?.(newVal, oldVal),
+    validate,
+    disabled,
+    hidden,
+    getTextValue: (v) => v || '',
+    onBlur,
+    onFocus,
+    onItemClick,
+    onKeyPress,
+    onAfterRender,
+    onBeforeRender,
+    onViewShow,
+    onViewResize,
+    onAfterScroll,
+  });
+
+  // Expose ref methods
+  useImperativeHandle(ref, () => getRefMethods());
+
   const [open, setOpen] = useState(false);
-  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [valueOnOpen, setValueOnOpen] = useState<string | undefined>(value);
   const [themeAttr, setThemeAttr] = useState<string | null>(null);
+
+  // Track value when popover opens for cancel functionality
+  useEffect(() => {
+    if (open) {
+      setValueOnOpen(value);
+    }
+  }, [open, value]);
+
+  const handleCancel = () => {
+    // Revert to the value when popover was opened
+    if (valueOnOpen !== value) {
+      onChange(valueOnOpen || '');
+    }
+    setOpen(false);
+  };
 
   useEffect(() => {
     const host = rootRef.current;
@@ -352,7 +481,66 @@ export function AvakioDatePicker({
     return () => observer.disconnect();
   }, []);
 
-  const displayValue = formatDisplayDate(value, showTime);
+  // Format value for input display using browser locale
+  const inputDisplayValue = value ? (() => {
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return value;
+    
+    if (showTime) {
+      // Include time in display using locale format
+      return d.toLocaleString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+    
+    // Date only using locale format
+    return d.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+  })() : '';
+
+  // Copy value to clipboard
+  const handleCopyValue = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (inputDisplayValue) {
+      navigator.clipboard.writeText(inputDisplayValue);
+    }
+  };
+
+  // Compute combined styles using base helpers
+  const computedStyle: React.CSSProperties = {
+    ...computeBaseStyles({
+      style,
+      hidden: isHidden,
+      height,
+      width,
+      minHeight,
+      minWidth,
+      bottomPadding,
+      align,
+    }),
+  };
+
+  // Label styles using base helpers
+  const labelStyle: React.CSSProperties = computeLabelStyles({ labelWidth, labelAlign });
+
+  // Input styles
+  const inputStyle: React.CSSProperties = {
+    textAlign: inputAlign,
+    width: formatSize(inputWidth),
+    height: formatSize(inputHeight),
+  };
+
+  // Handle value change with old value tracking
+  const handleValueChange = (newValue: string) => {
+    onChange?.(newValue, value);
+  };
 
   // If inline mode, render the calendar directly
   if (inline) {
@@ -361,79 +549,203 @@ export function AvakioDatePicker({
         ref={rootRef}
         id={id} 
         data-testid={testId} 
-        className={cn('avakio-dp-inline', className)}
+        className={cn(
+          'avakio-dp-inline', 
+          borderless && 'avakio-dp-borderless',
+          isDisabled && 'avakio-dp-disabled',
+          className
+        )}
         data-admin-theme={themeAttr || undefined}
+        style={computedStyle}
+        title={tooltip}
+        onClick={eventHandlers.onClick}
       >
         <AvakioDatePickerCalendar 
           value={value} 
-          onChange={onChange} 
+          onChange={handleValueChange} 
           showTime={showTime} 
         />
+        {bottomLabel && <div className="avakio-dp-bottom-label">{bottomLabel}</div>}
       </div>
     );
   }
 
-  // Dropdown mode (default)
+  // Compact mode for filters/tables
+  if (size === 'compact') {
+    return (
+      <div
+        ref={rootRef}
+        id={id}
+        data-testid={testId}
+        className={cn(
+          'avakio-dp avakio-dp-compact',
+          borderless && 'avakio-dp-borderless',
+          invalid && 'avakio-dp-invalid',
+          isDisabled && 'avakio-dp-disabled',
+          className
+        )}
+        data-admin-theme={themeAttr || undefined}
+        style={computedStyle}
+        title={tooltip}
+        onClick={eventHandlers.onClick}
+      >
+        <Popover open={!isDisabled && open} onOpenChange={(o) => !isDisabled && setOpen(o)}>
+          <PopoverTrigger asChild>
+            <div className="avakio-dp-input-group-compact">
+              <input
+                type="text"
+                className="avakio-dp-input-compact"
+                placeholder={placeholder}
+                value={inputDisplayValue}
+                readOnly={readonly || true}
+                disabled={isDisabled}
+                style={inputStyle}
+                onBlur={eventHandlers.onBlur}
+                onFocus={eventHandlers.onFocus}
+                onKeyDown={eventHandlers.onKeyPress}
+              />
+              {enableValueCopyButton && value && (
+                <button
+                  type="button"
+                  className="avakio-dp-copy-btn-compact"
+                  onClick={handleCopyValue}
+                  title="Copy to clipboard"
+                  disabled={isDisabled}
+                >
+                  <Copy size={12} />
+                </button>
+              )}
+              {clearable && value && !isDisabled && (
+                <button
+                  type="button"
+                  className="avakio-dp-clear-btn-compact"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleValueChange('');
+                  }}
+                >
+                  <X size={12} />
+                </button>
+              )}
+              <button type="button" className="avakio-dp-icon-btn-compact" disabled={isDisabled}>
+                <CalendarIcon size={12} />
+              </button>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent
+            className="avakio-dp-popover"
+            align="start"
+            data-admin-theme={themeAttr || undefined}
+          >
+            <AvakioDatePickerCalendar 
+              value={value} 
+              onChange={handleValueChange} 
+              showTime={showTime}
+              onDateSelect={() => setOpen(false)}
+              onCancel={handleCancel}
+            />
+          </PopoverContent>
+        </Popover>
+        {invalid && invalidMessage && (
+          <div className="avakio-dp-invalid-message">{invalidMessage}</div>
+        )}
+        {bottomLabel && <div className="avakio-dp-bottom-label">{bottomLabel}</div>}
+      </div>
+    );
+  }
+
+  // Default mode - label + input with calendar button
   return (
     <div
       ref={rootRef}
       id={id}
       data-testid={testId}
-      className={cn('avakio-dp', className)}
+      className={cn(
+        'avakio-dp',
+        borderless && 'avakio-dp-borderless',
+        invalid && 'avakio-dp-invalid',
+        isDisabled && 'avakio-dp-disabled',
+        labelPosition === 'top' && 'avakio-dp-label-top',
+        className
+      )}
       data-admin-theme={themeAttr || undefined}
+      style={computedStyle}
+      title={tooltip}
+      onClick={eventHandlers.onClick}
     >
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <button type="button" className="avakio-dp-trigger">
-            <div className="avakio-dp-trigger-label">
-              <CalendarIcon size={16} />
-              <span>{label}</span>
+      <Popover open={!isDisabled && open} onOpenChange={(o) => !isDisabled && setOpen(o)}>
+        <div className={cn('avakio-dp-wrapper', labelPosition === 'top' && 'avakio-dp-wrapper-vertical')}>
+          {label && (
+            <div className="avakio-dp-label" style={labelStyle}>
+              {label}
+              {required && <span className="avakio-dp-required">*</span>}
             </div>
-            <div className="avakio-dp-trigger-value">
-              {value ? displayValue : <span className="avakio-dp-placeholder">{placeholder}</span>}
+          )}
+          <PopoverTrigger asChild>
+            <div className="avakio-dp-input-group">
+              <input
+                ref={inputRef as React.RefObject<HTMLInputElement>}
+                type="text"
+                className="avakio-dp-input"
+                placeholder={placeholder}
+                value={inputDisplayValue}
+                readOnly={readonly || true}
+                disabled={isDisabled}
+                style={inputStyle}
+                onBlur={eventHandlers.onBlur}
+                onFocus={eventHandlers.onFocus}
+                onKeyDown={eventHandlers.onKeyPress}
+              />
+              {enableValueCopyButton && value && (
+                <button
+                  type="button"
+                  className="avakio-dp-copy-btn"
+                  onClick={handleCopyValue}
+                  title="Copy to clipboard"
+                  disabled={isDisabled}
+                >
+                  <Copy size={14} />
+                </button>
+              )}
+              {clearable && value && !isDisabled && (
+                <button
+                  type="button"
+                  className="avakio-dp-clear-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleValueChange('');
+                  }}
+                >
+                  <X size={14} />
+                </button>
+              )}
+              <button type="button" className="avakio-dp-icon-btn" disabled={isDisabled}>
+                <CalendarIcon size={16} />
+              </button>
             </div>
-          </button>
-        </PopoverTrigger>
+          </PopoverTrigger>
+        </div>
         <PopoverContent
           className="avakio-dp-popover"
-          align="start"
+          align="end"
           data-admin-theme={themeAttr || undefined}
         >
           <AvakioDatePickerCalendar 
             value={value} 
-            onChange={(val) => {
-              onChange(val);
-              // Auto-close after selection if not showing time
-              if (!showTime && val) {
-                setOpen(false);
-              }
-            }} 
-            showTime={showTime} 
+            onChange={handleValueChange} 
+            showTime={showTime}
+            onDateSelect={() => setOpen(false)}
+            onCancel={handleCancel}
           />
-          <div className="avakio-dp-footer">
-            <button 
-              type="button" 
-              className="avakio-dp-footer-action" 
-              onClick={() => {
-                onChange('');
-                setOpen(false);
-              }}
-            >
-              Clear
-            </button>
-            <button 
-              type="button" 
-              className="avakio-dp-footer-action avakio-dp-footer-action-primary" 
-              onClick={() => setOpen(false)}
-            >
-              Done
-            </button>
-          </div>
         </PopoverContent>
       </Popover>
+      {invalid && invalidMessage && (
+        <div className="avakio-dp-invalid-message">{invalidMessage}</div>
+      )}
+      {bottomLabel && <div className="avakio-dp-bottom-label">{bottomLabel}</div>}
     </div>
   );
-}
+});
 
 
 

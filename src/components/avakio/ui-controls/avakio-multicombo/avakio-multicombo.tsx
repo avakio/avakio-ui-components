@@ -33,6 +33,8 @@ interface AvakioMultiComboProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioMultiCombo({
@@ -48,6 +50,7 @@ export function AvakioMultiCombo({
   testId,
   minWidth,
   minHeight,
+  style,
 }: AvakioMultiComboProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -161,7 +164,7 @@ export function AvakioMultiCombo({
               onClick={(e) => handleRemoveItem(opt.value, e)}
               disabled={disabled}
             >
-              <X className="h-3 w-3" />
+              <X size={12} />
             </button>
           </span>
         ))}
@@ -183,6 +186,7 @@ export function AvakioMultiCombo({
       id={id}
       data-testid={testId}
       className={cn('avakio-multicombo', disabled && 'avakio-mc-disabled', className)}
+      style={style}
     >
       {/* Input Area */}
       <div 
@@ -213,7 +217,7 @@ export function AvakioMultiCombo({
               className="avakio-mc-clear-btn"
               onClick={handleClearAll}
             >
-              <X className="h-4 w-4" />
+              <X size={16} />
             </button>
           )}
           <button
@@ -230,7 +234,7 @@ export function AvakioMultiCombo({
             }}
             disabled={disabled}
           >
-            <ChevronDown className={cn('h-4 w-4', isOpen && 'avakio-mc-toggle-open')} />
+            <ChevronDown size={16} className={cn(isOpen && 'avakio-mc-toggle-open')} />
           </button>
         </div>
       </div>
@@ -250,7 +254,7 @@ export function AvakioMultiCombo({
                   'avakio-mc-checkbox',
                   allFilteredSelected && 'avakio-mc-checkbox-checked'
                 )}>
-                  {allFilteredSelected && <Check className="h-3 w-3" />}
+                  {allFilteredSelected && <Check size={12} />}
                 </div>
                 <span className="avakio-mc-option-label avakio-mc-select-all-label">
                   {allFilteredSelected ? 'Deselect All' : 'Select All'}
@@ -275,7 +279,7 @@ export function AvakioMultiCombo({
                       'avakio-mc-checkbox',
                       isSelected && 'avakio-mc-checkbox-checked'
                     )}>
-                      {isSelected && <Check className="h-3 w-3" />}
+                      {isSelected && <Check size={12} />}
                     </div>
                     <span className="avakio-mc-option-label">{option.label}</span>
                   </button>

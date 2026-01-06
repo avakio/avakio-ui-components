@@ -83,13 +83,18 @@ function applyFilters(data, filters) {
         if (value.length > 0) {
           result = result.filter(item => {
             const itemValue = String(item[key] || '').toLowerCase();
-            return value.some(v => itemValue.includes(String(v).toLowerCase()));
+            return value.some(v => itemValue === String(v).toLowerCase());
           });
         }
       } else {
         result = result.filter(item => {
           const itemValue = String(item[key] || '').toLowerCase();
-          return itemValue.includes(value.toLowerCase());
+          const filterValue = value.toLowerCase();
+          // Use exact match for status-type fields, partial match for text fields
+          if (key === 'status') {
+            return itemValue === filterValue;
+          }
+          return itemValue.includes(filterValue);
         });
       }
     }

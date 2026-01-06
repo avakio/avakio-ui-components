@@ -86,6 +86,8 @@ export interface AvakioAbsoluteLayoutProps {
   onCellClick?: (cellId: string | undefined, cell: AvakioAbsoluteLayoutCell) => void;
   /** Callback when the layout is resized */
   onResize?: (width: number, height: number) => void;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export interface AvakioAbsoluteLayoutRef {
@@ -147,6 +149,7 @@ export const AvakioAbsoluteLayout = forwardRef<AvakioAbsoluteLayoutRef, AvakioAb
     padding,
     onCellClick,
     onResize,
+    style,
   } = props;
 
   // State
@@ -245,6 +248,7 @@ export const AvakioAbsoluteLayout = forwardRef<AvakioAbsoluteLayoutRef, AvakioAb
     maxHeight: toCssValue(maxHeight),
     background,
     padding: toCssValue(padding),
+    ...style,
   };
 
   if (isHidden) {

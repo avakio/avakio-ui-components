@@ -74,6 +74,8 @@ export interface AvakioToggleButtonProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
   /** Callback when value changes */
   onChange?: (value: boolean) => void;
   /** Callback when clicked */
@@ -138,6 +140,7 @@ export const AvakioToggleButton = forwardRef<AvakioToggleButtonRef, AvakioToggle
       margin,
       minWidth,
       minHeight,
+      style: styleProp,
       onChange,
       onClick,
       onFocus,
@@ -256,6 +259,7 @@ export const AvakioToggleButton = forwardRef<AvakioToggleButtonRef, AvakioToggle
       height: typeof height === 'number' ? `${height}px` : height,
       padding: paddingStyle,
       margin: marginStyle,
+      ...styleProp,
     };
 
     // Build class names

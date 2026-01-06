@@ -41,6 +41,8 @@ export interface AvakioCounterProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioCounter({
@@ -67,6 +69,7 @@ export function AvakioCounter({
   minWidth,
   minHeight,
   testId,
+  style,
 }: AvakioCounterProps) {
   const isControlled = value !== undefined;
   const [internal, setInternal] = useState<number>(value ?? defaultValue);
@@ -138,6 +141,7 @@ export function AvakioCounter({
     ...(marginStyle && { margin: marginStyle }),
     ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
     ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+    ...style,
   };
 
   return (

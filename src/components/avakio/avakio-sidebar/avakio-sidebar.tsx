@@ -48,6 +48,8 @@ export interface AvakioSidebarProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 interface ItemState {
@@ -82,6 +84,7 @@ export function AvakioSidebar({
   borderless = false,
   disabled = false,
   hidden = false,
+  style,
 }: AvakioSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(collapsed);
   const [openItems, setOpenItems] = useState<ItemState>({});
@@ -302,6 +305,7 @@ export function AvakioSidebar({
     ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
     ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
     ...(hidden && { display: 'none' }),
+    ...style,
   };
 
   return (

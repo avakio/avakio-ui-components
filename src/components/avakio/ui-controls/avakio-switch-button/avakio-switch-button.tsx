@@ -73,6 +73,8 @@ export interface AvakioSwitchButtonProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export interface AvakioSwitchButtonRef {
@@ -131,6 +133,7 @@ export const AvakioSwitchButton = forwardRef<AvakioSwitchButtonRef, AvakioSwitch
       margin,
       minWidth,
       minHeight,
+      style,
     },
     ref
   ) => {
@@ -235,6 +238,7 @@ export const AvakioSwitchButton = forwardRef<AvakioSwitchButtonRef, AvakioSwitch
       height: typeof height === 'number' ? `${height}px` : height,
       ...(paddingStyle && { padding: paddingStyle }),
       ...(marginStyle && { margin: marginStyle }),
+      ...style,
     };
 
     const labelStyles: React.CSSProperties = {

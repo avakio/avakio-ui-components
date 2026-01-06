@@ -80,6 +80,8 @@ export interface AvakioMultitextProps {
   maxHeight?: number | string;
   /** Whether the component is hidden */
   hidden?: boolean;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
   /** Input alignment */
   inputAlign?: 'left' | 'center' | 'right';
   /** Input width */
@@ -205,6 +207,7 @@ export const AvakioMultitext = forwardRef<AvakioMultitextRef, AvakioMultitextPro
       height,
       minWidth,
       maxWidth,
+      style,
       inputAlign = 'left',
       inputWidth,
       icon,
@@ -497,6 +500,7 @@ export const AvakioMultitext = forwardRef<AvakioMultitextRef, AvakioMultitextPro
       height: height ? (typeof height === 'number' ? `${height}px` : height) : undefined,
       minWidth: minWidth ? (typeof minWidth === 'number' ? `${minWidth}px` : minWidth) : undefined,
       maxWidth: maxWidth ? (typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth) : undefined,
+      ...style,
     };
 
     const canAddMore = !maxFields || fields.length < maxFields;

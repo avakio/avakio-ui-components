@@ -100,6 +100,8 @@ export interface AvakioGridProps {
   onDragStart?: (cell: AvakioGridCell) => void;
   /** Callback when drag ends */
   onDragEnd?: (cell: AvakioGridCell, newPosition: { x: number; y: number }) => void;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export interface AvakioGridRef {
@@ -162,6 +164,7 @@ export const AvakioGrid = forwardRef<AvakioGridRef, AvakioGridProps>(
       isDraggable = false,
       onDragStart,
       onDragEnd,
+      style,
     },
     ref
   ) => {
@@ -711,6 +714,7 @@ export const AvakioGrid = forwardRef<AvakioGridRef, AvakioGridProps>(
       minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight,
       margin: margin !== undefined ? (typeof margin === 'number' ? `${margin}px` : margin) : undefined,
       ...(css && typeof css === 'object' && !Array.isArray(css) ? css : {}),
+      ...style,
     };
 
     return (

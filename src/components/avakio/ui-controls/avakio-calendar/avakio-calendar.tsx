@@ -41,6 +41,8 @@ export interface AvakioCalendarProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 function isSameDay(date1: Date, date2: Date): boolean {
@@ -81,6 +83,7 @@ export function AvakioCalendar({
   testId,
   minWidth,
   minHeight,
+  style,
 }: AvakioCalendarProps) {
   // Initialize view to the first selected date's month, or today if no selection
   const getInitialViewDate = () => {
@@ -319,7 +322,7 @@ export function AvakioCalendar({
               className="avakio-cal-nav-btn"
               onClick={handlePrevMonth}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft size={16} />
             </button>
           )}
           <div className="avakio-cal-title">
@@ -331,7 +334,7 @@ export function AvakioCalendar({
               className="avakio-cal-nav-btn"
               onClick={handleNextMonth}
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight size={16} />
             </button>
           )}
         </div>
@@ -401,7 +404,7 @@ export function AvakioCalendar({
   };
 
   return (
-    <div id={id} data-testid={testId} className={`avakio-calendar ${className}`}>
+    <div id={id} data-testid={testId} className={`avakio-calendar ${className}`} style={style}>
       {safeMonthsToShow > 1 && (
         <div className="avakio-cal-multi-nav">
           <button
@@ -409,7 +412,7 @@ export function AvakioCalendar({
             className="avakio-cal-nav-btn"
             onClick={handlePrevMonth}
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft size={16} />
           </button>
           <button
             type="button"
@@ -423,7 +426,7 @@ export function AvakioCalendar({
             className="avakio-cal-nav-btn"
             onClick={handleNextMonth}
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight size={16} />
           </button>
         </div>
       )}

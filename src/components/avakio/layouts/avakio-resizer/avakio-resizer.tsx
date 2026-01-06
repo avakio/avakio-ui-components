@@ -34,6 +34,8 @@ export interface AvakioResizerProps {
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 /**
@@ -72,6 +74,7 @@ export function AvakioResizer({
   hidden = false,
   id,
   testId,
+  style,
 }: AvakioResizerProps) {
   const resizerRef = useRef<HTMLDivElement>(null);
   const startPosRef = useRef<number>(0);
@@ -150,6 +153,7 @@ export function AvakioResizer({
     ...(maxWidth && { maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth }),
     ...(maxHeight && { maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
     ...(hidden && { display: 'none' }),
+    ...style,
   };
 
   return (

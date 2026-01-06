@@ -64,6 +64,8 @@ export interface AvakioButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   maxHeight?: number | string;
   /** Maximum width */
   maxWidth?: number | string;
+  /** Custom inline styles for the root element */
+  style?: React.CSSProperties;
 }
 
 export function AvakioButton({
@@ -95,6 +97,7 @@ export function AvakioButton({
   minWidth,
   minHeight,
   onClick,
+  style,
   ...rest
 }: AvakioButtonProps) {
   const isDisabled = disabled || loading;
@@ -174,6 +177,7 @@ export function AvakioButton({
         ...(marginStyle && { margin: marginStyle }),
         ...(minWidth && { minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth }),
         ...(minHeight && { minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight }),
+        ...style,
       }}
       {...rest}
     >
