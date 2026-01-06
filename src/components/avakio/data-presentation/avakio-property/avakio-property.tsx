@@ -1,5 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import "./avakio-property.css";
+import {
+  AvakioBaseProps,
+  AvakioBaseRef,
+  AVAKIO_BASE_DEFAULTS,
+  computeBaseStyles,
+  useAvakioBase,
+} from "../../base/avakio-base-props";
 import { AvakioDatePicker } from "../../ui-controls/avakio-datepicker/avakio-datepicker";
 import { AvakioCheckbox } from "../../ui-controls/avakio-checkbox/avakio-checkbox";
 import { AvakioButton, AvakioButtonSize, AvakioButtonVariant } from "../../ui-controls/avakio-button/avakio-button";
@@ -11,6 +18,7 @@ import { AvakioGridSuggest, AvakioGridSuggestBodyConfig, AvakioGridSuggestOption
 import { AvakioMultiCombo, AvakioMultiComboOption } from "../../ui-controls/avakio-multicombo/avakio-multicombo";
 import { AvakioRichSelect, AvakioRichSelectOption } from "../../ui-controls/avakio-richselect/avakio-richselect";
 import { AvakioSlider } from "../../ui-controls/avakio-slider/avakio-slider";
+import { AvakioText } from "../../ui-controls/avakio-text/avakio-text";
 
 export type AvakioPropertyEditor =
   | "text"
@@ -163,51 +171,87 @@ export interface AvakioPropertyItem {
   colorOnChange?: (color: string, item: AvakioPropertyItem) => void;
 }
 
-export interface AvakioPropertyProps {
+export interface AvakioPropertyProps extends AvakioBaseProps {
+  /** Array of property items to display */
   items: AvakioPropertyItem[];
+  /** Callback when any property value changes */
   onChange?: (items: AvakioPropertyItem[], changed: AvakioPropertyItem) => void;
-  theme?: string;
-  className?: string;
-  style?: React.CSSProperties;
+  /** Enable dense/compact mode */
   dense?: boolean;
+  /** Show borders between rows */
   showBorders?: boolean;
-  /** ID of the component */
-  id?: string;
-  /** Test ID for testing purposes */
-  testId?: string;
-  /** Minimum width */
-  minWidth?: string | number;
-  /** Minimum height */
-  minHeight?: string | number;
-  /** Whether the component is borderless */
-  borderless?: boolean;
-  /** Whether the component is disabled */
-  disabled?: boolean;
-  /** Whether the component is hidden */
-  hidden?: boolean;
-  /** Maximum height */
-  maxHeight?: number | string;
-  /** Maximum width */
-  maxWidth?: number | string;
 }
 
-export function AvakioProperty({
-  items,
-  onChange,
-  theme,
-  className,
-  style,
-  dense,
-  showBorders,
-  id,
-  testId,
-}: AvakioPropertyProps) {
-  const [rows, setRows] = useState<AvakioPropertyItem[]>(items);
+/** Ref type for AvakioProperty component */
+export type AvakioPropertyRef = AvakioBaseRef<AvakioPropertyItem[]>;
+
+export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>(
+  function AvakioProperty(props, ref) {
+    const {
+      // Property-specific props
+      items,
+      onChange,
+      dense,
+      showBorders,
+      // Base props
+      id,
+      testId,
+      className,
+      style,
+      disabled = AVAKIO_BASE_DEFAULTS.disabled,
+      hidden = AVAKIO_BASE_DEFAULTS.hidden,
+      borderless = AVAKIO_BASE_DEFAULTS.borderless,
+      width,
+      height,
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+      margin,
+      padding,
+      tooltip,
+      // Event handlers
+      onBlur,
+      onFocus,
+      onItemClick,
+      onKeyPress,
+      onAfterRender,
+      onBeforeRender,
+      onViewShow,
+      onViewResize,
+      onAfterScroll,
+    } = props;
+
+    const [rows, setRows] = useState<AvakioPropertyItem[]>(items);
+    
+    // Use the base hook for common functionality
+    const {
+      rootRef,
+      isDisabled,
+      isHidden,
+      setIsDisabled,
+      setIsHidden,
+      getRefMethods,
+      eventHandlers,
+    } = useAvakioBase<AvakioPropertyItem[]>({
+      initialValue: items,
+      onChange: (newVal) => {
+        if (newVal) setRows(newVal);
+      },
+      disabled,
+      hidden,
+      getTextValue: (v) => (v ? JSON.stringify(v) : ''),
+      onBlur,
+      onFocus,
+      onItemClick,
+      onKeyPress,
+      onAfterRender,
+      onBeforeRender,
+      onViewShow,
+      onViewResize,
+      onAfterScroll,
+    });
   const [lastChanged, setLastChanged] = useState<AvakioPropertyItem | null>(null);
-  const [openDateId, setOpenDateId] = useState<string | null>(null);
-  const [openDatePlacement, setOpenDatePlacement] = useState<"bottom" | "top">("bottom");
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const dateBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   useEffect(() => {
     setRows(items);
@@ -220,55 +264,6 @@ export function AvakioProperty({
     }
   }, [lastChanged, onChange, rows]);
 
-  useEffect(() => {
-    if (!openDateId) return;
-    const handleClickOutside = (evt: MouseEvent) => {
-      if (!rootRef.current) return;
-      if (!rootRef.current.contains(evt.target as Node)) {
-        setOpenDateId(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [openDateId]);
-
-  const computeDatePlacement = (id: string) => {
-    const btn = dateBtnRefs.current[id];
-    if (!btn) return "bottom" as const;
-    const rect = btn.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const estimatedHeight = 360;
-    const spaceBelow = viewportHeight - rect.bottom;
-    const spaceAbove = rect.top;
-    return spaceBelow < estimatedHeight && spaceAbove > spaceBelow ? "top" : "bottom";
-  };
-
-  const coerceDate = (val: unknown) => {
-    if (val === undefined || val === null || val === "") return null;
-    const raw = String(val);
-    const normalized = raw.includes("T") ? raw : `${raw}T00:00:00`;
-    const d = new Date(normalized);
-    return Number.isNaN(d.getTime()) ? null : d;
-  };
-
-  const formatDisplayValue = (item: AvakioPropertyItem) => {
-    if (item.value === undefined || item.value === null || item.value === "") {
-      return item.placeholder || (item.type === "datetime" ? "Select date & time" : "Select date");
-    }
-
-    if (item.type === "date" && typeof item.value === "string") {
-      const date = coerceDate(item.value);
-      return date ? date.toLocaleDateString(undefined, { dateStyle: "medium" }) : "Invalid date";
-    }
-
-    if (item.type === "datetime" && typeof item.value === "string") {
-      const date = coerceDate(item.value);
-      return date ? date.toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }) : "Invalid date";
-    }
-
-    return String(item.value);
-  };
-
   const groupedRows = useMemo(() => {
     const groups: Record<string, AvakioPropertyItem[]> = {};
     rows.forEach((row) => {
@@ -279,7 +274,32 @@ export function AvakioProperty({
     return groups;
   }, [rows]);
 
+  // Expose imperative methods via ref (extending base methods)
+  useImperativeHandle(ref, () => ({
+    ...getRefMethods(),
+    getValue: () => rows,
+    setValue: (newItems: AvakioPropertyItem[]) => setRows(newItems),
+    getText: () => JSON.stringify(rows),
+  }), [rows, getRefMethods]);
+
+  // Compute styles from base props
+  const computedStyle: React.CSSProperties = {
+    ...computeBaseStyles({
+      style,
+      hidden: isHidden,
+      height,
+      width,
+      minHeight,
+      minWidth,
+      maxHeight,
+      maxWidth,
+      margin,
+      padding,
+    }),
+  };
+
   const handleChange = (id: string, value: string | number | boolean | string[] | AvakioDateRange | null) => {
+    if (isDisabled) return;
     setRows((prev) => {
       const next = prev.map((r) => (r.id === id ? { ...r, value } : r));
       const changed = next.find((r) => r.id === id)!;
@@ -300,16 +320,21 @@ export function AvakioProperty({
     switch (item.type) {
       case "number":
         return (
-          <input
+          <AvakioText
+            id={item.id}
+            name={item.id}
             type="number"
-            className="av-prop-input"
-            {...common}
             value={
               item.value === undefined || item.value === null
                 ? ""
-                : (item.value as number | string)
+                : String(item.value)
             }
-            onChange={(e) => handleChange(item.id, e.target.value === "" ? "" : Number(e.target.value))}
+            placeholder={item.placeholder}
+            disabled={item.disabled}
+            readonly={item.disabled}
+            onChange={(val) => handleChange(item.id, val === "" ? "" : Number(val))}
+            width="100%"
+            borderless
           />
         );
       case "select":
@@ -463,40 +488,19 @@ export function AvakioProperty({
         );
       case "date":
         return (
-          <div className="av-prop-datewrap">
-            <button
-              type="button"
-              className="av-prop-datebtn"
-              ref={(el) => {
-                dateBtnRefs.current[item.id] = el;
-              }}
-              onClick={() => {
-                if (openDateId === item.id) {
-                  setOpenDateId(null);
-                  return;
-                }
-                const placement = computeDatePlacement(item.id);
-                setOpenDatePlacement(placement);
-                setOpenDateId(item.id);
-              }}
-            >
-              {formatDisplayValue(item)}
-            </button>
-            {openDateId === item.id && (
-              <div className={`av-prop-datepop ${openDatePlacement === "top" ? "is-top" : ""}`}>
-                <AvakioDatePicker
-                  value={(item.value as string | undefined) ?? ""}
-                  onChange={(val) => {
-                    item.dateOnChange?.(val, item);
-                    handleChange(item.id, val);
-                    setOpenDateId(null);
-                  }}
-                  showTime={item.dateShowTime ?? false}
-                  className={item.dateClassName ?? "av-prop-datepicker"}
-                />
-              </div>
-            )}
-          </div>
+          <AvakioDatePicker
+            id={item.id}
+            value={(item.value as string | undefined) ?? ""}
+            onChange={(val) => {
+              item.dateOnChange?.(val, item);
+              handleChange(item.id, val);
+            }}
+            showTime={item.dateShowTime ?? false}
+            placeholder={item.placeholder}
+            disabled={item.disabled}
+            className={item.dateClassName}
+            width="100%"
+          />
         );
       case "daterangepicker":
         return (
@@ -559,40 +563,19 @@ export function AvakioProperty({
         );
       case "datetime":
         return (
-          <div className="av-prop-datewrap">
-            <button
-              type="button"
-              className="av-prop-datebtn"
-              ref={(el) => {
-                dateBtnRefs.current[item.id] = el;
-              }}
-              onClick={() => {
-                if (openDateId === item.id) {
-                  setOpenDateId(null);
-                  return;
-                }
-                const placement = computeDatePlacement(item.id);
-                setOpenDatePlacement(placement);
-                setOpenDateId(item.id);
-              }}
-            >
-              {formatDisplayValue(item)}
-            </button>
-            {openDateId === item.id && (
-              <div className={`av-prop-datepop ${openDatePlacement === "top" ? "is-top" : ""}`}>
-                <AvakioDatePicker
-                  value={(item.value as string | undefined) ?? ""}
-                  onChange={(val) => {
-                    item.dateOnChange?.(val, item);
-                    handleChange(item.id, val);
-                    setOpenDateId(null);
-                  }}
-                  showTime={item.dateShowTime ?? true}
-                  className={item.dateClassName ?? "av-prop-datepicker"}
-                />
-              </div>
-            )}
-          </div>
+          <AvakioDatePicker
+            id={item.id}
+            value={(item.value as string | undefined) ?? ""}
+            onChange={(val) => {
+              item.dateOnChange?.(val, item);
+              handleChange(item.id, val);
+            }}
+            showTime
+            placeholder={item.placeholder}
+            disabled={item.disabled}
+            className={item.dateClassName}
+            width="100%"
+          />
         );
       case "button":
         return (
@@ -614,22 +597,33 @@ export function AvakioProperty({
         );
       case "textarea":
         return (
-          <textarea
-            className="av-prop-input av-prop-textarea"
-            {...common}
+          <AvakioText
+            id={item.id}
+            name={item.id}
             value={(item.value as string | undefined) ?? ""}
-            onChange={(e) => handleChange(item.id, e.target.value)}
+            placeholder={item.placeholder}
+            disabled={item.disabled}
+            readonly={item.disabled}
+            onChange={(val) => handleChange(item.id, val)}
+            width="100%"
+            borderless
+            multiline
+            rows={3}
           />
         );
       case "text":
       default:
         return (
-          <input
-            type="text"
-            className="av-prop-input"
-            {...common}
+          <AvakioText
+            id={item.id}
+            name={item.id}
             value={(item.value as string | undefined) ?? ""}
-            onChange={(e) => handleChange(item.id, e.target.value)}
+            placeholder={item.placeholder}
+            disabled={item.disabled}
+            readonly={item.disabled}
+            onChange={(val) => handleChange(item.id, val)}
+            width="100%"
+            borderless
           />
         );
     }
@@ -639,15 +633,28 @@ export function AvakioProperty({
     "avakio-property",
     dense ? "is-dense" : "",
     showBorders ? "has-borders" : "",
+    borderless ? "is-borderless" : "",
+    isDisabled ? "is-disabled" : "",
     className || "",
   ]
     .filter(Boolean)
     .join(" ");
 
-  const themeProps = theme ? { "data-admin-theme": theme } : undefined;
-
   return (
-    <div ref={rootRef} id={id} data-testid={testId} className={rootClass} style={style} {...themeProps}>
+    <div
+      ref={rootRef}
+      id={id}
+      data-testid={testId}
+      className={rootClass}
+      style={computedStyle}
+      title={tooltip}
+      onBlur={eventHandlers.onBlur}
+      onFocus={eventHandlers.onFocus}
+      onClick={eventHandlers.onClick}
+      onKeyDown={eventHandlers.onKeyPress}
+      onScroll={eventHandlers.onScroll}
+      tabIndex={isDisabled ? -1 : 0}
+    >
       <div className="av-prop-table">
         {Object.entries(groupedRows).map(([group, rowsInGroup]) => (
           <React.Fragment key={group}>
@@ -666,7 +673,7 @@ export function AvakioProperty({
       </div>
     </div>
   );
-}
+});
 
 
 

@@ -10,6 +10,8 @@ import { AvakioDataTable } from '../../components/avakio/data-presentation/avaki
 import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
+import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
+import { addEventLog } from '../../services/event-log-service';
 import { 
   Calendar,
   Settings2,
@@ -23,7 +25,6 @@ import './avakio-datepicker-example.css';
 const TAB_OPTIONS = [
   { id: 'basic', label: 'Basic Usage', icon: <Calendar size={14} /> },
   { id: 'options', label: 'Options', icon: <Settings2 size={14} /> },
-  { id: 'methods', label: 'Ref Methods', icon: <Wand2 size={14} /> },
   { id: 'playground', label: 'Interactive Playground', icon: <Play size={14} /> },
   { id: 'docs', label: 'Documentation', icon: <Book size={14} /> },
 ];
@@ -42,17 +43,93 @@ export function AvakioDatePickerExample() {
   
   // Playground state
   const [playgroundValue, setPlaygroundValue] = useState<string>(new Date().toISOString());
-  const [playgroundShowTime, setPlaygroundShowTime] = useState(false);
-  const [playgroundInline, setPlaygroundInline] = useState(false);
-  const [playgroundClearable, setPlaygroundClearable] = useState(true);
-  const [playgroundBorderless, setPlaygroundBorderless] = useState(false);
-  const [playgroundDisabled, setPlaygroundDisabled] = useState(false);
-  const [playgroundHidden, setPlaygroundHidden] = useState(false);
-  const [playgroundRequired, setPlaygroundRequired] = useState(false);
-  const [playgroundInvalid, setPlaygroundInvalid] = useState(false);
-  const [playgroundCopyBtn, setPlaygroundCopyBtn] = useState(false);
-  const [playgroundSize, setPlaygroundSize] = useState<string>('default');
-  const [playgroundLabelPosition, setPlaygroundLabelPosition] = useState<string>('left');
+  
+  // Playground property items for AvakioProperty
+  const [playgroundProps, setPlaygroundProps] = useState<AvakioPropertyItem[]>([
+    // Appearance Group
+    { id: 'label', label: 'Label', type: 'text', value: 'Event Date', group: 'Appearance', placeholder: 'Enter label text' },
+    { id: 'placeholder', label: 'Placeholder', type: 'text', value: 'Select a date...', group: 'Appearance', placeholder: 'Enter placeholder' },
+    { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'Appearance', placeholder: 'Helper text' },
+    { id: 'tooltip', label: 'Tooltip', type: 'text', value: '', group: 'Appearance', placeholder: 'Tooltip text' },
+    { id: 'invalidMessage', label: 'Invalid Message', type: 'text', value: 'This field is required', group: 'Appearance', placeholder: 'Error message' },
+    {
+      id: 'size',
+      label: 'Size',
+      type: 'select',
+      value: 'default',
+      group: 'Appearance',
+      selectOptions: [
+        { id: 'default', value: 'Default' },
+        { id: 'compact', value: 'Compact' },
+      ],
+    },
+    {
+      id: 'labelPosition',
+      label: 'Label Position',
+      type: 'select',
+      value: 'left',
+      group: 'Appearance',
+      selectOptions: [
+        { id: 'left', value: 'Left' },
+        { id: 'top', value: 'Top' },
+      ],
+    },
+    {
+      id: 'labelAlign',
+      label: 'Label Align',
+      type: 'select',
+      value: 'left',
+      group: 'Appearance',
+      selectOptions: [
+        { id: 'left', value: 'Left' },
+        { id: 'center', value: 'Center' },
+        { id: 'right', value: 'Right' },
+      ],
+    },
+    { id: 'labelWidth', label: 'Label Width', type: 'number', value: 100, group: 'Appearance', placeholder: 'e.g. 100' },
+    
+    // Features Group
+    { id: 'showTime', label: 'Show Time', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable time selection' },
+    { id: 'inline', label: 'Inline Mode', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Display calendar inline' },
+    { id: 'showYearSelector', label: 'Year Selector', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show month/year quick selector' },
+    { id: 'clearable', label: 'Clearable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Show clear button' },
+    { id: 'enableValueCopyButton', label: 'Copy Button', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show copy value button' },
+    
+    // Year Selector Range
+    { id: 'minYear', label: 'Min Year', type: 'number', value: '', group: 'Year Selector', placeholder: 'e.g. 1920' },
+    { id: 'maxYear', label: 'Max Year', type: 'number', value: '', group: 'Year Selector', placeholder: 'e.g. 2030' },
+    
+    // Sizing Group
+    { id: 'width', label: 'Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 300 or 100%' },
+    { id: 'height', label: 'Height', type: 'number', value: '', group: 'Sizing', placeholder: 'e.g. 38' },
+    { id: 'minWidth', label: 'Min Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 200' },
+    { id: 'maxWidth', label: 'Max Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 500' },
+    { id: 'minHeight', label: 'Min Height', type: 'number', value: '', group: 'Sizing', placeholder: 'e.g. 30' },
+    { id: 'maxHeight', label: 'Max Height', type: 'number', value: '', group: 'Sizing', placeholder: 'e.g. 50' },
+    
+    // State Group
+    { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Disable the component' },
+    { id: 'readonly', label: 'Read Only', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Make input read-only' },
+    { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Hide the component' },
+    { id: 'borderless', label: 'Borderless', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Remove border' },
+    
+    // Validation Group
+    { id: 'required', label: 'Required', type: 'checkbox', value: false, group: 'Validation', checkboxLabel: 'Mark as required field' },
+    { id: 'invalid', label: 'Invalid', type: 'checkbox', value: false, group: 'Validation', checkboxLabel: 'Show invalid/error state' },
+  ]);
+
+  // Helper to get prop value from playground props
+  const getPropValue = <T,>(propId: string, defaultValue: T): T => {
+    const prop = playgroundProps.find(p => p.id === propId);
+    if (prop?.value === undefined || prop?.value === null || prop?.value === '') return defaultValue;
+    return prop.value as T;
+  };
+
+  // Handle property changes
+  const handlePlaygroundPropsChange = (items: AvakioPropertyItem[], changed: AvakioPropertyItem) => {
+    setPlaygroundProps(items);
+    addLog('Playground prop changed', `${changed.label}: ${changed.value}`);
+  };
 
   // Ref example
   const datePickerRef = useRef<AvakioBaseRef<string>>(null);
@@ -69,9 +146,12 @@ export function AvakioDatePickerExample() {
     }
   };
 
-  // Add to event log
-  const addLog = (message: string) => {
-    setEventLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()} - ${message}`]);
+  // Add to local event log and global event log
+  const addLog = (action: string, details: string = '') => {
+    // Add to local log for display in the example
+    setEventLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()} - ${action}${details ? ': ' + details : ''}`]);
+    // Add to global event log sidebar
+    addEventLog('DatePicker', action, details);
   };
 
   // Format date for display
@@ -113,32 +193,35 @@ export function AvakioDatePickerExample() {
     { id: 6, name: 'placeholder', type: 'string', defaultValue: "''", description: 'Placeholder text when no date is selected' },
     { id: 7, name: 'showTime', type: 'boolean', defaultValue: 'false', description: 'Enable time selection (returns full ISO datetime)' },
     { id: 8, name: 'inline', type: 'boolean', defaultValue: 'false', description: 'Display calendar inline without dropdown' },
-    { id: 9, name: 'size', type: "'default' | 'compact'", defaultValue: "'default'", description: 'Size variant - compact for filters/tables' },
-    { id: 10, name: 'clearable', type: 'boolean', defaultValue: 'false', description: 'Show clear button when value exists' },
-    { id: 11, name: 'enableValueCopyButton', type: 'boolean', defaultValue: 'false', description: 'Show copy button to copy value to clipboard' },
-    { id: 12, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove border from component' },
-    { id: 13, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable the component' },
-    { id: 14, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Make the input read-only' },
-    { id: 15, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Hide the component' },
-    { id: 16, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Mark field as required (shows asterisk)' },
-    { id: 17, name: 'invalid', type: 'boolean', defaultValue: 'false', description: 'Show invalid/error state' },
-    { id: 18, name: 'invalidMessage', type: 'string', defaultValue: 'undefined', description: 'Error message to display when invalid' },
-    { id: 19, name: 'labelPosition', type: "'left' | 'top'", defaultValue: "'left'", description: 'Position of the label relative to input' },
-    { id: 20, name: 'labelAlign', type: "'left' | 'right' | 'center'", defaultValue: "'left'", description: 'Alignment of label text' },
-    { id: 21, name: 'labelWidth', type: 'number | string', defaultValue: '80', description: 'Width of the label area' },
-    { id: 22, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the component' },
-    { id: 23, name: 'height', type: 'number | string', defaultValue: '38', description: 'Height of the component' },
-    { id: 24, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width' },
-    { id: 25, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height' },
-    { id: 26, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width' },
-    { id: 27, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height' },
-    { id: 28, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Helper text below the input' },
-    { id: 29, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text on hover' },
-    { id: 30, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name' },
-    { id: 31, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles' },
-    { id: 32, name: 'onBlur', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Callback when focus leaves the input' },
-    { id: 33, name: 'onFocus', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Callback when input receives focus' },
-    { id: 34, name: 'onKeyPress', type: '(event: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Callback on keyboard key press' },
+    { id: 9, name: 'showYearSelector', type: 'boolean', defaultValue: 'false', description: 'Show month/year selector to quickly jump to different dates' },
+    { id: 10, name: 'minYear', type: 'number', defaultValue: 'currentYear - 100', description: 'Minimum year available in the year selector' },
+    { id: 11, name: 'maxYear', type: 'number', defaultValue: 'currentYear + 50', description: 'Maximum year available in the year selector' },
+    { id: 12, name: 'size', type: "'default' | 'compact'", defaultValue: "'default'", description: 'Size variant - compact for filters/tables' },
+    { id: 13, name: 'clearable', type: 'boolean', defaultValue: 'false', description: 'Show clear button when value exists' },
+    { id: 14, name: 'enableValueCopyButton', type: 'boolean', defaultValue: 'false', description: 'Show copy button to copy value to clipboard' },
+    { id: 15, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove border from component' },
+    { id: 16, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable the component' },
+    { id: 17, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Make the input read-only' },
+    { id: 18, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Hide the component' },
+    { id: 19, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Mark field as required (shows asterisk)' },
+    { id: 20, name: 'invalid', type: 'boolean', defaultValue: 'false', description: 'Show invalid/error state' },
+    { id: 21, name: 'invalidMessage', type: 'string', defaultValue: 'undefined', description: 'Error message to display when invalid' },
+    { id: 22, name: 'labelPosition', type: "'left' | 'top'", defaultValue: "'left'", description: 'Position of the label relative to input' },
+    { id: 23, name: 'labelAlign', type: "'left' | 'right' | 'center'", defaultValue: "'left'", description: 'Alignment of label text' },
+    { id: 24, name: 'labelWidth', type: 'number | string', defaultValue: '80', description: 'Width of the label area' },
+    { id: 25, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the component' },
+    { id: 26, name: 'height', type: 'number | string', defaultValue: '38', description: 'Height of the component' },
+    { id: 27, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width' },
+    { id: 28, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height' },
+    { id: 29, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width' },
+    { id: 30, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height' },
+    { id: 31, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Helper text below the input' },
+    { id: 32, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text on hover' },
+    { id: 33, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name' },
+    { id: 34, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles' },
+    { id: 35, name: 'onBlur', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Callback when focus leaves the input' },
+    { id: 36, name: 'onFocus', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Callback when input receives focus' },
+    { id: 37, name: 'onKeyPress', type: '(event: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Callback on keyboard key press' },
   ];
 
   const refMethodsData: PropDoc[] = [
@@ -216,17 +299,18 @@ export function AvakioDatePickerExample() {
           rows={[
             <div key="basic" style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'flex-start' }}>
               <AvakioDatePicker
+                margin={[5, 5, 5, 5]} 
                 value={basicDate}
                 labelWidth={100}
                 onChange={(newVal) => {
                   setBasicDate(newVal);
-                  addLog(`Date changed to: ${newVal}`);
+                  addLog('onChange', `value: ${newVal || '(empty)'}`);
                 }}
                 label="Select Date"
                 showTime={false}
                 clearable
               />
-              <div className="avakio-datepicker-result">
+              <div className="avakio-datepicker-result" style={{ margin: '5px' }}>
                 Selected: <strong>{formatDate(basicDate)}</strong>
               </div>
             </div>,
@@ -244,7 +328,7 @@ export function AvakioDatePickerExample() {
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="Set inline={true} to display the calendar directly without a dropdown."
+          content="Set inline={true} to display the calendar directly without a dropdown. Use showYearSelector={true} to enable month/year quick selection."
         />
         <AvakioLayout
           type="clean"
@@ -255,9 +339,13 @@ export function AvakioDatePickerExample() {
             <div key="inline" style={{ display: 'flex', justifyContent: 'center' }}>
               <AvakioDatePicker
                 value={inlineDate}
-                onChange={setInlineDate}
+                onChange={(newVal) => {
+                  setInlineDate(newVal);
+                  addLog('onChange (inline)', `value: ${newVal || '(empty)'}`);
+                }}
                 showTime={false}
                 inline
+                showYearSelector
               />
             </div>,
             <div key="inline-result" className="avakio-datepicker-result" style={{ textAlign: 'center' }}>
@@ -479,116 +567,6 @@ export function AvakioDatePickerExample() {
         />
       </section>
 
-      {/* Ref Methods Section */}
-      <section 
-        ref={(el) => { sectionRefs.current['methods'] = el; }}
-        className="avakio-datepicker-demo-section"
-      >
-        <AvakioTemplate
-          type="section"
-          borderType="clean"
-          content="Ref Methods"
-        />
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[0, 0, 0, 16]}
-          content="Access component methods via ref for programmatic control."
-        />
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
-          rows={[
-            <div key="methods" style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'flex-start' }}>
-                <AvakioDatePicker
-                  ref={datePickerRef}
-                  value={basicDate}
-                  onChange={(newVal, oldVal) => {
-                    setBasicDate(newVal);
-                    addLog(`Changed: ${oldVal || 'empty'} → ${newVal || 'empty'}`);
-                  }}
-                  label="Date"
-                  showTime={false}
-                  clearable
-                />
-                <div className="avakio-datepicker-result">
-                  Value: <strong>{basicDate || '(empty)'}</strong>
-                </div>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minWidth: 180 }}>
-                <AvakioButton onClick={() => {
-                  datePickerRef.current?.focus();
-                  addLog('focus() called');
-                }}>
-                  focus()
-                </AvakioButton>
-                <AvakioButton onClick={() => {
-                  datePickerRef.current?.blur();
-                  addLog('blur() called');
-                }}>
-                  blur()
-                </AvakioButton>
-                <AvakioButton onClick={() => {
-                  const val = datePickerRef.current?.getValue();
-                  addLog(`getValue() = ${val || '(empty)'}`);
-                }}>
-                  getValue()
-                </AvakioButton>
-                <AvakioButton onClick={() => {
-                  datePickerRef.current?.setValue(new Date().toISOString().split('T')[0]);
-                  addLog('setValue(today)');
-                }}>
-                  setValue(today)
-                </AvakioButton>
-                <AvakioButton onClick={() => {
-                  datePickerRef.current?.enable();
-                  addLog('enable() called');
-                }}>
-                  enable()
-                </AvakioButton>
-                <AvakioButton onClick={() => {
-                  datePickerRef.current?.disable();
-                  addLog('disable() called');
-                }}>
-                  disable()
-                </AvakioButton>
-                <AvakioButton onClick={() => {
-                  const enabled = datePickerRef.current?.isEnabled();
-                  addLog(`isEnabled() = ${enabled}`);
-                }}>
-                  isEnabled()
-                </AvakioButton>
-                <AvakioButton onClick={() => {
-                  datePickerRef.current?.show();
-                  addLog('show() called');
-                }}>
-                  show()
-                </AvakioButton>
-                <AvakioButton onClick={() => {
-                  datePickerRef.current?.hide();
-                  addLog('hide() called');
-                }}>
-                  hide()
-                </AvakioButton>
-              </div>
-            </div>,
-            <div key="event-log" style={{ marginTop: '16px', padding: '12px', background: '#f5f5f5', borderRadius: '6px', fontSize: '12px' }}>
-              <strong>Event Log:</strong>
-              <div style={{ marginTop: '8px', maxHeight: '100px', overflow: 'auto' }}>
-                {eventLog.length === 0 ? (<div style={{ color: '#888' }}>No events yet...</div>) : (
-                  eventLog.map((log, i) => (
-                    <div key={i} style={{ padding: '2px 0', color: '#666' }}>{log}</div>
-                  ))
-                )}
-              </div>
-            </div>,
-          ]}
-        />
-      </section>
-
       {/* Interactive Playground Section */}
       <section 
         ref={(el) => { sectionRefs.current['playground'] = el; }}
@@ -603,126 +581,245 @@ export function AvakioDatePickerExample() {
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="Experiment with different DatePicker configurations in real-time."
+          content="Experiment with different DatePicker configurations in real-time. Change any property below to see the effect on the preview."
         />
         <AvakioLayout
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
-          rows={[
-            <div key="playground" style={{ display: 'flex', gap: '32px', flexWrap: 'wrap' }}>
-              {/* Preview */}
-              <div style={{ flex: 1, minWidth: 300, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <AvakioTemplate
+          rows={[ <AvakioLayout
+              type="clean"
+              borderless={true}              
+              cols={[
+                //Column 1
+                <AvakioLayout
                   type="clean"
-                  borderType="clean"
-                  content={<strong>Preview</strong>}
-                />
-                <div style={{ 
-                  padding: '24px', 
-                  borderRadius: '8px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '16px',
-                  background: '#fafafa',
-                }}>
-                  <AvakioDatePicker
-                    value={playgroundValue}
-                    onChange={setPlaygroundValue}
-                    label="Event Date"
-                    showTime={playgroundShowTime}
-                    inline={playgroundInline}
-                    clearable={playgroundClearable}
-                    borderless={playgroundBorderless}
-                    disabled={playgroundDisabled}
-                    hidden={playgroundHidden}
-                    required={playgroundRequired}
-                    invalid={playgroundInvalid}
-                    invalidMessage={playgroundInvalid ? 'This field is required' : undefined}
-                    enableValueCopyButton={playgroundCopyBtn}
-                    size={playgroundSize as 'default' | 'compact'}
-                    labelPosition={playgroundLabelPosition as 'left' | 'top'}
-                  />
-                  <div className="avakio-datepicker-result">
-                    Value: <strong>{formatDate(playgroundValue, playgroundShowTime)}</strong>
-                  </div>
-                </div>
-              </div>
+                  borderless={true}                  
+                  rows={[
+                    <AvakioTemplate
+                      type="clean"
+                      borderType="clean"
+                      padding={[0,0,10,0]}
+                      content={<strong>Preview</strong>}
+                    />,
+                    <AvakioDatePicker
+                      id='Playground_DatePicker'
+                      ref={datePickerRef}                    
+                      value={playgroundValue}
+                      onChange={(newVal) => {
+                        setPlaygroundValue(newVal);
+                        addLog('onChange', `value: ${newVal || '(empty)'}`);
+                      }}
+                      // Appearance props
+                      label={getPropValue('label', '')}
+                      placeholder={getPropValue('placeholder', '')}
+                      bottomLabel={getPropValue('bottomLabel', '')}
+                      tooltip={getPropValue('tooltip', '')}
+                      size={getPropValue('size', 'default') as 'default' | 'compact'}
+                      labelPosition={getPropValue('labelPosition', 'left') as 'left' | 'top'}
+                      labelAlign={getPropValue('labelAlign', 'left') as 'left' | 'center' | 'right'}
+                      labelWidth={getPropValue('labelWidth', 100)}
+                      // Features props
+                      showTime={getPropValue('showTime', false)}
+                      inline={getPropValue('inline', false)}
+                      showYearSelector={getPropValue('showYearSelector', false)}
+                      clearable={getPropValue('clearable', true)}
+                      enableValueCopyButton={getPropValue('enableValueCopyButton', false)}
+                      // Year selector range
+                      minYear={getPropValue('minYear', '') ? Number(getPropValue('minYear', '')) : undefined}
+                      maxYear={getPropValue('maxYear', '') ? Number(getPropValue('maxYear', '')) : undefined}
+                      // Sizing props
+                      width={getPropValue('width', '') || undefined}
+                      height={getPropValue('height', '') ? Number(getPropValue('height', '')) : undefined}
+                      minWidth={getPropValue('minWidth', '') || undefined}
+                      maxWidth={getPropValue('maxWidth', '') || undefined}
+                      minHeight={getPropValue('minHeight', '') ? Number(getPropValue('minHeight', '')) : undefined}
+                      maxHeight={getPropValue('maxHeight', '') ? Number(getPropValue('maxHeight', '')) : undefined}
+                      // State props
+                      disabled={getPropValue('disabled', false)}
+                      readonly={getPropValue('readonly', false)}
+                      hidden={getPropValue('hidden', false)}
+                      borderless={getPropValue('borderless', false)}
+                      // Validation props
+                      required={getPropValue('required', false)}
+                      invalid={getPropValue('invalid', false)}
+                      invalidMessage={getPropValue('invalid', false) ? getPropValue('invalidMessage', 'This field is required') : undefined}
+                    />,
+                    <AvakioTemplate
+                      type="clean"
+                      borderType="clean"
+                      padding={[10,0,10,0]}
+                      content={<>Value: <strong>{formatDate(playgroundValue, getPropValue('showTime', false))}</strong></>}
+                    />,                  
+                    <AvakioTemplate
+                      type="clean"
+                      padding={[10,0,10,0]}
+                      borderType="clean"
+                      content={<strong>Ref Methods</strong>}
+                    />,
+                    // Ref Methods
+                    <AvakioTemplate
+                      type="clean"
+                      padding={[10,0,10,0]}
+                      borderType="clean"
+                      content={<>
+                        <AvakioButton 
+                          size="sm"
+                          label='Focus()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            datePickerRef.current?.focus();
+                            addLog('focus()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton 
+                          size="sm"
+                          label='Blur()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            datePickerRef.current?.blur();
+                            addLog('blur()', 'called via ref');
+                          }}
+                        />
+                         <AvakioButton 
+                            size="sm"
+                            label='getValue()'
+                            margin={[0,10,10,0]}
+                            onClick={() => {
+                              const val = playgroundValue;
+                              addLog('getValue()', `returned: ${val || '(empty)'}`);
+                            }}
+                          />                                      
+                          <AvakioButton 
+                            size="sm"
+                            label='setValue(now)' 
+                            margin={[0,10,10,0]}
+                            onClick={() => {
+                              datePickerRef.current?.setValue(new Date().toISOString());
+                              setPlaygroundValue(new Date().toISOString());
+                              addLog('setValue()', 'set to current date/time');
+                            }}
+                          />
+                          <AvakioButton 
+                            size="sm"
+                            label='getText()'
+                            margin={[0,10,10,0]}
+                            onClick={() => {
+                              const text = formatDate(playgroundValue, getPropValue('showTime', false));
+                              addLog('getText()', `returned: ${text || '(empty)'}`);
+                            }}
+                          />                                      
+                          <AvakioButton 
+                            size="sm"
+                            label='enable()'
+                            margin={[0,10,10,0]}  
+                            onClick={() => {
+                              datePickerRef.current?.enable();
+                              addLog('enable()', 'called via ref');
+                            }}
+                          />                                                      
+                          <AvakioButton 
+                            size="sm"
+                            label='disable()'
+                            margin={[0,10,10,0]}  
+                            onClick={() => {
+                              datePickerRef.current?.disable();
+                              addLog('disable()', 'called via ref');
+                            }}
+                          />                                                      
+                          <AvakioButton 
+                            size="sm"
+                            label='isEnabled()'
+                            margin={[0,10,10,0]}
+                            onClick={() => {
+                              const enabled = datePickerRef.current?.isEnabled();
+                              addLog('isEnabled()', `returned: ${enabled}`);
+                            }}
+                          />                                                      
+                          <AvakioButton 
+                            size="sm"
+                            label='show()'
+                            margin={[0,10,10,0]}  
+                            onClick={() => {
+                              datePickerRef.current?.show();
+                              addLog('show()', 'called via ref');
+                            }}
+                          />                                                      
+                          <AvakioButton 
+                            size="sm"
+                            label='hide()'
+                            margin={[0,10,10,0]}
+                            onClick={() => {
+                              datePickerRef.current?.hide();
+                              addLog('hide()', 'called via ref');
+                            }}
+                          />                                                      
+                          <AvakioButton 
+                            size="sm"
+                            label='isVisible()'
+                            margin={[0,10,10,0]}
+                            onClick={() => {
+                              const visible = datePickerRef.current?.isVisible();
+                              addLog('isVisible()', `returned: ${visible}`);
+                            }}
+                          />                                                      
+                          <AvakioButton 
+                            size="sm"
+                            label='validate()'
+                            margin={[0,10,10,0]}
+                            onClick={() => {
+                              const result = datePickerRef.current?.validate();
+                              addLog('validate()', `returned: ${result}`);
+                            }}
+                          />                                                      
+                          <AvakioButton 
+                            size="sm"
+                            label='getElement()'
+                            margin={[0,10,10,0]}
+                            onClick={() => {
+                              const el = datePickerRef.current?.getElement();
+                              addLog('getElement()', `returned: ${el ? el.tagName : 'null'}`);
+                            }}
+                          />                                                      
+                          <AvakioButton 
+                            size="sm"
+                            label='getParentView()'
+                            margin={[0,10,10,0]}
+                            onClick={() => {
+                              const parent = datePickerRef.current?.getParentView();
+                              addLog('getParentView()', `returned: ${parent ? parent.tagName : 'null'}`);
+                            }}
+                          />                                                      
+                      </>
 
-              {/* Controls */}
-              <div style={{ width: '280px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <AvakioTemplate
+                      }
+                    />                    
+                  ]}
+                />,
+                // Column 2 - Configuration
+                <AvakioLayout
                   type="clean"
-                  borderType="clean"
-                  content={<strong>Configuration</strong>}
-                />
-                <AvakioRichSelect
-                  label="Size"
-                  value={playgroundSize}
-                  options={[
-                    { id: 'default', value: 'Default' },
-                    { id: 'compact', value: 'Compact' },
+                  borderless={true}
+                  rows={[
+                    <AvakioTemplate
+                      type="clean"
+                      borderType="clean"
+                      padding={[0,0,10,0]}  
+                      content={<strong>Configuration</strong>}
+                    />,
+                    <AvakioProperty
+                      items={playgroundProps}
+                      onChange={handlePlaygroundPropsChange}
+                      dense
+                      showBorders
+                      maxHeight={600}
+                      style={{ overflowY: 'auto' }}
+                    />
                   ]}
-                  onChange={(val) => setPlaygroundSize(String(val))}
-                />
-                <AvakioRichSelect
-                  label="Label Position"
-                  value={playgroundLabelPosition}
-                  options={[
-                    { id: 'left', value: 'Left' },
-                    { id: 'top', value: 'Top' },
-                  ]}
-                  onChange={(val) => setPlaygroundLabelPosition(String(val))}
-                />
-                <AvakioCheckbox
-                  label="Show Time"
-                  checked={playgroundShowTime}
-                  onChange={setPlaygroundShowTime}
-                />
-                <AvakioCheckbox
-                  label="Inline Mode"
-                  checked={playgroundInline}
-                  onChange={setPlaygroundInline}
-                />
-                <AvakioCheckbox
-                  label="Clearable"
-                  checked={playgroundClearable}
-                  onChange={setPlaygroundClearable}
-                />
-                <AvakioCheckbox
-                  label="Copy Button"
-                  checked={playgroundCopyBtn}
-                  onChange={setPlaygroundCopyBtn}
-                />
-                <AvakioCheckbox
-                  label="Borderless"
-                  checked={playgroundBorderless}
-                  onChange={setPlaygroundBorderless}
-                />
-                <AvakioCheckbox
-                  label="Disabled"
-                  checked={playgroundDisabled}
-                  onChange={setPlaygroundDisabled}
-                />
-                <AvakioCheckbox
-                  label="Hidden"
-                  checked={playgroundHidden}
-                  onChange={setPlaygroundHidden}
-                />
-                <AvakioCheckbox
-                  label="Required"
-                  checked={playgroundRequired}
-                  onChange={setPlaygroundRequired}
-                />
-                <AvakioCheckbox
-                  label="Invalid"
-                  checked={playgroundInvalid}
-                  onChange={setPlaygroundInvalid}
-                />
-              </div>
-            </div>,
+                />,
+              ]}
+            />,               
           ]}
         />
       </section>

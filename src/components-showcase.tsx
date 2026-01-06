@@ -2,6 +2,8 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import { AvakioView } from './components/avakio/views/avakio-view/avakio-view';
 import { AvakioLayout } from './components/avakio/layouts/avakio-layout/avakio-layout';
 import { AvakioSidebar, SidebarItem, AvakioSidebarToggleButton } from './components/avakio/avakio-sidebar/avakio-sidebar';
+import { EventLogProvider, useEventLog, setGlobalAddLog } from './services/event-log-service';
+import { EventLogSidebar } from './components/event-log-sidebar/event-log-sidebar';
 import { AvakioMultiview, AvakioMultiviewRef } from './components/avakio/views/avakio-multiview/avakio-multiview';
 import { AvakioLayoutExample } from './examples/layouts/avakio-layout-example';
 import { AvakioAbsoluteLayoutExample } from './examples/layouts/avakio-absolute-layout-example';
@@ -57,9 +59,10 @@ import './components/avakio/avakio-sidebar/avakio-sidebar.css';
 import './components/avakio/views/avakio-multiview/avakio-multiview.css';
 import './components/avakio/themes/avakio-themes.css';
 import { AvakioTemplate } from './components/avakio/views/avakio-template/avakio-template';
-import { Layout, Layers, Box, AlignJustify, FileText, LayoutGrid, Grid3X3, Lightbulb, ImageIcon, Type, Tag, FolderTree, PanelTopClose, BarChart3, Gauge, Map, List, LayoutDashboard, Palette, Menu, Calendar, Clock, Table, Settings, MessageCircle } from 'lucide-react';
+import { Layout, Layers, Box, AlignJustify, FileText, LayoutGrid, Grid3X3, Lightbulb, ImageIcon, Type, Tag, FolderTree, PanelTopClose, BarChart3, Gauge, Map, List, LayoutDashboard, Palette, Menu, Calendar, Clock, Table, Settings, MessageCircle, ScrollText } from 'lucide-react';
 
-export default function ComponentsShowcasePage() {
+// Inner component that uses the EventLog context
+function ComponentsShowcasePage() {
   const [selectedView, setSelectedView] = useState<string>(() => {
     return localStorage.getItem('avakio-showcase-view') || 'components';
   });
@@ -755,6 +758,14 @@ export default function ComponentsShowcasePage() {
     },
   ], [components, theme]);
 
+  // Set up global addLog function for external use
+  const { addLog, toggleLogSidebar, isLogSidebarOpen } = useEventLog();
+  
+  useEffect(() => {
+    setGlobalAddLog(addLog);
+    return () => setGlobalAddLog(() => {});
+  }, [addLog]);
+
   return (
     <AvakioLayout
       id='WebAppMainLayout'
@@ -837,6 +848,18 @@ export default function ComponentsShowcasePage() {
                       </AvakioButton>
                     ))}
                   </div>
+                  <div style={{ marginLeft: '16px', borderLeft: '1px solid #ddd', paddingLeft: '16px' }}>
+                    <AvakioButton
+                      id="WebAppMainLayoutHeaderLogsBtn"
+                      onClick={toggleLogSidebar}
+                      variant={isLogSidebarOpen ? 'primary' : 'outline'}
+                      size="sm"
+                      title={isLogSidebarOpen ? 'Hide Event Logs' : 'Show Event Logs'}
+                    >
+                      <ScrollText size={16} />
+                      <span style={{ marginLeft: '6px' }}>Logs</span>
+                    </AvakioButton>
+                  </div>
                 </div>
               </AvakioView>,
             ]}
@@ -877,6 +900,9 @@ export default function ComponentsShowcasePage() {
                 height="100%"
                 width="100%"
               />,
+              
+              // Right Sidebar - Event Logs
+              <EventLogSidebar theme={theme} />,
             ]}
             css={{ minHeight: 0, width: '100%', flex: 1, display: 'flex', flexGrow: 1 }}
           />,
@@ -897,6 +923,15 @@ export default function ComponentsShowcasePage() {
           </AvakioView>,
         ]}
       />
+  );
+}
+
+// Wrapper component that provides the EventLog context
+export default function ComponentsShowcasePageWrapper() {
+  return (
+    <EventLogProvider>
+      <ComponentsShowcasePage />
+    </EventLogProvider>
   );
 }
 

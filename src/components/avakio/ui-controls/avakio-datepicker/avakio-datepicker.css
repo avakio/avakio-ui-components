@@ -5,9 +5,13 @@
    ================================ */
 
 .avakio-dp,
-.avakio-dp-popover {
+.avakio-dp-popover,
+.avakio-dp-inline,
+.avakio-datepicker-container {
   --dp-surface: var(--avakio-bg-primary, var(--background, #fff));
   --dp-border: var(--avakio-border-primary, var(--border, #ddd));
+  --dp-border-focus: var(--avakio-border-focus, #3b82f6);
+  --dp-bg-focus: var(--avakio-bg-selected, #e0f2fe);
   --dp-text: var(--avakio-text-primary, var(--foreground, #333));
   --dp-muted: var(--avakio-text-secondary, var(--muted-foreground, #888));
   --dp-primary: var(--avakio-accent-primary, var(--primary, #3498db));
@@ -52,6 +56,7 @@
 .avakio-dp-label {
   display: flex;
   align-items: center;
+  justify-content: flex-start; /* Default, can be overridden by labelAlign */
   padding: 8px 16px;
   background: var(--dp-primary);
   color: white;
@@ -103,6 +108,11 @@
 
 .avakio-dp-input::placeholder {
   color: var(--dp-muted);
+}
+
+.avakio-dp-input:focus {
+  background: var(--dp-bg-focus);
+  border-color: var(--dp-border-focus);
 }
 
 .avakio-dp-copy-btn {
@@ -160,6 +170,22 @@
 
 .avakio-dp-icon-btn:hover {
   background: color-mix(in srgb, var(--dp-primary) 10%, var(--dp-surface));
+}
+
+/* ================================
+   FOCUS STATE - Apply to all elements when wrapper has focus
+   ================================ */
+
+.avakio-dp-wrapper:focus-within .avakio-dp-input,
+.avakio-dp-wrapper:focus-within .avakio-dp-copy-btn,
+.avakio-dp-wrapper:focus-within .avakio-dp-clear-btn,
+.avakio-dp-wrapper:focus-within .avakio-dp-icon-btn {
+  background: var(--dp-bg-focus);
+  border-color: var(--dp-border-focus);
+}
+
+.avakio-dp-wrapper:focus-within .avakio-dp-label {
+  border-color: var(--dp-border-focus);
 }
 
 /* ================================
@@ -285,6 +311,11 @@
   color: var(--dp-muted);
 }
 
+.avakio-dp-input-compact:focus {
+  background: var(--dp-bg-focus);
+  border-color: var(--dp-border-focus);
+}
+
 .avakio-dp-copy-btn-compact {
   display: flex;
   align-items: center;
@@ -353,6 +384,15 @@
   background: color-mix(in srgb, var(--dp-primary) 10%, var(--dp-surface));
 }
 
+/* Compact mode focus state - Apply to all elements when group has focus */
+.avakio-dp-input-group-compact:focus-within .avakio-dp-input-compact,
+.avakio-dp-input-group-compact:focus-within .avakio-dp-copy-btn-compact,
+.avakio-dp-input-group-compact:focus-within .avakio-dp-clear-btn-compact,
+.avakio-dp-input-group-compact:focus-within .avakio-dp-icon-btn-compact {
+  background: var(--dp-bg-focus);
+  border-color: var(--dp-border-focus);
+}
+
 /* ================================
    POPOVER STYLES
    ================================ */
@@ -391,14 +431,20 @@
    INLINE CALENDAR STYLES
    ================================ */
 
+/* Inline wrapper - inherits theme from data-admin-theme */
+.avakio-dp-inline {
+  display: inline-block;
+}
+
 .avakio-datepicker-container {
   width: 100%;
   max-width: 300px;
-  background: var(--dp-surface, var(--background, #fff));
-  border: 1px solid var(--dp-border, var(--border, #ddd));
+  background: var(--dp-surface, var(--avakio-bg-primary, #fff));
+  border: 1px solid var(--dp-border, var(--avakio-border-primary, #ddd));
   border-radius: 4px;
   padding: 12px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--dp-text, var(--avakio-text-primary, #333));
 }
 
 /* Navigation */
@@ -434,6 +480,154 @@
   font-size: 14px; 
   font-weight: 600;
   color: var(--dp-text, var(--foreground, #333));
+}
+
+/* Year Selector Styles */
+.avakio-dp-nav-label-selectable {
+  position: relative;
+}
+
+.avakio-dp-nav-month-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dp-text, var(--foreground, #333));
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--dp-radius);
+  transition: background 0.15s ease;
+}
+
+.avakio-dp-nav-month-btn:hover {
+  background: var(--dp-border, var(--muted, #eee));
+}
+
+.avakio-dp-nav-chevron {
+  transition: transform 0.2s ease;
+  transform: rotate(90deg);
+}
+
+.avakio-dp-nav-chevron-open {
+  transform: rotate(-90deg);
+}
+
+.avakio-dp-year-selector {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: var(--dp-surface, #fff);
+  border: 1px solid var(--dp-border, #ddd);
+  border-radius: var(--dp-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 280px;
+  margin-top: 4px;
+}
+
+.avakio-dp-year-selector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--dp-border, #ddd);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dp-muted, #888);
+}
+
+.avakio-dp-year-selector-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--dp-radius);
+  color: var(--dp-muted, #888);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avakio-dp-year-selector-close:hover {
+  background: var(--dp-border, #eee);
+  color: var(--dp-text, #333);
+}
+
+.avakio-dp-year-selector-content {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+}
+
+.avakio-dp-month-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  flex: 1;
+}
+
+.avakio-dp-month-option {
+  padding: 8px 4px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--dp-radius);
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--dp-text, #333);
+  transition: all 0.15s ease;
+}
+
+.avakio-dp-month-option:hover {
+  background: var(--dp-border, #eee);
+}
+
+.avakio-dp-month-option-selected {
+  background: var(--dp-primary, #3498db);
+  color: white;
+  border-color: var(--dp-primary, #3498db);
+}
+
+.avakio-dp-month-option-selected:hover {
+  background: var(--dp-primary-strong, #2980b9);
+}
+
+.avakio-dp-year-list {
+  width: 80px;
+  max-height: 200px;
+  overflow-y: auto;
+  border-left: 1px solid var(--dp-border, #ddd);
+  padding-left: 8px;
+}
+
+.avakio-dp-year-option {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  background: none;
+  border: none;
+  border-radius: var(--dp-radius);
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--dp-text, #333);
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.avakio-dp-year-option:hover {
+  background: var(--dp-border, #eee);
+}
+
+.avakio-dp-year-option-selected {
+  background: var(--dp-primary, #3498db);
+  color: white;
+}
+
+.avakio-dp-year-option-selected:hover {
+  background: var(--dp-primary-strong, #2980b9);
 }
 
 /* Weekdays */

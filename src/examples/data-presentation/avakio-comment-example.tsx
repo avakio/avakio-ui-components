@@ -9,6 +9,7 @@ import { AvakioDataTable } from '../../components/avakio/data-presentation/avaki
 import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
+import { addEventLog } from '../../services/event-log-service';
 import { 
   MessageSquare,
   Palette,
@@ -108,18 +109,19 @@ export function AvakioCommentExample() {
     }
   };
 
-  // Add to event log
-  const addLog = (message: string) => {
-    setEventLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()} - ${message}`]);
+  // Add to local and global event log
+  const addLog = (action: string, details: string = '') => {
+    setEventLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()} - ${action}${details ? ': ' + details : ''}`]);
+    addEventLog('Comment', action, details);
   };
 
   // Event handlers
-  const handleAdd = (comment: CommentItem) => addLog(`Added comment: "${comment.text.slice(0, 30)}..."`);
-  const handleDelete = (id: string | number) => addLog(`Deleted comment ID: ${id}`);
-  const handleEdit = (comment: CommentItem) => addLog(`Edited comment ID: ${comment.id}`);
+  const handleAdd = (comment: CommentItem) => addLog('onAdd', `"${comment.text.slice(0, 30)}..."`);
+  const handleDelete = (id: string | number) => addLog('onDelete', `comment ID: ${id}`);
+  const handleEdit = (comment: CommentItem) => addLog('onEdit', `comment ID: ${comment.id}`);
   const handleUserMentioned = (userId: string | number) => {
     const user = sampleUsers.find(u => u.id === userId);
-    addLog(`Mentioned user: ${user?.value || userId}`);
+    addLog('onUserMentioned', user?.value || String(userId));
   };
 
   // Props documentation data

@@ -7,18 +7,17 @@
   flex-direction: column;
   gap: 0;
   width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  scroll-behavior: smooth;
+  padding: 0;
+  min-height: 100vh;
 }
 
 /* Sticky header with tabs */
-.avakio-datepicker-sticky-header {
+.avakio-datepicker-demo-container .avakio-example-sticky-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--avakio-sticky-header-bg, #f8f9fa);
-  border-bottom: 1px solid var(--avakio-sticky-header-border, #e5e7eb);
+  background: var(--avakio-bg-primary, #ffffff);
+  border-bottom: 1px solid var(--avakio-border, #e5e7eb);
 }
 
 .avakio-datepicker-tabbar-container {
@@ -30,6 +29,7 @@
 .avakio-datepicker-demo-section {
   padding: 16px;
   border-bottom: 1px solid var(--avakio-section-border, #e5e7eb);
+  scroll-margin-top: 140px;
 }
 
 .avakio-datepicker-demo-section:last-child {
@@ -130,7 +130,8 @@
 /* ================================
    THEME: MATERIAL
    ================================ */
-.avakio-datepicker-demo-container[data-admin-theme="material"] {
+.avakio-datepicker-demo-container[data-admin-theme="material"],
+[data-admin-theme="material"] .avakio-datepicker-result {
   --avakio-sticky-header-bg: #ffffff;
   --avakio-sticky-header-border: #e0e0e0;
   --avakio-section-border: #e0e0e0;
@@ -152,7 +153,8 @@
 /* ================================
    THEME: DARK
    ================================ */
-.avakio-datepicker-demo-container[data-admin-theme="dark"] {
+.avakio-datepicker-demo-container[data-admin-theme="dark"],
+[data-admin-theme="dark"] .avakio-datepicker-result {
   --avakio-sticky-header-bg: #1a1a2e;
   --avakio-sticky-header-border: #2d2d44;
   --avakio-section-border: #2d2d44;
@@ -174,7 +176,8 @@
 /* ================================
    THEME: OCEAN
    ================================ */
-.avakio-datepicker-demo-container[data-admin-theme="ocean"] {
+.avakio-datepicker-demo-container[data-admin-theme="ocean"],
+[data-admin-theme="ocean"] .avakio-datepicker-result {
   --avakio-sticky-header-bg: #f0f7ff;
   --avakio-sticky-header-border: #bfdbfe;
   --avakio-section-border: #bfdbfe;
@@ -196,7 +199,8 @@
 /* ================================
    THEME: SUNSET
    ================================ */
-.avakio-datepicker-demo-container[data-admin-theme="sunset"] {
+.avakio-datepicker-demo-container[data-admin-theme="sunset"],
+[data-admin-theme="sunset"] .avakio-datepicker-result {
   --avakio-sticky-header-bg: #fffbeb;
   --avakio-sticky-header-border: #fed7aa;
   --avakio-section-border: #fed7aa;
@@ -218,7 +222,8 @@
 /* ================================
    THEME: FLAT
    ================================ */
-.avakio-datepicker-demo-container[data-admin-theme="flat"] {
+.avakio-datepicker-demo-container[data-admin-theme="flat"],
+[data-admin-theme="flat"] .avakio-datepicker-result {
   --avakio-sticky-header-bg: #f9fafb;
   --avakio-sticky-header-border: #d1d5db;
   --avakio-section-border: #d1d5db;
@@ -240,7 +245,8 @@
 /* ================================
    THEME: COMPACT
    ================================ */
-.avakio-datepicker-demo-container[data-admin-theme="compact"] {
+.avakio-datepicker-demo-container[data-admin-theme="compact"],
+[data-admin-theme="compact"] .avakio-datepicker-result {
   --avakio-sticky-header-bg: #fafafa;
   --avakio-sticky-header-border: #e4e4e7;
   --avakio-section-border: #e4e4e7;

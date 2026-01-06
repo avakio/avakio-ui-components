@@ -91,12 +91,6 @@ export function AvakioCheckbox({
     }
   };
 
-  const handleIconClick = (e: React.MouseEvent<HTMLSpanElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    handleToggle();
-  };
-
   // Handle padding
   const paddingStyle = padding
     ? typeof padding === 'number'
@@ -124,7 +118,7 @@ export function AvakioCheckbox({
   };
 
   return (
-    <label
+    <div
       data-testid={testId}
       className={[
         'avakio-checkbox',
@@ -133,9 +127,9 @@ export function AvakioCheckbox({
         error ? 'avakio-checkbox-error' : '',
         className,
       ].filter(Boolean).join(' ')}
-      htmlFor={id}
       data-status={status}
       style={containerStyle}
+      onClick={handleToggle}
     >
       <div
         className="avakio-checkbox-box"
@@ -145,7 +139,6 @@ export function AvakioCheckbox({
         aria-disabled={disabled}
         aria-invalid={!!error}
         onKeyDown={handleKeyDown}
-        onClick={handleToggle}
       >
         <input
           ref={checkboxRef}
@@ -159,7 +152,7 @@ export function AvakioCheckbox({
           tabIndex={-1}
           {...rest}
         />
-        <span className="avakio-checkbox-mark" onClick={handleIconClick} />
+        <span className="avakio-checkbox-mark" />
       </div>
 
       {(label || description || error) && (
@@ -172,7 +165,7 @@ export function AvakioCheckbox({
           {error && <div className="avakio-checkbox-error-text">{error}</div>}
         </div>
       )}
-    </label>
+    </div>
   );
 }
 

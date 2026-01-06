@@ -23,6 +23,12 @@ export interface AvakioDatePickerProps extends AvakioControlledProps<string> {
   size?: 'default' | 'compact';
   /** Enable copy button to copy the value to clipboard */
   enableValueCopyButton?: boolean;
+  /** Show year selector to quickly jump to a different year */
+  showYearSelector?: boolean;
+  /** Minimum year available in the year selector (default: current year - 100) */
+  minYear?: number;
+  /** Maximum year available in the year selector (default: current year + 50) */
+  maxYear?: number;
 }
 
 const formatDisplayDate = (value: string | null | undefined, showTime: boolean) => {
@@ -48,7 +54,10 @@ function AvakioDatePickerCalendar({
   className, 
   showTime = true,
   onDateSelect,
-  onCancel
+  onCancel,
+  showYearSelector = false,
+  minYear,
+  maxYear
 }: { 
   value?: string; 
   onChange: (value: string) => void; 
@@ -56,9 +65,18 @@ function AvakioDatePickerCalendar({
   showTime?: boolean;
   onDateSelect?: () => void;
   onCancel?: () => void;
+  showYearSelector?: boolean;
+  minYear?: number;
+  maxYear?: number;
 }) {
   const selectedDate = value ? new Date(value) : null;
   const [viewDate, setViewDate] = useState(selectedDate || new Date());
+  const [isYearSelectorOpen, setIsYearSelectorOpen] = useState(false);
+
+  // Calculate year range for selector
+  const currentYear = new Date().getFullYear();
+  const yearMin = minYear ?? currentYear - 100;
+  const yearMax = maxYear ?? currentYear + 50;
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -119,6 +137,25 @@ function AvakioDatePickerCalendar({
   const handleNextMonth = () => {
     setViewDate(new Date(year, month + 1, 1));
   };
+
+  const handleYearChange = (newYear: number) => {
+    setViewDate(new Date(newYear, month, 1));
+    setIsYearSelectorOpen(false);
+  };
+
+  const handleMonthChange = (newMonth: number) => {
+    setViewDate(new Date(year, newMonth, 1));
+    setIsYearSelectorOpen(false);
+  };
+
+  // Generate years array for selector
+  const yearsArray = useMemo(() => {
+    const years: number[] = [];
+    for (let y = yearMax; y >= yearMin; y--) {
+      years.push(y);
+    }
+    return years;
+  }, [yearMin, yearMax]);
 
   const handleDateSelect = (date: Date) => {
     const newDate = new Date(date);
@@ -196,9 +233,62 @@ function AvakioDatePickerCalendar({
           onClick={handlePrevMonth}
           className="avakio-dp-nav-btn"
         />
-        <div className="avakio-dp-nav-label">
-          {monthNames[month]} {year}
-        </div>
+        {showYearSelector ? (
+          <div className="avakio-dp-nav-label-selectable">
+            <button 
+              type="button"
+              className="avakio-dp-nav-month-btn"
+              onClick={() => setIsYearSelectorOpen(!isYearSelectorOpen)}
+            >
+              {monthNames[month]} {year}
+              <ChevronRight size={14} className={cn('avakio-dp-nav-chevron', isYearSelectorOpen && 'avakio-dp-nav-chevron-open')} />
+            </button>
+            {isYearSelectorOpen && (
+              <div className="avakio-dp-year-selector">
+                <div className="avakio-dp-year-selector-header">
+                  <span>Select Month & Year</span>
+                  <button 
+                    type="button" 
+                    className="avakio-dp-year-selector-close"
+                    onClick={() => setIsYearSelectorOpen(false)}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+                <div className="avakio-dp-year-selector-content">
+                  <div className="avakio-dp-month-grid">
+                    {monthNames.map((monthName, idx) => (
+                      <button
+                        key={monthName}
+                        type="button"
+                        className={cn('avakio-dp-month-option', idx === month && 'avakio-dp-month-option-selected')}
+                        onClick={() => handleMonthChange(idx)}
+                      >
+                        {monthName.substring(0, 3)}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="avakio-dp-year-list">
+                    {yearsArray.map((y) => (
+                      <button
+                        key={y}
+                        type="button"
+                        className={cn('avakio-dp-year-option', y === year && 'avakio-dp-year-option-selected')}
+                        onClick={() => handleYearChange(y)}
+                      >
+                        {y}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="avakio-dp-nav-label">
+            {monthNames[month]} {year}
+          </div>
+        )}
         <AvakioButton
           variant="ghost"
           size="sm"
@@ -387,6 +477,9 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     labelPosition = AVAKIO_BASE_DEFAULTS.labelPosition,
     labelAlign = AVAKIO_BASE_DEFAULTS.labelAlign,
     enableValueCopyButton = false,
+    showYearSelector = false,
+    minYear,
+    maxYear,
     invalid = false,
     invalidMessage,
     borderless = AVAKIO_BASE_DEFAULTS.borderless,
@@ -395,8 +488,12 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     readonly = AVAKIO_BASE_DEFAULTS.readonly,
     minWidth,
     minHeight,
+    maxWidth,
+    maxHeight,
     width,
     height,
+    padding,
+    margin,
     bottomPadding,
     bottomLabel,
     tooltip,
@@ -522,6 +619,10 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
       width,
       minHeight,
       minWidth,
+      maxHeight,
+      maxWidth,
+      padding,
+      margin,
       bottomPadding,
       align,
     }),
@@ -563,7 +664,10 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
         <AvakioDatePickerCalendar 
           value={value} 
           onChange={handleValueChange} 
-          showTime={showTime} 
+          showTime={showTime}
+          showYearSelector={showYearSelector}
+          minYear={minYear}
+          maxYear={maxYear}
         />
         {bottomLabel && <div className="avakio-dp-bottom-label">{bottomLabel}</div>}
       </div>
@@ -641,6 +745,9 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
               value={value} 
               onChange={handleValueChange} 
               showTime={showTime}
+              showYearSelector={showYearSelector}
+              minYear={minYear}
+              maxYear={maxYear}
               onDateSelect={() => setOpen(false)}
               onCancel={handleCancel}
             />
@@ -734,6 +841,9 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
             value={value} 
             onChange={handleValueChange} 
             showTime={showTime}
+            showYearSelector={showYearSelector}
+            minYear={minYear}
+            maxYear={maxYear}
             onDateSelect={() => setOpen(false)}
             onCancel={handleCancel}
           />

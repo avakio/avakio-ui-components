@@ -2,6 +2,8 @@
 
 .avakio-property {
   --prop-surface: #ffffff;
+  --prop-input-bg: #ffffff;
+  --prop-input-text: #0f172a;
   --prop-border: #d1d5db;
   --prop-muted: #6b7280;
   --prop-strong: #0f172a;
@@ -11,8 +13,8 @@
   --prop-radius: 0px;
   color: var(--prop-strong);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  width: 100%;
-  max-width: 900px;
+  /* Width is controlled by inline style from width prop */
+  box-sizing: border-box;
 }
 
 .avakio-property.is-dense {
@@ -40,7 +42,7 @@
 
 .av-prop-row {
   display: grid;
-  grid-template-columns: 200px 1fr;
+  grid-template-columns: minmax(100px, 200px) minmax(0, 1fr);
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
@@ -73,17 +75,26 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .av-prop-input {
   width: 100%;
+  min-width: 0;
   padding: 10px 11px;
   border-radius: 10px;
   border: 1px solid var(--prop-border);
-  background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
-  color: var(--prop-strong);
+  background: var(--prop-input-bg);
+  color: var(--prop-input-text);
   font-size: 14px;
+  box-sizing: border-box;
   transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.av-prop-input::placeholder {
+  color: var(--prop-muted);
+  opacity: 0.7;
 }
 
 .av-prop-input:focus {
@@ -180,6 +191,8 @@
 [data-admin-theme="material"] .avakio-property,
 .avakio-property[data-admin-theme="material"] {
   --prop-surface: #ffffff;
+  --prop-input-bg: #ffffff;
+  --prop-input-text: #0f172a;
   --prop-border: #d7dde4;
   --prop-muted: #6b7280;
   --prop-strong: #0f172a;
@@ -191,6 +204,8 @@
 [data-admin-theme="flat"] .avakio-property,
 .avakio-property[data-admin-theme="flat"] {
   --prop-surface: #f7f9fb;
+  --prop-input-bg: #ffffff;
+  --prop-input-text: #1f2a3d;
   --prop-border: #cfd8e6;
   --prop-muted: #42526a;
   --prop-strong: #1f2a3d;
@@ -202,6 +217,8 @@
 [data-admin-theme="compact"] .avakio-property,
 .avakio-property[data-admin-theme="compact"] {
   --prop-surface: #f4faf8;
+  --prop-input-bg: #ffffff;
+  --prop-input-text: #0b2c28;
   --prop-border: #b7d6d1;
   --prop-muted: #1f5a52;
   --prop-strong: #0b2c28;
@@ -213,8 +230,10 @@
 [data-admin-theme="dark"] .avakio-property,
 .avakio-property[data-admin-theme="dark"] {
   --prop-surface: hsl(222, 47%, 11%);
+  --prop-input-bg: hsl(222, 40%, 16%);
+  --prop-input-text: hsl(210, 40%, 96%);
   --prop-border: hsl(217, 33%, 17%);
-  --prop-muted: hsl(215, 20%, 80%);
+  --prop-muted: hsl(215, 20%, 60%);
   --prop-strong: hsl(210, 40%, 96%);
   --prop-accent: hsl(217, 91%, 60%);
   --prop-bg-alt: hsl(217, 33%, 17%);
@@ -224,6 +243,8 @@
 [data-admin-theme="ocean"] .avakio-property,
 .avakio-property[data-admin-theme="ocean"] {
   --prop-surface: #f1f7fd;
+  --prop-input-bg: #ffffff;
+  --prop-input-text: #0f2740;
   --prop-border: #bfd8f1;
   --prop-muted: #244f74;
   --prop-strong: #0f2740;
@@ -235,6 +256,8 @@
 [data-admin-theme="sunset"] .avakio-property,
 .avakio-property[data-admin-theme="sunset"] {
   --prop-surface: #fff8f1;
+  --prop-input-bg: #ffffff;
+  --prop-input-text: #4a2e0f;
   --prop-border: #f4d3ad;
   --prop-muted: #8c5416;
   --prop-strong: #4a2e0f;
@@ -251,6 +274,36 @@
 
   .av-prop-label {
     font-size: 14px;
+  }
+}
+
+/* Container query support for when component has explicit width */
+.avakio-property {
+  container-type: inline-size;
+  container-name: avakio-property;
+}
+
+@container avakio-property (max-width: 500px) {
+  .av-prop-row {
+    grid-template-columns: minmax(80px, 120px) minmax(0, 1fr);
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  
+  .av-prop-label {
+    font-size: 13px;
+  }
+  
+  .av-prop-input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
+@container avakio-property (max-width: 350px) {
+  .av-prop-row {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: flex-start;
   }
 }
 

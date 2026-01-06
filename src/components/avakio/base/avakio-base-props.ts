@@ -77,6 +77,12 @@ export interface AvakioBaseProps {
   /** Sets the maximum width for the view */
   maxWidth?: number | string;
   
+  /** Sets the margin around the component. Can be a number, string, or array [top, right, bottom, left] */
+  margin?: number | string | [number, number, number, number];
+  
+  /** Sets the padding inside the component. Can be a number, string, or array [top, right, bottom, left] */
+  padding?: number | string | [number, number, number, number];
+  
   /** Placeholder text for the input */
   placeholder?: string;
   
@@ -182,6 +188,38 @@ export const formatSize = (size: number | string | undefined): string | undefine
 };
 
 /**
+ * Helper to compute width accounting for horizontal margins when width is 100%
+ */
+const computeWidthWithMargin = (
+  width: number | string | undefined,
+  margin: number | string | [number, number, number, number] | undefined
+): string | undefined => {
+  if (width === undefined) return undefined;
+  
+  const widthStr = formatSize(width);
+  
+  // Only apply calc adjustment if width is 100% and margin is set
+  if (widthStr === '100%' && margin !== undefined) {
+    let horizontalMargin = 0;
+    
+    if (typeof margin === 'number') {
+      horizontalMargin = margin * 2; // left + right
+    } else if (Array.isArray(margin)) {
+      horizontalMargin = margin[1] + margin[3]; // right + left
+    } else if (typeof margin === 'string') {
+      // For string margins, we can't calculate, so return as-is
+      return widthStr;
+    }
+    
+    if (horizontalMargin > 0) {
+      return `calc(100% - ${horizontalMargin}px)`;
+    }
+  }
+  
+  return widthStr;
+};
+
+/**
  * Compute base styles from props
  */
 export const computeBaseStyles = (props: AvakioBaseProps): React.CSSProperties => {
@@ -192,10 +230,12 @@ export const computeBaseStyles = (props: AvakioBaseProps): React.CSSProperties =
     hidden,
     inputHeight,
     inputWidth,
+    margin,
     minHeight,
     minWidth,
     maxHeight,
     maxWidth,
+    padding,
     width,
     style,
   } = props;
@@ -204,11 +244,13 @@ export const computeBaseStyles = (props: AvakioBaseProps): React.CSSProperties =
     ...style,
     display: hidden ? 'none' : undefined,
     height: formatSize(height),
-    width: formatSize(width),
+    width: computeWidthWithMargin(width, margin),
     minHeight: formatSize(minHeight),
     minWidth: formatSize(minWidth),
     maxHeight: formatSize(maxHeight),
     maxWidth: formatSize(maxWidth),
+    margin: formatSpacing(margin),
+    padding: formatSpacing(padding),
     paddingBottom: bottomPadding ? `${bottomPadding}px` : undefined,
     justifyContent: align === 'center' ? 'center' : align === 'right' ? 'flex-end' : undefined,
   };
@@ -216,13 +258,22 @@ export const computeBaseStyles = (props: AvakioBaseProps): React.CSSProperties =
 
 /**
  * Compute label styles from props
+ * Returns both textAlign (for non-flex) and justifyContent (for flex) to support all label layouts
  */
 export const computeLabelStyles = (props: AvakioBaseProps): React.CSSProperties => {
   const { labelWidth, labelAlign } = props;
   
+  // Map text-align values to justify-content values for flex containers
+  const justifyMap: Record<string, string> = {
+    'left': 'flex-start',
+    'center': 'center',
+    'right': 'flex-end',
+  };
+  
   return {
     width: formatSize(labelWidth),
     textAlign: labelAlign,
+    justifyContent: labelAlign ? justifyMap[labelAlign] || 'flex-start' : undefined,
   };
 };
 
