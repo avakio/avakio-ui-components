@@ -31,6 +31,21 @@ export interface AvakioDatePickerProps extends AvakioControlledProps<string> {
   maxYear?: number;
 }
 
+/**
+ * Formats a Date to a local ISO-like string (YYYY-MM-DDTHH:mm:ss.sss) without UTC conversion.
+ * This preserves the browser's local timezone.
+ */
+const toLocalISOString = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const ms = String(date.getMilliseconds()).padStart(3, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${ms}`;
+};
+
 const formatDisplayDate = (value: string | null | undefined, showTime: boolean) => {
   if (!value) return "—";
   const d = new Date(value);
@@ -170,7 +185,7 @@ function AvakioDatePickerCalendar({
       }
       newDate.setSeconds(0);
       newDate.setMilliseconds(0);
-      onChange(newDate.toISOString());
+      onChange(toLocalISOString(newDate));
     } else {
       // Return only date without time (YYYY-MM-DD)
       const year = newDate.getFullYear();
@@ -188,14 +203,14 @@ function AvakioDatePickerCalendar({
     date.setMinutes(minutes);
     date.setSeconds(0);
     date.setMilliseconds(0);
-    onChange(date.toISOString());
+    onChange(toLocalISOString(date));
   };
 
   const handleToday = () => {
     const now = new Date();
     now.setSeconds(0);
     now.setMilliseconds(0);
-    onChange(now.toISOString());
+    onChange(toLocalISOString(now));
     setViewDate(now);
   };
 
@@ -521,6 +536,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     inputRef,
     isDisabled,
     isHidden,
+    isInvalid: internalInvalid,
     methods,
     getRefMethods,
     eventHandlers,
@@ -530,6 +546,9 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     validate,
     disabled,
     hidden,
+    required,
+    invalid,
+    invalidMessage,
     getTextValue: (v) => v || '',
     onBlur,
     onFocus,
@@ -541,6 +560,9 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     onViewResize,
     onAfterScroll,
   });
+
+  // Combine external invalid prop with internal validation state
+  const isInvalid = invalid || internalInvalid;
 
   // Expose ref methods
   useImperativeHandle(ref, () => getRefMethods());
@@ -659,6 +681,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
         data-admin-theme={themeAttr || undefined}
         style={computedStyle}
         title={tooltip}
+        tabIndex={isDisabled ? -1 : 0}
         onClick={eventHandlers.onClick}
       >
         <AvakioDatePickerCalendar 
@@ -684,7 +707,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
         className={cn(
           'avakio-dp avakio-dp-compact',
           borderless && 'avakio-dp-borderless',
-          invalid && 'avakio-dp-invalid',
+          isInvalid && 'avakio-dp-invalid',
           isDisabled && 'avakio-dp-disabled',
           className
         )}
@@ -753,7 +776,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
             />
           </PopoverContent>
         </Popover>
-        {invalid && invalidMessage && (
+        {isInvalid && invalidMessage && (
           <div className="avakio-dp-invalid-message">{invalidMessage}</div>
         )}
         {bottomLabel && <div className="avakio-dp-bottom-label">{bottomLabel}</div>}
@@ -770,7 +793,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
       className={cn(
         'avakio-dp',
         borderless && 'avakio-dp-borderless',
-        invalid && 'avakio-dp-invalid',
+        isInvalid && 'avakio-dp-invalid',
         isDisabled && 'avakio-dp-disabled',
         labelPosition === 'top' && 'avakio-dp-label-top',
         className
@@ -849,7 +872,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
           />
         </PopoverContent>
       </Popover>
-      {invalid && invalidMessage && (
+      {isInvalid && invalidMessage && (
         <div className="avakio-dp-invalid-message">{invalidMessage}</div>
       )}
       {bottomLabel && <div className="avakio-dp-bottom-label">{bottomLabel}</div>}

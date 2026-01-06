@@ -258,7 +258,7 @@ export function AvakioPropertyExample() {
     { id: 9, name: 'show()', type: '() => void', defaultValue: '-', description: 'Show the component' },
     { id: 10, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hide the component' },
     { id: 11, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Check if visible' },
-    { id: 12, name: 'validate()', type: '() => boolean | string', defaultValue: '-', description: 'Run validation and return result' },
+    { id: 12, name: 'validate()', type: '() => boolean | string', defaultValue: '-', description: 'Run validation: returns false/error if invalid prop is set, then checks required field, then runs custom validate function. Returns true if all pass. Resets invalid state when validation passes.' },
     { id: 13, name: 'getElement()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Get the root DOM element' },
     { id: 14, name: 'getParentView()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Get the parent element' },
   ];
@@ -322,8 +322,7 @@ export function AvakioPropertyExample() {
             <div key="basic">
               <AvakioProperty
                 items={basicItems}
-                                
-                
+                                                
                 onChange={(items, changed) => {
                   setBasicItems(items);
                   addLog('onChange', `${changed.label}: ${JSON.stringify(changed.value)}`);

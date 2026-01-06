@@ -365,6 +365,12 @@ export interface UseAvakioBaseOptions<T = string> {
   disabled?: boolean;
   /** Initial hidden state from props */
   hidden?: boolean;
+  /** Whether the field is required */
+  required?: boolean;
+  /** External invalid state from props */
+  invalid?: boolean;
+  /** Message to show when validation fails */
+  invalidMessage?: string;
   /** Function to get text representation of value */
   getTextValue?: (value: T | undefined) => string;
   
@@ -417,6 +423,9 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
     validate: validateFn,
     disabled = false,
     hidden = false,
+    required = false,
+    invalid = false,
+    invalidMessage,
     getTextValue = (v) => (v !== undefined ? String(v) : ''),
     onAfterRender,
     onBeforeRender,
@@ -438,9 +447,16 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
   const [value, setValueState] = useState<T | undefined>(initialValue);
   const [isDisabled, setIsDisabled] = useState(disabled);
   const [isHidden, setIsHidden] = useState(hidden);
+  const [isRequired, setIsRequired] = useState(required);
+  const [isInvalid, setIsInvalid] = useState(false);
+  const [currentInvalidMessage, setCurrentInvalidMessage] = useState(invalidMessage);
   const [config, setConfig] = useState<Partial<AvakioBaseProps>>({});
 
   // Sync with prop changes
+  React.useEffect(() => {
+    setValueState(initialValue);
+  }, [initialValue]);
+
   React.useEffect(() => {
     setIsDisabled(disabled);
   }, [disabled]);
@@ -448,6 +464,29 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
   React.useEffect(() => {
     setIsHidden(hidden);
   }, [hidden]);
+
+  React.useEffect(() => {
+    setIsRequired(required);
+  }, [required]);
+
+  React.useEffect(() => {
+    setIsInvalid(invalid);
+  }, [invalid]);
+
+  React.useEffect(() => {
+    setCurrentInvalidMessage(invalidMessage);
+  }, [invalidMessage]);
+
+  // Clear invalid state when value changes (if not externally forced invalid)
+  React.useEffect(() => {
+    if (!invalid) {
+      const isEmpty = value === undefined || value === null || value === '' || 
+        (Array.isArray(value) && value.length === 0);
+      if (!isEmpty) {
+        setIsInvalid(false);
+      }
+    }
+  }, [value, invalid]);
 
   // Lifecycle events
   React.useEffect(() => {
@@ -469,11 +508,11 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
 
   // Methods
   const blur = useCallback(() => {
-    inputRef.current?.blur();
+    (inputRef.current ?? rootRef.current)?.blur();
   }, []);
 
   const focus = useCallback(() => {
-    inputRef.current?.focus();
+    (inputRef.current ?? rootRef.current)?.focus();
   }, []);
 
   const disable = useCallback(() => {
@@ -535,9 +574,34 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
   }, []);
 
   const validate = useCallback(() => {
-    if (!validateFn) return true;
-    return validateFn(value as T);
-  }, [validateFn, value]);
+    // If marked invalid externally via prop, return the error message
+    if (invalid) {
+      return currentInvalidMessage || false;
+    }
+    
+    // Check required field first
+    if (isRequired) {
+      const isEmpty = value === undefined || value === null || value === '' || 
+        (Array.isArray(value) && value.length === 0);
+      if (isEmpty) {
+        setIsInvalid(true);
+        return currentInvalidMessage || 'This field is required';
+      }
+    }
+    
+    // Run custom validation function if provided
+    if (validateFn) {
+      const result = validateFn(value as T);
+      if (result !== true) {
+        setIsInvalid(true);
+        return result;
+      }
+    }
+    
+    // Validation passed
+    setIsInvalid(false);
+    return true;
+  }, [validateFn, value, isRequired, invalid, currentInvalidMessage]);
 
   // Event handler wrappers
   const handleBlur = useCallback((event: React.FocusEvent) => {
@@ -594,12 +658,18 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
     value,
     isDisabled,
     isHidden,
+    isRequired,
+    isInvalid,
+    invalidMessage: currentInvalidMessage,
     config,
     
     // State setters (for controlled components)
     setValueState,
     setIsDisabled,
     setIsHidden,
+    setIsRequired,
+    setIsInvalid,
+    setInvalidMessage: setCurrentInvalidMessage,
     
     // Methods
     methods: {
