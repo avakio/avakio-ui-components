@@ -10,6 +10,21 @@
 .avakio-template-content {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Content alignment */
+.avakio-template-align-left {
+  align-items: flex-start;
+}
+
+.avakio-template-align-center {
+  align-items: center;
+}
+
+.avakio-template-align-right {
+  align-items: flex-end;
 }
 
 /* Auto-height */

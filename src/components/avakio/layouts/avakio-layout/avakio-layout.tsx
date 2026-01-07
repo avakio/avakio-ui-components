@@ -23,10 +23,10 @@ export interface AvakioLayoutProps {
   css?: React.CSSProperties;
   
   /** Width of the layout */
-  width?: number | string;
+  width?: number | string | [number];
   
   /** Height of the layout */
-  height?: number | string;
+  height?: number | string | [number];
   
   /** Minimum width */
   minWidth?: number | string;
@@ -194,12 +194,13 @@ export function AvakioLayout({
     hidden ? 'avakio-layout-hidden' : '',
     responsive ? 'avakio-layout-responsive' : '',
     responsiveMode ? 'avakio-layout-responsive-active' : '',
+    (height || width) ? 'avakio-layout-sized' : '',
     className,
   ].filter(Boolean).join(' ');
 
   const layoutStyles: React.CSSProperties = {
-    width: typeof width === 'number' ? `${width}px` : width,
-    height: typeof height === 'number' ? `${height}px` : height,
+    width: Array.isArray(width) ? `${width[0]}px` : typeof width === 'number' ? `${width}px` : width,
+    height: Array.isArray(height) ? `${height[0]}px` : typeof height === 'number' ? `${height}px` : height,
     minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth,
     minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight,
     maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth,

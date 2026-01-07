@@ -88,6 +88,8 @@ export interface AvakioTemplateProps {
   onClick?: (e: React.MouseEvent) => void;
   /** Custom inline styles for the root element */
   style?: React.CSSProperties;
+  /** Horizontal alignment of content */
+  align?: 'left' | 'center' | 'right';
 }
 
 export interface AvakioTemplateRef {
@@ -156,6 +158,7 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
       onChange,
       onClick,
       style,
+      align = 'left',
     },
     ref
   ) => {
@@ -301,6 +304,7 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
       scroll === 'y' ? 'avakio-template-scroll-y' : '',
       isHidden ? 'avakio-template-hidden' : '',
       isDisabled ? 'avakio-template-disabled' : '',
+      (width === '100%' || height === '100%') ? 'avakio-fill-container' : '',
       className,
     ]
       .filter(Boolean)
@@ -333,7 +337,7 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
         style={styles}
         onClick={onClick}
       >
-        <div className="avakio-template-content">{renderContent()}</div>
+        <div className={`avakio-template-content avakio-template-align-${align}`}>{renderContent()}</div>
       </div>
     );
   }

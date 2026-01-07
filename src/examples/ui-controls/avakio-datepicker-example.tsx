@@ -1023,86 +1023,100 @@ export function AvakioDatePickerExample() {
                 />,
                 // Column 2 - Configuration
                 <AvakioLayout
+                  id='Layout-row-Column2'
                   type="clean"
                   borderless={true}
                   rows={[
                     <AvakioLayout
+                      id='Layout-row1-col-Column2'
                       key="config-header"
                       type="clean"
                       borderless={true}
+                      height='50px'
+                      width='100%'
                       cols={[
-                        <AvakioTemplate
-                          type="clean"
-                          borderType="clean"
-                          padding={[0,0,10,0]}  
+                        <AvakioTemplate                        
+                          id='Template-config-header'
+                          type="clean"                          
+                          borderType="clean"                                                    
                           content={<strong>Configuration</strong>}
                         />,
-                        <AvakioButton
-                          size="sm"
-                          label="Reset"
+                        <AvakioTemplate                        
+                          id='Template-config-header-button'
+                          type="clean"                          
+                          borderType="clean"           
+                          width='100%'
                           align="right"
-                          margin={[0,0,10,0]}
-                          onClick={() => {
-                            // Reset to initial values
-                            setPlaygroundProps([
-                              // Identity Group
-                              { id: 'componentId', label: 'ID', type: 'text', value: 'playground-datepicker', group: 'Identity', placeholder: 'Component ID' },
-                              { id: 'testId', label: 'Test ID', type: 'text', value: '', group: 'Identity', placeholder: 'Test ID for testing' },
-                              { id: 'className', label: 'Class Name', type: 'text', value: '', group: 'Identity', placeholder: 'Additional CSS class' },
-                              // Appearance Group
-                              { id: 'label', label: 'Label', type: 'text', value: 'Event Date', group: 'Appearance', placeholder: 'Enter label text' },
-                              { id: 'labelForm', label: 'Label Form', type: 'text', value: '', group: 'Appearance', placeholder: 'Form label title' },
-                              { id: 'placeholder', label: 'Placeholder', type: 'text', value: 'Select a date...', group: 'Appearance', placeholder: 'Enter placeholder' },
-                              { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'Appearance', placeholder: 'Helper text' },
-                              { id: 'bottomPadding', label: 'Bottom Padding', type: 'number', value: '', group: 'Appearance', placeholder: 'e.g. 8' },
-                              { id: 'tooltip', label: 'Tooltip', type: 'text', value: '', group: 'Appearance', placeholder: 'Tooltip text' },
-                              { id: 'invalidMessage', label: 'Invalid Message', type: 'text', value: 'This field is required', group: 'Appearance', placeholder: 'Error message' },
-                              { id: 'size', label: 'Size', type: 'select', value: 'default', group: 'Appearance', selectOptions: [{ id: 'default', value: 'Default' }, { id: 'compact', value: 'Compact' }] },
-                              { id: 'labelPosition', label: 'Label Position', type: 'select', value: 'left', group: 'Appearance', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'top', value: 'Top' }] },
-                              { id: 'labelAlign', label: 'Label Align', type: 'select', value: 'left', group: 'Appearance', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'center', value: 'Center' }, { id: 'right', value: 'Right' }] },
-                              { id: 'labelWidth', label: 'Label Width', type: 'number', value: 100, group: 'Appearance', placeholder: 'e.g. 100' },
-                              // Layout & Alignment Group
-                              { id: 'align', label: 'Align', type: 'select', value: 'left', group: 'Layout', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'center', value: 'Center' }, { id: 'right', value: 'Right' }] },
-                              { id: 'inputAlign', label: 'Input Align', type: 'select', value: 'left', group: 'Layout', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'right', value: 'Right' }] },
-                              { id: 'inputWidth', label: 'Input Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 200' },
-                              { id: 'inputHeight', label: 'Input Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 38' },
-                              // Features Group
-                              { id: 'showTime', label: 'Show Time', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable time selection' },
-                              { id: 'inline', label: 'Inline Mode', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Display calendar inline' },
-                              { id: 'showYearSelector', label: 'Year Selector', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show month/year quick selector' },
-                              { id: 'clearable', label: 'Clearable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Show clear button' },
-                              { id: 'enableValueCopyButton', label: 'Copy Button', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show copy value button' },
-                              // Year Selector Range
-                              { id: 'minYear', label: 'Min Year', type: 'number', value: '', group: 'Year Selector', placeholder: 'e.g. 1920' },
-                              { id: 'maxYear', label: 'Max Year', type: 'number', value: '', group: 'Year Selector', placeholder: 'e.g. 2030' },
-                              // Sizing Group
-                              { id: 'width', label: 'Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 300 or 100%' },
-                              { id: 'height', label: 'Height', type: 'number', value: '', group: 'Sizing', placeholder: 'e.g. 38' },
-                              { id: 'minWidth', label: 'Min Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 200' },
-                              { id: 'maxWidth', label: 'Max Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 500' },
-                              { id: 'minHeight', label: 'Min Height', type: 'number', value: '', group: 'Sizing', placeholder: 'e.g. 30' },
-                              { id: 'maxHeight', label: 'Max Height', type: 'number', value: '', group: 'Sizing', placeholder: 'e.g. 50' },
-                              { id: 'margin', label: 'Margin', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 8 or 8,16,8,16' },
-                              { id: 'padding', label: 'Padding', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 8 or 8,16,8,16' },
-                              // State Group
-                              { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Disable the component' },
-                              { id: 'readonly', label: 'Read Only', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Make input read-only' },
-                              { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Hide the component' },
-                              { id: 'borderless', label: 'Borderless', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Remove border' },
-                              // Validation Group
-                              { id: 'required', label: 'Required', type: 'checkbox', value: false, group: 'Validation', checkboxLabel: 'Mark as required field' },
-                              { id: 'invalid', label: 'Invalid', type: 'checkbox', value: false, group: 'Validation', checkboxLabel: 'Show invalid/error state' },
-                              // Events Group
-                              { id: 'logOnChange', label: 'Log onChange', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onChange events' },
-                              { id: 'logOnFocus', label: 'Log onFocus', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onFocus events' },
-                              { id: 'logOnBlur', label: 'Log onBlur', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onBlur events' },
-                              { id: 'logOnKeyPress', label: 'Log onKeyPress', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onKeyPress events' },
-                              { id: 'logOnItemClick', label: 'Log onItemClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onItemClick events' },
-                            ]);
-                            setPlaygroundValue(new Date().toISOString());
-                            addLog('Reset', 'playground configuration reset to defaults');
-                          }}
-                        />
+                          content={                          
+                            <AvakioButton
+                              id='Button-reset-playground'
+                              size="sm"
+                              label="Reset"
+                              
+                              align="right"
+                              onClick={() => {
+                                // Reset to initial values
+                                setPlaygroundProps([
+                                  // Identity Group
+                                  { id: 'componentId', label: 'ID', type: 'text', value: 'playground-datepicker', group: 'Identity', placeholder: 'Component ID' },
+                                  { id: 'testId', label: 'Test ID', type: 'text', value: '', group: 'Identity', placeholder: 'Test ID for testing' },
+                                  { id: 'className', label: 'Class Name', type: 'text', value: '', group: 'Identity', placeholder: 'Additional CSS class' },
+                                  // Appearance Group
+                                  { id: 'label', label: 'Label', type: 'text', value: 'Event Date', group: 'Appearance', placeholder: 'Enter label text' },
+                                  { id: 'labelForm', label: 'Label Form', type: 'text', value: '', group: 'Appearance', placeholder: 'Form label title' },
+                                  { id: 'placeholder', label: 'Placeholder', type: 'text', value: 'Select a date...', group: 'Appearance', placeholder: 'Enter placeholder' },
+                                  { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'Appearance', placeholder: 'Helper text' },
+                                  { id: 'bottomPadding', label: 'Bottom Padding', type: 'number', value: '', group: 'Appearance', placeholder: 'e.g. 8' },
+                                  { id: 'tooltip', label: 'Tooltip', type: 'text', value: '', group: 'Appearance', placeholder: 'Tooltip text' },
+                                  { id: 'invalidMessage', label: 'Invalid Message', type: 'text', value: 'This field is required', group: 'Appearance', placeholder: 'Error message' },
+                                  { id: 'size', label: 'Size', type: 'select', value: 'default', group: 'Appearance', selectOptions: [{ id: 'default', value: 'Default' }, { id: 'compact', value: 'Compact' }] },
+                                  { id: 'labelPosition', label: 'Label Position', type: 'select', value: 'left', group: 'Appearance', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'top', value: 'Top' }] },
+                                  { id: 'labelAlign', label: 'Label Align', type: 'select', value: 'left', group: 'Appearance', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'center', value: 'Center' }, { id: 'right', value: 'Right' }] },
+                                  { id: 'labelWidth', label: 'Label Width', type: 'number', value: 100, group: 'Appearance', placeholder: 'e.g. 100' },
+                                  // Layout & Alignment Group
+                                  { id: 'align', label: 'Align', type: 'select', value: 'left', group: 'Layout', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'center', value: 'Center' }, { id: 'right', value: 'Right' }] },
+                                  { id: 'inputAlign', label: 'Input Align', type: 'select', value: 'left', group: 'Layout', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'right', value: 'Right' }] },
+                                  { id: 'inputWidth', label: 'Input Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 200' },
+                                  { id: 'inputHeight', label: 'Input Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 38' },
+                                  // Features Group
+                                  { id: 'showTime', label: 'Show Time', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable time selection' },
+                                  { id: 'inline', label: 'Inline Mode', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Display calendar inline' },
+                                  { id: 'showYearSelector', label: 'Year Selector', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show month/year quick selector' },
+                                  { id: 'clearable', label: 'Clearable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Show clear button' },
+                                  { id: 'enableValueCopyButton', label: 'Copy Button', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show copy value button' },
+                                  // Year Selector Range
+                                  { id: 'minYear', label: 'Min Year', type: 'number', value: '', group: 'Year Selector', placeholder: 'e.g. 1920' },
+                                  { id: 'maxYear', label: 'Max Year', type: 'number', value: '', group: 'Year Selector', placeholder: 'e.g. 2030' },
+                                  // Sizing Group
+                                  { id: 'width', label: 'Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 300 or 100%' },
+                                  { id: 'height', label: 'Height', type: 'number', value: '', group: 'Sizing', placeholder: 'e.g. 38' },
+                                  { id: 'minWidth', label: 'Min Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 200' },
+                                  { id: 'maxWidth', label: 'Max Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 500' },
+                                  { id: 'minHeight', label: 'Min Height', type: 'number', value: '', group: 'Sizing', placeholder: 'e.g. 30' },
+                                  { id: 'maxHeight', label: 'Max Height', type: 'number', value: '', group: 'Sizing', placeholder: 'e.g. 50' },
+                                  { id: 'margin', label: 'Margin', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 8 or 8,16,8,16' },
+                                  { id: 'padding', label: 'Padding', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 8 or 8,16,8,16' },
+                                  // State Group
+                                  { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Disable the component' },
+                                  { id: 'readonly', label: 'Read Only', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Make input read-only' },
+                                  { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Hide the component' },
+                                  { id: 'borderless', label: 'Borderless', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Remove border' },
+                                  // Validation Group
+                                  { id: 'required', label: 'Required', type: 'checkbox', value: false, group: 'Validation', checkboxLabel: 'Mark as required field' },
+                                  { id: 'invalid', label: 'Invalid', type: 'checkbox', value: false, group: 'Validation', checkboxLabel: 'Show invalid/error state' },
+                                  // Events Group
+                                  { id: 'logOnChange', label: 'Log onChange', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onChange events' },
+                                  { id: 'logOnFocus', label: 'Log onFocus', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onFocus events' },
+                                  { id: 'logOnBlur', label: 'Log onBlur', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onBlur events' },
+                                  { id: 'logOnKeyPress', label: 'Log onKeyPress', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onKeyPress events' },
+                                  { id: 'logOnItemClick', label: 'Log onItemClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onItemClick events' },
+                                ]);
+                                setPlaygroundValue(new Date().toISOString());
+                                addLog('Reset', 'playground configuration reset to defaults');
+                              }}
+                            />
+                          }
+                        />,
                       ]}
                     />,
                     <AvakioProperty

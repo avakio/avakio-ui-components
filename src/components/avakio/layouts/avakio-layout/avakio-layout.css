@@ -20,16 +20,18 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
 }
 
 /* Allow layout items to grow when their content has flex: 1 or is a multiview/layout */
-.avakio-layout-rows > .avakio-layout-item:has(> .avakio-layout),
+/* But NOT when the child has an explicit height (avakio-layout-sized) */
+.avakio-layout-rows > .avakio-layout-item:has(> .avakio-layout:not(.avakio-layout-sized)),
 .avakio-layout-rows > .avakio-layout-item:has(> .avakio-multiview) {
   flex: 1;
   min-height: 0;
 }
 
-.avakio-layout-cols > .avakio-layout-item:has(> .avakio-layout),
+.avakio-layout-cols > .avakio-layout-item:has(> .avakio-layout:not(.avakio-layout-sized)),
 .avakio-layout-cols > .avakio-layout-item:has(> .avakio-multiview) {
   flex: 1;
   min-width: 0;
@@ -42,8 +44,25 @@
   min-width: 0;
 }
 
-.avakio-layout-item > * {
+/* Only apply flex: 1 to children that don't have explicit sizing */
+.avakio-layout-item > *:not(.avakio-layout-sized) {
   flex: 1;
+}
+
+/* Ensure sized layouts respect their dimensions */
+.avakio-layout-sized {
+  flex: none !important;
+}
+
+/* Allow items with fill-container class to expand their parent wrapper */
+.avakio-layout-cols > .avakio-layout-item:has(> .avakio-fill-container) {
+  flex: 1;
+  min-width: 0;
+}
+
+.avakio-layout-rows > .avakio-layout-item:has(> .avakio-fill-container) {
+  flex: 1;
+  min-height: 0;
 }
 
 .avakio-layout-hidden {

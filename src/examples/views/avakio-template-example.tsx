@@ -893,6 +893,7 @@ const propsData: PropDoc[] = [
   { id: 25, name: 'onLoad', type: '() => void', defaultValue: 'undefined', description: 'Callback when content loads', rules: 'Fires after URL content is fetched or on initial render' },
   { id: 26, name: 'onChange', type: '(data: any) => void', defaultValue: 'undefined', description: 'Callback when data changes', rules: 'Fires when setValues() is called on ref' },
   { id: 27, name: 'onClick', type: '(e: MouseEvent) => void', defaultValue: 'undefined', description: 'Click event handler', rules: 'Disabled when disabled=true' },
+  { id: 28, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Horizontal alignment of content', rules: 'Aligns child content within the template container' },
 ];
 
 interface RefMethodDoc {
