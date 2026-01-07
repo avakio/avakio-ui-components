@@ -36,6 +36,12 @@ export interface AvakioButtonProps extends AvakioBaseProps {
   buttonType?: AvakioButtonType;
   /** Text alignment */
   align?: AvakioButtonAlign;
+  /** Width of the button element */
+  buttonWidth?: number | string;
+  /** Height of the button element */
+  buttonHeight?: number | string;
+  /** Text alignment inside the button */
+  textAlign?: 'left' | 'center' | 'right';
   /** Image URL for image button */
   image?: string;
   /** Keyboard hotkey (e.g., 'ctrl+s') */
@@ -79,6 +85,9 @@ export const AvakioButton = forwardRef<AvakioBaseRef, AvakioButtonProps>(functio
     autowidth = false,
     buttonType = 'default',
     align = 'center',
+    buttonWidth,
+    buttonHeight,
+    textAlign,
     image,
     hotkey,
     popup,
@@ -167,8 +176,14 @@ export const AvakioButton = forwardRef<AvakioBaseRef, AvakioButtonProps>(functio
   // Compute base styles from merged props (original + config from define())
   const baseStyles = computeBaseStyles({ ...mergedProps, hidden: isHidden });
 
+  // Add text-align to container style based on align prop
+  const containerStyle: React.CSSProperties = {
+    ...baseStyles,
+    textAlign: align,
+  };
+
   return (
-    <div ref={containerRef} style={baseStyles}>
+    <div ref={containerRef} style={containerStyle}>
       <button
         ref={(el) => {
           buttonRef.current = el;
@@ -192,6 +207,11 @@ export const AvakioButton = forwardRef<AvakioBaseRef, AvakioButtonProps>(functio
           mergedProps.borderless ? 'avakio-button-borderless' : '',
           className,
         ].filter(Boolean).join(' ')}
+        style={{
+          width: typeof buttonWidth === 'number' ? `${buttonWidth}px` : buttonWidth,
+          height: typeof buttonHeight === 'number' ? `${buttonHeight}px` : buttonHeight,
+          justifyContent: textAlign === 'left' ? 'flex-start' : textAlign === 'right' ? 'flex-end' : textAlign === 'center' ? 'center' : undefined,
+        }}
         disabled={isDisabled}
         title={mergedProps.tooltip}
         value={value}

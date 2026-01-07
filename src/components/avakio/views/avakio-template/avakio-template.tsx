@@ -90,6 +90,8 @@ export interface AvakioTemplateProps {
   style?: React.CSSProperties;
   /** Horizontal alignment of content */
   align?: 'left' | 'center' | 'right';
+  /** Wrap content in a flex container with flexWrap */
+  flexWrap?: boolean;
 }
 
 export interface AvakioTemplateRef {
@@ -159,6 +161,7 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
       onClick,
       style,
       align = 'left',
+      flexWrap = false,
     },
     ref
   ) => {
@@ -337,7 +340,13 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
         style={styles}
         onClick={onClick}
       >
-        <div className={`avakio-template-content avakio-template-align-${align}`}>{renderContent()}</div>
+        <div className={`avakio-template-content avakio-template-align-${align}`}>
+          {flexWrap ? (
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>{renderContent()}</div>
+          ) : (
+            renderContent()
+          )}
+        </div>
       </div>
     );
   }

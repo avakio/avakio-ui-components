@@ -894,6 +894,7 @@ const propsData: PropDoc[] = [
   { id: 26, name: 'onChange', type: '(data: any) => void', defaultValue: 'undefined', description: 'Callback when data changes', rules: 'Fires when setValues() is called on ref' },
   { id: 27, name: 'onClick', type: '(e: MouseEvent) => void', defaultValue: 'undefined', description: 'Click event handler', rules: 'Disabled when disabled=true' },
   { id: 28, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Horizontal alignment of content', rules: 'Aligns child content within the template container' },
+  { id: 29, name: 'flexWrap', type: 'boolean', defaultValue: 'false', description: 'Wrap content in a flex container with flexWrap', rules: 'When true, wraps content in a div with display: flex and flexWrap: wrap' },
 ];
 
 interface RefMethodDoc {

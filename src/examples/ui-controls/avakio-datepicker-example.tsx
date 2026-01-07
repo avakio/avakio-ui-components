@@ -858,18 +858,29 @@ export function AvakioDatePickerExample() {
                     <AvakioTemplate
                       type="clean"
                       padding={[10,0,10,0]}
-                      borderType="clean"
+                      borderType="clean"                      
+                      //maxHeight='500px'
+                      scroll="xy"  
+                      flexWrap={true}
                       content={<>
                         <AvakioButton 
-                          size="sm"
+                          size="sm"                                                    
                           label='Focus()'
                           margin={[0,10,10,0]}
+                          align='left'
+                          textAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
                           onClick={() => {
                             datePickerRef.current?.focus();
                             addLog('focus()', 'called via ref');
                           }}
                         />
-                        <AvakioButton 
+                        <AvakioButton        
+                          align='left'
+                          textAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
                           size="sm"
                           label='Blur()'
                           margin={[0,10,10,0]}
@@ -880,6 +891,10 @@ export function AvakioDatePickerExample() {
                         />
                          <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='getValue()'
                             margin={[0,10,10,0]}
                             onClick={() => {
@@ -890,6 +905,10 @@ export function AvakioDatePickerExample() {
                           <AvakioButton 
                             size="sm"
                             label='setValue(now)' 
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             margin={[0,10,10,0]}
                             onClick={() => {
                               datePickerRef.current?.setValue(new Date().toISOString());
@@ -899,6 +918,10 @@ export function AvakioDatePickerExample() {
                           />
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='getText()'
                             margin={[0,10,10,0]}
                             onClick={() => {
@@ -908,6 +931,10 @@ export function AvakioDatePickerExample() {
                           />                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='enable()'
                             margin={[0,10,10,0]}  
                             onClick={() => {
@@ -917,6 +944,10 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='disable()'
                             margin={[0,10,10,0]}  
                             onClick={() => {
@@ -926,6 +957,10 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='isEnabled()'
                             margin={[0,10,10,0]}
                             onClick={() => {
@@ -935,6 +970,10 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='show()'
                             margin={[0,10,10,0]}  
                             onClick={() => {
@@ -944,6 +983,10 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='hide()'
                             margin={[0,10,10,0]}
                             onClick={() => {
@@ -953,6 +996,10 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='isVisible()'
                             margin={[0,10,10,0]}
                             onClick={() => {
@@ -962,6 +1009,10 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='validate()'
                             margin={[0,10,10,0]}
                             onClick={() => {
@@ -971,6 +1022,10 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='getElement()'
                             margin={[0,10,10,0]}
                             onClick={() => {
@@ -980,6 +1035,10 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='getParentView()'
                             margin={[0,10,10,0]}
                             onClick={() => {
@@ -989,6 +1048,10 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='define(label)'
                             margin={[0,10,10,0]}
                             onClick={() => {
@@ -1002,6 +1065,10 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
+                            align='left'
+                            textAlign='center'
+                            width='200px'
+                            buttonWidth='150px'
                             label='define(config)'
                             margin={[0,10,10,0]}
                             onClick={() => {
@@ -1120,13 +1187,14 @@ export function AvakioDatePickerExample() {
                       ]}
                     />,
                     <AvakioProperty
+                      id='Property-playground-props'
                       items={playgroundProps}
                       onChange={handlePlaygroundPropsChange}
                       dense
                       showBorders
-                      maxHeight={600}
-                      style={{ overflowY: 'auto' }}
-                    />
+                      maxHeight='600px'
+                      overflowY="auto"
+                    />,
                   ]}
                 />,
               ]}

@@ -180,6 +180,8 @@ export interface AvakioPropertyProps extends AvakioBaseProps {
   dense?: boolean;
   /** Show borders between rows */
   showBorders?: boolean;
+  /** Enable vertical overflow scrolling */
+  overflowY?: 'auto' | 'scroll' | 'hidden' | 'visible';
 }
 
 /** Ref type for AvakioProperty component */
@@ -193,6 +195,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
       onChange,
       dense,
       showBorders,
+      overflowY,
       // Base props
       id,
       testId,
@@ -296,6 +299,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
       margin,
       padding,
     }),
+    ...(overflowY && { overflowY }),
   };
 
   const handleChange = (id: string, value: string | number | boolean | string[] | AvakioDateRange | null) => {
