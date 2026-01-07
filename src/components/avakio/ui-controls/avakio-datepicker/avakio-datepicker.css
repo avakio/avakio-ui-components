@@ -23,6 +23,33 @@
 }
 
 /* ================================
+   FORM LABEL (labelForm)
+   ================================ */
+
+.avakio-dp-label-form {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dp-text);
+  margin-bottom: 6px;
+}
+
+/* When labelPosition is left, labelForm appears inline */
+.avakio-dp-label-form-left {
+  display: inline-block;
+  vertical-align: middle;
+  margin-bottom: 0;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+/* When labelPosition is top, labelForm appears above */
+.avakio-dp-label-form-top {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* ================================
    DEFAULT MODE - Label + Input + Icon Button
    ================================ */
 
@@ -60,7 +87,7 @@
   padding: 8px 16px;
   background: var(--dp-primary);
   color: white;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 14px;
   white-space: nowrap;
   border-radius: var(--dp-radius) 0 0 var(--dp-radius);
@@ -201,9 +228,7 @@
 }
 
 .avakio-dp-borderless .avakio-dp-label {
-  background: transparent;
-  color: var(--dp-text);
-  font-weight: 600;
+  font-weight: 400;
 }
 
 /* ================================

@@ -1,53 +1,52 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { AvakioDataTable } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
-import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
+import type { AvakioColumn, AvakioDataTableRef } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
-import { AvakioRichSelect } from '../../components/avakio/ui-controls/avakio-richselect/avakio-richselect';
 import { AvakioCheckbox } from '../../components/avakio/ui-controls/avakio-checkbox/avakio-checkbox';
-import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
-import { AvakioDatePicker } from '../../components/avakio/ui-controls/avakio-datepicker/avakio-datepicker';
+import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
+import { addEventLog } from '../../services/event-log-service';
 import { 
   Table2,
   Settings2,
   Book,
   Play,
-  Server,
-  Filter,
+  Edit3,
 } from 'lucide-react';
 import './avakio-datatable-example.css';
 
 // Tab options for navigation
 const TAB_OPTIONS = [
   { id: 'basic', label: 'Basic Usage', icon: <Table2 size={14} /> },
-  { id: 'server', label: 'Server-Side Data', icon: <Server size={14} /> },
-  { id: 'filtering', label: 'Filtering', icon: <Filter size={14} /> },
   { id: 'options', label: 'Options', icon: <Settings2 size={14} /> },
+  { id: 'editable', label: 'Editable', icon: <Edit3 size={14} /> },
   { id: 'playground', label: 'Interactive Playground', icon: <Play size={14} /> },
   { id: 'docs', label: 'Documentation', icon: <Book size={14} /> },
 ];
 
-// Interfaces
-interface Customer {
+// Sample data types
+interface Person {
   id: number;
   name: string;
   email: string;
-  phone: string;
-  company: string;
+  age: number;
+  department: string;
   status: string;
-  joinDate: string;
-  revenue: number;
+  salary: number;
 }
 
-// Static sample data for basic example
-const staticCustomers: Customer[] = [
-  { id: 1, name: "John Doe", email: "john.doe@example.com", phone: "+1-555-0101", company: "Tech Corp", status: "active", joinDate: "2023-01-15", revenue: 125000 },
-  { id: 2, name: "Jane Smith", email: "jane.smith@example.com", phone: "+1-555-0102", company: "Design Studio", status: "active", joinDate: "2023-02-20", revenue: 89000 },
-  { id: 3, name: "Bob Johnson", email: "bob.johnson@example.com", phone: "+1-555-0103", company: "Marketing Inc", status: "inactive", joinDate: "2022-12-10", revenue: 156000 },
-  { id: 4, name: "Alice Williams", email: "alice.williams@example.com", phone: "+1-555-0104", company: "Finance Group", status: "active", joinDate: "2023-11-05", revenue: 234000 },
-  { id: 5, name: "Charlie Brown", email: "charlie.brown@example.com", phone: "+1-555-0105", company: "Software Solutions", status: "active", joinDate: "2023-10-12", revenue: 78000 },
+// Sample data
+const sampleData: Person[] = [
+  { id: 1, name: "John Doe", email: "john@example.com", age: 32, department: "Engineering", status: "Active", salary: 85000 },
+  { id: 2, name: "Jane Smith", email: "jane@example.com", age: 28, department: "Marketing", status: "Active", salary: 72000 },
+  { id: 3, name: "Bob Johnson", email: "bob@example.com", age: 45, department: "Sales", status: "Inactive", salary: 95000 },
+  { id: 4, name: "Alice Williams", email: "alice@example.com", age: 35, department: "Engineering", status: "Active", salary: 92000 },
+  { id: 5, name: "Charlie Brown", email: "charlie@example.com", age: 29, department: "HR", status: "Active", salary: 65000 },
+  { id: 6, name: "Diana Ross", email: "diana@example.com", age: 41, department: "Finance", status: "Active", salary: 88000 },
+  { id: 7, name: "Edward King", email: "edward@example.com", age: 38, department: "Engineering", status: "Inactive", salary: 78000 },
+  { id: 8, name: "Fiona Green", email: "fiona@example.com", age: 26, department: "Marketing", status: "Active", salary: 68000 },
 ];
 
 // Props documentation data
@@ -63,39 +62,60 @@ const propsData: PropDoc[] = [
   { id: 1, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID' },
   { id: 2, name: 'columns', type: 'AvakioColumn<T>[]', defaultValue: '[]', description: 'Array of column definitions' },
   { id: 3, name: 'data', type: 'T[]', defaultValue: '[]', description: 'Array of data objects to display' },
-  { id: 4, name: 'pageSize', type: 'number', defaultValue: '10', description: 'Number of rows per page' },
-  { id: 5, name: 'currentPage', type: 'number', defaultValue: '1', description: 'Current page number (server-side)' },
-  { id: 6, name: 'totalCount', type: 'number', defaultValue: 'undefined', description: 'Total record count (server-side pagination)' },
-  { id: 7, name: 'paging', type: 'boolean', defaultValue: 'true', description: 'Enable pagination' },
-  { id: 8, name: 'sortable', type: 'boolean', defaultValue: 'true', description: 'Enable column sorting' },
-  { id: 9, name: 'filterable', type: 'boolean', defaultValue: 'true', description: 'Enable column filtering' },
-  { id: 10, name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Enable column resizing' },
-  { id: 11, name: 'select', type: "'row' | 'cell' | false", defaultValue: 'false', description: 'Selection mode' },
-  { id: 12, name: 'serverSide', type: 'boolean', defaultValue: 'false', description: 'Enable server-side operations' },
-  { id: 13, name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show loading state' },
-  { id: 14, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Fixed height' },
-  { id: 15, name: 'emptyMessage', type: 'string', defaultValue: '"No data"', description: 'Message when no data' },
-  { id: 16, name: 'onPageChange', type: '(page: number) => void', defaultValue: 'undefined', description: 'Page change callback' },
-  { id: 17, name: 'onPageSizeChange', type: '(size: number) => void', defaultValue: 'undefined', description: 'Page size change callback' },
-  { id: 18, name: 'onSort', type: '(col, dir) => void', defaultValue: 'undefined', description: 'Sort callback' },
-  { id: 19, name: 'onFilter', type: '(filters) => void', defaultValue: 'undefined', description: 'Filter callback' },
-  { id: 20, name: 'onSelectChange', type: '(rows) => void', defaultValue: 'undefined', description: 'Selection change callback' },
+  { id: 4, name: 'height', type: 'number | string', defaultValue: "'auto'", description: 'Fixed height of the table' },
+  { id: 5, name: 'width', type: 'number | string', defaultValue: "'100%'", description: 'Width of the table' },
+  { id: 6, name: 'paging', type: 'boolean', defaultValue: 'false', description: 'Enable pagination' },
+  { id: 7, name: 'pageSize', type: 'number', defaultValue: '20', description: 'Number of rows per page' },
+  { id: 8, name: 'currentPage', type: 'number', defaultValue: '1', description: 'Current page number' },
+  { id: 9, name: 'totalCount', type: 'number', defaultValue: 'undefined', description: 'Total record count (server-side)' },
+  { id: 10, name: 'sortable', type: 'boolean', defaultValue: 'true', description: 'Enable column sorting' },
+  { id: 11, name: 'filterable', type: 'boolean', defaultValue: 'true', description: 'Enable column filtering' },
+  { id: 12, name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Enable column resizing' },
+  { id: 13, name: 'select', type: "boolean | 'row' | 'cell' | 'column'", defaultValue: 'false', description: 'Selection mode' },
+  { id: 14, name: 'multiselect', type: 'boolean', defaultValue: 'false', description: 'Enable multi-row selection' },
+  { id: 15, name: 'hover', type: 'boolean', defaultValue: 'true', description: 'Enable row hover effect' },
+  { id: 16, name: 'editable', type: 'boolean', defaultValue: 'false', description: 'Enable cell editing based on column type' },
+  { id: 17, name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show loading state' },
+  { id: 18, name: 'emptyText', type: 'string', defaultValue: "'No data available'", description: 'Message when no data' },
+  { id: 19, name: 'serverSide', type: 'boolean', defaultValue: 'false', description: 'Enable server-side operations' },
+  { id: 20, name: 'onRowClick', type: '(row, index) => void', defaultValue: 'undefined', description: 'Row click callback' },
+  { id: 21, name: 'onRowDoubleClick', type: '(row, index) => void', defaultValue: 'undefined', description: 'Row double-click callback' },
+  { id: 22, name: 'onSelectChange', type: '(rows) => void', defaultValue: 'undefined', description: 'Selection change callback' },
+  { id: 23, name: 'onSort', type: '(columnId, direction) => void', defaultValue: 'undefined', description: 'Sort callback' },
+  { id: 24, name: 'onFilter', type: '(filters) => void', defaultValue: 'undefined', description: 'Filter callback' },
+  { id: 25, name: 'onPageChange', type: '(page) => void', defaultValue: 'undefined', description: 'Page change callback' },
+  { id: 26, name: 'onPageSizeChange', type: '(size) => void', defaultValue: 'undefined', description: 'Page size change callback' },
+  { id: 27, name: 'onCellChange', type: '(rowIndex, columnId, newValue, oldValue) => void', defaultValue: 'undefined', description: 'Cell value change callback (editable mode)' },
 ];
 
 const columnPropsData: PropDoc[] = [
-  { id: 1, name: 'id', type: 'string', defaultValue: '-', description: 'Unique column identifier' },
-  { id: 2, name: 'header', type: 'string | ReactNode', defaultValue: '-', description: 'Column header content' },
-  { id: 3, name: 'width', type: 'number', defaultValue: '100', description: 'Column width in pixels' },
-  { id: 4, name: 'minWidth', type: 'number', defaultValue: 'undefined', description: 'Minimum column width' },
-  { id: 5, name: 'maxWidth', type: 'number', defaultValue: 'undefined', description: 'Maximum column width' },
-  { id: 6, name: 'sort', type: 'boolean', defaultValue: 'false', description: 'Enable sorting for column' },
-  { id: 7, name: 'filterable', type: 'boolean', defaultValue: 'false', description: 'Enable filtering for column' },
-  { id: 8, name: 'filterType', type: "'text' | 'combo' | 'multicombo' | 'date'", defaultValue: "'text'", description: 'Filter input type' },
-  { id: 9, name: 'filterComponent', type: '(value, onChange) => ReactNode', defaultValue: 'undefined', description: 'Custom filter component' },
-  { id: 10, name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Enable column resizing' },
-  { id: 11, name: 'template', type: '(row: T) => ReactNode', defaultValue: 'undefined', description: 'Custom cell renderer' },
-  { id: 12, name: 'headerWrap', type: 'boolean', defaultValue: 'false', description: 'Allow header text to wrap to multiple lines' },
-  { id: 13, name: 'fillspace', type: 'boolean', defaultValue: 'false', description: 'Column will fill the remaining available space' },
+  { id: 1, name: 'id', type: 'string', defaultValue: '-', description: 'Unique column identifier (must match data property name)' },
+  { id: 2, name: 'header', type: 'string', defaultValue: '-', description: 'Column header text' },
+  { id: 3, name: 'type', type: "'text' | 'number' | 'boolean' | 'date' | 'json'", defaultValue: "'text'", description: 'Data type for editing and formatting' },
+  { id: 4, name: 'width', type: 'number | string', defaultValue: '150', description: 'Column width' },
+  { id: 5, name: 'minWidth', type: 'number', defaultValue: 'undefined', description: 'Minimum column width' },
+  { id: 6, name: 'maxWidth', type: 'number', defaultValue: 'undefined', description: 'Maximum column width' },
+  { id: 7, name: 'sort', type: "'asc' | 'desc' | boolean", defaultValue: 'false', description: 'Enable sorting or set initial direction' },
+  { id: 8, name: 'filterable', type: 'boolean', defaultValue: 'false', description: 'Enable column filtering' },
+  { id: 9, name: 'filterType', type: "'text' | 'combo' | 'multicombo' | 'date' | 'number'", defaultValue: "'text'", description: 'Filter input type' },
+  { id: 10, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Hide the column' },
+  { id: 11, name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Enable column resizing' },
+  { id: 12, name: 'template', type: '(row) => ReactNode', defaultValue: 'undefined', description: 'Custom cell renderer' },
+  { id: 13, name: 'format', type: '(value) => string', defaultValue: 'undefined', description: 'Format function for display' },
+  { id: 14, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Cell text alignment' },
+  { id: 15, name: 'fillspace', type: 'boolean', defaultValue: 'false', description: 'Column fills remaining space' },
+  { id: 16, name: 'adjust', type: "'data' | 'header' | boolean", defaultValue: 'undefined', description: 'Auto-adjust column width' },
+  { id: 17, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Inline styles for cells' },
+  { id: 18, name: 'cssClass', type: 'string', defaultValue: 'undefined', description: 'CSS class for cells' },
+  { id: 19, name: 'headerCssClass', type: 'string', defaultValue: 'undefined', description: 'CSS class for header' },
+  { id: 20, name: 'headerWrap', type: 'boolean', defaultValue: 'false', description: 'Allow header text wrapping' },
+];
+
+const propsColumns: AvakioColumn<PropDoc>[] = [
+  { id: 'name', header: 'Property', width: 160 },
+  { id: 'type', header: 'Type', width: 280 },
+  { id: 'defaultValue', header: 'Default', width: 120 },
+  { id: 'description', header: 'Description', fillspace: true },
 ];
 
 export function AvakioDataTableExample() {
@@ -104,50 +124,88 @@ export function AvakioDataTableExample() {
   // Section refs for scroll navigation
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   
-  // Server-side state for customers
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const [customersLoading, setCustomersLoading] = useState(false);
-  const [customersPage, setCustomersPage] = useState(1);
-  const [customersPageSize, setCustomersPageSize] = useState(5);
-  const [customersTotalCount, setCustomersTotalCount] = useState(0);
-  const [customersSortColumn, setCustomersSortColumn] = useState<string | null>(null);
-  const [customersSortDirection, setCustomersSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [customersFilters, setCustomersFilters] = useState<Record<string, string>>({});
-  const [customerStatusOptions, setCustomerStatusOptions] = useState<Array<{ id: string; value: string }>>([]);
+  // Editable table state
+  const [editableData, setEditableData] = useState([
+    { id: 1, name: 'John Doe', age: 28, email: 'john@example.com', active: true, joinDate: '2024-03-15' },
+    { id: 2, name: 'Jane Smith', age: 34, email: 'jane@example.com', active: true, joinDate: '2023-11-20' },
+    { id: 3, name: 'Bob Johnson', age: 45, email: 'bob@example.com', active: false, joinDate: '2024-01-10' },
+    { id: 4, name: 'Alice Brown', age: 29, email: 'alice@example.com', active: true, joinDate: '2024-06-05' },
+    { id: 5, name: 'Charlie Wilson', age: 52, email: 'charlie@example.com', active: false, joinDate: '2022-08-30' },
+  ]);
+  
+  // Playground state with AvakioProperty
+  const [playgroundProps, setPlaygroundProps] = useState<AvakioPropertyItem[]>([
+    // Data & Display Group
+    { id: 'height', label: 'Height', type: 'number', value: 300, group: 'Display', placeholder: 'e.g. 400' },
+    { id: 'emptyText', label: 'Empty Text', type: 'text', value: 'No data available', group: 'Display', placeholder: 'Message when empty' },
+    
+    // Features Group
+    { id: 'paging', label: 'Paging', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable pagination' },
+    { id: 'sortable', label: 'Sortable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable column sorting' },
+    { id: 'filterable', label: 'Filterable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable column filtering' },
+    { id: 'resizable', label: 'Resizable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable column resizing' },
+    { id: 'hover', label: 'Hover', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable row hover effect' },
+    { id: 'editable', label: 'Editable', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable cell editing' },
+    
+    // Selection Group
+    {
+      id: 'select',
+      label: 'Selection Mode',
+      type: 'select',
+      value: 'false',
+      group: 'Selection',
+      selectOptions: [
+        { id: 'false', value: 'None' },
+        { id: 'row', value: 'Row' },
+        { id: 'cell', value: 'Cell' },
+      ],
+    },
+    { id: 'multiselect', label: 'Multi-select', type: 'checkbox', value: false, group: 'Selection', checkboxLabel: 'Allow multiple selection' },
+    
+    // Pagination Group
+    {
+      id: 'pageSize',
+      label: 'Page Size',
+      type: 'select',
+      value: '5',
+      group: 'Pagination',
+      selectOptions: [
+        { id: '5', value: '5 rows' },
+        { id: '10', value: '10 rows' },
+        { id: '20', value: '20 rows' },
+        { id: '50', value: '50 rows' },
+      ],
+    },
+    
+    // State Group
+    { id: 'loading', label: 'Loading', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Show loading state' },
+  ]);
 
-  // Playground state
-  const [playgroundPaging, setPlaygroundPaging] = useState(true);
-  const [playgroundSortable, setPlaygroundSortable] = useState(true);
-  const [playgroundFilterable, setPlaygroundFilterable] = useState(true);
-  const [playgroundResizable, setPlaygroundResizable] = useState(true);
-  const [playgroundSelect, setPlaygroundSelect] = useState<string>('false');
-  const [playgroundPageSize, setPlaygroundPageSize] = useState<string>('5');
-  const [eventLog, setEventLog] = useState<string[]>([]);
+  // Helper to get prop value
+  const getPropValue = <T,>(propId: string, defaultValue: T): T => {
+    const prop = playgroundProps.find(p => p.id === propId);
+    if (prop?.value === undefined || prop?.value === null || prop?.value === '') return defaultValue;
+    return prop.value as T;
+  };
 
-  // Add to event log - memoized to prevent infinite loops
-  const addLog = useCallback((message: string) => {
-    setEventLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()} - ${message}`]);
+  // Add to local event log and global event log
+  const addLog = useCallback((action: string, details: string = '') => {
+    // Add to global event log sidebar
+    addEventLog('DataTable', action, details);
   }, []);
 
-  // Memoized selection change handlers to prevent re-creation on every render
-  const handleServerSelectChange = useCallback((rows: Customer[]) => {
-    addLog(`Selected ${rows.length} customers`);
-  }, [addLog]);
+  // Handle property changes
+  const handlePlaygroundPropsChange = (items: AvakioPropertyItem[], changed: AvakioPropertyItem) => {
+    setPlaygroundProps(items);
+    addLog('Playground prop changed', `${changed.label}: ${changed.value}`);
+  };
 
-  const handleOptionsSelectChange = useCallback((rows: Customer[]) => {
-    addLog(`Selected ${rows.length} rows`);
-  }, [addLog]);
-
-  const handlePlaygroundSelectChange = useCallback((rows: Customer[]) => {
-    addLog(`Selected ${rows.length} rows`);
-  }, [addLog]);
-
-  const handlePlaygroundSort = useCallback((col: string, dir: 'asc' | 'desc') => {
-    addLog(`Sorted by ${col} (${dir})`);
-  }, [addLog]);
-
-  const handlePlaygroundFilter = useCallback((filters: Record<string, string>) => {
-    addLog(`Filters: ${JSON.stringify(filters)}`);
+  // Handle cell change for editable table
+  const handleCellChange = useCallback((rowIndex: number, columnId: string, newValue: any, oldValue: any) => {
+    setEditableData(prev => prev.map((row, idx) =>
+      idx === rowIndex ? { ...row, [columnId]: newValue } : row
+    ));
+    addLog('onCellChange', `row ${rowIndex}, ${columnId}: ${oldValue} → ${newValue}`);
   }, [addLog]);
 
   // Scroll to section when tab is clicked
@@ -161,287 +219,51 @@ export function AvakioDataTableExample() {
     }
   };
 
-  // Fetch customer status options
-  const fetchCustomerStatuses = useCallback(async () => {
-    try {
-      const res = await fetch('/api/customer-statuses');
-      if (!res.ok) return;
-      const data = await res.json();
-      setCustomerStatusOptions(data.statuses?.map((s: { value: string; label: string }) => ({ id: s.value, value: s.label })) || []);
-    } catch (error) {
-      console.error('Error fetching customer statuses:', error);
-    }
-  }, []);
-
-  // Fetch customers from API
-  const fetchCustomers = useCallback(async (
-    page: number,
-    pageSize: number,
-    sortColumn: string | null,
-    sortDirection: 'asc' | 'desc',
-    filters: Record<string, string>
-  ) => {
-    setCustomersLoading(true);
-    try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        limit: pageSize.toString(),
-      });
-
-      if (sortColumn) {
-        params.append('sortBy', sortColumn);
-        params.append('sortOrder', sortDirection);
-      }
-
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value) {
-          params.append(`filter_${key}`, value);
-        }
-      });
-
-      const res = await fetch(`/api/customers?${params.toString()}`);
-      
-      if (!res.ok) {
-        throw new Error(`Failed to fetch customers: ${res.status}`);
-      }
-      
-      const data = await res.json();
-      setCustomers(data.customers || []);
-      setCustomersTotalCount(data.total || 0);
-    } catch (error) {
-      console.error("Error fetching customers:", error);
-      setCustomers([]);
-      setCustomersTotalCount(0);
-    } finally {
-      setCustomersLoading(false);
-    }
-  }, []);
-
-  // Load data on mount
-  useEffect(() => {
-    fetchCustomerStatuses();
-    fetchCustomers(customersPage, customersPageSize, customersSortColumn, customersSortDirection, customersFilters);
-  }, []);
-
-  // Customer handlers
-  const handleCustomersPageChange = (newPage: number) => {
-    setCustomersPage(newPage);
-    fetchCustomers(newPage, customersPageSize, customersSortColumn, customersSortDirection, customersFilters);
-  };
-
-  const handleCustomersPageSizeChange = (newPageSize: number) => {
-    setCustomersPageSize(newPageSize);
-    setCustomersPage(1);
-    fetchCustomers(1, newPageSize, customersSortColumn, customersSortDirection, customersFilters);
-  };
-
-  const handleCustomersSort = (columnId: string, direction: 'asc' | 'desc') => {
-    setCustomersSortColumn(columnId);
-    setCustomersSortDirection(direction);
-    setCustomersPage(1);
-    fetchCustomers(1, customersPageSize, columnId, direction, customersFilters);
-  };
-
-  const handleCustomersFilter = (filters: Record<string, string>) => {
-    setCustomersFilters(filters);
-    setCustomersPage(1);
-    fetchCustomers(1, customersPageSize, customersSortColumn, customersSortDirection, filters);
-  };
-
-  // Basic columns (static data)
-  const basicColumns: AvakioColumn<Customer>[] = [
-    {
-      id: "id",
-      header: "ID",
-      width: 60,
-      sort: true,
-      filterable: true,
-      resizable: false,
-      template: (row) => row.id,
-    },
-    {
-      id: "name",
-      header: "Name",
-      width: 150,
-      sort: true,
-      filterable: true,
-      template: (row) => row.name,
-    },
-    {
-      id: "email",
-      header: "Email",
-      width:440,
-      minWidth: 60,
-      sort: true,
-      filterable: true,
-      template: (row) => row.email,
-    },
-    {
-      id: "company",
-      header: "Company",
-      width: 150,
-      sort: true,
-      filterable: true,
-      resizable: false,
-      fillspace: true,
-      template: (row) => row.company,
-    },
-    {
-      id: "status",
-      header: "Status",
-      width: 150,
-      sort: true,
-      filterable: true,
-      template: (row) => (
-        <span
-          style={{
-            padding: '2px 8px',
-            borderRadius: '9999px',
-            fontSize: '12px',
-            fontWeight: 500,
-            backgroundColor: row.status === "active" ? '#dcfce7' : '#f3f4f6',
-            color: row.status === "active" ? '#166534' : '#374151',
-          }}
-        >
-          {row.status}
-        </span>
-      ),
-    },
-    {
-      id: "revenue",
-      header: "Annual Revenue ($)",
-      headerWrap: false,
-      width: 100,
-      sort: true,
-      template: (row) => `$${row.revenue.toLocaleString()}`,
-    },
+  // Basic columns
+  const basicColumns: AvakioColumn<Person>[] = [
+    { id: 'id', header: 'ID', width: 60, align: 'center' },
+    { id: 'name', header: 'Name', width: 150 },
+    { id: 'email', header: 'Email', fillspace: true },
+    { id: 'department', header: 'Department', width: 120 },
+    { id: 'status', header: 'Status', width: 100, align: 'center' },
   ];
 
-  // Server-side columns
-  const serverColumns: AvakioColumn<Customer>[] = [
-    {
-      id: "id",
-      header: "ID",
-      width: 60,
-      sort: true,
-      template: (row) => row.id,
-    },
-    {
-      id: "name",
-      header: "Name",
-      width: 150,
-      sort: true,
-      filterable: true,
-      template: (row) => row.name,
-    },
-    {
-      id: "email",
-      header: "Email",
-      width: 220,
-      sort: true,
-      filterable: true,
-      template: (row) => row.email,
-    },
-    {
-      id: "phone",
-      header: "Phone",
-      width: 130,
-      filterable: true,
-      template: (row) => row.phone,
-    },
-    {
-      id: "company",
-      header: "Company",
-      width: 160,
-      sort: true,
-      filterable: true,
-      template: (row) => row.company,
-    },
-    {
-      id: "status",
-      header: "Status",
-      width: 120,
-      sort: true,
-      filterable: true,
-      filterType: 'combo' as const,
-      filterComponent: (value, onChange) => (
-        <AvakioRichSelect
-          options={customerStatusOptions}
-          value={value || ''}
-          onChange={(selectedValue) => {
-            console.log('Status filter changed:', selectedValue);
-            onChange(selectedValue);
-          }}
-          placeholder="Filter..."
-          clearable={true}
-        />
-      ),
-      template: (row) => (
-        <span
-          style={{
-            padding: '2px 8px',
-            borderRadius: '9999px',
-            fontSize: '12px',
-            fontWeight: 500,
-            backgroundColor: row.status === "active" ? '#dcfce7' : '#f3f4f6',
-            color: row.status === "active" ? '#166534' : '#374151',
-          }}
-        >
-          {row.status}
-        </span>
-      ),
-    },
-    {
-      id: "joinDate",
-      header: "Join Date",
-      width: 180,
-      sort: true,
-      filterable: true,
-      filterType: 'date' as const,
-      filterComponent: (value, onChange) => (
-        <AvakioDatePicker
-          value={value || ''}
-          onChange={onChange}
-          placeholder="filter..."
-          clearable={true}
-          size="compact"
-        />
-      ),
-      template: (row) => row.joinDate,
-    },
-    {
-      id: "revenue",
-      header: "Revenue",
-      width: 120,
-      sort: true,
-      template: (row) => (
-        <span style={row.revenue >= 200000 ? { color: '#16a34a', fontWeight: 500 } : undefined}>
-          ${row.revenue.toLocaleString()}
-        </span>
-      ),
-    },
-    {
-      id: "actions",
-      header: "Actions",
-      width: 100,
-      template: (row) => (
-        <AvakioButton
-          size="sm"
-          variant="outline"
-          onClick={() => alert(`View customer: ${row.name}`)}
-        >
-          View
-        </AvakioButton>
-      ),
-    },
+  // Columns with sorting
+  const sortableColumns: AvakioColumn<Person>[] = [
+    { id: 'id', header: 'ID', width: 60, align: 'center', sort: true },
+    { id: 'name', header: 'Name', width: 150, sort: true },
+    { id: 'email', header: 'Email', fillspace: true },
+    { id: 'age', header: 'Age', width: 80, align: 'center', sort: true },
+    { id: 'salary', header: 'Salary', width: 120, align: 'right', sort: true, format: (val) => `$${val.toLocaleString()}` },
   ];
 
-  // Props documentation columns
-  const propsColumns: AvakioColumn<PropDoc>[] = [
-    { id: 'name', header: 'Property', width: 150 },
-    { id: 'type', header: 'Type', width: 280 },
-    { id: 'defaultValue', header: 'Default', width: 120 },
-    { id: 'description', header: 'Description', width: 380 },
+  // Columns with filtering
+  const filterableColumns: AvakioColumn<Person>[] = [
+    { id: 'id', header: 'ID', width: 60, align: 'center' },
+    { id: 'name', header: 'Name', width: 150, filterable: true },
+    { id: 'email', header: 'Email', fillspace: true, filterable: true },
+    { id: 'department', header: 'Department', width: 140, filterable: true },
+    { id: 'status', header: 'Status', width: 100, align: 'center', filterable: true },
+  ];
+
+  // Editable columns
+  const editableColumns: AvakioColumn<typeof editableData[0]>[] = [
+    { id: 'id', header: 'ID', type: 'number', width: 60, css: { color: '#999' } },
+    { id: 'name', header: 'Name', type: 'text', width: 150 },
+    { id: 'age', header: 'Age', type: 'number', width: 80 },
+    { id: 'email', header: 'Email', type: 'text', fillspace: true },
+    { id: 'active', header: 'Active', type: 'boolean', width: 80, align: 'center' },
+    { id: 'joinDate', header: 'Join Date', type: 'date', width: 150 },
+  ];
+
+  // Playground columns
+  const playgroundColumns: AvakioColumn<Person>[] = [
+    { id: 'id', header: 'ID', width: 60, align: 'center', sort: true },
+    { id: 'name', header: 'Name', width: 150, sort: true, filterable: true },
+    { id: 'email', header: 'Email', fillspace: true, filterable: true },
+    { id: 'department', header: 'Department', width: 130, filterable: true },
+    { id: 'status', header: 'Status', width: 100, align: 'center', filterable: true },
+    { id: 'salary', header: 'Salary', width: 120, align: 'right', sort: true, format: (val) => `$${val.toLocaleString()}` },
   ];
 
   return (
@@ -451,8 +273,8 @@ export function AvakioDataTableExample() {
         {/* Header */}
         <AvakioViewHeader
           label="Data Presentation"
-          title="DataTable"                                
-          subTitle="A high-performance data table component with sorting, filtering, pagination, column resizing, and server-side data support."
+          title="DataTable"
+          subTitle="A high-performance data table with sorting, filtering, pagination, column resizing, and inline editing support."
           isSticky={false}
         />
 
@@ -464,7 +286,7 @@ export function AvakioDataTableExample() {
             options={TAB_OPTIONS}
             onChange={handleTabChange}
             align="left"
-            padding={[6, 16, 16, 16]} 
+            padding={[6, 16, 16, 16]}
             size="sm"
             scrollable
           />
@@ -485,7 +307,7 @@ export function AvakioDataTableExample() {
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="A simple data table displaying customer information with built-in sorting, filtering, and pagination."
+          content="The DataTable displays tabular data with columns and rows. Define columns with id (matching data property) and header text."
         />
         <AvakioLayout
           type="clean"
@@ -493,35 +315,29 @@ export function AvakioDataTableExample() {
           margin={12}
           padding={16}
           rows={[
-            <div key="basic" style={{ width: '100%' }}>
+            <div key="basic-table">
               <AvakioDataTable
+                data={sampleData}
                 columns={basicColumns}
-                data={staticCustomers}
-                pageSize={5}
-                resizable={true}
-                filterable={true}
-                sortable={true}
+                height={280}
+                onRowClick={(row, index) => addLog('onRowClick', `row ${index}: ${row.name}`)}
               />
             </div>,
           ]}
         />
-      </section>
 
-      {/* Server-Side Data Section */}
-      <section 
-        ref={(el) => { sectionRefs.current['server'] = el; }}
-        className="avakio-datatable-demo-section"
-      >
+        {/* With Sorting */}
         <AvakioTemplate
-          type="section"
+          type="clean"
           borderType="clean"
-          content="Server-Side Data"
+          padding={[16, 0, 0, 16]}
+          content={<strong>With Sorting</strong>}
         />
         <AvakioTemplate
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="DataTable with server-side pagination, sorting, and filtering. Data is fetched from a backend API endpoint."
+          content="Add sort={true} to columns to enable sorting. Click column headers to sort ascending/descending."
         />
         <AvakioLayout
           type="clean"
@@ -529,159 +345,43 @@ export function AvakioDataTableExample() {
           margin={12}
           padding={16}
           rows={[
-            <div key="server" style={{ width: '100%' }}>
+            <div key="sortable-table">
               <AvakioDataTable
-                columns={serverColumns}
-                data={customers}
-                serverSide={true}
-                paging={true}
-                pageSize={customersPageSize}
-                currentPage={customersPage}
-                totalCount={customersTotalCount}
-                loading={customersLoading}
-                resizable={true}
-                filterable={true}
-                sortable={true}
-                select="row"
-                onPageChange={handleCustomersPageChange}
-                onPageSizeChange={handleCustomersPageSizeChange}
-                onSort={handleCustomersSort}
-                onFilter={handleCustomersFilter}
-                onSelectChange={handleServerSelectChange}
+                data={sampleData}
+                columns={sortableColumns}
+                height={280}
+                onSort={(col, dir) => addLog('onSort', `${col} ${dir}`)}
               />
-            </div>,
-            <div key="api-info" style={{ marginTop: '16px', padding: '12px', background: '#f5f5f5', borderRadius: '6px', fontSize: '12px' }}>
-              <strong>API Endpoint:</strong> <code>GET /api/customers</code>
-              <div style={{ marginTop: '8px', color: '#666' }}>
-                Supports query parameters: page, limit, sortBy, sortOrder, filter_*
-              </div>
             </div>,
           ]}
         />
-      </section>
 
-      {/* Filtering Section */}
-      <section 
-        ref={(el) => { sectionRefs.current['filtering'] = el; }}
-        className="avakio-datatable-demo-section"
-      >
+        {/* With Filtering */}
         <AvakioTemplate
-          type="section"
+          type="clean"
           borderType="clean"
-          content="Filtering"
+          padding={[16, 0, 0, 16]}
+          content={<strong>With Filtering</strong>}
         />
         <AvakioTemplate
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="DataTable supports various filter types including text input, combo select, and date picker filters."
+          content="Add filterable={true} to columns to enable text filtering. Type in the filter input to search within column values."
         />
-
-        {/* Text Filter */}
         <AvakioLayout
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
           rows={[
-            <AvakioTemplate
-              key="text-filter-title"
-              type="clean"
-              borderType="clean"
-              content={<strong>Text Filter (Default)</strong>}
-            />,
-            <AvakioTemplate
-              key="text-filter-desc"
-              type="clean"
-              borderType="clean"
-              padding={[8, 0, 0, 0]}
-              content="Simple text input for searching within column values."
-            />,
-            <div key="text-filter" style={{ marginTop: '16px' }}>
-              <pre style={{ background: '#f5f5f5', padding: '12px', borderRadius: '6px', fontSize: '12px', overflow: 'auto' }}>
-{`{
-  id: "name",
-  header: "Name",
-  filterable: true,  // Uses text filter by default
-}`}
-              </pre>
-            </div>,
-          ]}
-        />
-
-        {/* Combo Filter */}
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
-          rows={[
-            <AvakioTemplate
-              key="combo-filter-title"
-              type="clean"
-              borderType="clean"
-              content={<strong>Combo Filter</strong>}
-            />,
-            <AvakioTemplate
-              key="combo-filter-desc"
-              type="clean"
-              borderType="clean"
-              padding={[8, 0, 0, 0]}
-              content="Dropdown select for filtering by predefined options."
-            />,
-            <div key="combo-filter" style={{ marginTop: '16px' }}>
-              <pre style={{ background: '#f5f5f5', padding: '12px', borderRadius: '6px', fontSize: '12px', overflow: 'auto' }}>
-{`{
-  id: "status",
-  header: "Status",
-  filterable: true,
-  filterType: 'combo',
-  filterComponent: (value, onChange) => (
-    <AvakioCombo
-      options={statusOptions}
-      value={value}
-      onChange={onChange}
-      placeholder="Filter status..."
-    />
-  ),
-}`}
-              </pre>
-            </div>,
-          ]}
-        />
-
-        {/* Date Filter */}
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
-          rows={[
-            <AvakioTemplate
-              key="date-filter-title"
-              type="clean"
-              borderType="clean"
-              content={<strong>Date Filter</strong>}
-            />,
-            <AvakioTemplate
-              key="date-filter-desc"
-              type="clean"
-              borderType="clean"
-              padding={[8, 0, 0, 0]}
-              content="Date picker for filtering by date values."
-            />,
-            <div key="date-filter" style={{ marginTop: '16px' }}>
-              <pre style={{ background: '#f5f5f5', padding: '12px', borderRadius: '6px', fontSize: '12px', overflow: 'auto' }}>
-{`{
-  id: "joinDate",
-  header: "Join Date",
-  filterable: true,
-  filterType: 'date',
-  filterComponent: (value, onChange) => (
-    <DatePickerFilter value={value} onChange={onChange} />
-  ),
-}`}
-              </pre>
+            <div key="filterable-table">
+              <AvakioDataTable
+                data={sampleData}
+                columns={filterableColumns}
+                height={320}
+                onFilter={(filters) => addLog('onFilter', JSON.stringify(filters))}
+              />
             </div>,
           ]}
         />
@@ -701,7 +401,41 @@ export function AvakioDataTableExample() {
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="Configure the DataTable with various options for different use cases."
+          content="Configure the DataTable with various options like pagination, row selection, and custom formatting."
+        />
+
+        {/* Pagination */}
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioTemplate
+              key="paging-title"
+              type="clean"
+              borderType="clean"
+              content={<strong>Pagination</strong>}
+            />,
+            <AvakioTemplate
+              key="paging-desc"
+              type="clean"
+              borderType="clean"
+              padding={[8, 0, 0, 0]}
+              content="Set paging={true} to enable pagination. Use pageSize to control rows per page."
+            />,
+            <div key="paging-table" style={{ marginTop: '16px' }}>
+              <AvakioDataTable
+                data={sampleData}
+                columns={basicColumns}
+                paging
+                pageSize={3}
+                height={220}
+                onPageChange={(page) => addLog('onPageChange', `page ${page}`)}
+                onPageSizeChange={(size) => addLog('onPageSizeChange', `${size} rows`)}
+              />
+            </div>,
+          ]}
         />
 
         {/* Row Selection */}
@@ -712,62 +446,32 @@ export function AvakioDataTableExample() {
           padding={16}
           rows={[
             <AvakioTemplate
-              key="selection-title"
+              key="select-title"
               type="clean"
               borderType="clean"
               content={<strong>Row Selection</strong>}
             />,
             <AvakioTemplate
-              key="selection-desc"
+              key="select-desc"
               type="clean"
               borderType="clean"
               padding={[8, 0, 0, 0]}
-              content="Enable row selection with checkboxes for batch operations."
+              content="Set select='row' for single selection or add multiselect={true} for multi-row selection with checkboxes."
             />,
-            <div key="selection" style={{ marginTop: '16px' }}>
+            <div key="select-table" style={{ marginTop: '16px' }}>
               <AvakioDataTable
-                columns={basicColumns.slice(0, 4)}
-                data={staticCustomers.slice(0, 3)}
-                pageSize={5}
-                paging={false}
+                data={sampleData}
+                columns={basicColumns}
                 select="row"
-                onSelectChange={handleOptionsSelectChange}
+                multiselect
+                height={280}
+                onSelectChange={(rows) => addLog('onSelectChange', `${rows.length} rows selected`)}
               />
             </div>,
           ]}
         />
 
-        {/* Without Pagination */}
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
-          rows={[
-            <AvakioTemplate
-              key="no-paging-title"
-              type="clean"
-              borderType="clean"
-              content={<strong>Without Pagination</strong>}
-            />,
-            <AvakioTemplate
-              key="no-paging-desc"
-              type="clean"
-              borderType="clean"
-              padding={[8, 0, 0, 0]}
-              content="Display all data without pagination controls."
-            />,
-            <div key="no-paging" style={{ marginTop: '16px' }}>
-              <AvakioDataTable
-                columns={basicColumns.slice(0, 4)}
-                data={staticCustomers.slice(0, 3)}
-                paging={false}
-              />
-            </div>,
-          ]}
-        />
-
-        {/* Custom Cell Templates */}
+        {/* Custom Cell Rendering */}
         <AvakioLayout
           type="clean"
           borderless={false}
@@ -778,37 +482,122 @@ export function AvakioDataTableExample() {
               key="template-title"
               type="clean"
               borderType="clean"
-              content={<strong>Custom Cell Templates</strong>}
+              content={<strong>Custom Cell Rendering</strong>}
             />,
             <AvakioTemplate
               key="template-desc"
               type="clean"
               borderType="clean"
               padding={[8, 0, 0, 0]}
-              content="Use the template property to render custom cell content."
+              content="Use template function for custom cell rendering, format for value formatting, and css for inline styles."
             />,
-            <div key="template" style={{ marginTop: '16px' }}>
-              <pre style={{ background: '#f5f5f5', padding: '12px', borderRadius: '6px', fontSize: '12px', overflow: 'auto' }}>
-{`{
-  id: "status",
-  header: "Status",
-  template: (row) => (
-    <span
-      style={{
-        padding: '2px 8px',
-        borderRadius: '9999px',
-        fontSize: '12px',
-        fontWeight: 500,
-        backgroundColor: row.status === 'active' ? '#dcfce7' : '#f3f4f6',
-        color: row.status === 'active' ? '#166534' : '#374151',
-      }}
-    >
-      {row.status}
-    </span>
-  ),
-}`}
-              </pre>
+            <div key="template-table" style={{ marginTop: '16px' }}>
+              <AvakioDataTable
+                data={sampleData}
+                columns={[
+                  { id: 'id', header: 'ID', width: 60, align: 'center' },
+                  { id: 'name', header: 'Name', width: 150, css: { fontWeight: 'bold' } },
+                  { id: 'email', header: 'Email', fillspace: true },
+                  { 
+                    id: 'status', 
+                    header: 'Status', 
+                    width: 100, 
+                    align: 'center',
+                    template: (row) => (
+                      <span style={{ 
+                        padding: '2px 8px', 
+                        borderRadius: '4px',
+                        backgroundColor: row.status === 'Active' ? '#dcfce7' : '#fee2e2',
+                        color: row.status === 'Active' ? '#166534' : '#991b1b',
+                        fontSize: '12px'
+                      }}>
+                        {row.status}
+                      </span>
+                    )
+                  },
+                  { 
+                    id: 'salary', 
+                    header: 'Salary', 
+                    width: 120, 
+                    align: 'right',
+                    format: (val) => `$${val.toLocaleString()}`,
+                    css: { color: '#059669', fontWeight: '500' }
+                  },
+                ]}
+                height={280}
+              />
             </div>,
+          ]}
+        />
+      </section>
+
+      {/* Editable Section */}
+      <section 
+        ref={(el) => { sectionRefs.current['editable'] = el; }}
+        className="avakio-datatable-demo-section"
+      >
+        <AvakioTemplate
+          type="section"
+          borderType="clean"
+          content="Editable Table"
+        />
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[0, 0, 0, 16]}
+          content="Enable inline cell editing with editable={true}. Set column type to control the editor: text/number use text inputs, boolean uses checkbox, date uses date picker."
+        />
+
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioTemplate
+              key="editable-title"
+              type="clean"
+              borderType="clean"
+              content={<strong>Inline Cell Editing</strong>}
+            />,
+            <AvakioTemplate
+              key="editable-desc"
+              type="clean"
+              borderType="clean"
+              padding={[8, 0, 0, 0]}
+              content="Click on any cell to edit its value. Changes trigger onCellChange callback with row index, column id, and new/old values."
+            />,
+            <AvakioDataTable
+              margin={[16, 0, 0, 0]}
+              data={editableData}
+              columns={editableColumns}
+              editable
+              onCellChange={handleCellChange}
+              paging={false}
+              height={280}
+            />,
+            <AvakioTemplate
+              key="editable-data"
+              type="clean"
+              borderType="clean"
+              padding={[16, 0, 0, 0]}
+              content={
+                <div>
+                  <strong>Current Data (JSON):</strong>
+                  <pre style={{ 
+                    background: 'var(--background-secondary)', 
+                    padding: '12px', 
+                    borderRadius: '4px', 
+                    fontSize: '12px',
+                    overflow: 'auto',
+                    maxHeight: '150px',
+                    marginTop: '8px'
+                  }}>
+                    {JSON.stringify(editableData, null, 2)}
+                  </pre>
+                </div>
+              }
+            />,
           ]}
         />
       </section>
@@ -827,7 +616,7 @@ export function AvakioDataTableExample() {
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="Experiment with different DataTable configurations in real-time."
+          content="Experiment with different DataTable configurations in real-time. Change any property below to see the effect on the preview."
         />
         <AvakioLayout
           type="clean"
@@ -835,90 +624,85 @@ export function AvakioDataTableExample() {
           margin={12}
           padding={16}
           rows={[
-            <div key="playground" style={{ display: 'flex', gap: '32px', flexWrap: 'wrap' }}>
-              {/* Preview */}
-              <div style={{ flex: 1, minWidth: 400, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <AvakioTemplate
+            <AvakioLayout
+              key="playground-layout"
+              type="clean"
+              borderless={true}
+              cols={[
+                // Column 1 - Preview
+                <AvakioLayout
+                  key="preview-col"
                   type="clean"
-                  borderType="clean"
-                  content={<strong>Preview</strong>}
-                />
-                <div>
-                  <AvakioDataTable
-                    columns={basicColumns}
-                    data={staticCustomers}
-                    paging={playgroundPaging}
-                    pageSize={parseInt(playgroundPageSize)}
-                    sortable={playgroundSortable}
-                    filterable={playgroundFilterable}
-                    resizable={playgroundResizable}
-                    select={playgroundSelect === 'false' ? false : playgroundSelect as 'row' | 'cell'}
-                    onSelectChange={handlePlaygroundSelectChange}
-                    onSort={handlePlaygroundSort}
-                    onFilter={handlePlaygroundFilter}
-                  />
-                </div>
-              </div>
-
-              {/* Controls */}
-              <div style={{ width: '280px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                <AvakioTemplate
+                  borderless={true}
+                  rows={[
+                    <AvakioTemplate
+                      key="preview-title"
+                      type="clean"
+                      borderType="clean"
+                      padding={[0, 0, 10, 0]}
+                      content={<strong>Preview</strong>}
+                    />,
+                    <div key="playground-table">
+                      <AvakioDataTable
+                        id="Playground_DataTable"
+                        data={sampleData}
+                        columns={playgroundColumns}
+                        // Display props
+                        height={getPropValue('height', 300)}
+                        emptyText={getPropValue('emptyText', 'No data available')}
+                        // Features props
+                        paging={getPropValue('paging', true)}
+                        sortable={getPropValue('sortable', true)}
+                        filterable={getPropValue('filterable', true)}
+                        resizable={getPropValue('resizable', true)}
+                        hover={getPropValue('hover', true)}
+                        editable={getPropValue('editable', false)}
+                        // Selection props
+                        select={getPropValue('select', 'false') === 'false' ? false : getPropValue('select', 'row') as 'row' | 'cell'}
+                        multiselect={getPropValue('multiselect', false)}
+                        // Pagination props
+                        pageSize={Number(getPropValue('pageSize', '5'))}
+                        // State props
+                        loading={getPropValue('loading', false)}
+                        // Callbacks
+                        onRowClick={(row, index) => addLog('onRowClick', `row ${index}: ${row.name}`)}
+                        onRowDoubleClick={(row, index) => addLog('onRowDoubleClick', `row ${index}: ${row.name}`)}
+                        onSelectChange={(rows) => addLog('onSelectChange', `${rows.length} rows`)}
+                        onSort={(col, dir) => addLog('onSort', `${col} ${dir}`)}
+                        onFilter={(filters) => addLog('onFilter', JSON.stringify(filters))}
+                        onPageChange={(page) => addLog('onPageChange', `page ${page}`)}
+                        onPageSizeChange={(size) => addLog('onPageSizeChange', `${size} rows`)}
+                        onCellChange={(rowIdx, colId, newVal, oldVal) => addLog('onCellChange', `[${rowIdx}].${colId}: ${oldVal} → ${newVal}`)}
+                      />
+                    </div>,
+                  ]}
+                />,
+                // Column 2 - Configuration
+                <AvakioLayout
+                  key="config-col"
                   type="clean"
-                  borderType="clean"
-                  content={<strong>Configuration</strong>}
-                />
-                <AvakioRichSelect
-                  label="Selection Mode"
-                  value={playgroundSelect}
-                  options={[
-                    { id: 'false', value: 'None' },
-                    { id: 'row', value: 'Row Selection' },
-                    { id: 'cell', value: 'Cell Selection' },
+                  borderless={true}
+                  rows={[
+                    <AvakioTemplate
+                      key="config-title"
+                      type="clean"
+                      borderType="clean"
+                      padding={[0, 0, 10, 0]}
+                      content={<strong>Configuration</strong>}
+                    />,
+                    <AvakioProperty
+                      key="config-property"
+                      items={playgroundProps}
+                      onChange={handlePlaygroundPropsChange}
+                      dense
+                      showBorders
+                      maxHeight={500}
+                      style={{ overflowY: 'auto' }}
+                    />,
                   ]}
-                  onChange={(val) => setPlaygroundSelect(String(val))}
-                />
-                <AvakioRichSelect
-                  label="Page Size"
-                  value={playgroundPageSize}
-                  options={[
-                    { id: '3', value: '3 rows' },
-                    { id: '5', value: '5 rows' },
-                    { id: '10', value: '10 rows' },
-                  ]}
-                  onChange={(val) => setPlaygroundPageSize(String(val))}
-                />
-                <AvakioCheckbox
-                  label="Enable Pagination"
-                  checked={playgroundPaging}
-                  onChange={setPlaygroundPaging}
-                />
-                <AvakioCheckbox
-                  label="Enable Sorting"
-                  checked={playgroundSortable}
-                  onChange={setPlaygroundSortable}
-                />
-                <AvakioCheckbox
-                  label="Enable Filtering"
-                  checked={playgroundFilterable}
-                  onChange={setPlaygroundFilterable}
-                />
-                <AvakioCheckbox
-                  label="Enable Resizing"
-                  checked={playgroundResizable}
-                  onChange={setPlaygroundResizable}
-                />
-              </div>
-            </div>,
-            <div key="event-log" style={{ marginTop: '16px', padding: '12px', background: '#f5f5f5', borderRadius: '6px', fontSize: '12px' }}>
-              <strong>Event Log:</strong>
-              <div style={{ marginTop: '8px', maxHeight: '100px', overflow: 'auto' }}>
-                {eventLog.length === 0 ? (<div style={{ color: '#888' }}>No events yet...</div>) : (
-                  eventLog.map((log, i) => (
-                    <div key={i} style={{ padding: '2px 0', color: '#666' }}>{log}</div>
-                  ))
-                )}
-              </div>
-            </div>,
+                />,
+              ]}
+            />,
           ]}
         />
       </section>
@@ -934,12 +718,12 @@ export function AvakioDataTableExample() {
           content="Documentation"
         />
 
-        {/* Props Table */}
+        {/* DataTable Props Table */}
         <AvakioTemplate
           type="clean"
           borderType="clean"
           padding={[16, 0, 0, 16]}
-          content={<strong>Component Props</strong>}
+          content={<strong>DataTable Props</strong>}
         />
         <AvakioLayout
           type="clean"
@@ -953,7 +737,7 @@ export function AvakioDataTableExample() {
               data={propsData}
               columns={propsColumns}
               select={false}
-              height={500}
+              height={600}
             />,
           ]}
         />
@@ -963,7 +747,7 @@ export function AvakioDataTableExample() {
           type="clean"
           borderType="clean"
           padding={[24, 0, 0, 16]}
-          content={<strong>Column Configuration</strong>}
+          content={<strong>Column Configuration (AvakioColumn)</strong>}
         />
         <AvakioLayout
           type="clean"
@@ -977,84 +761,8 @@ export function AvakioDataTableExample() {
               data={columnPropsData}
               columns={propsColumns}
               select={false}
-              height={350}
+              height={500}
             />,
-          ]}
-        />
-
-        {/* Usage Example */}
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[24, 0, 0, 16]}
-          content={<strong>Usage Example</strong>}
-        />
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
-          rows={[
-            <pre key="usage" style={{ background: '#f5f5f5', padding: '16px', borderRadius: '6px', fontSize: '12px', overflow: 'auto' }}>
-{`import { AvakioDataTable } from '@avakio/ui-components';
-import type { AvakioColumn } from '@avakio/ui-components';
-
-interface Customer {
-  id: number;
-  name: string;
-  email: string;
-  status: string;
-}
-
-const columns: AvakioColumn<Customer>[] = [
-  { id: "id", header: "ID", width: 60, sort: true },
-  { id: "name", header: "Name", width: 150, sort: true, filterable: true },
-  { id: "email", header: "Email", width: 200, filterable: true },
-  { 
-    id: "status", 
-    header: "Status", 
-    width: 100,
-    template: (row) => (
-      <span
-        style={{
-          padding: '2px 8px',
-          borderRadius: '9999px',
-          fontSize: '12px',
-          fontWeight: 500,
-          backgroundColor: row.status === 'active' ? '#dcfce7' : '#f3f4f6',
-          color: row.status === 'active' ? '#166534' : '#374151',
-        }}
-      >
-        {row.status}
-      </span>
-    ),
-  },
-];
-
-// Basic usage
-<AvakioDataTable
-  columns={columns}
-  data={customers}
-  pageSize={10}
-  sortable={true}
-  filterable={true}
-  resizable={true}
-/>
-
-// Server-side usage
-<AvakioDataTable
-  columns={columns}
-  data={customers}
-  serverSide={true}
-  currentPage={page}
-  pageSize={pageSize}
-  totalCount={totalCount}
-  loading={loading}
-  onPageChange={handlePageChange}
-  onSort={handleSort}
-  onFilter={handleFilter}
-/>`}
-            </pre>,
           ]}
         />
       </section>
@@ -1063,14 +771,3 @@ const columns: AvakioColumn<Customer>[] = [
 }
 
 export default AvakioDataTableExample;
-
-
-
-
-
-
-
-
-
-
-

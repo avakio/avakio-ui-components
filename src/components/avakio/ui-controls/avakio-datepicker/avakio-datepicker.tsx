@@ -29,6 +29,8 @@ export interface AvakioDatePickerProps extends AvakioControlledProps<string> {
   minYear?: number;
   /** Maximum year available in the year selector (default: current year + 50) */
   maxYear?: number;
+  /** Form label displayed above the component */
+  labelForm?: string;
 }
 
 /**
@@ -495,6 +497,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     showYearSelector = false,
     minYear,
     maxYear,
+    labelForm,
     invalid = false,
     invalidMessage,
     borderless = AVAKIO_BASE_DEFAULTS.borderless,
@@ -653,6 +656,12 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
   // Label styles using base helpers
   const labelStyle: React.CSSProperties = computeLabelStyles({ labelWidth, labelAlign });
 
+  // LabelForm styles based on position
+  const labelFormStyle: React.CSSProperties = {
+    width: labelPosition === 'left' ? formatSize(labelWidth) : undefined,
+    textAlign: labelAlign,
+  };
+
   // Input styles
   const inputStyle: React.CSSProperties = {
     textAlign: inputAlign,
@@ -684,6 +693,14 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
         tabIndex={isDisabled ? -1 : 0}
         onClick={eventHandlers.onClick}
       >
+        {labelForm && (
+          <div 
+            className={cn('avakio-dp-label-form', `avakio-dp-label-form-${labelPosition}`)}
+            style={labelFormStyle}
+          >
+            {labelForm}
+          </div>
+        )}
         <AvakioDatePickerCalendar 
           value={value} 
           onChange={handleValueChange} 
@@ -716,6 +733,14 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
         title={tooltip}
         onClick={eventHandlers.onClick}
       >
+        {labelForm && (
+          <div 
+            className={cn('avakio-dp-label-form', `avakio-dp-label-form-${labelPosition}`)}
+            style={labelFormStyle}
+          >
+            {labelForm}
+          </div>
+        )}
         <Popover open={!isDisabled && open} onOpenChange={(o) => !isDisabled && setOpen(o)}>
           <PopoverTrigger asChild>
             <div className="avakio-dp-input-group-compact">
@@ -803,6 +828,14 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
       title={tooltip}
       onClick={eventHandlers.onClick}
     >
+      {labelForm && (
+        <div 
+          className={cn('avakio-dp-label-form', `avakio-dp-label-form-${labelPosition}`)}
+          style={labelFormStyle}
+        >
+          {labelForm}
+        </div>
+      )}
       <Popover open={!isDisabled && open} onOpenChange={(o) => !isDisabled && setOpen(o)}>
         <div className={cn('avakio-dp-wrapper', labelPosition === 'top' && 'avakio-dp-wrapper-vertical')}>
           {label && (

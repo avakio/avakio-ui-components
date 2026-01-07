@@ -9,6 +9,28 @@
   font-family: var(--font-sans);
 }
 
+/* Borderless variant */
+.avakio-datatable-borderless {
+  border: none;
+  border-radius: 0;
+}
+
+.avakio-datatable-borderless .avakio-datatable-header {
+  border-bottom: 1px solid var(--border);
+}
+
+.avakio-datatable-borderless .avakio-datatable-header-cell,
+.avakio-datatable-borderless .avakio-datatable-cell {
+  border-right: none;
+}
+
+/* Disabled state */
+.avakio-datatable-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* Scroll Container - single horizontal scroll for entire table */
 .avakio-datatable-scroll-container {
   flex: 1;
@@ -393,14 +415,20 @@
   color: var(--foreground);
   border-right: 1px solid var(--border);
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   display: flex;
   align-items: center;
   line-height: 20px;
   min-height: 40px;
   box-sizing: border-box;
   min-width: 0;
+}
+
+.avakio-datatable-cell-content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
 }
 
 .avakio-datatable-cell:last-child {

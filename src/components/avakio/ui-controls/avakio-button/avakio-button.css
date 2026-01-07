@@ -88,6 +88,16 @@
   width: 100%;
 }
 
+/* Borderless */
+.avakio-button-borderless {
+  border: none;
+  box-shadow: none;
+}
+
+.avakio-button-borderless:hover:not(:disabled) {
+  box-shadow: none;
+}
+
 /* Sizes */
 .avakio-button-sm {
   padding: 9px 12px;

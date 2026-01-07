@@ -1,13 +1,81 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { ChevronUp, ChevronDown, ChevronsUpDown, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { AvakioText } from '../../ui-controls/avakio-text/avakio-text';
 import { AvakioButton } from '../../ui-controls/avakio-button/avakio-button';
 import { AvakioRichSelect } from '../../ui-controls/avakio-richselect/avakio-richselect';
+import { AvakioCheckbox } from '../../ui-controls/avakio-checkbox/avakio-checkbox';
+import { AvakioDatePicker } from '../../ui-controls/avakio-datepicker/avakio-datepicker';
+import { 
+  AvakioBaseProps, 
+  AvakioBaseRef,
+  computeBaseStyles,
+  formatSize 
+} from '../../base/avakio-base-props';
 import './avakio-datatable.css';
+
+/**
+ * =============================================================================
+ * EXCLUDED BASE PROPS, METHODS, AND EVENTS
+ * =============================================================================
+ * The following properties from AvakioBaseProps are NOT applicable to DataTable
+ * because DataTable is a complex data component, not a simple form input.
+ * 
+ * EXCLUDED PROPS:
+ * - clearable: DataTable doesn't have a single value to clear
+ * - inputAlign: No single input field in DataTable
+ * - inputHeight: No single input field in DataTable  
+ * - inputWidth: No single input field in DataTable
+ * - invalid: DataTable doesn't have form validation
+ * - invalidMessage: DataTable doesn't have form validation
+ * - label: DataTable doesn't use a label (has headers instead)
+ * - labelAlign: No label support
+ * - labelPosition: No label support
+ * - labelWidth: No label support
+ * - bottomLabel: No label support
+ * - placeholder: No single input placeholder
+ * - readonly: Use 'editable' prop instead
+ * - required: DataTable is not a required form field
+ * - validate: No single value validation
+ * - value: DataTable uses 'data' prop instead
+ * - onChange: DataTable uses specific callbacks (onRowClick, onCellChange, etc.)
+ * 
+ * EXCLUDED METHODS (from AvakioBaseRef):
+ * - getText: DataTable doesn't have single text value
+ * - getValue: DataTable uses getData() instead
+ * - setValue: DataTable uses setData() instead
+ * - validate: No single value validation
+ * 
+ * EXCLUDED EVENTS:
+ * - onItemClick: Use onRowClick, onRowDoubleClick instead
+ * =============================================================================
+ */
+
+/** Props excluded from AvakioBaseProps for DataTable component */
+export type AvakioDataTableExcludedProps = 
+  | 'clearable'
+  | 'inputAlign'
+  | 'inputHeight'
+  | 'inputWidth'
+  | 'invalid'
+  | 'invalidMessage'
+  | 'label'
+  | 'labelAlign'
+  | 'labelPosition'
+  | 'labelWidth'
+  | 'bottomLabel'
+  | 'placeholder'
+  | 'readonly'
+  | 'required'
+  | 'validate'
+  | 'value'
+  | 'onChange'
+  | 'onItemClick';
 
 export interface AvakioColumn<T = any> {
   id: string;
   header: string;
+  /** Data type of the column: text, number, boolean, date, json (default: 'text') */
+  type?: 'text' | 'number' | 'boolean' | 'date' | 'json';
   /** Allow header text to wrap to multiple lines */
   headerWrap?: boolean;
   /** Column will fill the remaining available space */
@@ -26,6 +94,10 @@ export interface AvakioColumn<T = any> {
   headerCssClass?: string;
   align?: 'left' | 'center' | 'right';
   format?: (value: any) => string;
+  /** Auto-adjust column width: 'data' (widest content), 'header' (header text), or true (both) */
+  adjust?: 'data' | 'header' | boolean;
+  /** Inline CSS styles for cells in this column, e.g. { textAlign: 'right', fontWeight: 'bold' } */
+  css?: React.CSSProperties;
 }
 
 export type AvakioSpan = [
@@ -37,98 +109,299 @@ export type AvakioSpan = [
   cssClass?: string
 ];
 
-export interface AvakioDataTableProps<T = any> {
-  id?: string;
-  data: T[];
-  spans?: AvakioSpan[];
-  columns: AvakioColumn<T>[];
-  height?: number | string;
-  width?: number | string;
-  select?: boolean | 'row' | 'cell' | 'column';
-  multiselect?: boolean;
-  rowHeight?: number;
-  headerHeight?: number;
-  fixedRowNumber?: number;
-  hover?: boolean;
-  resizable?: boolean;
-  sortable?: boolean;
-  filterable?: boolean;
-  paging?: boolean;
-  pageSize?: number;
-  autoConfig?: boolean;
-  scroll?: boolean | 'x' | 'y' | 'xy';
-  css?: string;
-  serverSide?: boolean;
-  onRowClick?: (row: T, index: number) => void;
-  onRowDoubleClick?: (row: T, index: number) => void;
-  onSelectChange?: (selected: T[]) => void;
-  onSort?: (columnId: string, direction: 'asc' | 'desc') => void;
-  onFilter?: (filters: Record<string, string>) => void;
-  loading?: boolean;
-  emptyText?: string;
-  totalCount?: number;
-  currentPage?: number;
-  onPageChange?: (page: number) => void;
-  onPageSizeChange?: (pageSize: number) => void;
-  /** Test ID for testing purposes */
-  testId?: string;
-  /** Minimum width */
-  minWidth?: number | string;
-  /** Minimum height */
-  minHeight?: number | string;
-  /** Whether the component is borderless */
-  borderless?: boolean;
-  /** Whether the component is disabled */
-  disabled?: boolean;
-  /** Whether the component is hidden */
-  hidden?: boolean;
-  /** Maximum height */
-  maxHeight?: number | string;
-  /** Maximum width */
-  maxWidth?: number | string;
-  /** Custom inline styles for the root element */
-  style?: React.CSSProperties;
+/**
+ * DataTable-specific ref interface extending AvakioBaseRef with exclusions.
+ * Provides imperative methods for controlling the DataTable.
+ * 
+ * Note: The following AvakioBaseRef methods are NOT available for DataTable:
+ * - getText: Use getData() to get table data
+ * - getValue: Use getData() to get table data  
+ * - setValue: Use setData() to set table data
+ * - validate: DataTable doesn't support single-value validation
+ */
+export interface AvakioDataTableRef<T = any> extends Omit<AvakioBaseRef<T[]>, 'getText' | 'getValue' | 'setValue' | 'validate'> {
+  /** Returns the current table data */
+  getData: () => T[];
+  
+  /** Sets new data for the table */
+  setData: (data: T[]) => void;
+  
+  /** Returns the currently selected rows */
+  getSelectedRows: () => T[];
+  
+  /** Selects rows by indices */
+  selectRows: (indices: number[]) => void;
+  
+  /** Clears all row selections */
+  clearSelection: () => void;
+  
+  /** Scrolls to a specific row index */
+  scrollToRow: (index: number) => void;
+  
+  /** Returns the current sort state */
+  getSortState: () => { column: string | null; direction: 'asc' | 'desc' };
+  
+  /** Sets the sort state programmatically */
+  setSortState: (column: string | null, direction: 'asc' | 'desc') => void;
+  
+  /** Returns the current filter values */
+  getFilterValues: () => Record<string, string>;
+  
+  /** Sets filter values programmatically */
+  setFilterValues: (filters: Record<string, string>) => void;
+  
+  /** Clears all filters */
+  clearFilters: () => void;
+  
+  /** Refreshes the table (re-renders with current data) */
+  refresh: () => void;
 }
 
-export function AvakioDataTable<T extends Record<string, any>>({
-  id = 'avakio-datatable',
-  data,
-  spans,
-  columns,
-  height = 'auto',
-  width = '100%',
-  select = false,
-  multiselect = false,
-  rowHeight = 40,
-  headerHeight = 44,
-  fixedRowNumber = 0,
-  hover = true,
-  resizable = true,
-  sortable = true,
-  filterable = true,
-  paging = false,
-  pageSize = 20,
-  autoConfig = false,
-  scroll = 'xy',
-  css = '',
-  serverSide = false,
-  onRowClick,
-  onRowDoubleClick,
-  onSelectChange,
-  onSort,
-  onFilter,
-  loading = false,
-  emptyText = 'No data available',
-  totalCount,
-  currentPage = 1,
-  onPageChange,
-  onPageSizeChange,
-  testId,
-  style,
-}: AvakioDataTableProps<T>) {
+/**
+ * Props interface for AvakioDataTable component.
+ * Extends AvakioBaseProps with DataTable-specific exclusions.
+ */
+export interface AvakioDataTableProps<T = any> extends Omit<AvakioBaseProps, AvakioDataTableExcludedProps> {
+  /** Table data array */
+  data: T[];
+  /** Cell span definitions: [rowId, columnId, colspan, rowspan, value?, cssClass?] */
+  spans?: AvakioSpan[];
+  /** Column configuration array */
+  columns: AvakioColumn<T>[];
+  /** Selection mode: false (disabled), 'row', 'cell', or 'column' */
+  select?: boolean | 'row' | 'cell' | 'column';
+  /** Allow multiple selections */
+  multiselect?: boolean;
+  /** Height of each data row in pixels */
+  rowHeight?: number;
+  /** Height of the header row in pixels */
+  headerHeight?: number;
+  /** Number of fixed (frozen) rows at the top */
+  fixedRowNumber?: number;
+  /** Enable row hover highlighting */
+  hover?: boolean;
+  /** Enable column resizing by dragging */
+  resizable?: boolean;
+  /** Enable column sorting by clicking headers */
+  sortable?: boolean;
+  /** Enable column filtering */
+  filterable?: boolean;
+  /** Enable pagination */
+  paging?: boolean;
+  /** Number of rows per page when paging is enabled */
+  pageSize?: number;
+  /** Auto-configure columns from data keys */
+  autoConfig?: boolean;
+  /** Scroll behavior: false, 'x', 'y', or 'xy' */
+  scroll?: boolean | 'x' | 'y' | 'xy';
+  /** Additional CSS class for styling */
+  css?: string;
+  /** Enable server-side data handling */
+  serverSide?: boolean;
+  /** Callback when a row is clicked */
+  onRowClick?: (row: T, index: number) => void;
+  /** Callback when a row is double-clicked */
+  onRowDoubleClick?: (row: T, index: number) => void;
+  /** Callback when selection changes */
+  onSelectChange?: (selected: T[]) => void;
+  /** Callback when sorting changes (server-side mode) */
+  onSort?: (columnId: string, direction: 'asc' | 'desc') => void;
+  /** Callback when filters change (server-side mode) */
+  onFilter?: (filters: Record<string, string>) => void;
+  /** Show loading spinner overlay */
+  loading?: boolean;
+  /** Text to display when table has no data */
+  emptyText?: string;
+  /** Total row count for server-side pagination */
+  totalCount?: number;
+  /** Current page number (1-indexed) */
+  currentPage?: number;
+  /** Callback when page changes */
+  onPageChange?: (page: number) => void;
+  /** Callback when page size changes */
+  onPageSizeChange?: (pageSize: number) => void;
+  /** Enable inline cell editing based on column type */
+  editable?: boolean;
+  /** Callback when a cell value is changed via editing */
+  onCellChange?: (rowIndex: number, columnId: string, newValue: any, oldValue: any) => void;
+}
+
+// Inner component with generic type parameter
+function AvakioDataTableInner<T extends Record<string, any>>(
+  {
+    id = 'avakio-datatable',
+    data,
+    spans,
+    columns,
+    height = 'auto',
+    width = '100%',
+    select = false,
+    multiselect = false,
+    rowHeight = 40,
+    headerHeight = 44,
+    fixedRowNumber = 0,
+    hover = true,
+    resizable = true,
+    sortable = true,
+    filterable = true,
+    paging = false,
+    pageSize = 20,
+    autoConfig = false,
+    scroll = 'xy',
+    css = '',
+    serverSide = false,
+    onRowClick,
+    onRowDoubleClick,
+    onSelectChange,
+    onSort,
+    onFilter,
+    loading = false,
+    emptyText = 'No data available',
+    totalCount,
+    currentPage = 1,
+    onPageChange,
+    onPageSizeChange,
+    testId,
+    editable = false,
+    onCellChange,
+    // Base props
+    className,
+    style,
+    disabled = false,
+    hidden = false,
+    borderless = false,
+    minWidth,
+    minHeight,
+    maxWidth,
+    maxHeight,
+    margin,
+    padding,
+    tooltip,
+    align,
+    // Event handlers from base
+    onBlur,
+    onFocus,
+    onKeyPress,
+    onAfterRender,
+    onBeforeRender,
+    onViewShow,
+    onViewResize,
+    onAfterScroll,
+  }: AvakioDataTableProps<T>,
+  ref: React.ForwardedRef<AvakioDataTableRef<T>>
+) {
+  // Root element ref
+  const rootRef = useRef<HTMLDivElement>(null);
+  
+  // Internal data state (for ref methods)
+  const [internalData, setInternalData] = useState<T[]>(data);
+  
+  // Sync internal data with prop changes
+  useEffect(() => {
+    setInternalData(data);
+  }, [data]);
+  
+  // Internal disabled/hidden state (for ref methods)
+  const [isDisabled, setIsDisabled] = useState(disabled);
+  const [isHidden, setIsHidden] = useState(hidden);
+  
+  useEffect(() => {
+    setIsDisabled(disabled);
+  }, [disabled]);
+  
+  useEffect(() => {
+    setIsHidden(hidden);
+  }, [hidden]);
+  
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [filters, setFilters] = useState<Record<string, string>>({});
+  const [refreshKey, setRefreshKey] = useState(0);
+  
+  // Lifecycle events
+  useEffect(() => {
+    onBeforeRender?.();
+  }, []);
+  
+  useEffect(() => {
+    onAfterRender?.();
+  });
+  
+  useEffect(() => {
+    if (!isHidden) {
+      onViewShow?.();
+    }
+  }, [isHidden]);
+  
+  // Expose imperative methods via ref
+  useImperativeHandle(ref, () => ({
+    // Methods from AvakioBaseRef
+    blur: () => {
+      rootRef.current?.blur();
+    },
+    focus: () => {
+      rootRef.current?.focus();
+    },
+    define: (config: Partial<AvakioBaseProps> | string, value?: unknown) => {
+      // This is a simplified implementation - full implementation would handle individual props
+      console.log('define called with:', config, value);
+    },
+    disable: () => {
+      setIsDisabled(true);
+    },
+    enable: () => {
+      setIsDisabled(false);
+    },
+    hide: () => {
+      setIsHidden(true);
+    },
+    show: () => {
+      setIsHidden(false);
+      onViewShow?.();
+    },
+    isEnabled: () => !isDisabled,
+    isVisible: () => !isHidden,
+    getParentView: () => rootRef.current?.parentElement || null,
+    getElement: () => rootRef.current,
+    
+    // DataTable-specific methods
+    getData: () => internalData,
+    setData: (newData: T[]) => {
+      setInternalData(newData);
+    },
+    getSelectedRows: () => {
+      return Array.from(selectedRows).map(index => internalData[index]).filter(Boolean);
+    },
+    selectRows: (indices: number[]) => {
+      setSelectedRows(new Set(indices));
+    },
+    clearSelection: () => {
+      setSelectedRows(new Set());
+    },
+    scrollToRow: (index: number) => {
+      const rowElement = rootRef.current?.querySelector(`[data-row-index="${index}"]`);
+      rowElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    },
+    getSortState: () => ({
+      column: sortColumn,
+      direction: sortDirection,
+    }),
+    setSortState: (column: string | null, direction: 'asc' | 'desc') => {
+      setSortColumn(column);
+      setSortDirection(direction);
+    },
+    getFilterValues: () => filters,
+    setFilterValues: (newFilters: Record<string, string>) => {
+      setFilters(newFilters);
+    },
+    clearFilters: () => {
+      setFilters({});
+    },
+    refresh: () => {
+      setRefreshKey(prev => prev + 1);
+    },
+  }), [internalData, selectedRows, sortColumn, sortDirection, filters, isDisabled, isHidden]);
 
   // Process spans to create a map of cells to skip
   const spanMap = useMemo(() => {
@@ -156,7 +429,7 @@ export function AvakioDataTable<T extends Record<string, any>>({
       
       // Mark cells to skip due to rowspan
       // Use row IDs directly from the span configuration to find consecutive rows
-      const allRowIds = data.map((row: any) => String(row.id || row.Id));
+      const allRowIds = internalData.map((row: any) => String(row.id || row.Id));
       const rowIndex = allRowIds.indexOf(rowKey);
       
       if (rowIndex !== -1) {
@@ -179,9 +452,61 @@ export function AvakioDataTable<T extends Record<string, any>>({
     });
     
     return map;
-  }, [spans, columns, data]);
-  const [filters, setFilters] = useState<Record<string, string>>({});
+  }, [spans, columns, internalData]);
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
+
+  // Calculate adjusted widths for columns with adjust property
+  const adjustedWidths = useMemo(() => {
+    const widths: Record<string, number> = {};
+    const padding = 32; // 16px padding on each side
+    const sortIconWidth = 20; // Space for sort icon
+    
+    // Helper function to measure text width
+    const measureTextWidth = (text: string, fontSize: number = 14, fontWeight: number = 400): number => {
+      if (typeof document === 'undefined') return 0;
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      if (!context) return 0;
+      context.font = `${fontWeight} ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+      return context.measureText(String(text ?? '')).width;
+    };
+    
+    columns.forEach(column => {
+      if (!column.adjust) return;
+      
+      let maxWidth = 0;
+      
+      // Measure header width
+      if (column.adjust === 'header' || column.adjust === true) {
+        const headerWidth = measureTextWidth(column.header, 14, 500) + padding + sortIconWidth;
+        maxWidth = Math.max(maxWidth, headerWidth);
+      }
+      
+      // Measure data width
+      if (column.adjust === 'data' || column.adjust === true) {
+        internalData.forEach(row => {
+          const value = row[column.id];
+          const displayValue = column.format ? column.format(value) : String(value ?? '');
+          const cellWidth = measureTextWidth(displayValue, 14, 400) + padding;
+          maxWidth = Math.max(maxWidth, cellWidth);
+        });
+      }
+      
+      // Apply min/max constraints
+      if (column.minWidth) {
+        maxWidth = Math.max(maxWidth, column.minWidth);
+      }
+      if (column.maxWidth) {
+        maxWidth = Math.min(maxWidth, column.maxWidth);
+      }
+      
+      // Ensure minimum reasonable width
+      widths[column.id] = Math.max(maxWidth, 60);
+    });
+    
+    return widths;
+  }, [columns, internalData]);
+
   const [page, setPage] = useState(currentPage);
   const [localPageSize, setLocalPageSize] = useState(pageSize);
   const [resizingColumn, setResizingColumn] = useState<string | null>(null);
@@ -194,9 +519,9 @@ export function AvakioDataTable<T extends Record<string, any>>({
 
   // Filter data (skip if server-side)
   const filteredData = useMemo(() => {
-    if (serverSide) return data;
+    if (serverSide) return internalData;
     
-    let result = [...data];
+    let result = [...internalData];
 
     // Apply filters
     Object.entries(filters).forEach(([columnId, filterValue]) => {
@@ -390,8 +715,13 @@ export function AvakioDataTable<T extends Record<string, any>>({
 
   // Get column width
   const getColumnWidth = (column: AvakioColumn<T>) => {
+    // First check for manual resize
     const customWidth = columnWidths[column.id];
     if (customWidth) return `${customWidth}px`;
+    // Then check for auto-adjusted width
+    const adjustedWidth = adjustedWidths[column.id];
+    if (adjustedWidth) return `${adjustedWidth}px`;
+    // Then check for explicit width
     if (column.width) return typeof column.width === 'number' ? `${column.width}px` : column.width;
     return '150px'; // Default width instead of 'auto'
   };
@@ -450,12 +780,62 @@ export function AvakioDataTable<T extends Record<string, any>>({
   }, [visibleColumns, columnWidths]);
 
   // Render cell content
-  const renderCell = (column: AvakioColumn<T>, row: T) => {
+  const renderCell = (column: AvakioColumn<T>, row: T, rowIndex: number) => {
     if (column.template) {
       return column.template(row);
     }
     
     const value = row[column.id];
+    const columnType = column.type || 'text';
+    
+    // If editable, render appropriate editor based on column type
+    if (editable) {
+      const handleChange = (newValue: any) => {
+        if (onCellChange) {
+          onCellChange(rowIndex, column.id, newValue, value);
+        }
+      };
+      
+      switch (columnType) {
+        case 'boolean':
+          return (
+            <AvakioCheckbox
+              checked={Boolean(value)}
+              onChange={(checked) => handleChange(checked)}
+              size="sm"
+            />
+          );
+        case 'date':
+          return (
+            <AvakioDatePicker
+              value={value ? String(value) : ''}
+              onChange={(newValue) => handleChange(newValue)}
+              size="compact"
+              borderless
+            />
+          );
+        case 'number':
+          return (
+            <AvakioText
+              value={value !== null && value !== undefined ? String(value) : ''}
+              onChange={(newValue) => handleChange(newValue ? Number(newValue) : null)}
+              type="number"
+              borderless
+            />
+          );
+        case 'json':
+        case 'text':
+        default:
+          return (
+            <AvakioText
+              value={value !== null && value !== undefined ? String(value) : ''}
+              onChange={(newValue) => handleChange(newValue)}
+              borderless
+            />
+          );
+      }
+    }
+    
     if (column.format) {
       return column.format(value);
     }
@@ -463,16 +843,33 @@ export function AvakioDataTable<T extends Record<string, any>>({
     return value !== null && value !== undefined ? String(value) : '';
   };
 
+  // Compute base styles from AvakioBaseProps
+  const baseStyles = computeBaseStyles({
+    align,
+    height,
+    hidden: isHidden,
+    margin,
+    minHeight,
+    minWidth,
+    maxHeight,
+    maxWidth,
+    padding,
+    width,
+    style,
+  });
+
   return (
     <div
+      ref={rootRef}
       id={id}
       data-testid={testId}
-      className={`avakio-datatable ${css}`}
-      style={{
-        height: typeof height === 'number' ? `${height}px` : height,
-        width: typeof width === 'number' ? `${width}px` : width,
-        ...style,
-      }}
+      className={`avakio-datatable ${css} ${className || ''} ${borderless ? 'avakio-datatable-borderless' : ''} ${isDisabled ? 'avakio-datatable-disabled' : ''}`}
+      style={baseStyles}
+      title={tooltip}
+      tabIndex={isDisabled ? -1 : 0}
+      onBlur={onBlur}
+      onFocus={onFocus}
+      onKeyDown={onKeyPress as any}
     >
       {/* Scroll Container - single horizontal scroll for header and body */}
       <div className="avakio-datatable-scroll-container">
@@ -608,11 +1005,14 @@ export function AvakioDataTable<T extends Record<string, any>>({
                       style={{
                         ...getColumnStyle(column),
                         textAlign: column.align || 'left',
+                        ...column.css,
                       }}
                       {...(spanInfo?.colspan && spanInfo.colspan > 1 ? { 'data-colspan': spanInfo.colspan } : {})}
                       {...(spanInfo?.rowspan && spanInfo.rowspan > 1 ? { 'data-rowspan': spanInfo.rowspan } : {})}
                     >
-                      {spanInfo?.value !== undefined ? spanInfo.value : renderCell(column, row)}
+                      <span className="avakio-datatable-cell-content">
+                        {spanInfo?.value !== undefined ? spanInfo.value : renderCell(column, row, rowIndex)}
+                      </span>
                     </div>
                   );
                 })}
@@ -696,15 +1096,35 @@ export function AvakioDataTable<T extends Record<string, any>>({
   );
 }
 
+/**
+ * AvakioDataTable - High-performance data table component with sorting, filtering, pagination and editing.
+ * 
+ * Extends AvakioBaseProps (with exclusions for input-specific props).
+ * Use AvakioDataTableRef for imperative methods like getData(), setData(), getSelectedRows(), etc.
+ * 
+ * @example
+ * ```tsx
+ * const tableRef = useRef<AvakioDataTableRef<MyDataType>>(null);
+ * 
+ * <AvakioDataTable
+ *   ref={tableRef}
+ *   data={myData}
+ *   columns={columns}
+ *   editable
+ *   onCellChange={(rowIndex, columnId, newValue, oldValue) => {
+ *     console.log('Cell changed:', { rowIndex, columnId, newValue, oldValue });
+ *   }}
+ * />
+ * 
+ * // Imperative methods:
+ * tableRef.current?.getData();
+ * tableRef.current?.setData(newData);
+ * tableRef.current?.getSelectedRows();
+ * tableRef.current?.clearFilters();
+ * ```
+ */
+export const AvakioDataTable = forwardRef(AvakioDataTableInner) as <T extends Record<string, any>>(
+  props: AvakioDataTableProps<T> & { ref?: React.ForwardedRef<AvakioDataTableRef<T>> }
+) => React.ReactElement;
+
 export default AvakioDataTable;
-
-
-
-
-
-
-
-
-
-
-
