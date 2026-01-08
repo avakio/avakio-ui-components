@@ -1,0 +1,99 @@
+/* ================================
+   AVAKIO LABEL EXAMPLE STYLES
+   ================================ */
+
+.avakio-label-demo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Sticky header with tabs */
+.avakio-label-demo-container .avakio-example-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--avakio-bg-primary, #ffffff);
+  border-bottom: 1px solid var(--avakio-border, #e5e7eb);
+}
+
+.avakio-label-tabbar-container {
+  padding: 0 16px 12px;
+  background: inherit;
+}
+
+/* Demo sections */
+.avakio-label-demo-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--avakio-section-border, #e5e7eb);
+  scroll-margin-top: 140px;
+}
+
+.avakio-label-demo-section:last-child {
+  border-bottom: none;
+}
+
+/* Result display */
+.avakio-label-result {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: var(--avakio-result-bg, #f0f9ff);
+  border: 1px solid var(--avakio-result-border, #bae6fd);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--avakio-result-text, #0369a1);
+}
+
+.avakio-label-result strong {
+  color: var(--avakio-result-strong, #075985);
+}
+
+/* Custom grid for variations */
+.avakio-label-custom-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.avakio-label-custom-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.avakio-label-custom-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--avakio-custom-label, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* API Table */
+.avakio-label-api-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.avakio-label-api-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.avakio-label-api-table th,
+.avakio-label-api-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--avakio-table-border, #e5e7eb);
+}
+
+.avakio-label-api-table th {
+  font-weight: 600;
+  background: var(--avakio-table-header-bg, #f3f4f6);
+  color: var(--avakio-table-header-text, #374151);
+}

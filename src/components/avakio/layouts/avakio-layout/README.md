@@ -12,6 +12,7 @@ A flexible layout container component for organizing views in rows and columns. 
 - ✓ Gap control for spacing between items
 - ✓ Alignment and justification options
 - ✓ Gravity for flexible sizing
+- ✓ Flex-wrap support for wrapping items
 - ✓ Theme-aware for all 6 Avakio themes
 - ✓ Container border control (borderless prop)
 - ✓ Hidden and disabled states
@@ -270,6 +271,25 @@ function Dashboard() {
 <AvakioLayout justify="center" cols={[...]} />
 ```
 
+## Flex Wrap
+
+Enable wrapping of items to the next line when they don't fit:
+
+```tsx
+{/* Items wrap to next line when space runs out */}
+<AvakioLayout
+  flexWrap
+  gap={12}
+  cols={[
+    <AvakioButton label="Button 1" />,
+    <AvakioButton label="Button 2" />,
+    <AvakioButton label="Button 3" />,
+    <AvakioButton label="Button 4" />,
+    <AvakioButton label="Button 5" />,
+  ]}
+/>
+```
+
 ## Sizing
 
 ```tsx
@@ -309,6 +329,7 @@ function Dashboard() {
 | `onResize` | `() => void` | `undefined` | Callback when layout is resized |
 | `align` | `'start'\|'center'\|'end'\|'stretch'` | `'stretch'` | Cross-axis alignment |
 | `justify` | `'start'\|'center'\|'end'\|'space-between'\|'space-around'\|'space-evenly'` | `'start'` | Main-axis justification |
+| `flexWrap` | `boolean` | `false` | Enable flex-wrap to allow items to wrap to the next line |
 | `hidden` | `boolean` | `false` | Hide the layout |
 | `disabled` | `boolean` | `false` | Disable interaction |
 | `id` | `string` | `undefined` | HTML ID attribute |

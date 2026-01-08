@@ -169,6 +169,46 @@ export interface AvakioPropertyItem {
   colorShowPreview?: boolean;
   colorClassName?: string;
   colorOnChange?: (color: string, item: AvakioPropertyItem) => void;
+  // Text editor events (AvakioText)
+  textOnChange?: (value: string, item: AvakioPropertyItem) => void;
+  textOnBlur?: (value: string, item: AvakioPropertyItem) => void;
+  textOnFocus?: (value: string, item: AvakioPropertyItem) => void;
+  textOnEnter?: (value: string, item: AvakioPropertyItem) => void;
+  textOnKeyDown?: (event: React.KeyboardEvent, item: AvakioPropertyItem) => void;
+  textOnClick?: (item: AvakioPropertyItem) => void;
+  // Number editor events (AvakioText with type="number")
+  numberOnChange?: (value: number, item: AvakioPropertyItem) => void;
+  numberOnBlur?: (value: number, item: AvakioPropertyItem) => void;
+  numberOnFocus?: (value: number, item: AvakioPropertyItem) => void;
+  numberOnEnter?: (value: number, item: AvakioPropertyItem) => void;
+  numberOnKeyDown?: (event: React.KeyboardEvent, item: AvakioPropertyItem) => void;
+  // Textarea editor events (AvakioText with multiline)
+  textareaOnChange?: (value: string, item: AvakioPropertyItem) => void;
+  textareaOnBlur?: (value: string, item: AvakioPropertyItem) => void;
+  textareaOnFocus?: (value: string, item: AvakioPropertyItem) => void;
+  textareaOnKeyDown?: (event: React.KeyboardEvent, item: AvakioPropertyItem) => void;
+  // Checkbox editor events (AvakioCheckbox - only onChange)
+  // Note: AvakioCheckbox only exposes onChange
+  // Button editor events (AvakioButton - click only in property context)
+  // Note: AvakioButton is used for onClick action, not form input
+  // GridSuggest editor events (AvakioGridSuggest - onChange, onInputChange)
+  // Note: Uses gridsuggestOnChange and gridsuggestOnInputChange defined above
+  // Combo editor events (AvakioCombo - onChange, onInputChange)
+  // Note: Uses comboOnChange and comboOnInputChange defined above
+  // Date/DateTime editor events (AvakioDatePicker - onChange)
+  // Note: Uses dateOnChange defined above
+  // DateRange editor events (AvakioDateRangePicker - onChange)
+  // Note: Uses daterangeOnChange defined above
+  // Counter editor events (AvakioCounter - onChange)
+  // Note: Uses counterOnChange defined above
+  // Slider editor events (AvakioSlider - onChange)
+  // Note: Uses sliderOnChange defined above
+  // ColorPicker editor events (AvakioColorPicker - onChange)
+  // Note: Uses colorOnChange defined above
+  // Select editor events (AvakioRichSelect - onChange)
+  // Note: Uses selectOnChange defined above
+  // MultiCombo editor events (AvakioMultiCombo - onChange)
+  // Note: Uses multicomboOnChange defined above
 }
 
 export interface AvakioPropertyProps extends AvakioBaseProps {
@@ -182,6 +222,12 @@ export interface AvakioPropertyProps extends AvakioBaseProps {
   showBorders?: boolean;
   /** Enable vertical overflow scrolling */
   overflowY?: 'auto' | 'scroll' | 'hidden' | 'visible';
+  /** Auto-adjust height to fill parent container (overrides height and maxHeight) */
+  autoHeight?: boolean;
+  /** Width of the label column (first column) */
+  labelWidth?: number | string;
+  /** Show or hide the label column (default: true) */
+  showLabel?: boolean;
 }
 
 /** Ref type for AvakioProperty component */
@@ -194,8 +240,11 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
       items,
       onChange,
       dense,
-      showBorders,
+      showBorders = true,
       overflowY,
+      autoHeight,
+      labelWidth,
+      showLabel = true,
       // Base props
       id,
       testId,
@@ -226,6 +275,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
     } = props;
 
     const [rows, setRows] = useState<AvakioPropertyItem[]>(items);
+    const [autoHeightValue, setAutoHeightValue] = useState<number | null>(null);
     
     // Use the base hook for common functionality
     const {
@@ -267,6 +317,83 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
     }
   }, [lastChanged, onChange, rows]);
 
+  // Auto-height: observe parent container and calculate available height
+  useEffect(() => {
+    if (!autoHeight || !rootRef.current) return;
+
+    const calculateHeight = () => {
+      const element = rootRef.current;
+      if (!element) return;
+
+      // Find the layout-item wrapper (immediate parent in AvakioLayout)
+      const layoutItem = element.parentElement;
+      if (!layoutItem) return;
+
+      // Find the layout container (parent of layout-item)
+      const layoutContainer = layoutItem.parentElement;
+      if (!layoutContainer) return;
+
+      // Get the layout container's dimensions
+      const containerRect = layoutContainer.getBoundingClientRect();
+      const containerStyle = window.getComputedStyle(layoutContainer);
+      const containerPaddingTop = parseFloat(containerStyle.paddingTop) || 0;
+      const containerPaddingBottom = parseFloat(containerStyle.paddingBottom) || 0;
+      const containerGap = parseFloat(containerStyle.gap) || 0;
+      
+      // Calculate total height used by sibling layout-items
+      let siblingHeight = 0;
+      const siblings = layoutContainer.children;
+      for (let i = 0; i < siblings.length; i++) {
+        const sibling = siblings[i] as HTMLElement;
+        if (sibling !== layoutItem && sibling.classList.contains('avakio-layout-item')) {
+          siblingHeight += sibling.getBoundingClientRect().height;
+        }
+      }
+      
+      // Calculate available height
+      const availableContainerHeight = containerRect.height - containerPaddingTop - containerPaddingBottom;
+      const gapCount = Math.max(0, siblings.length - 1);
+      const totalGapHeight = containerGap * gapCount;
+      const calculatedHeight = availableContainerHeight - siblingHeight - totalGapHeight;
+      
+      if (calculatedHeight > 50) { // Minimum reasonable height
+        setAutoHeightValue(calculatedHeight);
+      }
+    };
+
+    // Initial calculation with a small delay to ensure DOM is ready
+    const timeoutId = setTimeout(calculateHeight, 50);
+
+    // Observe for size changes
+    const layoutItem = rootRef.current.parentElement;
+    const layoutContainer = layoutItem?.parentElement;
+    
+    if (layoutContainer) {
+      const resizeObserver = new ResizeObserver(() => {
+        calculateHeight();
+      });
+      resizeObserver.observe(layoutContainer);
+      
+      // Also observe siblings for height changes
+      const siblings = layoutContainer.children;
+      for (let i = 0; i < siblings.length; i++) {
+        const sibling = siblings[i] as HTMLElement;
+        if (sibling !== layoutItem) {
+          resizeObserver.observe(sibling);
+        }
+      }
+
+      return () => {
+        clearTimeout(timeoutId);
+        resizeObserver.disconnect();
+      };
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [autoHeight]);
+
   const groupedRows = useMemo(() => {
     const groups: Record<string, AvakioPropertyItem[]> = {};
     rows.forEach((row) => {
@@ -290,16 +417,22 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
     ...computeBaseStyles({
       style,
       hidden: isHidden,
-      height,
+      height: autoHeight ? undefined : height,
       width,
       minHeight,
       minWidth,
-      maxHeight,
+      maxHeight: autoHeight ? undefined : maxHeight,
       maxWidth,
       margin,
       padding,
     }),
     ...(overflowY && { overflowY }),
+    // Apply auto-calculated height
+    ...(autoHeight && autoHeightValue && {
+      height: `${autoHeightValue}px`,
+      maxHeight: `${autoHeightValue}px`,
+      overflowY: overflowY || 'auto',
+    }),
   };
 
   const handleChange = (id: string, value: string | number | boolean | string[] | AvakioDateRange | null) => {
@@ -313,10 +446,13 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
   };
 
   const renderControl = (item: AvakioPropertyItem) => {
+    // Combine component-level disabled with item-level disabled
+    const itemDisabled = isDisabled || item.disabled;
+    
     const common = {
       id: item.id,
       name: item.id,
-      disabled: item.disabled,
+      disabled: itemDisabled,
       required: item.required,
       placeholder: item.placeholder,
     } as const;
@@ -334,9 +470,17 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
                 : String(item.value)
             }
             placeholder={item.placeholder}
-            disabled={item.disabled}
-            readonly={item.disabled}
-            onChange={(val) => handleChange(item.id, val === "" ? "" : Number(val))}
+            disabled={itemDisabled}
+            readonly={itemDisabled}
+            onChange={(val) => {
+              const numVal = val === "" ? 0 : Number(val);
+              handleChange(item.id, val === "" ? "" : numVal);
+              item.numberOnChange?.(numVal, item);
+            }}
+            onBlur={() => item.numberOnBlur?.(Number(item.value) || 0, item)}
+            onFocus={() => item.numberOnFocus?.(Number(item.value) || 0, item)}
+            onEnter={(val) => item.numberOnEnter?.(Number(val) || 0, item)}
+            onKeyDown={(e) => item.numberOnKeyDown?.(e, item)}
             width="100%"
             borderless
           />
@@ -361,7 +505,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
                 handleChange(item.id, (val as string | number) ?? "");
               }}
               placeholder={item.selectPlaceholder ?? item.placeholder}
-              disabled={item.selectDisabled ?? item.disabled}
+              disabled={itemDisabled || item.selectDisabled}
               readonly={item.selectReadOnly}
               template={item.selectTemplate}
               width={item.selectWidth}
@@ -388,7 +532,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
               }}
               label={item.checkboxLabel ?? item.placeholder ?? item.label}
               description={item.checkboxDescription ?? item.description}
-            disabled={item.disabled}
+            disabled={itemDisabled}
             required={item.required}
           />
         );
@@ -408,7 +552,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             label={item.comboLabel}
             labelAlign={item.comboLabelAlign}
             labelWidth={item.comboLabelWidth}
-            disabled={item.comboDisabled ?? item.disabled}
+            disabled={itemDisabled || item.comboDisabled}
             readonly={item.comboReadOnly}
             filterMode={item.comboFilterMode}
             customFilter={item.comboCustomFilter}
@@ -429,7 +573,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             label={item.colorLabel}
             description={item.colorDescription}
             error={item.colorError}
-            disabled={item.colorDisabled ?? item.disabled}
+            disabled={itemDisabled || item.colorDisabled}
             readOnly={item.colorReadOnly}
             required={item.colorRequired ?? item.required}
             presets={item.colorPresets}
@@ -455,7 +599,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             description={item.counterDescription ?? item.description}
             error={item.counterError}
             required={item.counterRequired ?? item.required}
-            disabled={item.counterDisabled ?? item.disabled}
+            disabled={itemDisabled || item.counterDisabled}
             readOnly={item.counterReadOnly}
             size={item.counterSize}
             allowInput={item.counterAllowInput}
@@ -474,7 +618,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             min={item.sliderMin}
             max={item.sliderMax}
             step={item.sliderStep}
-            disabled={item.sliderDisabled ?? item.disabled}
+            disabled={itemDisabled || item.sliderDisabled}
             label={item.sliderLabel ?? item.label}
             description={item.sliderDescription ?? item.description}
             required={item.sliderRequired ?? item.required}
@@ -501,7 +645,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             }}
             showTime={item.dateShowTime ?? false}
             placeholder={item.placeholder}
-            disabled={item.disabled}
+            disabled={itemDisabled}
             className={item.dateClassName}
             width="100%"
           />
@@ -536,7 +680,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             label={item.gridsuggestLabel}
             labelAlign={item.gridsuggestLabelAlign}
             labelWidth={item.gridsuggestLabelWidth}
-            disabled={item.gridsuggestDisabled ?? item.disabled}
+            disabled={itemDisabled || item.gridsuggestDisabled}
             readonly={item.gridsuggestReadOnly}
             textValue={item.gridsuggestTextValue}
             template={item.gridsuggestTemplate}
@@ -562,7 +706,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             className={item.multicomboClassName}
             showCount={item.multicomboShowCount}
             maxDisplayItems={item.multicomboMaxDisplayItems}
-            disabled={item.multicomboDisabled ?? item.disabled}
+            disabled={itemDisabled || item.multicomboDisabled}
           />
         );
       case "datetime":
@@ -576,7 +720,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             }}
             showTime
             placeholder={item.placeholder}
-            disabled={item.disabled}
+            disabled={itemDisabled}
             className={item.dateClassName}
             width="100%"
           />
@@ -586,11 +730,11 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
           <AvakioButton
             label={item.buttonLabel || item.placeholder || "Action"}
             onClick={() => {
-              if (item.disabled) return;
+              if (itemDisabled) return;
               item.buttonOnClick?.(item);
               handleChange(item.id, true);
             }}
-            disabled={item.disabled}
+            disabled={itemDisabled}
             variant={item.buttonVariant}
             size={item.buttonSize}
             badge={item.buttonBadge}
@@ -606,9 +750,15 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             name={item.id}
             value={(item.value as string | undefined) ?? ""}
             placeholder={item.placeholder}
-            disabled={item.disabled}
-            readonly={item.disabled}
-            onChange={(val) => handleChange(item.id, val)}
+            disabled={itemDisabled}
+            readonly={itemDisabled}
+            onChange={(val) => {
+              handleChange(item.id, val);
+              item.textareaOnChange?.(val, item);
+            }}
+            onBlur={() => item.textareaOnBlur?.((item.value as string) ?? "", item)}
+            onFocus={() => item.textareaOnFocus?.((item.value as string) ?? "", item)}
+            onKeyDown={(e) => item.textareaOnKeyDown?.(e, item)}
             width="100%"
             borderless
             multiline
@@ -623,9 +773,17 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             name={item.id}
             value={(item.value as string | undefined) ?? ""}
             placeholder={item.placeholder}
-            disabled={item.disabled}
-            readonly={item.disabled}
-            onChange={(val) => handleChange(item.id, val)}
+            disabled={itemDisabled}
+            readonly={itemDisabled}
+            onChange={(val) => {
+              handleChange(item.id, val);
+              item.textOnChange?.(val, item);
+            }}
+            onBlur={() => item.textOnBlur?.((item.value as string) ?? "", item)}
+            onFocus={() => item.textOnFocus?.((item.value as string) ?? "", item)}
+            onEnter={(val) => item.textOnEnter?.(val, item)}
+            onKeyDown={(e) => item.textOnKeyDown?.(e, item)}
+            onClick={() => item.textOnClick?.(item)}
             width="100%"
             borderless
           />
@@ -633,16 +791,35 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
     }
   };
 
+  // Compute label column width style
+  let labelWidthStyle: string | undefined = undefined;
+  if (labelWidth !== undefined && labelWidth !== null && labelWidth !== '') {
+    const labelWidthStr = String(labelWidth);
+    if (typeof labelWidth === 'number' || /^\d+$/.test(labelWidthStr)) {
+      labelWidthStyle = `${labelWidth}px`;
+    } else {
+      labelWidthStyle = labelWidthStr;
+    }
+  }
+
   const rootClass = [
     "avakio-property",
+    (height || width || autoHeight) ? "avakio-layout-sized" : "",
     dense ? "is-dense" : "",
-    showBorders ? "has-borders" : "",
+    showBorders === false ? "no-row-borders" : "",
     borderless ? "is-borderless" : "",
     isDisabled ? "is-disabled" : "",
+    showLabel === false ? "no-label" : "",
     className || "",
   ]
     .filter(Boolean)
     .join(" ");
+
+  // Merge label width into computed style
+  const finalStyle: React.CSSProperties = {
+    ...computedStyle,
+    ...(labelWidthStyle && { '--prop-label-width': labelWidthStyle } as React.CSSProperties),
+  };
 
   return (
     <div
@@ -650,7 +827,8 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
       id={id}
       data-testid={testId}
       className={rootClass}
-      style={computedStyle}
+      style={finalStyle}
+      data-label-width={labelWidthStyle || undefined}
       title={tooltip}
       onBlur={eventHandlers.onBlur}
       onFocus={eventHandlers.onFocus}
@@ -665,10 +843,12 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             {group !== "__ungrouped" && <div className="av-prop-group">{group}</div>}
             {rowsInGroup.map((item) => (
               <div key={item.id} className="av-prop-row">
-                <div className="av-prop-label">
-                  <label htmlFor={item.id}>{item.label}</label>
-                  {item.description && <div className="av-prop-desc">{item.description}</div>}
-                </div>
+                {showLabel !== false && (
+                  <div className="av-prop-label">
+                    <label htmlFor={item.id}>{item.label}</label>
+                    {item.description && <div className="av-prop-desc">{item.description}</div>}
+                  </div>
+                )}
                 <div className="av-prop-control">{renderControl(item)}</div>
               </div>
             ))}

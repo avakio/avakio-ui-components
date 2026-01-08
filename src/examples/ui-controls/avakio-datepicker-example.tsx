@@ -769,20 +769,26 @@ export function AvakioDatePickerExample() {
           borderless={false}
           margin={12}
           padding={16}
+          height={750}            
           rows={[ <AvakioLayout
               type="clean"
-              borderless={true}              
+              borderless={true}
+              responsive
+              autoResize
+              gap={16}
+              height='100%'
               cols={[
                 //Column 1
                 <AvakioLayout
                   type="clean"
                   borderless={true}                  
+                  height='100%'
                   rows={[
                     <AvakioTemplate
                       type="clean"
                       borderType="clean"
                       padding={[0,0,10,0]}
-                      content={<strong>Preview</strong>}
+                      content={<span><strong>Preview</strong></span>}
                     />,
                     <AvakioDatePicker
                       id={getPropValue('componentId', 'playground-datepicker')}
@@ -857,12 +863,12 @@ export function AvakioDatePickerExample() {
                       type="clean"
                       borderType="clean"
                       padding={[10,0,10,0]}
-                      content={<>Value: <strong>{formatDate(playgroundValue, getPropValue('showTime', false))}</strong></>}
+                      content={<span>Value: <strong>{formatDate(playgroundValue, getPropValue('showTime', false))}</strong></span>}
                     />,                  
                     <AvakioTemplate
                       type="clean"
                       padding={[10,0,10,0]}
-                      borderType="clean"
+                      borderType="clean"                      
                       content={<strong>Ref Methods</strong>}
                     />,
                     // Ref Methods
@@ -870,16 +876,14 @@ export function AvakioDatePickerExample() {
                       type="clean"
                       padding={[10,0,10,0]}
                       borderType="clean"                      
-                      //maxHeight='500px'
                       scroll="xy"  
                       flexWrap={true}
                       content={<>
                         <AvakioButton 
                           size="sm"                                                    
                           label='Focus()'
-                          margin={[0,10,10,0]}
-                          align='left'
-                          textAlign='center'
+                          margin={[0,10,10,0]}                          
+                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           onClick={() => {
@@ -888,8 +892,7 @@ export function AvakioDatePickerExample() {
                           }}
                         />
                         <AvakioButton        
-                          align='left'
-                          textAlign='center'
+                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           size="sm"
@@ -902,8 +905,7 @@ export function AvakioDatePickerExample() {
                         />
                          <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='getValue()'
@@ -916,8 +918,7 @@ export function AvakioDatePickerExample() {
                           <AvakioButton 
                             size="sm"
                             label='setValue(now)' 
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             margin={[0,10,10,0]}
@@ -929,8 +930,7 @@ export function AvakioDatePickerExample() {
                           />
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='getText()'
@@ -942,8 +942,7 @@ export function AvakioDatePickerExample() {
                           />                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='enable()'
@@ -955,8 +954,7 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='disable()'
@@ -968,8 +966,7 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='isEnabled()'
@@ -981,8 +978,7 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='show()'
@@ -994,8 +990,7 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='hide()'
@@ -1007,8 +1002,7 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='isVisible()'
@@ -1020,8 +1014,7 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='validate()'
@@ -1033,8 +1026,7 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='getElement()'
@@ -1046,8 +1038,7 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='getParentView()'
@@ -1059,8 +1050,7 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='define(label)'
@@ -1076,8 +1066,7 @@ export function AvakioDatePickerExample() {
                           />                                                      
                           <AvakioButton 
                             size="sm"
-                            align='left'
-                            textAlign='center'
+                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             label='define(config)'
@@ -1104,6 +1093,7 @@ export function AvakioDatePickerExample() {
                   id='Layout-row-Column2'
                   type="clean"
                   borderless={true}
+                  height='100%'                  
                   rows={[
                     <AvakioLayout
                       id='Layout-row1-col-Column2'
@@ -1200,12 +1190,13 @@ export function AvakioDatePickerExample() {
                     />,
                     <AvakioProperty
                       id='Property-playground-props'
-                      items={playgroundProps}
+                      className='avakio-fill-container'
+                      items={playgroundProps}                  
                       onChange={handlePlaygroundPropsChange}
                       dense
                       showBorders
-                      maxHeight='600px'
-                      overflowY="auto"
+                      autoHeight
+                      overflowY='auto'
                     />,
                   ]}
                 />,

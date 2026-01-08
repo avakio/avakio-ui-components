@@ -93,6 +93,9 @@ export interface AvakioLayoutProps {
   
   /** Enable auto-resize observer */
   autoResize?: boolean;
+
+  /** Enable flex-wrap on the layout container */
+  flexWrap?: boolean;
 }
 
 export function AvakioLayout({
@@ -126,6 +129,7 @@ export function AvakioLayout({
   onResize,
   autoResize = false,
   style,
+  flexWrap = false,
 }: AvakioLayoutProps) {
   const layoutRef = useRef<HTMLDivElement>(null);
   const [responsiveMode, setResponsiveMode] = useState(false);
@@ -184,6 +188,16 @@ export function AvakioLayout({
     };
   }, [autoResize, checkResponsive]);
   
+  // Helper to check if a dimension value is a fixed size (not percentage or relative)
+  const isFixedSize = (value: number | string | [number] | undefined): boolean => {
+    if (value === undefined || value === null) return false;
+    if (typeof value === 'number') return true;
+    if (Array.isArray(value)) return true;
+    // String values like '100%', 'auto', '100vh' are not fixed sizes
+    const strValue = String(value);
+    return !strValue.includes('%') && strValue !== 'auto' && !strValue.includes('vh') && !strValue.includes('vw');
+  };
+
   const layoutClasses = [
     'avakio-layout',
     `avakio-layout-theme-${theme}`,
@@ -194,7 +208,7 @@ export function AvakioLayout({
     hidden ? 'avakio-layout-hidden' : '',
     responsive ? 'avakio-layout-responsive' : '',
     responsiveMode ? 'avakio-layout-responsive-active' : '',
-    (height || width) ? 'avakio-layout-sized' : '',
+    (isFixedSize(height) || isFixedSize(width)) ? 'avakio-layout-sized' : '',
     className,
   ].filter(Boolean).join(' ');
 
@@ -210,6 +224,7 @@ export function AvakioLayout({
     alignItems: align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : align === 'center' ? 'center' : undefined,
     justifyContent: justify === 'start' ? 'flex-start' : justify === 'end' ? 'flex-end' : justify,
     flex: gravity,
+    flexWrap: flexWrap ? 'wrap' : undefined,
     ...(css && typeof css === 'object' && !Array.isArray(css) ? css : {}),
     ...style,
   };
