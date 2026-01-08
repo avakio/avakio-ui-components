@@ -146,7 +146,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
+  padding: 0 4px;
   background: var(--dp-surface);
   border: 1px solid var(--dp-border);
   border-left: none;
@@ -165,7 +165,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
+  padding: 0 4px;
   background: var(--dp-surface);
   border: 1px solid var(--dp-border);
   border-left: none;
@@ -180,11 +180,28 @@
   color: var(--dp-text);
 }
 
+/* When clear or copy button is the last element (calendar icon hidden) */
+.avakio-dp-clear-btn:last-child,
+.avakio-dp-copy-btn:last-child {
+  border-right: 1px solid var(--dp-border);
+  border-radius: 0 var(--dp-radius) var(--dp-radius) 0;
+}
+
+/* When input is the last element (no icons at all) */
+.avakio-dp-input:last-child {
+  border-right: 1px solid var(--dp-border);
+  border-radius: var(--dp-radius);
+}
+
+.avakio-dp-label + .avakio-dp-input-group .avakio-dp-input:last-child {
+  border-radius: 0 var(--dp-radius) var(--dp-radius) 0;
+}
+
 .avakio-dp-icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 12px;
+  padding: 8px 6px;
   background: var(--dp-surface);
   border: 1px solid var(--dp-border);
   border-left: none;
@@ -375,6 +392,19 @@
   color: var(--dp-text);
 }
 
+/* When clear or copy button is the last element in compact mode (calendar icon hidden) */
+.avakio-dp-clear-btn-compact:last-child,
+.avakio-dp-copy-btn-compact:last-child {
+  border-right: 1px solid var(--dp-border);
+  border-radius: 0 var(--dp-radius) var(--dp-radius) 0;
+}
+
+/* When input is the last element in compact mode (no icons at all) */
+.avakio-dp-input-compact:last-child {
+  border-right: 1px solid var(--dp-border);
+  border-radius: var(--dp-radius);
+}
+
 /* Compact mode borderless */
 .avakio-dp-compact.avakio-dp-borderless .avakio-dp-input-compact,
 .avakio-dp-compact.avakio-dp-borderless .avakio-dp-icon-btn-compact,
@@ -458,7 +488,8 @@
 
 /* Inline wrapper - inherits theme from data-admin-theme */
 .avakio-dp-inline {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   outline: none;
 }
 

@@ -210,7 +210,7 @@ export const AvakioButton = forwardRef<AvakioBaseRef, AvakioButtonProps>(functio
         style={{
           width: typeof buttonWidth === 'number' ? `${buttonWidth}px` : buttonWidth,
           height: typeof buttonHeight === 'number' ? `${buttonHeight}px` : buttonHeight,
-          justifyContent: textAlign === 'left' ? 'flex-start' : textAlign === 'right' ? 'flex-end' : textAlign === 'center' ? 'center' : undefined,
+          textAlign: textAlign,
         }}
         disabled={isDisabled}
         title={mergedProps.tooltip}

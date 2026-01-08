@@ -31,6 +31,8 @@ export interface AvakioDatePickerProps extends AvakioControlledProps<string> {
   maxYear?: number;
   /** Form label displayed above the component */
   labelForm?: string;
+  /** Total width of the component (default: 'auto') */
+  compWidth?: number | string;
 }
 
 /**
@@ -498,6 +500,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     minYear,
     maxYear,
     labelForm,
+    compWidth = 'auto',
     invalid = false,
     invalidMessage,
     borderless = AVAKIO_BASE_DEFAULTS.borderless,
@@ -635,6 +638,9 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     }
   };
 
+  // Format compWidth value
+  const formattedCompWidth = typeof compWidth === 'number' ? `${compWidth}px` : compWidth;
+
   // Compute combined styles using base helpers
   const computedStyle: React.CSSProperties = {
     ...computeBaseStyles({
@@ -653,8 +659,21 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     }),
   };
 
-  // Label styles using base helpers
-  const labelStyle: React.CSSProperties = computeLabelStyles({ labelWidth, labelAlign });
+  // Wrapper style - set the actual component width
+  const wrapperStyle: React.CSSProperties = {
+    ...(compWidth !== 'auto' && { 
+      width: formattedCompWidth,
+      minWidth: formattedCompWidth,
+      maxWidth: formattedCompWidth,
+      overflow: 'hidden',
+    }),
+  };
+
+  // Label styles - keep label width fixed
+  const labelStyle: React.CSSProperties = {
+    ...computeLabelStyles({ labelWidth, labelAlign }),
+    ...(compWidth !== 'auto' && { flexShrink: 0 }), // Don't shrink label
+  };
 
   // LabelForm styles based on position
   const labelFormStyle: React.CSSProperties = {
@@ -662,11 +681,17 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     textAlign: labelAlign,
   };
 
-  // Input styles
+  // Input styles - shrink input when compWidth is set
   const inputStyle: React.CSSProperties = {
     textAlign: inputAlign,
     width: formatSize(inputWidth),
     height: formatSize(inputHeight),
+    ...(compWidth !== 'auto' && { minWidth: 0, width: '100%' }),
+  };
+
+  // Input group style - allow shrinking when compWidth is set
+  const inputGroupStyle: React.CSSProperties = {
+    ...(compWidth !== 'auto' && { minWidth: 0, flex: '1 1 0' }),
   };
 
   // Handle value change with old value tracking
@@ -743,7 +768,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
         )}
         <Popover open={!isDisabled && open} onOpenChange={(o) => !isDisabled && setOpen(o)}>
           <PopoverTrigger asChild>
-            <div className="avakio-dp-input-group-compact">
+            <div className="avakio-dp-input-group-compact" style={wrapperStyle}>
               <input
                 type="text"
                 className="avakio-dp-input-compact"
@@ -779,9 +804,11 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
                   <X size={12} />
                 </button>
               )}
-              <button type="button" className="avakio-dp-icon-btn-compact" disabled={isDisabled}>
-                <CalendarIcon size={12} />
-              </button>
+              {!value && (
+                <button type="button" className="avakio-dp-icon-btn-compact" disabled={isDisabled}>
+                  <CalendarIcon size={12} />
+                </button>
+              )}
             </div>
           </PopoverTrigger>
           <PopoverContent
@@ -837,7 +864,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
         </div>
       )}
       <Popover open={!isDisabled && open} onOpenChange={(o) => !isDisabled && setOpen(o)}>
-        <div className={cn('avakio-dp-wrapper', labelPosition === 'top' && 'avakio-dp-wrapper-vertical')}>
+        <div className={cn('avakio-dp-wrapper', labelPosition === 'top' && 'avakio-dp-wrapper-vertical')} style={wrapperStyle}>
           {label && (
             <div className="avakio-dp-label" style={labelStyle}>
               {label}
@@ -845,7 +872,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
             </div>
           )}
           <PopoverTrigger asChild>
-            <div className="avakio-dp-input-group">
+            <div className="avakio-dp-input-group" style={inputGroupStyle}>
               <input
                 ref={inputRef as React.RefObject<HTMLInputElement>}
                 type="text"
@@ -882,9 +909,11 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
                   <X size={14} />
                 </button>
               )}
-              <button type="button" className="avakio-dp-icon-btn" disabled={isDisabled}>
-                <CalendarIcon size={16} />
-              </button>
+              {!value && (
+                <button type="button" className="avakio-dp-icon-btn" disabled={isDisabled}>
+                  <CalendarIcon size={16} />
+                </button>
+              )}
             </div>
           </PopoverTrigger>
         </div>

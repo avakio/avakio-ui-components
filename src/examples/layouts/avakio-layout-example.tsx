@@ -412,13 +412,37 @@ export function AvakioLayoutExample() {
         {/* Alignment & Justification */}
         <section className="avakio-layout-section">
           <h3 className="avakio-layout-section-title">Alignment & Justification</h3>
-          <p className="avakio-layout-section-description">Control item alignment and distribution.</p>
+          <p className="avakio-layout-section-description">Control item alignment and distribution using align (left/center/right) and justify props.</p>
           <div className="layout-types-grid">
+            <div>
+              <h4>Align: Left</h4>
+              <AvakioLayout
+                type="clean"
+                align="left"
+                height={150}
+                cols={[
+                  <div className="demo-box-small" style={{ height: '60px' }}>Item 1</div>,
+                  <div className="demo-box-small" style={{ height: '80px' }}>Item 2</div>,
+                ]}
+              />
+            </div>
             <div>
               <h4>Align: Center</h4>
               <AvakioLayout
                 type="clean"
                 align="center"
+                height={150}
+                cols={[
+                  <div className="demo-box-small" style={{ height: '60px' }}>Item 1</div>,
+                  <div className="demo-box-small" style={{ height: '80px' }}>Item 2</div>,
+                ]}
+              />
+            </div>
+            <div>
+              <h4>Align: Right</h4>
+              <AvakioLayout
+                type="clean"
+                align="right"
                 height={150}
                 cols={[
                   <div className="demo-box-small" style={{ height: '60px' }}>Item 1</div>,

@@ -252,7 +252,9 @@ export const computeBaseStyles = (props: AvakioBaseProps): React.CSSProperties =
     margin: formatSpacing(margin),
     padding: formatSpacing(padding),
     paddingBottom: bottomPadding ? `${bottomPadding}px` : undefined,
-    justifyContent: align === 'center' ? 'center' : align === 'right' ? 'flex-end' : undefined,
+    textAlign: align,
+    alignItems: align === 'center' ? 'center' : align === 'right' ? 'flex-end' : align === 'left' ? 'flex-start' : undefined,
+    justifyContent: align === 'center' ? 'center' : align === 'right' ? 'flex-end' : align === 'left' ? 'flex-start' : undefined,
   };
 };
 

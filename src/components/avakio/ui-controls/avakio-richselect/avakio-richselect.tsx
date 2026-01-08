@@ -93,15 +93,17 @@ export function AvakioRichSelect({
   useEffect(() => {
     if (value !== undefined && value !== null && value !== '') {
       const option = normalizedOptions.find(
-        (opt) => opt.id === value || opt.value === value
+        (opt) => opt.id === value || opt.value === value || String(opt.id) === String(value)
       );
       if (option) {
         setSelectedOption(option);
+      } else {
+        setSelectedOption(null);
       }
     } else {
       setSelectedOption(null);
     }
-  }, [value]);
+  }, [value, options]);
 
   // Close dropdown when clicking outside
   useEffect(() => {

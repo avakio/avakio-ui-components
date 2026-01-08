@@ -83,7 +83,7 @@ export interface AvakioLayoutProps {
   gap?: number | string;
   
   /** Alignment of items */
-  align?: 'start' | 'center' | 'end' | 'stretch';
+  align?: 'left' | 'center' | 'right';
   
   /** Justify content */
   justify?: 'start' | 'center' | 'end' | 'space-between' | 'space-around' | 'space-evenly';
@@ -121,7 +121,7 @@ export function AvakioLayout({
   id,
   testId,
   gap,
-  align = 'stretch',
+  align,
   justify = 'start',
   onResize,
   autoResize = false,
@@ -207,8 +207,8 @@ export function AvakioLayout({
     maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
     margin: typeof margin === 'number' ? `${margin}px` : margin,
     gap: typeof gap === 'number' ? `${gap}px` : gap,
-    alignItems: align,
-    justifyContent: justify,
+    alignItems: align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : align === 'center' ? 'center' : undefined,
+    justifyContent: justify === 'start' ? 'flex-start' : justify === 'end' ? 'flex-end' : justify,
     flex: gravity,
     ...(css && typeof css === 'object' && !Array.isArray(css) ? css : {}),
     ...style,
