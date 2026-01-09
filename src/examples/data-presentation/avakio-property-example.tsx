@@ -105,7 +105,7 @@ export function AvakioPropertyExample() {
   // Playground state
   const [playgroundItems, setPlaygroundItems] = useState<AvakioPropertyItem[]>([
     { id: 'name', label: 'Component Name 123', type: 'text', value: 'MyComponent', placeholder: 'Enter name', group: 'Identity' },
-    { id: 'id', label: 'ID', type: 'text', value: 'comp-001', group: 'Identity' },
+    { id: 'id', label: 'ID', type: 'text', value: 'comp-001', group: 'Identity', labelAlign: 'right' },
     { id: 'visible', label: 'Visible', type: 'checkbox', value: true, checkboxLabel: 'Show component', group: 'State' },
     { id: 'enabled', label: 'Enabled', type: 'checkbox', value: true, checkboxLabel: 'Enable interactions', group: 'State' },
     { id: 'width', label: 'Width', type: 'number', value: 300, group: 'Sizing' },
@@ -216,14 +216,15 @@ export function AvakioPropertyExample() {
     { id: 5, name: 'placeholder', type: 'string', defaultValue: 'undefined', description: 'Placeholder text for text inputs' },
     { id: 6, name: 'description', type: 'string', defaultValue: 'undefined', description: 'Description text shown below the input' },
     { id: 7, name: 'group', type: 'string', defaultValue: 'undefined', description: 'Group name for organizing properties' },
-    { id: 8, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable this specific property' },
-    { id: 9, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Mark property as required' },
-    { id: 10, name: 'selectOptions', type: 'AvakioRichSelectOption[]', defaultValue: 'undefined', description: 'Options for select type editor' },
-    { id: 11, name: 'comboOptions', type: 'AvakioComboOption[]', defaultValue: 'undefined', description: 'Options for combo type editor' },
-    { id: 12, name: 'checkboxLabel', type: 'string', defaultValue: 'undefined', description: 'Label shown next to checkbox' },
-    { id: 13, name: 'counterMin/Max/Step', type: 'number', defaultValue: 'undefined', description: 'Counter editor configuration' },
-    { id: 14, name: 'sliderMin/Max/Step', type: 'number', defaultValue: 'undefined', description: 'Slider editor configuration' },
-    { id: 15, name: 'colorPresets', type: 'AvakioColorPickerPreset[]', defaultValue: 'undefined', description: 'Color presets for colorpicker' },
+    { id: 8, name: 'labelAlign', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Alignment of the label text (left, center, or right)' },
+    { id: 9, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable this specific property' },
+    { id: 10, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Mark property as required' },
+    { id: 11, name: 'selectOptions', type: 'AvakioRichSelectOption[]', defaultValue: 'undefined', description: 'Options for select type editor' },
+    { id: 12, name: 'comboOptions', type: 'AvakioComboOption[]', defaultValue: 'undefined', description: 'Options for combo type editor' },
+    { id: 13, name: 'checkboxLabel', type: 'string', defaultValue: 'undefined', description: 'Label shown next to checkbox' },
+    { id: 14, name: 'counterMin/Max/Step', type: 'number', defaultValue: 'undefined', description: 'Counter editor configuration' },
+    { id: 15, name: 'sliderMin/Max/Step', type: 'number', defaultValue: 'undefined', description: 'Slider editor configuration' },
+    { id: 16, name: 'colorPresets', type: 'AvakioColorPickerPreset[]', defaultValue: 'undefined', description: 'Color presets for colorpicker' },
   ];
 
   const refMethodsData: PropDoc[] = [
@@ -295,10 +296,10 @@ export function AvakioPropertyExample() {
           borderless={false}
           margin={12}
           padding={16}
-          rows={[
+          rows={[ 
             <AvakioProperty
+              id='basic-usage-property'
               items={basicItems}
-              margin={50}
               onChange={(items) => {
                 setBasicItems(items);
                 addLog('Basic property changed');
@@ -317,7 +318,7 @@ export function AvakioPropertyExample() {
         />
         <AvakioTemplate
           type="clean"
-          borderType="clean"
+          borderType="clean"          
           padding={[0, 0, 0, 16]}
           content="Use dense={true} for a more compact layout with reduced spacing, ideal for sidebars or panels."
         />
@@ -328,6 +329,7 @@ export function AvakioPropertyExample() {
           padding={16}
           rows={[
             <AvakioProperty
+              margin={16}
               items={denseItems}
               onChange={(items) => setDenseItems(items)}
               dense

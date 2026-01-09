@@ -13,8 +13,6 @@
   --prop-radius: 0px;
   color: var(--prop-strong);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  /* Width defaults to 100% to fill parent container */
-  width: 100%;
   box-sizing: border-box;
   /* Move border to root element so it stays visible during scroll */
   border: 1px solid var(--prop-border);
@@ -27,6 +25,20 @@
 
 .avakio-property.is-dense {
   --prop-radius: 0px;
+  font-size: 13px;
+  border: 1px solid var(--prop-border);
+  box-shadow: none;
+}
+
+.avakio-property.is-dense .av-prop-group {
+  padding: 0 0 0 8px;
+  font-size: 13px;
+  background: var(--prop-bg-alt);
+  border-bottom: none;
+  color: var(--prop-accent);
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0;
 }
 
 /* Borderless mode - remove only external borders and shadows */
@@ -84,8 +96,114 @@
 }
 
 .avakio-property.is-dense .av-prop-row {
-  padding: 10px 12px;
-  gap: 10px;
+  padding: 0 8px;
+  gap: 0;
+  border-top: 1px solid var(--prop-border);
+  border-bottom: 1px solid var(--prop-border);
+}
+
+.avakio-property.is-dense .av-prop-row + .av-prop-row {
+  border-top: none;
+}
+
+.avakio-property.is-dense .av-prop-control {
+  padding: 0 !important;
+}
+
+/* Remove borders from input controls in dense mode */
+.avakio-property.is-dense .avakio-text-input,
+.avakio-property.is-dense .avakio-richselect-button,
+.avakio-property.is-dense .avakio-combo-input,
+.avakio-property.is-dense .avakio-combo-wrapper,
+.avakio-property.is-dense .avakio-counter-body,
+.avakio-property.is-dense .avakio-datepicker-trigger,
+.avakio-property.is-dense .avakio-gridsuggest-input,
+.avakio-property.is-dense .avakio-multicombo-trigger {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  height: 24px !important;
+  min-height: 24px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Colorpicker in dense mode */
+.avakio-property.is-dense .avakio-colorpicker {
+  gap: 0 !important;
+}
+
+.avakio-property.is-dense .avakio-colorpicker-preview {
+  display: none !important;
+}
+
+.avakio-property.is-dense .avakio-colorpicker-swatches {
+  display: none !important;
+}
+
+.avakio-property.is-dense .avakio-colorpicker-body {
+  gap: 8px !important;
+}
+
+.avakio-property.is-dense .avakio-colorpicker-native {
+  width: 32px !important;
+  height: 24px !important;
+  border-radius: 4px !important;
+  border: none !important;
+}
+
+.avakio-property.is-dense .avakio-colorpicker-hex {
+  height: 24px !important;
+  min-height: 24px !important;
+  padding: 0 8px !important;
+  border: none !important;
+  background: transparent !important;
+  min-width: 80px !important;
+}
+
+.avakio-property.is-dense .avakio-checkbox-box {
+  box-shadow: none !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin-left: 8px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: 1.5px solid var(--cb-border) !important;
+}
+
+.avakio-property.is-dense .avakio-checkbox[data-status="checked"] .avakio-checkbox-box {
+  border-color: color-mix(in srgb, var(--cb-primary) 50%, transparent) !important;
+}
+
+.avakio-property.is-dense .av-prop-label {
+  gap: 0;
+  font-size: 13px;
+  border-right: 1px solid var(--prop-border);
+  padding: 4px 8px 4px 0;
+  margin: -4px 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.avakio-property.is-dense .av-prop-label-left {
+  justify-content: flex-start;
+}
+
+.avakio-property.is-dense .av-prop-label-center {
+  justify-content: center;
+}
+
+.avakio-property.is-dense .av-prop-label-right {
+  justify-content: flex-end;
+}
+
+.avakio-property.is-dense .av-prop-desc {
+  font-size: 11px;
 }
 
 .av-prop-label {
@@ -94,6 +212,19 @@
   gap: 4px;
   font-weight: 400;
   color: var(--prop-strong);
+  text-align: left;
+}
+
+.av-prop-label-left {
+  text-align: left;
+}
+
+.av-prop-label-center {
+  text-align: center;
+}
+
+.av-prop-label-right {
+  text-align: right;
 }
 
 .av-prop-desc {
@@ -110,8 +241,18 @@
   overflow: visible;
 }
 
-/* Counter inside property - remove margin and adjust height */
-.av-prop-control .avakio-counter {
+/* Remove bottom margin from all controls inside property rows */
+.av-prop-control .avakio-counter,
+.av-prop-control .avakio-richselect,
+.av-prop-control .avakio-combo,
+.av-prop-control .avakio-colorpicker,
+.av-prop-control .avakio-slider,
+.av-prop-control .avakio-checkbox,
+.av-prop-control .avakio-datepicker,
+.av-prop-control .avakio-daterangepicker,
+.av-prop-control .avakio-multicombo,
+.av-prop-control .avakio-gridsuggest,
+.av-prop-control .avakio-text {
   margin-bottom: 0;
 }
 

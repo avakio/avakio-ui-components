@@ -50,6 +50,7 @@ export interface AvakioPropertyItem {
   placeholder?: string;
   description?: string;
   group?: string;
+  labelAlign?: 'left' | 'center' | 'right';
   options?: AvakioPropertyOption[];
   disabled?: boolean;
   required?: boolean;
@@ -844,7 +845,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             {rowsInGroup.map((item) => (
               <div key={item.id} className="av-prop-row">
                 {showLabel !== false && (
-                  <div className="av-prop-label">
+                  <div className={`av-prop-label${item.labelAlign ? ` av-prop-label-${item.labelAlign}` : ''}`}>
                     <label htmlFor={item.id}>{item.label}</label>
                     {item.description && <div className="av-prop-desc">{item.description}</div>}
                   </div>

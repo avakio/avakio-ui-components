@@ -1,106 +1,139 @@
-/* Example styling for AvakioColorPicker */
+/* ================================
+   AVAKIO COLORPICKER EXAMPLE STYLES
+   ================================ */
 
-.avakio-colorpicker-example {
-  min-height: 100vh;
-  background: linear-gradient(180deg, rgba(248, 250, 252, 0.9) 0%, #ffffff 45%);
-  padding: 36px 20px 60px;
-  color: #0f172a;
-}
-
-.avakio-colorpicker-hero {
-  max-width: 1040px;
-  margin: 0 auto 28px auto;
+.avakio-colorpicker-demo-container {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  padding: 0;
+  min-height: 100vh;
 }
 
-.avakio-colorpicker-kicker {
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  color: #6b7280;
-  font-size: 12px;
-  margin-bottom: 6px;
+/* Sticky header with tabs */
+.avakio-colorpicker-demo-container .avakio-example-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--avakio-bg-primary, #ffffff);
+  border-bottom: 1px solid var(--avakio-border, #e5e7eb);
 }
 
-.avakio-colorpicker-title {
-  font-size: 32px;
-  font-weight: 800;
-  margin: 0 0 10px;
-  color: #0f172a;
+.avakio-colorpicker-tabbar-container {
+  padding: 0 16px 12px;
+  background: inherit;
 }
 
-.avakio-colorpicker-subtitle {
-  max-width: 620px;
-  color: #475569;
-  line-height: 1.6;
-  font-size: 15px;
-  margin: 0;
+/* Demo sections */
+.avakio-colorpicker-demo-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--avakio-section-border, #e5e7eb);
+  scroll-margin-top: 140px;
 }
 
-.avakio-colorpicker-theme-picker {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 14px 16px;
-  min-width: 240px;
-  box-shadow: 0 12px 26px -18px rgba(0, 0, 0, 0.22);
+.avakio-colorpicker-demo-section:last-child {
+  border-bottom: none;
 }
 
-.avakio-colorpicker-theme-label {
-  font-weight: 700;
-  font-size: 13px;
-  margin-bottom: 10px;
-  color: #111827;
+/* Result display */
+.avakio-colorpicker-result {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: var(--avakio-result-bg, #f0f9ff);
+  border: 1px solid var(--avakio-result-border, #bae6fd);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--avakio-result-text, #0369a1);
 }
 
-.avakio-colorpicker-theme-grid {
+.avakio-colorpicker-result strong {
+  color: var(--avakio-result-strong, #075985);
+}
+
+/* Custom grid for variations */
+.avakio-colorpicker-custom-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.avakio-colorpicker-custom-item {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 
-.avakio-colorpicker-chip {
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 8px 10px;
-  background: #ffffff;
-  color: #111827;
+.avakio-colorpicker-custom-label {
+  font-size: 12px;
   font-weight: 600;
+  color: var(--avakio-custom-label, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* API Table */
+.avakio-colorpicker-api-table {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.avakio-colorpicker-api-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.avakio-colorpicker-api-table th,
+.avakio-colorpicker-api-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--avakio-table-border, #e5e7eb);
+}
+
+.avakio-colorpicker-api-table th {
+  font-weight: 600;
+  background: var(--avakio-table-header-bg, #f3f4f6);
+  color: var(--avakio-table-header-text, #374151);
+}
+
+.avakio-colorpicker-api-table code {
+  font-family: 'Fira Code', 'Consolas', monospace;
   font-size: 13px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.18s ease;
+  padding: 2px 6px;
+  background: var(--avakio-code-bg, #f3f4f6);
+  border-radius: 4px;
 }
 
-.avakio-colorpicker-chip:hover { box-shadow: 0 8px 20px -14px rgba(0, 0, 0, 0.35); }
-
-.avakio-colorpicker-chip.active {
-  background: #f8fafc;
-  box-shadow: 0 8px 22px -14px rgba(28, 161, 193, 0.6);
-  border-color: rgba(17, 94, 164, 0.25);
-}
-
-.avakio-colorpicker-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
+/* Color preview swatch */
+.avakio-colorpicker-preview-swatch {
   display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid var(--avakio-border, #e5e7eb);
+  vertical-align: middle;
+  margin-right: 8px;
 }
 
-.avakio-colorpicker-card {
-  max-width: 1040px;
-  margin: 0 auto 16px auto;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 18px 40px -28px rgba(0, 0, 0, 0.4);
+/* Dark theme overrides */
+[data-theme="dark"] .avakio-colorpicker-demo-container .avakio-example-sticky-header {
+  background: var(--avakio-bg-primary, #1f2937);
+  border-bottom-color: var(--avakio-border, #374151);
 }
 
-@media (max-width: 900px) {
-  .avakio-colorpicker-hero { flex-direction: column; }
-  .avakio-colorpicker-theme-picker { width: 100%; }
+[data-theme="dark"] .avakio-colorpicker-demo-section {
+  border-bottom-color: var(--avakio-section-border, #374151);
+}
+
+[data-theme="dark"] .avakio-colorpicker-result {
+  background: var(--avakio-result-bg, #1e3a5f);
+  border-color: var(--avakio-result-border, #2563eb);
+  color: var(--avakio-result-text, #93c5fd);
+}
+
+[data-theme="dark"] .avakio-colorpicker-result strong {
+  color: var(--avakio-result-strong, #bfdbfe);
 }
 
