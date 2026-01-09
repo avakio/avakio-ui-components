@@ -24,12 +24,206 @@
   border-right: none;
 }
 
+/* Column borders - show borders between columns (extends to the end of the table) */
+.avakio-datatable.avakio-datatable-column-borders .avakio-datatable-header-cell,
+.avakio-datatable.avakio-datatable-column-borders .avakio-datatable-cell {
+  border-right: 1px solid var(--border, #e5e7eb) !important;
+}
+
+/* Row borders - show borders between rows (includes last row bottom border) */
+.avakio-datatable.avakio-datatable-row-borders .avakio-datatable-row {
+  border-bottom: 1px solid var(--border, #e5e7eb) !important;
+}
+
 /* Disabled state */
 .avakio-datatable-disabled {
   opacity: 0.5;
   pointer-events: none;
   user-select: none;
 }
+
+/* ============================================================================
+   THREE-PANEL FROZEN COLUMNS LAYOUT
+   ============================================================================ */
+
+/* Main container for frozen columns layout */
+.avakio-datatable-frozen-container {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Frozen panels (left and right) */
+.avakio-datatable-frozen-panel {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  z-index: 2;
+  position: relative;
+}
+
+/* Left frozen panel */
+.avakio-datatable-frozen-left {
+  border-right: 1px solid var(--border);
+}
+
+/* Right frozen panel */
+.avakio-datatable-frozen-right {
+  border-left: 1px solid var(--border);
+  z-index: 3; /* Ensure right panel is above scrollable content */
+}
+
+/* Shadow effect when scrolled - using semi-transparent black for broad compatibility */
+.avakio-datatable-frozen-left.has-shadow {
+  box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.15);
+}
+
+.avakio-datatable-frozen-right.has-shadow {
+  box-shadow: -4px 0 8px -2px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark theme shadow - slightly brighter for visibility */
+[data-theme="dark"] .avakio-datatable-frozen-left.has-shadow {
+  box-shadow: 4px 0 8px -2px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .avakio-datatable-frozen-right.has-shadow {
+  box-shadow: -4px 0 8px -2px rgba(0, 0, 0, 0.4);
+}
+
+/* Middle scrollable panel */
+.avakio-datatable-scrollable-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Clip the vertical scrollbar from the body */
+  position: relative;
+}
+
+/* Scrollable header container - horizontal scroll synced with body */
+.avakio-datatable-scrollable-header-container {
+  flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Header inside scrollable container should not be sticky (container handles scroll) */
+.avakio-datatable-scrollable-header-container .avakio-datatable-header {
+  position: relative;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Hide scrollbar on header (scroll is synced from body) */
+.avakio-datatable-scrollable-header-container::-webkit-scrollbar {
+  height: 0;
+  display: none;
+}
+
+.avakio-datatable-scrollable-header-container {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Horizontal scroll container for scrollable panel header */
+.avakio-datatable-horizontal-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
+}
+
+/* Frozen body - only vertical scroll, hide scrollbar on left/right panels */
+.avakio-datatable-frozen-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+}
+
+/* Hide scrollbar on left frozen panel (scroll is synced from right panel) */
+.avakio-datatable-frozen-left .avakio-datatable-frozen-body::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+.avakio-datatable-frozen-left .avakio-datatable-frozen-body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Right frozen panel shows the vertical scrollbar */
+.avakio-datatable-frozen-right .avakio-datatable-frozen-body {
+  overflow-y: auto;
+}
+
+/* Scrollable body - both scrollbars by default */
+.avakio-datatable-scrollable-body {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+}
+
+/* When frozen columns exist, hide all scrollbars on middle panel */
+.avakio-datatable-frozen-container .avakio-datatable-scrollable-body {
+  overflow: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.avakio-datatable-frozen-container .avakio-datatable-scrollable-body::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Edge */
+}
+
+/* Horizontal scrollbar container - only shown when frozen columns exist */
+.avakio-datatable-horizontal-scrollbar {
+  flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 12px;
+  background: var(--muted, #f1f1f1);
+}
+
+.avakio-datatable-horizontal-scrollbar-content {
+  height: 1px;
+}
+
+/* Rows container inside scrollable body needs proper width */
+.avakio-datatable-scrollable-body .avakio-datatable-rows {
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Ensure rows in frozen panels match row height */
+.avakio-datatable-frozen-panel .avakio-datatable-row {
+  display: flex;
+}
+
+/* Ensure header cells in frozen panels have proper styling */
+.avakio-datatable-frozen-panel .avakio-datatable-header-row {
+  display: flex;
+}
+
+/* Ensure scrollable panel header row displays correctly */
+.avakio-datatable-scrollable-panel .avakio-datatable-header-row {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Ensure scrollable panel rows display correctly */
+.avakio-datatable-scrollable-panel .avakio-datatable-row {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* ============================================================================
+   END FROZEN COLUMNS LAYOUT
+   ============================================================================ */
 
 /* Scroll Container - single horizontal scroll for entire table */
 .avakio-datatable-scroll-container {
@@ -67,7 +261,6 @@
   font-weight: 600;
   font-size: 14px;
   color: var(--foreground);
-  border-right: 1px solid var(--border);
   position: relative;
   user-select: none;
   transition: background-color 0.2s;
@@ -76,9 +269,68 @@
   overflow: hidden;
 }
 
+.avakio-datatable-header-cell.with-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 8px;
+}
+
 .avakio-datatable-header-cell:last-child {
   border-right: none;
   min-width: 0;
+}
+
+/* Drag and drop column reordering */
+.avakio-datatable-header-cell[draggable="true"] {
+  cursor: grab;
+}
+
+.avakio-datatable-header-cell[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.avakio-datatable-header-cell.dragging {
+  opacity: 0.5;
+  background-color: var(--muted);
+}
+
+.avakio-datatable-header-cell.drag-over {
+  background-color: var(--accent);
+  box-shadow: inset 2px 0 0 0 var(--primary, #3b82f6);
+}
+
+/* Checkbox column for bulk selection */
+.avakio-datatable-checkbox-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border);
+}
+
+.avakio-datatable-checkbox-cell .avakio-checkbox {
+  margin: 0;
+  padding: 0;
+}
+
+.avakio-datatable-checkbox-cell .avakio-checkbox-label {
+  display: none;
+}
+
+/* Remove border from checked/indeterminate checkbox in bulk selection */
+.avakio-datatable-checkbox-cell .avakio-checkbox[data-status="checked"] .avakio-checkbox-box,
+.avakio-datatable-checkbox-cell .avakio-checkbox[data-status="indeterminate"] .avakio-checkbox-box,
+.avakio-datatable-checkbox-cell.selected .avakio-checkbox .avakio-checkbox-box {
+  border: 0 !important;
+  border-width: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove cell selection outline from checkbox cell */
+.avakio-datatable-cell.avakio-datatable-checkbox-cell.selected {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .avakio-datatable-header-cell.sorted {
@@ -135,6 +387,16 @@
   background-color: var(--background);
   position: relative;
   z-index: 10;
+}
+
+/* Header Filter (filter inside header cell) */
+.avakio-datatable-header-filter {
+  width: 100%;
+  min-height: 28px;
+}
+
+.avakio-datatable-header-filter-empty {
+  min-height: 28px;
 }
 
 .avakio-datatable-filter-cell {
@@ -408,12 +670,40 @@
   background-color: var(--accent);
 }
 
+/* Cell selection */
+.avakio-datatable-cell.selected {
+  background-color: var(--accent) !important;
+  outline: 2px solid var(--primary, #3b82f6);
+  outline-offset: -2px;
+}
+
+/* Column selection - header */
+.avakio-datatable-header-cell.selected {
+  background-color: var(--accent) !important;
+  box-shadow: inset 2px 0 0 0 var(--primary, #3b82f6),
+              inset -2px 0 0 0 var(--primary, #3b82f6),
+              inset 0 2px 0 0 var(--primary, #3b82f6);
+}
+
+/* Column selection - body cells */
+.avakio-datatable-cell.column-selected {
+  background-color: var(--accent) !important;
+  box-shadow: inset 2px 0 0 0 var(--primary, #3b82f6),
+              inset -2px 0 0 0 var(--primary, #3b82f6);
+}
+
+/* Column selection - last row cell needs bottom border */
+.avakio-datatable-row:last-child .avakio-datatable-cell.column-selected {
+  box-shadow: inset 2px 0 0 0 var(--primary, #3b82f6),
+              inset -2px 0 0 0 var(--primary, #3b82f6),
+              inset 0 -2px 0 0 var(--primary, #3b82f6);
+}
+
 /* Cell */
 .avakio-datatable-cell {
   padding: 10px 16px;
   font-size: 14px;
   color: var(--foreground);
-  border-right: 1px solid var(--border);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -436,31 +726,59 @@
 }
 
 /* Spanning cells */
-.avakio-datatable-cell[data-colspan] {
+.avakio-datatable-cell[data-colspan],
+.avakio-datatable-cell-colspan {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
-.avakio-datatable-cell[data-rowspan] {
+.avakio-datatable-cell[data-rowspan],
+.avakio-datatable-cell-rowspan {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  background: var(--background, #ffffff);
+  box-sizing: border-box;
 }
 
-/* Adjust width for colspan */
-.avakio-datatable-cell[data-colspan="2"] {
-  flex-grow: 2;
+/* Spacer cells (placeholders for rowspan) - maintain width, transparent */
+.avakio-datatable-cell-spacer {
+  background: transparent !important;
+  border-color: transparent !important;
+  pointer-events: none;
 }
 
-.avakio-datatable-cell[data-colspan="3"] {
-  flex-grow: 3;
+/* Rows need relative positioning */
+.avakio-datatable-row {
+  position: relative;
 }
 
-.avakio-datatable-cell[data-colspan="4"] {
-  flex-grow: 4;
+/* Highlight class for spanned rows (like Webix) */
+.avakio-datatable-cell.highlight {
+  background: var(--primary-light, #dbeafe) !important;
+  font-weight: 600;
+  color: var(--primary, #3b82f6);
+  border-right: none !important;
+  border-left: none !important;
 }
 
-.avakio-datatable-cell[data-colspan="5"] {
-  flex-grow: 5;
+/* Highlight row - remove borders between cells */
+.avakio-datatable-row:has(.avakio-datatable-cell.highlight) {
+  background: var(--primary-light, #dbeafe) !important;
+}
+
+.avakio-datatable-row:has(.avakio-datatable-cell.highlight) .avakio-datatable-cell {
+  background: var(--primary-light, #dbeafe) !important;
+  border-right-color: transparent !important;
+}
+
+/* Dark mode highlight */
+[data-theme="dark"] .avakio-datatable-cell.highlight,
+[data-theme="dark"] .avakio-datatable-row:has(.avakio-datatable-cell.highlight),
+[data-theme="dark"] .avakio-datatable-row:has(.avakio-datatable-cell.highlight) .avakio-datatable-cell {
+  background: var(--primary-dark, #1e3a5f) !important;
+  color: var(--primary-light, #93c5fd);
 }
 
 /* Loading State */
@@ -497,6 +815,29 @@
   padding: 60px 20px;
   color: var(--muted-foreground);
   font-size: 14px;
+}
+
+/* Error State */
+.avakio-datatable-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--destructive, #dc2626);
+  font-size: 14px;
+  text-align: center;
+}
+
+.avakio-datatable-error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: var(--destructive, #dc2626);
+}
+
+.avakio-datatable-error p {
+  max-width: 400px;
+  line-height: 1.5;
 }
 
 /* Footer */

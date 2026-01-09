@@ -256,6 +256,11 @@
   margin-bottom: 0;
 }
 
+/* Center checkbox labels vertically in property rows */
+.av-prop-control .avakio-checkbox {
+  align-items: center;
+}
+
 .av-prop-control .avakio-counter-body {
   height: 36px;
   box-shadow: none;

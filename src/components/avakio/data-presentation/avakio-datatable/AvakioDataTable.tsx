@@ -98,6 +98,10 @@ export interface AvakioColumn<T = any> {
   adjust?: 'data' | 'header' | boolean;
   /** Inline CSS styles for cells in this column, e.g. { textAlign: 'right', fontWeight: 'bold' } */
   css?: React.CSSProperties;
+  /** Allow drag-and-drop reordering for this column (default: true). Only effective when table's allowDragDrop is enabled. */
+  allowDragDrop?: boolean;
+  /** Freeze column to left or right side of the table. Frozen columns don't scroll horizontally. */
+  frozen?: 'left' | 'right' | false;
 }
 
 export type AvakioSpan = [
@@ -126,8 +130,8 @@ export interface AvakioDataTableRef<T = any> extends Omit<AvakioBaseRef<T[]>, 'g
   /** Sets new data for the table */
   setData: (data: T[]) => void;
   
-  /** Returns the currently selected rows */
-  getSelectedRows: () => T[];
+  /** Returns the IDs of currently selected rows */
+  getSelectedRows: () => (string | number)[];
   
   /** Selects rows by indices */
   selectRows: (indices: number[]) => void;
@@ -155,6 +159,15 @@ export interface AvakioDataTableRef<T = any> extends Omit<AvakioBaseRef<T[]>, 'g
   
   /** Refreshes the table (re-renders with current data) */
   refresh: () => void;
+  
+  /** Hides a column by its id */
+  hideColumn: (columnId: string) => void;
+  
+  /** Shows a previously hidden column by its id */
+  showColumn: (columnId: string) => void;
+  
+  /** Returns the IDs of currently selected columns (when select='column') */
+  getSelectedColumns: () => string[];
 }
 
 /**
@@ -186,6 +199,10 @@ export interface AvakioDataTableProps<T = any> extends Omit<AvakioBaseProps, Ava
   sortable?: boolean;
   /** Enable column filtering */
   filterable?: boolean;
+  /** Show borders between columns */
+  columnBorders?: boolean;
+  /** Show borders between rows */
+  rowBorders?: boolean;
   /** Enable pagination */
   paging?: boolean;
   /** Number of rows per page when paging is enabled */
@@ -224,6 +241,12 @@ export interface AvakioDataTableProps<T = any> extends Omit<AvakioBaseProps, Ava
   editable?: boolean;
   /** Callback when a cell value is changed via editing */
   onCellChange?: (rowIndex: number, columnId: string, newValue: any, oldValue: any) => void;
+  /** Enable drag-and-drop column reordering */
+  allowDragDrop?: boolean;
+  /** Callback when columns are reordered via drag-and-drop */
+  onColumnReorder?: (newColumnOrder: string[]) => void;
+  /** Enable bulk selection with checkbox column on the left */
+  bulkSelection?: boolean;
 }
 
 // Inner component with generic type parameter
@@ -242,8 +265,10 @@ function AvakioDataTableInner<T extends Record<string, any>>(
     fixedRowNumber = 0,
     hover = true,
     resizable = true,
-    sortable = true,
-    filterable = true,
+    sortable = false,
+    filterable = false,
+    columnBorders = false,
+    rowBorders = false,
     paging = false,
     pageSize = 20,
     autoConfig = false,
@@ -264,6 +289,9 @@ function AvakioDataTableInner<T extends Record<string, any>>(
     testId,
     editable = false,
     onCellChange,
+    allowDragDrop = false,
+    onColumnReorder,
+    bulkSelection = false,
     // Base props
     className,
     style,
@@ -293,6 +321,25 @@ function AvakioDataTableInner<T extends Record<string, any>>(
   // Root element ref
   const rootRef = useRef<HTMLDivElement>(null);
   
+  // Refs for three-panel frozen columns scroll synchronization
+  const leftFrozenBodyRef = useRef<HTMLDivElement>(null);
+  const scrollableBodyRef = useRef<HTMLDivElement>(null);
+  const scrollableHeaderRef = useRef<HTMLDivElement>(null);
+  const horizontalScrollbarRef = useRef<HTMLDivElement>(null);
+  const rightFrozenBodyRef = useRef<HTMLDivElement>(null);
+  const isScrollSyncing = useRef(false);
+  const isHorizontalScrollSyncing = useRef(false);
+  
+  // State to track if scrolled horizontally (for shadow effects)
+  const [isScrolledLeft, setIsScrolledLeft] = useState(false);
+  const [isScrolledRight, setIsScrolledRight] = useState(false);
+  
+  // State to track scrollbar width for header alignment
+  const [scrollbarWidth, setScrollbarWidth] = useState(0);
+  
+  // State to track if horizontal scroll is needed
+  const [hasHorizontalOverflow, setHasHorizontalOverflow] = useState(false);
+  
   // Internal data state (for ref methods)
   const [internalData, setInternalData] = useState<T[]>(data);
   
@@ -300,6 +347,21 @@ function AvakioDataTableInner<T extends Record<string, any>>(
   useEffect(() => {
     setInternalData(data);
   }, [data]);
+  
+  // Validate that data has 'id' field
+  const dataError = useMemo(() => {
+    if (internalData.length === 0) return null;
+    // Check ALL rows for missing id field
+    const rowsWithoutId = internalData
+      .map((row, index) => ({ row, index }))
+      .filter(({ row }) => !('id' in row) && !('Id' in row));
+    
+    if (rowsWithoutId.length > 0) {
+      const rowIndices = rowsWithoutId.map(r => r.index + 1).join(', ');
+      return `Data Error: Row(s) ${rowIndices} missing "id" field. Each row must have a unique "id" property.`;
+    }
+    return null;
+  }, [internalData]);
   
   // Internal disabled/hidden state (for ref methods)
   const [isDisabled, setIsDisabled] = useState(disabled);
@@ -314,10 +376,30 @@ function AvakioDataTableInner<T extends Record<string, any>>(
   }, [hidden]);
   
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
+  const [selectedCells, setSelectedCells] = useState<Set<string>>(new Set());
+  const [selectedColumns, setSelectedColumns] = useState<Set<string>>(new Set());
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [refreshKey, setRefreshKey] = useState(0);
+  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set());
+  
+  // Column order state for drag-and-drop reordering
+  const [columnOrder, setColumnOrder] = useState<string[]>(() => columns.map(c => c.id));
+  const [draggedColumnId, setDraggedColumnId] = useState<string | null>(null);
+  const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null);
+  
+  // Sync column order when columns prop changes
+  useEffect(() => {
+    const currentIds = new Set(columnOrder);
+    const newIds = columns.map(c => c.id);
+    const newIdsSet = new Set(newIds);
+    
+    // Check if columns have changed
+    if (newIds.length !== columnOrder.length || !newIds.every(id => currentIds.has(id))) {
+      setColumnOrder(newIds);
+    }
+  }, [columns]);
   
   // Lifecycle events
   useEffect(() => {
@@ -333,6 +415,13 @@ function AvakioDataTableInner<T extends Record<string, any>>(
       onViewShow?.();
     }
   }, [isHidden]);
+  
+  // Clear all selections when selection mode changes
+  useEffect(() => {
+    setSelectedRows(new Set());
+    setSelectedCells(new Set());
+    setSelectedColumns(new Set());
+  }, [select]);
   
   // Expose imperative methods via ref
   useImperativeHandle(ref, () => ({
@@ -371,7 +460,10 @@ function AvakioDataTableInner<T extends Record<string, any>>(
       setInternalData(newData);
     },
     getSelectedRows: () => {
-      return Array.from(selectedRows).map(index => internalData[index]).filter(Boolean);
+      return Array.from(selectedRows)
+        .map(index => internalData[index])
+        .filter(Boolean)
+        .map(row => row.id ?? row.Id);
     },
     selectRows: (indices: number[]) => {
       setSelectedRows(new Set(indices));
@@ -380,8 +472,49 @@ function AvakioDataTableInner<T extends Record<string, any>>(
       setSelectedRows(new Set());
     },
     scrollToRow: (index: number) => {
-      const rowElement = rootRef.current?.querySelector(`[data-row-index="${index}"]`);
-      rowElement?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Helper function to scroll row into view
+      const scrollRowIntoView = (rowIdx: number) => {
+        const rowElement = rootRef.current?.querySelector(`[data-row-index="${rowIdx}"]`) as HTMLElement;
+        if (rowElement) {
+          // Find the scrollable container (avakio-datatable-scroll-container has overflow: auto)
+          const scrollContainer = rootRef.current?.querySelector('.avakio-datatable-scroll-container') as HTMLElement;
+          if (scrollContainer) {
+            // Get row position relative to scroll container
+            const containerRect = scrollContainer.getBoundingClientRect();
+            const rowRect = rowElement.getBoundingClientRect();
+            const currentScrollTop = scrollContainer.scrollTop;
+            
+            // Calculate the row's position relative to the scroll container
+            const rowTopRelative = rowRect.top - containerRect.top + currentScrollTop;
+            const containerHeight = scrollContainer.clientHeight;
+            const rowHeight = rowElement.offsetHeight;
+            
+            // Calculate scroll position to center the row
+            const scrollTarget = rowTopRelative - (containerHeight / 2) + (rowHeight / 2);
+            scrollContainer.scrollTo({ top: Math.max(0, scrollTarget), behavior: 'smooth' });
+          }
+        }
+      };
+
+      // If paging is enabled, navigate to the correct page first
+      if (paging && localPageSize > 0) {
+        const targetPage = Math.floor(index / localPageSize) + 1;
+        if (targetPage !== page) {
+          setPage(targetPage);
+          onPageChange?.(targetPage);
+        }
+        // Calculate the index within the page
+        const indexInPage = index % localPageSize;
+        // Select the row
+        setSelectedRows(new Set([indexInPage]));
+        // Use setTimeout to wait for re-render after page change
+        setTimeout(() => scrollRowIntoView(indexInPage), 100);
+      } else {
+        // Select the row
+        setSelectedRows(new Set([index]));
+        // Use setTimeout to ensure DOM is updated
+        setTimeout(() => scrollRowIntoView(index), 50);
+      }
     },
     getSortState: () => ({
       column: sortColumn,
@@ -401,7 +534,20 @@ function AvakioDataTableInner<T extends Record<string, any>>(
     refresh: () => {
       setRefreshKey(prev => prev + 1);
     },
-  }), [internalData, selectedRows, sortColumn, sortDirection, filters, isDisabled, isHidden]);
+    hideColumn: (columnId: string) => {
+      setHiddenColumns(prev => new Set([...prev, columnId]));
+    },
+    showColumn: (columnId: string) => {
+      setHiddenColumns(prev => {
+        const next = new Set(prev);
+        next.delete(columnId);
+        return next;
+      });
+    },
+    getSelectedColumns: () => {
+      return Array.from(selectedColumns);
+    },
+  }), [internalData, selectedRows, selectedColumns, columns, sortColumn, sortDirection, filters, isDisabled, isHidden]);
 
   // Process spans to create a map of cells to skip
   const spanMap = useMemo(() => {
@@ -517,6 +663,10 @@ function AvakioDataTableInner<T extends Record<string, any>>(
     setPage(currentPage);
   }, [currentPage]);
 
+  useEffect(() => {
+    setLocalPageSize(pageSize);
+  }, [pageSize]);
+
   // Filter data (skip if server-side)
   const filteredData = useMemo(() => {
     if (serverSide) return internalData;
@@ -626,9 +776,59 @@ function AvakioDataTableInner<T extends Record<string, any>>(
     }
   }, [filters, onFilter]);
 
+  // Handle cell click for cell selection mode
+  const handleCellClick = useCallback((row: T, rowIndex: number, columnId: string, event: React.MouseEvent) => {
+    if (select === 'cell') {
+      const cellKey = `${rowIndex}-${columnId}`;
+      if (multiselect && (event.ctrlKey || event.metaKey)) {
+        // Multi-select: toggle cell selection
+        setSelectedCells((prev) => {
+          const newSet = new Set(prev);
+          if (newSet.has(cellKey)) {
+            newSet.delete(cellKey);
+          } else {
+            newSet.add(cellKey);
+          }
+          return newSet;
+        });
+      } else {
+        // Single select: replace selection
+        setSelectedCells(new Set([cellKey]));
+      }
+      // Clear row and column selection when in cell mode
+      setSelectedRows(new Set());
+      setSelectedColumns(new Set());
+    }
+  }, [select, multiselect]);
+
+  // Handle column click for column selection mode
+  const handleColumnClick = useCallback((columnId: string, event: React.MouseEvent) => {
+    if (select === 'column') {
+      if (multiselect && (event.ctrlKey || event.metaKey)) {
+        // Multi-select: toggle column selection
+        setSelectedColumns((prev) => {
+          const newSet = new Set(prev);
+          if (newSet.has(columnId)) {
+            newSet.delete(columnId);
+          } else {
+            newSet.add(columnId);
+          }
+          return newSet;
+        });
+      } else {
+        // Single select: replace selection
+        setSelectedColumns(new Set([columnId]));
+      }
+      // Clear row and cell selection when in column mode
+      setSelectedRows(new Set());
+      setSelectedCells(new Set());
+    }
+  }, [select, multiselect]);
+
   // Handle row selection
   const handleRowClick = useCallback((row: T, index: number, event: React.MouseEvent) => {
-    if (select) {
+    // Only handle row selection if not in cell or column selection mode
+    if (select && select !== 'cell' && select !== 'column') {
       if (multiselect && (event.ctrlKey || event.metaKey)) {
         setSelectedRows((prev) => {
           const newSet = new Set(prev);
@@ -641,6 +841,9 @@ function AvakioDataTableInner<T extends Record<string, any>>(
         });
       } else {
         setSelectedRows(new Set([index]));
+        // Clear cell and column selection when switching to row mode
+        setSelectedCells(new Set());
+        setSelectedColumns(new Set());
       }
     }
 
@@ -692,6 +895,63 @@ function AvakioDataTableInner<T extends Record<string, any>>(
     };
   }, [resizingColumn, resizeStartX, resizeStartWidth]);
 
+  // Drag-and-drop column reordering handlers
+  const handleDragStart = useCallback((columnId: string, event: React.DragEvent) => {
+    if (!allowDragDrop) return;
+    setDraggedColumnId(columnId);
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', columnId);
+    // Add a slight delay to allow the drag image to be created
+    setTimeout(() => {
+      const element = event.target as HTMLElement;
+      element.classList.add('dragging');
+    }, 0);
+  }, [allowDragDrop]);
+
+  const handleDragEnd = useCallback((event: React.DragEvent) => {
+    setDraggedColumnId(null);
+    setDragOverColumnId(null);
+    const element = event.target as HTMLElement;
+    element.classList.remove('dragging');
+  }, []);
+
+  const handleDragOver = useCallback((columnId: string, event: React.DragEvent) => {
+    if (!allowDragDrop || !draggedColumnId || draggedColumnId === columnId) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    setDragOverColumnId(columnId);
+  }, [allowDragDrop, draggedColumnId]);
+
+  const handleDragLeave = useCallback((event: React.DragEvent) => {
+    // Only clear if we're leaving the header cell entirely
+    const relatedTarget = event.relatedTarget as HTMLElement;
+    const currentTarget = event.currentTarget as HTMLElement;
+    if (!currentTarget.contains(relatedTarget)) {
+      setDragOverColumnId(null);
+    }
+  }, []);
+
+  const handleDrop = useCallback((targetColumnId: string, event: React.DragEvent) => {
+    event.preventDefault();
+    if (!allowDragDrop || !draggedColumnId || draggedColumnId === targetColumnId) return;
+
+    const newOrder = [...columnOrder];
+    const draggedIndex = newOrder.indexOf(draggedColumnId);
+    const targetIndex = newOrder.indexOf(targetColumnId);
+
+    if (draggedIndex !== -1 && targetIndex !== -1) {
+      // Remove dragged column and insert at target position
+      newOrder.splice(draggedIndex, 1);
+      newOrder.splice(targetIndex, 0, draggedColumnId);
+      
+      setColumnOrder(newOrder);
+      onColumnReorder?.(newOrder);
+    }
+
+    setDraggedColumnId(null);
+    setDragOverColumnId(null);
+  }, [allowDragDrop, draggedColumnId, columnOrder, onColumnReorder]);
+
   // Notify selection changes - only when selectedRows actually changes
   const prevSelectedRowsRef = useRef<Set<number>>(new Set());
   useEffect(() => {
@@ -711,7 +971,136 @@ function AvakioDataTableInner<T extends Record<string, any>>(
     onSelectChange(selected);
   }, [selectedRows]);
 
-  const visibleColumns = columns.filter(col => !col.hidden);
+  // Order columns according to columnOrder, then filter hidden ones
+  const orderedColumns = useMemo(() => {
+    const columnMap = new Map(columns.map(col => [col.id, col]));
+    return columnOrder
+      .map(id => columnMap.get(id))
+      .filter((col): col is AvakioColumn<T> => col !== undefined);
+  }, [columns, columnOrder]);
+  
+  const visibleColumns = orderedColumns.filter(col => !col.hidden && !hiddenColumns.has(col.id));
+
+  // Split columns into frozen left, scrollable, and frozen right
+  const { frozenLeftColumns, scrollableColumns, frozenRightColumns } = useMemo(() => {
+    const left: AvakioColumn<T>[] = [];
+    const middle: AvakioColumn<T>[] = [];
+    const right: AvakioColumn<T>[] = [];
+    
+    visibleColumns.forEach(col => {
+      if (col.frozen === 'left') {
+        left.push(col);
+      } else if (col.frozen === 'right') {
+        right.push(col);
+      } else {
+        middle.push(col);
+      }
+    });
+    
+    return { frozenLeftColumns: left, scrollableColumns: middle, frozenRightColumns: right };
+  }, [visibleColumns]);
+
+  // Check if we have any frozen columns
+  const hasFrozenColumns = frozenLeftColumns.length > 0 || frozenRightColumns.length > 0;
+  
+  // Calculate scrollbar width for header alignment with body (when frozen columns are used)
+  useEffect(() => {
+    if (hasFrozenColumns && scrollableBodyRef.current) {
+      const body = scrollableBodyRef.current;
+      // Scrollbar width = total width - content width
+      const scrollbarW = body.offsetWidth - body.clientWidth;
+      setScrollbarWidth(scrollbarW);
+      
+      // Check if horizontal scroll is needed
+      const needsHorizontalScroll = body.scrollWidth > body.clientWidth;
+      setHasHorizontalOverflow(needsHorizontalScroll);
+      
+      // Sync horizontal scrollbar content width with body scroll width
+      if (horizontalScrollbarRef.current) {
+        const scrollbarContent = horizontalScrollbarRef.current.querySelector('.avakio-datatable-horizontal-scrollbar-content') as HTMLElement;
+        if (scrollbarContent) {
+          scrollbarContent.style.width = `${body.scrollWidth}px`;
+        }
+      }
+    } else {
+      setScrollbarWidth(0);
+      setHasHorizontalOverflow(false);
+    }
+  }, [hasFrozenColumns, paginatedData, loading, scrollableColumns]);
+
+  // Vertical scroll synchronization handler for frozen columns
+  const handleVerticalScroll = useCallback((source: 'left' | 'middle' | 'right') => {
+    if (isScrollSyncing.current) return;
+    isScrollSyncing.current = true;
+    
+    let scrollTop = 0;
+    if (source === 'left' && leftFrozenBodyRef.current) {
+      scrollTop = leftFrozenBodyRef.current.scrollTop;
+    } else if (source === 'middle' && scrollableBodyRef.current) {
+      scrollTop = scrollableBodyRef.current.scrollTop;
+    } else if (source === 'right' && rightFrozenBodyRef.current) {
+      scrollTop = rightFrozenBodyRef.current.scrollTop;
+    }
+    
+    // Sync all panels to the same scroll position
+    if (leftFrozenBodyRef.current && source !== 'left') {
+      leftFrozenBodyRef.current.scrollTop = scrollTop;
+    }
+    if (scrollableBodyRef.current && source !== 'middle') {
+      scrollableBodyRef.current.scrollTop = scrollTop;
+    }
+    if (rightFrozenBodyRef.current && source !== 'right') {
+      rightFrozenBodyRef.current.scrollTop = scrollTop;
+    }
+    
+    // Reset sync flag after a short delay
+    requestAnimationFrame(() => {
+      isScrollSyncing.current = false;
+    });
+  }, []);
+
+  // Horizontal scroll synchronization for scrollable header, body, and scrollbar
+  const handleHorizontalScroll = useCallback((source: 'header' | 'body' | 'scrollbar') => {
+    if (isHorizontalScrollSyncing.current) return;
+    isHorizontalScrollSyncing.current = true;
+    
+    let scrollLeft = 0;
+    let scrollWidth = 0;
+    let clientWidth = 0;
+    
+    if (source === 'header' && scrollableHeaderRef.current) {
+      scrollLeft = scrollableHeaderRef.current.scrollLeft;
+      scrollWidth = scrollableHeaderRef.current.scrollWidth;
+      clientWidth = scrollableHeaderRef.current.clientWidth;
+    } else if (source === 'body' && scrollableBodyRef.current) {
+      scrollLeft = scrollableBodyRef.current.scrollLeft;
+      scrollWidth = scrollableBodyRef.current.scrollWidth;
+      clientWidth = scrollableBodyRef.current.clientWidth;
+    } else if (source === 'scrollbar' && horizontalScrollbarRef.current) {
+      scrollLeft = horizontalScrollbarRef.current.scrollLeft;
+      scrollWidth = horizontalScrollbarRef.current.scrollWidth;
+      clientWidth = horizontalScrollbarRef.current.clientWidth;
+    }
+    
+    // Update shadow states based on scroll position
+    setIsScrolledLeft(scrollLeft > 0);
+    setIsScrolledRight(scrollLeft < scrollWidth - clientWidth - 1);
+    
+    // Sync all horizontal scroll elements
+    if (scrollableHeaderRef.current && source !== 'header') {
+      scrollableHeaderRef.current.scrollLeft = scrollLeft;
+    }
+    if (scrollableBodyRef.current && source !== 'body') {
+      scrollableBodyRef.current.scrollLeft = scrollLeft;
+    }
+    if (horizontalScrollbarRef.current && source !== 'scrollbar') {
+      horizontalScrollbarRef.current.scrollLeft = scrollLeft;
+    }
+    
+    requestAnimationFrame(() => {
+      isHorizontalScrollSyncing.current = false;
+    });
+  }, []);
 
   // Get column width
   const getColumnWidth = (column: AvakioColumn<T>) => {
@@ -764,6 +1153,44 @@ function AvakioDataTableInner<T extends Record<string, any>>(
       minWidth: effectiveMinWidth ? `${effectiveMinWidth}px` : undefined,
       maxWidth: column.maxWidth ? `${column.maxWidth}px` : undefined,
     };
+  };
+
+  // Calculate combined width for colspan cells
+  const getColspanWidth = (startColIndex: number, colspan: number): string => {
+    let totalWidth = 0;
+    let hasFillspace = false;
+    
+    for (let i = 0; i < colspan && startColIndex + i < visibleColumns.length; i++) {
+      const col = visibleColumns[startColIndex + i];
+      if (col.fillspace) {
+        hasFillspace = true;
+      }
+      const width = columnWidths[col.id] || (typeof col.width === 'number' ? col.width : 150);
+      totalWidth += width;
+    }
+    
+    // If any column has fillspace, the span should expand
+    if (hasFillspace) {
+      return 'auto';
+    }
+    
+    return `${totalWidth}px`;
+  };
+
+  // Calculate left offset for a column (used for absolute positioning of rowspan cells)
+  const getColumnLeftOffset = (colIndex: number): number => {
+    let offset = 0;
+    for (let i = 0; i < colIndex; i++) {
+      const col = visibleColumns[i];
+      const width = columnWidths[col.id] || (typeof col.width === 'number' ? col.width : 150);
+      offset += width;
+    }
+    return offset;
+  };
+
+  // Calculate combined height for rowspan cells
+  const getRowspanHeight = (rowspan: number): string => {
+    return `${rowspan * rowHeight}px`;
   };
 
   // Calculate total minimum width of all columns for horizontal scroll threshold
@@ -843,6 +1270,217 @@ function AvakioDataTableInner<T extends Record<string, any>>(
     return value !== null && value !== undefined ? String(value) : '';
   };
 
+  // Helper function to render header cells for a set of columns
+  const renderHeaderCells = (columnsToRender: AvakioColumn<T>[]) => {
+    return columnsToRender.map((column) => {
+      const isColumnSelected = select === 'column' && selectedColumns.has(column.id);
+      const isDragging = draggedColumnId === column.id;
+      const isDragOver = dragOverColumnId === column.id;
+      const isColumnDraggable = allowDragDrop && column.allowDragDrop !== false;
+      return (
+        <div
+          key={column.id}
+          className={`avakio-datatable-header-cell ${filterable ? 'with-filter' : ''} ${column.headerCssClass || ''} ${isColumnSelected ? 'column-selected' : ''} ${isDragging ? 'dragging' : ''} ${isDragOver ? 'drag-over' : ''}`}
+          style={{
+            ...getColumnStyle(column),
+            cursor: isColumnDraggable ? 'grab' : (select === 'column' ? 'pointer' : undefined),
+          }}
+          draggable={isColumnDraggable}
+          onDragStart={(e) => handleDragStart(column.id, e)}
+          onDragEnd={handleDragEnd}
+          onDragOver={(e) => handleDragOver(column.id, e)}
+          onDragLeave={handleDragLeave}
+          onDrop={(e) => handleDrop(column.id, e)}
+          onClick={(e) => {
+            if (select === 'column') {
+              handleColumnClick(column.id, e);
+            }
+          }}
+        >
+          <div
+            className="avakio-datatable-header-content"
+            style={{ pointerEvents: select === 'column' ? 'none' : undefined }}
+            onClick={(e) => {
+              if (sortable && column.sort !== false && select !== 'column') {
+                e.stopPropagation();
+                handleSort(column.id);
+              }
+            }}
+          >
+            <span 
+              className={`avakio-datatable-header-text ${column.headerWrap ? 'avakio-datatable-header-text-wrap' : ''}`}
+            >
+              {column.header}
+            </span>
+            {sortable && column.sort !== false && (
+              <span className="avakio-datatable-sort-icon">
+                {sortColumn === column.id ? (
+                  sortDirection === 'asc' ? <ChevronUp size={16} /> : <ChevronDown size={16} />
+                ) : (
+                  <ChevronsUpDown size={16} className="sort-inactive" />
+                )}
+              </span>
+            )}
+          </div>
+          {filterable && column.filterable !== false && (
+            <div
+              className="avakio-datatable-header-filter"
+              style={{ pointerEvents: select === 'column' ? 'none' : undefined }}
+            >
+              {column.filterComponent ? (
+                column.filterComponent(filters[column.id], (value) => handleFilter(column.id, value))
+              ) : column.filterType === 'date' ? (
+                <AvakioDatePicker
+                  value={filters[column.id] || ''}
+                  onChange={(value) => handleFilter(column.id, value)}
+                  clearable={true}
+                  className="avakio-datatable-filter-input"
+                  height={28}
+                  width="100%"
+                />
+              ) : (
+                <AvakioText
+                  type="text"
+                  value={filters[column.id] || ''}
+                  onChange={(value) => handleFilter(column.id, value)}
+                  clear={true}
+                  className="avakio-datatable-filter-input"
+                  height={28}
+                  width="100%"
+                />
+              )}
+            </div>
+          )}
+          {filterable && column.filterable === false && (
+            <div className="avakio-datatable-header-filter avakio-datatable-header-filter-empty" />
+          )}
+          {resizable && column.resizable !== false && (
+            <div
+              className="avakio-datatable-resize-handle"
+              onMouseDown={(e) => handleResizeStart(column.id, e)}
+            />
+          )}
+        </div>
+      );
+    });
+  };
+
+  // Helper function to render body cells for a row with a set of columns
+  const renderBodyCells = (row: T, rowIndex: number, columnsToRender: AvakioColumn<T>[]) => {
+    const rowId = String(row.id || row.Id);
+    return columnsToRender.map((column, colIndex) => {
+      const cellKey = `${rowId}-${column.id}`;
+      const spanInfo = spanMap.get(cellKey);
+      
+      // For cells covered by rowspan, render a transparent spacer to maintain column layout
+      if (spanInfo && spanInfo.skip) {
+        return (
+          <div
+            key={column.id}
+            className="avakio-datatable-cell avakio-datatable-cell-spacer"
+            style={{
+              ...getColumnStyle(column),
+              background: 'transparent',
+              borderColor: 'transparent',
+            }}
+            aria-hidden="true"
+          />
+        );
+      }
+      
+      const selectionKey = `${rowIndex}-${column.id}`;
+      const isCellSelected = select === 'cell' && selectedCells.has(selectionKey);
+      const isColumnSelected = select === 'column' && selectedColumns.has(column.id);
+      
+      const cellClasses = [
+        'avakio-datatable-cell',
+        column.cssClass || '',
+        spanInfo?.cssClass || '',
+        spanInfo?.colspan && spanInfo.colspan > 1 ? 'avakio-datatable-cell-colspan' : '',
+        spanInfo?.rowspan && spanInfo.rowspan > 1 ? 'avakio-datatable-cell-rowspan' : '',
+        isCellSelected ? 'selected' : '',
+        isColumnSelected ? 'column-selected' : ''
+      ].filter(Boolean).join(' ');
+      
+      // Calculate styles for spanned cells
+      const cellStyle: React.CSSProperties = {
+        ...getColumnStyle(column),
+        textAlign: column.align || 'left',
+        ...column.css,
+      };
+      
+      // Get the actual column index in visibleColumns for colspan calculation
+      const actualColIndex = visibleColumns.findIndex(c => c.id === column.id);
+      
+      // Override width for colspan cells
+      if (spanInfo?.colspan && spanInfo.colspan > 1) {
+        const colspanWidth = getColspanWidth(actualColIndex, spanInfo.colspan);
+        if (colspanWidth !== 'auto') {
+          cellStyle.flex = `0 0 ${colspanWidth}`;
+          cellStyle.width = colspanWidth;
+        } else {
+          cellStyle.flex = `${spanInfo.colspan} 1 auto`;
+        }
+      }
+      
+      // Set height for rowspan cells (keep in normal flow, just extend height)
+      if (spanInfo?.rowspan && spanInfo.rowspan > 1) {
+        cellStyle.height = getRowspanHeight(spanInfo.rowspan);
+        cellStyle.alignSelf = 'flex-start';
+        cellStyle.display = 'flex';
+        cellStyle.alignItems = 'center';
+      }
+      
+      return (
+        <div
+          key={column.id}
+          className={cellClasses}
+          style={{
+            ...cellStyle,
+            cursor: select === 'column' ? 'pointer' : undefined,
+          }}
+          {...(spanInfo?.colspan && spanInfo.colspan > 1 ? { 'data-colspan': spanInfo.colspan } : {})}
+          {...(spanInfo?.rowspan && spanInfo.rowspan > 1 ? { 'data-rowspan': spanInfo.rowspan } : {})}
+          onClick={(e) => {
+            if (select === 'cell') {
+              e.stopPropagation();
+              handleCellClick(row, rowIndex, column.id, e);
+            } else if (select === 'column') {
+              e.stopPropagation();
+              handleColumnClick(column.id, e);
+            }
+          }}
+        >
+          <span className="avakio-datatable-cell-content" style={{ pointerEvents: 'none' }}>
+            {spanInfo?.value !== undefined ? spanInfo.value : renderCell(column, row, rowIndex)}
+          </span>
+        </div>
+      );
+    });
+  };
+
+  // Helper function to render rows for a panel
+  const renderPanelRows = (columnsToRender: AvakioColumn<T>[]) => {
+    return paginatedData.map((row, rowIndex) => {
+      const rowKey = row.id !== undefined ? `row-${row.id}` : rowIndex;
+      
+      return (
+        <div
+          key={rowKey}
+          data-row-index={rowIndex}
+          className={`avakio-datatable-row ${
+            select !== 'cell' && select !== 'column' && selectedRows.has(rowIndex) ? 'selected' : ''
+          } ${hover ? 'hover' : ''}`}
+          style={{ height: `${rowHeight}px` }}
+          onClick={(e) => handleRowClick(row, rowIndex, e)}
+          onDoubleClick={() => handleRowDoubleClick(row, rowIndex)}
+        >
+          {renderBodyCells(row, rowIndex, columnsToRender)}
+        </div>
+      );
+    });
+  };
+
   // Compute base styles from AvakioBaseProps
   const baseStyles = computeBaseStyles({
     align,
@@ -863,7 +1501,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
       ref={rootRef}
       id={id}
       data-testid={testId}
-      className={`avakio-datatable ${css} ${className || ''} ${borderless ? 'avakio-datatable-borderless' : ''} ${isDisabled ? 'avakio-datatable-disabled' : ''}`}
+      className={`avakio-datatable ${css} ${className || ''} ${borderless ? 'avakio-datatable-borderless' : ''} ${columnBorders ? 'avakio-datatable-column-borders' : ''} ${rowBorders ? 'avakio-datatable-row-borders' : ''} ${isDisabled ? 'avakio-datatable-disabled' : ''}`}
       style={baseStyles}
       title={tooltip}
       tabIndex={isDisabled ? -1 : 0}
@@ -871,162 +1509,365 @@ function AvakioDataTableInner<T extends Record<string, any>>(
       onFocus={onFocus}
       onKeyDown={onKeyPress as any}
     >
-      {/* Scroll Container - single horizontal scroll for header and body */}
-      <div className="avakio-datatable-scroll-container">
-        {/* Content wrapper - ensures header and body have same width */}
-        <div className="avakio-datatable-content" style={{ minWidth: `${totalMinWidth}px` }}>
-        {/* Header */}
-        <div className="avakio-datatable-header" style={{ minHeight: `${headerHeight}px` }}>
-        <div className="avakio-datatable-header-row">
-          {visibleColumns.map((column, colIndex) => (
+      {/* Three-panel layout for frozen columns */}
+      {hasFrozenColumns ? (
+        <div className="avakio-datatable-frozen-container">
+          {/* Left Frozen Panel */}
+          {frozenLeftColumns.length > 0 && (
+            <div className={`avakio-datatable-frozen-panel avakio-datatable-frozen-left ${isScrolledLeft ? 'has-shadow' : ''}`}>
+              {/* Left Frozen Header */}
+              <div className={`avakio-datatable-header ${filterable ? 'has-filters' : ''}`} style={{ minHeight: `${headerHeight}px` }}>
+                <div className="avakio-datatable-header-row">
+                  {/* Bulk Selection Checkbox in frozen left panel */}
+                  {bulkSelection && (
+                    <div
+                      className={`avakio-datatable-header-cell avakio-datatable-checkbox-cell ${filterable ? 'with-filter' : ''}`}
+                      style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                    >
+                      <div className="avakio-datatable-header-content" style={{ justifyContent: 'center' }}>
+                        <AvakioCheckbox
+                          checked={paginatedData.length > 0 && selectedRows.size === paginatedData.length}
+                          indeterminate={selectedRows.size > 0 && selectedRows.size < paginatedData.length}
+                          onChange={(checked) => {
+                            if (checked) {
+                              const allIndices = new Set(paginatedData.map((_, idx) => idx));
+                              setSelectedRows(allIndices);
+                            } else {
+                              setSelectedRows(new Set());
+                            }
+                          }}
+                        />
+                      </div>
+                      {filterable && (
+                        <div className="avakio-datatable-header-filter avakio-datatable-header-filter-empty" />
+                      )}
+                    </div>
+                  )}
+                  {renderHeaderCells(frozenLeftColumns)}
+                </div>
+              </div>
+              {/* Left Frozen Body */}
+              <div
+                ref={leftFrozenBodyRef}
+                className="avakio-datatable-body avakio-datatable-frozen-body scrollbar-visible"
+                onScroll={() => handleVerticalScroll('left')}
+              >
+                {loading ? (
+                  <div className="avakio-datatable-loading">
+                    <div className="avakio-datatable-spinner" />
+                  </div>
+                ) : dataError ? (
+                  <div className="avakio-datatable-error">
+                    <div className="avakio-datatable-error-icon">⚠</div>
+                  </div>
+                ) : paginatedData.length === 0 ? null : (
+                  <div className="avakio-datatable-rows">
+                    {paginatedData.map((row, rowIndex) => {
+                      const rowKey = row.id !== undefined ? `row-${row.id}` : rowIndex;
+                      return (
+                        <div
+                          key={rowKey}
+                          data-row-index={rowIndex}
+                          className={`avakio-datatable-row ${
+                            select !== 'cell' && select !== 'column' && selectedRows.has(rowIndex) ? 'selected' : ''
+                          } ${hover ? 'hover' : ''}`}
+                          style={{ height: `${rowHeight}px` }}
+                          onClick={(e) => handleRowClick(row, rowIndex, e)}
+                          onDoubleClick={() => handleRowDoubleClick(row, rowIndex)}
+                        >
+                          {/* Bulk Selection Checkbox Cell in frozen left */}
+                          {bulkSelection && (
+                            <div
+                              className={`avakio-datatable-cell avakio-datatable-checkbox-cell ${selectedRows.has(rowIndex) ? 'selected' : ''}`}
+                              style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <AvakioCheckbox
+                                checked={selectedRows.has(rowIndex)}
+                                onChange={(checked) => {
+                                  const newSet = new Set(selectedRows);
+                                  if (checked) {
+                                    newSet.add(rowIndex);
+                                  } else {
+                                    newSet.delete(rowIndex);
+                                  }
+                                  setSelectedRows(newSet);
+                                }}
+                              />
+                            </div>
+                          )}
+                          {renderBodyCells(row, rowIndex, frozenLeftColumns)}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Middle Scrollable Panel */}
+          <div className="avakio-datatable-scrollable-panel">
+            {/* Scrollable Header - horizontal scroll synced with body */}
+            <div 
+              ref={scrollableHeaderRef}
+              className="avakio-datatable-scrollable-header-container"
+              style={{ paddingRight: scrollbarWidth > 0 ? `${scrollbarWidth}px` : undefined }}
+              onScroll={() => handleHorizontalScroll('header')}
+            >
+              <div className={`avakio-datatable-header ${filterable ? 'has-filters' : ''}`} style={{ minHeight: `${headerHeight}px` }}>
+                <div className="avakio-datatable-header-row">
+                  {/* Bulk Selection only in left frozen panel when frozen columns exist */}
+                  {bulkSelection && frozenLeftColumns.length === 0 && (
+                    <div
+                      className={`avakio-datatable-header-cell avakio-datatable-checkbox-cell ${filterable ? 'with-filter' : ''}`}
+                      style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                    >
+                      <div className="avakio-datatable-header-content" style={{ justifyContent: 'center' }}>
+                        <AvakioCheckbox
+                          checked={paginatedData.length > 0 && selectedRows.size === paginatedData.length}
+                          indeterminate={selectedRows.size > 0 && selectedRows.size < paginatedData.length}
+                          onChange={(checked) => {
+                            if (checked) {
+                              const allIndices = new Set(paginatedData.map((_, idx) => idx));
+                              setSelectedRows(allIndices);
+                            } else {
+                              setSelectedRows(new Set());
+                            }
+                          }}
+                        />
+                      </div>
+                      {filterable && (
+                        <div className="avakio-datatable-header-filter avakio-datatable-header-filter-empty" />
+                      )}
+                    </div>
+                  )}
+                  {renderHeaderCells(scrollableColumns)}
+                </div>
+              </div>
+            </div>
+            {/* Scrollable Body - horizontal scroll synced with header, vertical scroll synced with frozen panels */}
             <div
-              key={column.id}
-              className={`avakio-datatable-header-cell ${column.headerCssClass || ''} ${
-                sortColumn === column.id ? 'sorted' : ''
-              }`}
-              style={{
-                ...getColumnStyle(column),
-                textAlign: column.align || 'left',
+              ref={scrollableBodyRef}
+              className={`avakio-datatable-body avakio-datatable-scrollable-body scrollbar-visible`}
+              onScroll={(e) => {
+                handleVerticalScroll('middle');
+                handleHorizontalScroll('body');
               }}
             >
-              <div
-                className="avakio-datatable-header-content"
-                onClick={() => sortable && column.sort !== false && handleSort(column.id)}
-              >
-                <span className={`avakio-datatable-header-text ${column.headerWrap ? 'avakio-datatable-header-text-wrap' : ''}`}>{column.header}</span>
-                {sortable && column.sort !== false && (
-                  <span className="avakio-datatable-sort-icon">
-                    {sortColumn === column.id ? (
-                      sortDirection === 'asc' ? (
-                        <ChevronUp size={16} />
-                      ) : (
-                        <ChevronDown size={16} />
-                      )
-                    ) : (
-                      <ChevronsUpDown size={16} style={{ opacity: 0.4 }} />
-                    )}
-                  </span>
-                )}
-              </div>
-              {resizable && column.resizable !== false && (
-                <div
-                  className="avakio-datatable-resize-handle"
-                  onMouseDown={(e) => handleResizeStart(column.id, e)}
-                />
+              {loading ? (
+                <div className="avakio-datatable-loading">
+                  <div className="avakio-datatable-spinner" />
+                  <p>Loading data...</p>
+                </div>
+              ) : dataError ? (
+                <div className="avakio-datatable-error">
+                  <div className="avakio-datatable-error-icon">⚠</div>
+                  <p>{dataError}</p>
+                </div>
+              ) : paginatedData.length === 0 ? (
+                <div className="avakio-datatable-empty">
+                  <p>{emptyText}</p>
+                </div>
+              ) : (
+                <div className="avakio-datatable-rows">
+                  {paginatedData.map((row, rowIndex) => {
+                    const rowKey = row.id !== undefined ? `row-${row.id}` : rowIndex;
+                    return (
+                      <div
+                        key={rowKey}
+                        data-row-index={rowIndex}
+                        className={`avakio-datatable-row ${
+                          select !== 'cell' && select !== 'column' && selectedRows.has(rowIndex) ? 'selected' : ''
+                        } ${hover ? 'hover' : ''}`}
+                        style={{ height: `${rowHeight}px` }}
+                        onClick={(e) => handleRowClick(row, rowIndex, e)}
+                        onDoubleClick={() => handleRowDoubleClick(row, rowIndex)}
+                      >
+                        {/* Bulk Selection only if no frozen left columns */}
+                        {bulkSelection && frozenLeftColumns.length === 0 && (
+                          <div
+                            className={`avakio-datatable-cell avakio-datatable-checkbox-cell ${selectedRows.has(rowIndex) ? 'selected' : ''}`}
+                            style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <AvakioCheckbox
+                              checked={selectedRows.has(rowIndex)}
+                              onChange={(checked) => {
+                                const newSet = new Set(selectedRows);
+                                if (checked) {
+                                  newSet.add(rowIndex);
+                                } else {
+                                  newSet.delete(rowIndex);
+                                }
+                                setSelectedRows(newSet);
+                              }}
+                            />
+                          </div>
+                        )}
+                        {renderBodyCells(row, rowIndex, scrollableColumns)}
+                      </div>
+                    );
+                  })}
+                </div>
               )}
             </div>
-          ))}
-        </div>
-
-        {/* Filter Row */}
-        {filterable && (
-          <div className="avakio-datatable-filter-row">
-            {visibleColumns.map((column, colIndex) => (
+            {/* Horizontal Scrollbar - only shown when horizontal overflow exists */}
+            {hasHorizontalOverflow && (
               <div
-                key={column.id}
-                className="avakio-datatable-filter-cell"
-                style={getColumnStyle(column)}
+                ref={horizontalScrollbarRef}
+                className="avakio-datatable-horizontal-scrollbar"
+                onScroll={() => handleHorizontalScroll('scrollbar')}
               >
-                {column.filterable !== false && (
-                  <>
-                    {column.filterComponent ? (
-                      column.filterComponent(filters[column.id], (value) => handleFilter(column.id, value))
-                    ) : (
-                      <AvakioText
-                        type="text"
-                        placeholder="Filter..."
-                        value={filters[column.id] || ''}
-                        onChange={(value) => handleFilter(column.id, value)}
-                        clear={true}
-                        icon={<Search size={12} />}
-                        iconPosition="left"
-                        className="avakio-datatable-filter-input"
-                        height={28}
-                        width="100%"
-                      />
-                    )}
-                  </>
+                <div className="avakio-datatable-horizontal-scrollbar-content" />
+              </div>
+            )}
+          </div>
+
+          {/* Right Frozen Panel */}
+          {frozenRightColumns.length > 0 && (
+            <div className={`avakio-datatable-frozen-panel avakio-datatable-frozen-right ${isScrolledRight ? 'has-shadow' : ''}`}>
+              {/* Right Frozen Header */}
+              <div className={`avakio-datatable-header ${filterable ? 'has-filters' : ''}`} style={{ minHeight: `${headerHeight}px` }}>
+                <div className="avakio-datatable-header-row">
+                  {renderHeaderCells(frozenRightColumns)}
+                </div>
+              </div>
+              {/* Right Frozen Body */}
+              <div
+                ref={rightFrozenBodyRef}
+                className="avakio-datatable-body avakio-datatable-frozen-body scrollbar-visible"
+                onScroll={() => handleVerticalScroll('right')}
+              >
+                {loading || dataError || paginatedData.length === 0 ? null : (
+                  <div className="avakio-datatable-rows">
+                    {paginatedData.map((row, rowIndex) => {
+                      const rowKey = row.id !== undefined ? `row-${row.id}` : rowIndex;
+                      return (
+                        <div
+                          key={rowKey}
+                          data-row-index={rowIndex}
+                          className={`avakio-datatable-row ${
+                            select !== 'cell' && select !== 'column' && selectedRows.has(rowIndex) ? 'selected' : ''
+                          } ${hover ? 'hover' : ''}`}
+                          style={{ height: `${rowHeight}px` }}
+                          onClick={(e) => handleRowClick(row, rowIndex, e)}
+                          onDoubleClick={() => handleRowDoubleClick(row, rowIndex)}
+                        >
+                          {renderBodyCells(row, rowIndex, frozenRightColumns)}
+                        </div>
+                      );
+                    })}
+                  </div>
                 )}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Body */}
-      <div
-        className={`avakio-datatable-body ${scroll ? `scroll-${scroll}` : ''} scrollbar-visible`}
-      >
-        {loading ? (
-          <div className="avakio-datatable-loading">
-            <div className="avakio-datatable-spinner" />
-            <p>Loading data...</p>
-          </div>
-        ) : paginatedData.length === 0 ? (
-          <div className="avakio-datatable-empty">
-            <p>{emptyText}</p>
-          </div>
-        ) : (
-          <div className="avakio-datatable-rows">
-            {paginatedData.map((row, rowIndex) => {
-              // Use a unique identifier from the row if available, otherwise fall back to rowIndex
-              const rowKey = row.id !== undefined ? `row-${row.id}` : rowIndex;
-              const rowId = String(row.id || row.Id);
-              
-              return (
-              <div
-                key={rowKey}
-                className={`avakio-datatable-row ${
-                  selectedRows.has(rowIndex) ? 'selected' : ''
-                } ${hover ? 'hover' : ''}`}
-                style={{ height: `${rowHeight}px` }}
-                onClick={(e) => handleRowClick(row, rowIndex, e)}
-                onDoubleClick={() => handleRowDoubleClick(row, rowIndex)}
-              >
-                {visibleColumns.map((column, colIndex) => {
-                  const cellKey = `${rowId}-${column.id}`;
-                  const spanInfo = spanMap.get(cellKey);
-                  
-                  // Skip cells that are covered by a span
-                  if (spanInfo && spanInfo.skip) {
-                    return null;
-                  }
-                  
-                  const cellClasses = [
-                    'avakio-datatable-cell',
-                    column.cssClass || '',
-                    spanInfo?.cssClass || ''
-                  ].filter(Boolean).join(' ');
-                  
-                  return (
-                    <div
-                      key={column.id}
-                      className={cellClasses}
-                      style={{
-                        ...getColumnStyle(column),
-                        textAlign: column.align || 'left',
-                        ...column.css,
-                      }}
-                      {...(spanInfo?.colspan && spanInfo.colspan > 1 ? { 'data-colspan': spanInfo.colspan } : {})}
-                      {...(spanInfo?.rowspan && spanInfo.rowspan > 1 ? { 'data-rowspan': spanInfo.rowspan } : {})}
-                    >
-                      <span className="avakio-datatable-cell-content">
-                        {spanInfo?.value !== undefined ? spanInfo.value : renderCell(column, row, rowIndex)}
-                      </span>
+            </div>
+          )}
+        </div>
+      ) : (
+        /* Original single-panel layout when no frozen columns */
+        <div className="avakio-datatable-scroll-container">
+          {/* Content wrapper - ensures header and body have same width */}
+          <div className="avakio-datatable-content" style={{ minWidth: `${totalMinWidth}px` }}>
+            {/* Header */}
+            <div className={`avakio-datatable-header ${filterable ? 'has-filters' : ''}`} style={{ minHeight: `${headerHeight}px` }}>
+              <div className="avakio-datatable-header-row">
+                {/* Bulk Selection Checkbox Column Header */}
+                {bulkSelection && (
+                  <div
+                    className={`avakio-datatable-header-cell avakio-datatable-checkbox-cell ${filterable ? 'with-filter' : ''}`}
+                    style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                  >
+                    <div className="avakio-datatable-header-content" style={{ justifyContent: 'center' }}>
+                      <AvakioCheckbox
+                        checked={paginatedData.length > 0 && selectedRows.size === paginatedData.length}
+                        indeterminate={selectedRows.size > 0 && selectedRows.size < paginatedData.length}
+                        onChange={(checked) => {
+                          if (checked) {
+                            const allIndices = new Set(paginatedData.map((_, idx) => idx));
+                            setSelectedRows(allIndices);
+                          } else {
+                            setSelectedRows(new Set());
+                          }
+                        }}
+                      />
                     </div>
-                  );
-                })}
+                    {filterable && (
+                      <div className="avakio-datatable-header-filter avakio-datatable-header-filter-empty" />
+                    )}
+                  </div>
+                )}
+                {renderHeaderCells(visibleColumns)}
               </div>
-              );
-            })}
+            </div>
+
+            {/* Body */}
+            <div
+              className={`avakio-datatable-body ${scroll ? `scroll-${scroll}` : ''} scrollbar-visible`}
+            >
+              {loading ? (
+                <div className="avakio-datatable-loading">
+                  <div className="avakio-datatable-spinner" />
+                  <p>Loading data...</p>
+                </div>
+              ) : dataError ? (
+                <div className="avakio-datatable-error">
+                  <div className="avakio-datatable-error-icon">⚠</div>
+                  <p>{dataError}</p>
+                </div>
+              ) : paginatedData.length === 0 ? (
+                <div className="avakio-datatable-empty">
+                  <p>{emptyText}</p>
+                </div>
+              ) : (
+                <div className="avakio-datatable-rows">
+                  {paginatedData.map((row, rowIndex) => {
+                    const rowKey = row.id !== undefined ? `row-${row.id}` : rowIndex;
+                    return (
+                      <div
+                        key={rowKey}
+                        data-row-index={rowIndex}
+                        className={`avakio-datatable-row ${
+                          select !== 'cell' && select !== 'column' && selectedRows.has(rowIndex) ? 'selected' : ''
+                        } ${hover ? 'hover' : ''}`}
+                        style={{ height: `${rowHeight}px` }}
+                        onClick={(e) => handleRowClick(row, rowIndex, e)}
+                        onDoubleClick={() => handleRowDoubleClick(row, rowIndex)}
+                      >
+                        {/* Bulk Selection Checkbox Cell */}
+                        {bulkSelection && (
+                          <div
+                            className={`avakio-datatable-cell avakio-datatable-checkbox-cell ${selectedRows.has(rowIndex) ? 'selected' : ''}`}
+                            style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <AvakioCheckbox
+                              checked={selectedRows.has(rowIndex)}
+                              onChange={(checked) => {
+                                const newSet = new Set(selectedRows);
+                                if (checked) {
+                                  newSet.add(rowIndex);
+                                } else {
+                                  newSet.delete(rowIndex);
+                                }
+                                setSelectedRows(newSet);
+                              }}
+                            />
+                          </div>
+                        )}
+                        {renderBodyCells(row, rowIndex, visibleColumns)}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </div>
-      </div>
-      </div>
+        </div>
+      )}
 
       {/* Footer with Pagination */}
-      {paging && !loading && paginatedData.length > 0 && (
+      {paging && !loading && !dataError && paginatedData.length > 0 && (
         <div className="avakio-datatable-footer">
           <div className="avakio-datatable-footer-info">
             Showing {(page - 1) * localPageSize + 1} to{' '}

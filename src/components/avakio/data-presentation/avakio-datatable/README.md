@@ -9,6 +9,7 @@ A high-performance, feature-rich DataTable component inspired by Avakio DataTabl
 - **Filtering**: Built-in column filters with search functionality
 - **Pagination**: Server-side and client-side pagination support
 - **Column Resizing**: Drag column edges to resize
+- **Frozen Columns**: Pin columns to left or right side while scrolling horizontally
 - **Row Selection**: Single and multi-row selection modes
 - **Custom Rendering**: Template functions for custom cell rendering
 - **Responsive Design**: Mobile-friendly with adaptive layouts
@@ -237,11 +238,68 @@ function SelectableTable() {
 | `filterable` | `boolean` | `true` | Show filter for this column |
 | `hidden` | `boolean` | `false` | Hide this column |
 | `resizable` | `boolean` | `true` | Allow resizing this column |
+| `frozen` | `'left' \| 'right' \| false` | `false` | Pin column to left or right side |
 | `template` | `(row: T) => React.ReactNode` | - | Custom cell renderer |
 | `format` | `(value: any) => string` | - | Format cell value |
 | `cssClass` | `string` | - | CSS class for cells |
 | `headerCssClass` | `string` | - | CSS class for header cell |
 | `align` | `'left' \| 'center' \| 'right'` | `'left'` | Text alignment |
+
+## Frozen Columns
+
+Freeze columns to keep them visible while scrolling horizontally. This is useful for tables with many columns where you want key columns (like ID or actions) always visible.
+
+### Basic Usage
+
+```tsx
+const columns: AvakioColumn<User>[] = [
+  {
+    id: 'id',
+    header: 'ID',
+    width: 80,
+    frozen: 'left',  // Pin to left side
+  },
+  {
+    id: 'name',
+    header: 'Name',
+    width: 150,
+    frozen: 'left',  // Also pinned to left
+  },
+  // ... scrollable columns in the middle
+  {
+    id: 'email',
+    header: 'Email',
+    width: 200,
+  },
+  {
+    id: 'department',
+    header: 'Department',
+    width: 150,
+  },
+  {
+    id: 'status',
+    header: 'Status',
+    width: 100,
+    frozen: 'right',  // Pin to right side
+  },
+];
+```
+
+### Features
+
+- **Three-panel layout**: Left frozen, scrollable middle, right frozen
+- **Synchronized scrolling**: Vertical scroll syncs across all panels
+- **Single vertical scrollbar**: Located on the rightmost panel
+- **Horizontal scrollbar**: Only appears when content overflows horizontally
+- **Shadow effects**: Visual indicators appear when scrolled away from frozen panels
+- **Theme compatible**: Works with all admin themes
+
+### Notes
+
+- Frozen columns must have explicit widths for proper layout
+- The vertical scrollbar appears only on the right panel
+- All frozen left columns appear before scrollable columns
+- All frozen right columns appear after scrollable columns
 
 ## Styling
 

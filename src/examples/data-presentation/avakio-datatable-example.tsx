@@ -1,9 +1,10 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { AvakioDataTable } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
-import type { AvakioColumn, AvakioDataTableRef } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
+import type { AvakioColumn, AvakioDataTableRef, AvakioSpan } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
 import { AvakioCheckbox } from '../../components/avakio/ui-controls/avakio-checkbox/avakio-checkbox';
+import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
@@ -62,30 +63,27 @@ const propsData: PropDoc[] = [
   { id: 1, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID' },
   { id: 2, name: 'columns', type: 'AvakioColumn<T>[]', defaultValue: '[]', description: 'Array of column definitions' },
   { id: 3, name: 'data', type: 'T[]', defaultValue: '[]', description: 'Array of data objects to display' },
-  { id: 4, name: 'height', type: 'number | string', defaultValue: "'auto'", description: 'Fixed height of the table' },
-  { id: 5, name: 'width', type: 'number | string', defaultValue: "'100%'", description: 'Width of the table' },
-  { id: 6, name: 'paging', type: 'boolean', defaultValue: 'false', description: 'Enable pagination' },
-  { id: 7, name: 'pageSize', type: 'number', defaultValue: '20', description: 'Number of rows per page' },
-  { id: 8, name: 'currentPage', type: 'number', defaultValue: '1', description: 'Current page number' },
-  { id: 9, name: 'totalCount', type: 'number', defaultValue: 'undefined', description: 'Total record count (server-side)' },
-  { id: 10, name: 'sortable', type: 'boolean', defaultValue: 'true', description: 'Enable column sorting' },
-  { id: 11, name: 'filterable', type: 'boolean', defaultValue: 'true', description: 'Enable column filtering' },
-  { id: 12, name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Enable column resizing' },
-  { id: 13, name: 'select', type: "boolean | 'row' | 'cell' | 'column'", defaultValue: 'false', description: 'Selection mode' },
-  { id: 14, name: 'multiselect', type: 'boolean', defaultValue: 'false', description: 'Enable multi-row selection' },
-  { id: 15, name: 'hover', type: 'boolean', defaultValue: 'true', description: 'Enable row hover effect' },
-  { id: 16, name: 'editable', type: 'boolean', defaultValue: 'false', description: 'Enable cell editing based on column type' },
-  { id: 17, name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show loading state' },
-  { id: 18, name: 'emptyText', type: 'string', defaultValue: "'No data available'", description: 'Message when no data' },
-  { id: 19, name: 'serverSide', type: 'boolean', defaultValue: 'false', description: 'Enable server-side operations' },
-  { id: 20, name: 'onRowClick', type: '(row, index) => void', defaultValue: 'undefined', description: 'Row click callback' },
-  { id: 21, name: 'onRowDoubleClick', type: '(row, index) => void', defaultValue: 'undefined', description: 'Row double-click callback' },
-  { id: 22, name: 'onSelectChange', type: '(rows) => void', defaultValue: 'undefined', description: 'Selection change callback' },
-  { id: 23, name: 'onSort', type: '(columnId, direction) => void', defaultValue: 'undefined', description: 'Sort callback' },
-  { id: 24, name: 'onFilter', type: '(filters) => void', defaultValue: 'undefined', description: 'Filter callback' },
-  { id: 25, name: 'onPageChange', type: '(page) => void', defaultValue: 'undefined', description: 'Page change callback' },
-  { id: 26, name: 'onPageSizeChange', type: '(size) => void', defaultValue: 'undefined', description: 'Page size change callback' },
-  { id: 27, name: 'onCellChange', type: '(rowIndex, columnId, newValue, oldValue) => void', defaultValue: 'undefined', description: 'Cell value change callback (editable mode)' },
+  { id: 4, name: 'spans', type: 'AvakioSpan[]', defaultValue: 'undefined', description: 'Cell span definitions: [rowId, columnId, colspan, rowspan, value?, cssClass?]' },
+  { id: 5, name: 'height', type: 'number | string', defaultValue: "'auto'", description: 'Fixed height of the table' },
+  { id: 6, name: 'width', type: 'number | string', defaultValue: "'100%'", description: 'Width of the table' },
+  { id: 7, name: 'paging', type: 'boolean', defaultValue: 'false', description: 'Enable pagination' },
+  { id: 8, name: 'pageSize', type: 'number', defaultValue: '20', description: 'Number of rows per page' },
+  { id: 9, name: 'currentPage', type: 'number', defaultValue: '1', description: 'Current page number' },
+  { id: 10, name: 'totalCount', type: 'number', defaultValue: 'undefined', description: 'Total record count (server-side)' },
+  { id: 11, name: 'sortable', type: 'boolean', defaultValue: 'false', description: 'Enable column sorting' },
+  { id: 12, name: 'filterable', type: 'boolean', defaultValue: 'false', description: 'Enable column filtering' },
+  { id: 13, name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Enable column resizing' },
+  { id: 14, name: 'columnBorders', type: 'boolean', defaultValue: 'false', description: 'Show borders between columns' },
+  { id: 15, name: 'rowBorders', type: 'boolean', defaultValue: 'false', description: 'Show borders between rows' },
+  { id: 16, name: 'select', type: "boolean | 'row' | 'cell' | 'column'", defaultValue: 'false', description: 'Selection mode' },
+  { id: 17, name: 'multiselect', type: 'boolean', defaultValue: 'false', description: 'Enable multi-row selection' },
+  { id: 18, name: 'hover', type: 'boolean', defaultValue: 'true', description: 'Enable row hover effect' },
+  { id: 19, name: 'editable', type: 'boolean', defaultValue: 'false', description: 'Enable cell editing based on column type' },
+  { id: 20, name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show loading state' },
+  { id: 21, name: 'emptyText', type: 'string', defaultValue: "'No data available'", description: 'Message when no data' },
+  { id: 22, name: 'serverSide', type: 'boolean', defaultValue: 'false', description: 'Enable server-side operations' },
+  { id: 23, name: 'allowDragDrop', type: 'boolean', defaultValue: 'false', description: 'Enable drag-and-drop column reordering' },
+  { id: 24, name: 'bulkSelection', type: 'boolean', defaultValue: 'false', description: 'Enable bulk selection with checkbox column on the left' },
 ];
 
 const columnPropsData: PropDoc[] = [
@@ -109,6 +107,96 @@ const columnPropsData: PropDoc[] = [
   { id: 18, name: 'cssClass', type: 'string', defaultValue: 'undefined', description: 'CSS class for cells' },
   { id: 19, name: 'headerCssClass', type: 'string', defaultValue: 'undefined', description: 'CSS class for header' },
   { id: 20, name: 'headerWrap', type: 'boolean', defaultValue: 'false', description: 'Allow header text wrapping' },
+  { id: 21, name: 'allowDragDrop', type: 'boolean', defaultValue: 'true', description: 'Allow drag-and-drop reordering for this column (only when table allowDragDrop is enabled)' },
+  { id: 22, name: 'frozen', type: "'left' | 'right' | false", defaultValue: 'false', description: 'Freeze column to left or right side. Frozen columns don\'t scroll horizontally.' },
+];
+
+// Span configuration documentation
+interface SpanDoc {
+  id: number;
+  index: string;
+  type: string;
+  description: string;
+}
+
+const spanPropsData: SpanDoc[] = [
+  { id: 1, index: '0', type: 'string | number', description: 'Row ID - The id value of the row where the span starts' },
+  { id: 2, index: '1', type: 'string', description: 'Column ID - The id of the column where the span starts' },
+  { id: 3, index: '2', type: 'number', description: 'Colspan - Number of columns to span (1 = no span)' },
+  { id: 4, index: '3', type: 'number', description: 'Rowspan - Number of rows to span (1 = no span)' },
+  { id: 5, index: '4', type: 'any (optional)', description: 'Value - Custom value to display in the spanned cell' },
+  { id: 6, index: '5', type: 'string (optional)', description: 'CSS Class - CSS class to apply to the spanned cell (e.g., "highlight")' },
+];
+
+const spanColumns: AvakioColumn<SpanDoc>[] = [
+  { id: 'index', header: 'Index', width: 80 },
+  { id: 'type', header: 'Type', width: 180 },
+  { id: 'description', header: 'Description', fillspace: true },
+];
+
+// Methods documentation data
+interface MethodDoc {
+  id: number;
+  name: string;
+  signature: string;
+  description: string;
+}
+
+const methodsData: MethodDoc[] = [
+  { id: 1, name: 'getData', signature: '() => T[]', description: 'Returns the current table data' },
+  { id: 2, name: 'setData', signature: '(data: T[]) => void', description: 'Sets new data for the table' },
+  { id: 3, name: 'getSelectedRows', signature: '() => (string | number)[]', description: 'Returns the IDs of currently selected rows' },
+  { id: 4, name: 'getSelectedColumns', signature: '() => string[]', description: 'Returns the IDs of currently selected columns (when select="column")' },
+  { id: 5, name: 'selectRows', signature: '(indices: number[]) => void', description: 'Selects rows by indices' },
+  { id: 6, name: 'clearSelection', signature: '() => void', description: 'Clears all row selections' },
+  { id: 7, name: 'scrollToRow', signature: '(index: number) => void', description: 'Scrolls to a specific row index' },
+  { id: 8, name: 'getSortState', signature: '() => { column: string | null; direction: "asc" | "desc" }', description: 'Returns the current sort state' },
+  { id: 9, name: 'setSortState', signature: '(column: string | null, direction: "asc" | "desc") => void', description: 'Sets the sort state programmatically' },
+  { id: 10, name: 'getFilterValues', signature: '() => Record<string, string>', description: 'Returns the current filter values' },
+  { id: 11, name: 'setFilterValues', signature: '(filters: Record<string, string>) => void', description: 'Sets filter values programmatically' },
+  { id: 12, name: 'clearFilters', signature: '() => void', description: 'Clears all filters' },
+  { id: 13, name: 'refresh', signature: '() => void', description: 'Refreshes the table (re-renders with current data)' },
+  { id: 14, name: 'enable', signature: '() => void', description: 'Enables the component' },
+  { id: 15, name: 'disable', signature: '() => void', description: 'Disables the component' },
+  { id: 16, name: 'show', signature: '() => void', description: 'Shows the component' },
+  { id: 17, name: 'hide', signature: '() => void', description: 'Hides the component' },
+  { id: 18, name: 'hideColumn', signature: '(columnId: string) => void', description: 'Hides a column by its id' },
+  { id: 19, name: 'showColumn', signature: '(columnId: string) => void', description: 'Shows a previously hidden column by its id' },
+];
+
+const methodsColumns: AvakioColumn<MethodDoc>[] = [
+  { id: 'name', header: 'Method', width: 160 },
+  { id: 'signature', header: 'Signature', width: 380 },
+  { id: 'description', header: 'Description', fillspace: true },
+];
+
+// Events documentation data
+interface EventDoc {
+  id: number;
+  name: string;
+  signature: string;
+  description: string;
+}
+
+const eventsData: EventDoc[] = [
+  { id: 1, name: 'onRowClick', signature: '(row: T, index: number) => void', description: 'Fired when a row is clicked' },
+  { id: 2, name: 'onRowDoubleClick', signature: '(row: T, index: number) => void', description: 'Fired when a row is double-clicked' },
+  { id: 3, name: 'onSelectChange', signature: '(selected: T[]) => void', description: 'Fired when selection changes' },
+  { id: 4, name: 'onSort', signature: '(columnId: string, direction: "asc" | "desc") => void', description: 'Fired when sorting changes (server-side mode)' },
+  { id: 5, name: 'onFilter', signature: '(filters: Record<string, string>) => void', description: 'Fired when filters change (server-side mode)' },
+  { id: 6, name: 'onPageChange', signature: '(page: number) => void', description: 'Fired when page changes' },
+  { id: 7, name: 'onPageSizeChange', signature: '(pageSize: number) => void', description: 'Fired when page size changes' },
+  { id: 8, name: 'onCellChange', signature: '(rowIndex: number, columnId: string, newValue: any, oldValue: any) => void', description: 'Fired when a cell value is changed via editing' },
+  { id: 9, name: 'onColumnReorder', signature: '(newColumnOrder: string[]) => void', description: 'Fired when columns are reordered via drag-and-drop' },
+  { id: 10, name: 'onBlur', signature: '(e: FocusEvent) => void', description: 'Fired when the component loses focus' },
+  { id: 11, name: 'onFocus', signature: '(e: FocusEvent) => void', description: 'Fired when the component gains focus' },
+  { id: 12, name: 'onKeyPress', signature: '(e: KeyboardEvent) => void', description: 'Fired when a key is pressed' },
+];
+
+const eventsColumns: AvakioColumn<EventDoc>[] = [
+  { id: 'name', header: 'Event', width: 180 },
+  { id: 'signature', header: 'Signature', width: 450 },
+  { id: 'description', header: 'Description', fillspace: true },
 ];
 
 const propsColumns: AvakioColumn<PropDoc>[] = [
@@ -123,6 +211,9 @@ export function AvakioDataTableExample() {
   
   // Section refs for scroll navigation
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  
+  // Playground DataTable ref for method testing
+  const playgroundTableRef = useRef<AvakioDataTableRef<Person>>(null);
   
   // Editable table state
   const [editableData, setEditableData] = useState([
@@ -144,8 +235,12 @@ export function AvakioDataTableExample() {
     { id: 'sortable', label: 'Sortable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable column sorting' },
     { id: 'filterable', label: 'Filterable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable column filtering' },
     { id: 'resizable', label: 'Resizable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable column resizing' },
+    { id: 'columnBorders', label: 'Column Borders', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show borders between columns' },
+    { id: 'rowBorders', label: 'Row Borders', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show borders between rows' },
     { id: 'hover', label: 'Hover', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable row hover effect' },
     { id: 'editable', label: 'Editable', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable cell editing' },
+    { id: 'allowDragDrop', label: 'Allow Drag Drop', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable column drag-drop reordering' },
+    { id: 'bulkSelection', label: 'Bulk Selection', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable checkbox column for bulk selection' },
     
     // Selection Group
     {
@@ -158,6 +253,7 @@ export function AvakioDataTableExample() {
         { id: 'false', value: 'None' },
         { id: 'row', value: 'Row' },
         { id: 'cell', value: 'Cell' },
+        { id: 'column', value: 'Column' },
       ],
     },
     { id: 'multiselect', label: 'Multi-select', type: 'checkbox', value: false, group: 'Selection', checkboxLabel: 'Allow multiple selection' },
@@ -258,12 +354,51 @@ export function AvakioDataTableExample() {
 
   // Playground columns
   const playgroundColumns: AvakioColumn<Person>[] = [
-    { id: 'id', header: 'ID', width: 60, align: 'center', sort: true },
+    
     { id: 'name', header: 'Name', width: 150, sort: true, filterable: true },
     { id: 'email', header: 'Email', fillspace: true, filterable: true },
     { id: 'department', header: 'Department', width: 130, filterable: true },
     { id: 'status', header: 'Status', width: 100, align: 'center', filterable: true },
     { id: 'salary', header: 'Salary', width: 120, align: 'right', sort: true, format: (val) => `$${val.toLocaleString()}` },
+  ];
+
+  // Spans example data (similar to Webix example)
+  const spanFilmData = [
+    { id: 1, title: "The Shawshank Redemption", country: "USA", year: 1994, votes: 678790, rating: 9.5 },
+    { id: 2, title: "The Godfather", country: "USA", year: 1972, votes: 511495, rating: 9.2 },
+    { id: 3, title: "The Godfather: Part II", country: "USA", year: 1974, votes: 319352, rating: 9.0 },
+    { id: "sub1", title: "", country: "", year: "", votes: "", rating: 9.5, $css: "highlight-row" },
+    { id: 4, title: "The Good, the Bad and the Ugly", country: "Italy", year: 1966, votes: 213030, rating: 8.9 },
+    { id: 5, title: "The Star Maker", country: "Italy", year: 1995, votes: 164558, rating: 7.9 },
+    { id: "sub2", title: "", country: "", year: "", votes: "", rating: 8.9, $css: "highlight-row" },
+    { id: 6, title: "Amelie", country: "France", year: 2001, votes: 533848, rating: 8.5 },
+    { id: 7, title: "The Intouchables", country: "France", year: 2011, votes: 352058, rating: 8.6 },
+    { id: 8, title: "Van Gogh", country: "France", year: 1991, votes: 352058, rating: 7.4 },
+    { id: "sub3", title: "", country: "", year: "", votes: "", rating: 8.6, $css: "highlight-row" },
+  ];
+
+  const spanFilmColumns: AvakioColumn<typeof spanFilmData[0]>[] = [
+    { id: 'country', header: 'Country', width: 100 },
+    { id: 'title', header: 'Film Title', fillspace: true },
+    { id: 'year', header: 'Released', width: 80 },
+    { id: 'votes', header: 'Votes', width: 100 },
+    { id: 'rating', header: 'Rating', width: 100 },
+  ];
+
+  const filmSpans: AvakioSpan[] = [
+    // Country column spans 3 rows for USA
+    [1, "country", 1, 3],
+    // Country column spans 2 rows for Italy
+    [4, "country", 1, 2],
+    // Country column spans 3 rows for France
+    [6, "country", 1, 3],
+    // Highlight rows: first 4 columns show "Highest Rating", rating column shows value with highlight
+    ["sub1", "country", 4, 1, "Highest Rating", "highlight"],
+    ["sub1", "rating", 1, 1, undefined, "highlight"],
+    ["sub2", "country", 4, 1, "Highest Rating", "highlight"],
+    ["sub2", "rating", 1, 1, undefined, "highlight"],
+    ["sub3", "country", 4, 1, "Highest Rating", "highlight"],
+    ["sub3", "rating", 1, 1, undefined, "highlight"],
   ];
 
   return (
@@ -320,6 +455,8 @@ export function AvakioDataTableExample() {
                 data={sampleData}
                 columns={basicColumns}
                 height={280}
+                columnBorders={true}
+                rowBorders={true}
                 onRowClick={(row, index) => addLog('onRowClick', `row ${index}: ${row.name}`)}
               />
             </div>,
@@ -471,6 +608,38 @@ export function AvakioDataTableExample() {
           ]}
         />
 
+        {/* Column Selection */}
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioTemplate
+              key="col-select-title"
+              type="clean"
+              borderType="clean"
+              content={<strong>Column Selection</strong>}
+            />,
+            <AvakioTemplate
+              key="col-select-desc"
+              type="clean"
+              borderType="clean"
+              padding={[8, 0, 0, 0]}
+              content="Set select='column' to enable column selection. Click any cell or header to select the entire column. Use multiselect={true} with Ctrl+click for multiple columns."
+            />,
+            <div key="col-select-table" style={{ marginTop: '16px' }}>
+              <AvakioDataTable
+                data={sampleData}
+                columns={basicColumns}
+                select="column"
+                multiselect
+                height={280}
+              />
+            </div>,
+          ]}
+        />
+
         {/* Custom Cell Rendering */}
         <AvakioLayout
           type="clean"
@@ -525,6 +694,79 @@ export function AvakioDataTableExample() {
                   },
                 ]}
                 height={280}
+              />
+            </div>,
+          ]}
+        />
+
+        {/* Cell Spans */}
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioTemplate
+              key="spans-title"
+              type="clean"
+              borderType="clean"
+              content={<strong>Cell Spans (colspan & rowspan)</strong>}
+            />,
+            <AvakioTemplate
+              key="spans-desc"
+              type="clean"
+              borderType="clean"
+              padding={[8, 0, 0, 0]}
+              content="Use the spans prop to merge cells across columns (colspan) or rows (rowspan). Format: [rowId, columnId, colspan, rowspan, value?, cssClass?]"
+            />,
+            <div key="spans-table" style={{ marginTop: '16px' }}>
+              <AvakioDataTable
+                data={spanFilmData}
+                columns={spanFilmColumns}
+                spans={filmSpans}
+                columnBorders
+                rowBorders
+                height={400}
+              />
+            </div>,
+          ]}
+        />
+
+        {/* Frozen Columns */}
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioTemplate
+              key="frozen-title"
+              type="clean"
+              borderType="clean"
+              content={<strong>Frozen Columns</strong>}
+            />,
+            <AvakioTemplate
+              key="frozen-desc"
+              type="clean"
+              borderType="clean"
+              padding={[8, 0, 0, 0]}
+              content="Use frozen: 'left' or frozen: 'right' on columns to freeze them. Frozen columns stay visible while scrolling horizontally. Vertical scroll is synchronized across all panels."
+            />,
+            <div key="frozen-table" style={{ marginTop: '16px' }}>
+              <AvakioDataTable
+                data={sampleData}
+                columns={[
+                  { id: 'id', header: 'ID', width: 60, align: 'center', frozen: 'left' },
+                  { id: 'name', header: 'Name', width: 150, frozen: 'left' },
+                  { id: 'email', header: 'Email', width: 200 },
+                  { id: 'age', header: 'Age', width: 80, align: 'center' },
+                  { id: 'department', header: 'Department', width: 150 },
+                  { id: 'salary', header: 'Salary', width: 120, align: 'right', format: (val) => `$${val.toLocaleString()}` },
+                  { id: 'status', header: 'Status', width: 100, frozen: 'right' },
+                ]}
+                height={300}
+                columnBorders
+                select="row"
               />
             </div>,
           ]}
@@ -623,17 +865,23 @@ export function AvakioDataTableExample() {
           borderless={false}
           margin={12}
           padding={16}
+          height={750}
           rows={[
             <AvakioLayout
               key="playground-layout"
               type="clean"
               borderless={true}
+              responsive
+              autoResize
+              gap={16}
+              height="100%"
               cols={[
                 // Column 1 - Preview
                 <AvakioLayout
                   key="preview-col"
                   type="clean"
                   borderless={true}
+                  height="100%"
                   rows={[
                     <AvakioTemplate
                       key="preview-title"
@@ -642,62 +890,359 @@ export function AvakioDataTableExample() {
                       padding={[0, 0, 10, 0]}
                       content={<strong>Preview</strong>}
                     />,
-                    <div key="playground-table">
-                      <AvakioDataTable
-                        id="Playground_DataTable"
-                        data={sampleData}
-                        columns={playgroundColumns}
-                        // Display props
-                        height={getPropValue('height', 300)}
-                        emptyText={getPropValue('emptyText', 'No data available')}
-                        // Features props
-                        paging={getPropValue('paging', true)}
-                        sortable={getPropValue('sortable', true)}
-                        filterable={getPropValue('filterable', true)}
-                        resizable={getPropValue('resizable', true)}
-                        hover={getPropValue('hover', true)}
-                        editable={getPropValue('editable', false)}
-                        // Selection props
-                        select={getPropValue('select', 'false') === 'false' ? false : getPropValue('select', 'row') as 'row' | 'cell'}
-                        multiselect={getPropValue('multiselect', false)}
-                        // Pagination props
-                        pageSize={Number(getPropValue('pageSize', '5'))}
-                        // State props
-                        loading={getPropValue('loading', false)}
-                        // Callbacks
-                        onRowClick={(row, index) => addLog('onRowClick', `row ${index}: ${row.name}`)}
-                        onRowDoubleClick={(row, index) => addLog('onRowDoubleClick', `row ${index}: ${row.name}`)}
-                        onSelectChange={(rows) => addLog('onSelectChange', `${rows.length} rows`)}
-                        onSort={(col, dir) => addLog('onSort', `${col} ${dir}`)}
-                        onFilter={(filters) => addLog('onFilter', JSON.stringify(filters))}
-                        onPageChange={(page) => addLog('onPageChange', `page ${page}`)}
-                        onPageSizeChange={(size) => addLog('onPageSizeChange', `${size} rows`)}
-                        onCellChange={(rowIdx, colId, newVal, oldVal) => addLog('onCellChange', `[${rowIdx}].${colId}: ${oldVal} → ${newVal}`)}
-                      />
-                    </div>,
+                    <AvakioDataTable
+                      key="playground-table"
+                      ref={playgroundTableRef}
+                      id="Playground_DataTable"
+                      data={sampleData}
+                      columns={playgroundColumns}
+                      // Display props
+                      height={getPropValue('height', 300)}
+                      emptyText={getPropValue('emptyText', 'No data available')}
+                      // Features props
+                      paging={getPropValue('paging', true)}
+                      sortable={getPropValue('sortable', true)}
+                      filterable={getPropValue('filterable', true)}
+                      resizable={getPropValue('resizable', true)}
+                      columnBorders={getPropValue('columnBorders', false)}
+                      rowBorders={getPropValue('rowBorders', false)}
+                      hover={getPropValue('hover', true)}
+                      editable={getPropValue('editable', false)}
+                      allowDragDrop={getPropValue('allowDragDrop', false)}
+                      bulkSelection={getPropValue('bulkSelection', false)}
+                      // Selection props
+                      select={getPropValue('select', 'false') === 'false' ? false : getPropValue('select', 'row') as 'row' | 'cell' | 'column'}
+                      multiselect={getPropValue('multiselect', false)}
+                      // Pagination props
+                      pageSize={Number(getPropValue('pageSize', '5'))}
+                      // State props
+                      loading={getPropValue('loading', false)}
+                      // Callbacks
+                      onRowClick={(row, index) => addLog('onRowClick', `row ${index}: ${row.name}`)}
+                      onRowDoubleClick={(row, index) => addLog('onRowDoubleClick', `row ${index}: ${row.name}`)}
+                      onSelectChange={(rows) => addLog('onSelectChange', `${rows.length} rows`)}
+                      onSort={(col, dir) => addLog('onSort', `${col} ${dir}`)}
+                      onFilter={(filters) => addLog('onFilter', JSON.stringify(filters))}
+                      onPageChange={(page) => addLog('onPageChange', `page ${page}`)}
+                      onPageSizeChange={(size) => addLog('onPageSizeChange', `${size} rows`)}
+                      onCellChange={(rowIdx, colId, newVal, oldVal) => addLog('onCellChange', `[${rowIdx}].${colId}: ${oldVal} → ${newVal}`)}
+                      onColumnReorder={(newOrder) => addLog('onColumnReorder', newOrder.join(', '))}
+                    />,
+                    <AvakioTemplate
+                      key="methods-title"
+                      type="clean"
+                      borderType="clean"
+                      padding={[16, 0, 10, 0]}
+                      content={<strong>Ref Methods</strong>}
+                    />,
+                    <AvakioTemplate
+                      key="methods-buttons"
+                      type="clean"
+                      borderType="clean"
+                      padding={[0, 0, 0, 0]}
+                      scroll="xy"
+                      flexWrap={true}
+                      content={
+                        <>
+                          <AvakioButton
+                            size="sm"
+                            label="getData()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const data = playgroundTableRef.current?.getData();
+                              addLog('getData()', `${data?.length} rows returned`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="getSelectedRows()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const selected = playgroundTableRef.current?.getSelectedRows();
+                              addLog('getSelectedRows()', selected?.length ? `IDs: [${selected.join(', ')}]` : 'No rows selected');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="getSelectedColumns()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const selected = playgroundTableRef.current?.getSelectedColumns();
+                              addLog('getSelectedColumns()', selected?.length ? `IDs: [${selected.join(', ')}]` : 'No columns selected');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="selectRows([0,2])"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.selectRows([0, 2]);
+                              addLog('selectRows([0,2])', 'Selected rows 0 and 2');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="clearSelection()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.clearSelection();
+                              addLog('clearSelection()', 'Cleared selection');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="scrollToRow(5)"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.scrollToRow(5);
+                              addLog('scrollToRow(5)', 'Scrolled to row 5');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="getSortState()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const sort = playgroundTableRef.current?.getSortState();
+                              addLog('getSortState()', JSON.stringify(sort));
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="setSortState()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.setSortState('name', 'asc');
+                              addLog('setSortState()', 'name asc');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="getFilterValues()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const filters = playgroundTableRef.current?.getFilterValues();
+                              addLog('getFilterValues()', JSON.stringify(filters));
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="setFilterValues()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.setFilterValues({ name: 'John' });
+                              addLog('setFilterValues()', '{ name: "John" }');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="clearFilters()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.clearFilters();
+                              addLog('clearFilters()', 'Cleared filters');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="hideColumn(email)"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.hideColumn('email');
+                              addLog('hideColumn()', 'email hidden');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="showColumn(email)"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.showColumn('email');
+                              addLog('showColumn()', 'email shown');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="refresh()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.refresh();
+                              addLog('refresh()', 'Table refreshed');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="disable()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.disable();
+                              addLog('disable()', 'Table disabled');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="enable()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.enable();
+                              addLog('enable()', 'Table enabled');
+                            }}
+                          />
+                        </>
+                      }
+                    />,
                   ]}
                 />,
                 // Column 2 - Configuration
                 <AvakioLayout
                   key="config-col"
+                  id="Layout-row-Column2"
                   type="clean"
                   borderless={true}
+                  height="100%"
                   rows={[
-                    <AvakioTemplate
-                      key="config-title"
+                    <AvakioLayout
+                      id="Layout-row1-col-Column2"
+                      key="config-header"
                       type="clean"
-                      borderType="clean"
-                      padding={[0, 0, 10, 0]}
-                      content={<strong>Configuration</strong>}
+                      borderless={true}
+                      height="50px"
+                      width="100%"
+                      cols={[
+                        <AvakioTemplate
+                          id="Template-config-header"
+                          key="config-title"
+                          type="clean"
+                          borderType="clean"
+                          content={<strong>Configuration</strong>}
+                        />,
+                        <AvakioTemplate
+                          id="Template-config-header-button"
+                          key="config-reset"
+                          type="clean"
+                          borderType="clean"
+                          width="100%"
+                          align="right"
+                          content={
+                            <AvakioButton
+                              id="Button-reset-playground"
+                              size="sm"
+                              label="Reset"
+                              align="right"
+                              onClick={() => {
+                                // Reset to initial values
+                                setPlaygroundProps([
+                                  // Data & Display Group
+                                  { id: 'height', label: 'Height', type: 'number', value: 300, group: 'Display', placeholder: 'e.g. 400' },
+                                  { id: 'emptyText', label: 'Empty Text', type: 'text', value: 'No data available', group: 'Display', placeholder: 'Message when empty' },
+                                  // Features Group
+                                  { id: 'paging', label: 'Paging', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable pagination' },
+                                  { id: 'sortable', label: 'Sortable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable column sorting' },
+                                  { id: 'filterable', label: 'Filterable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable column filtering' },
+                                  { id: 'resizable', label: 'Resizable', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable column resizing' },
+                                  { id: 'columnBorders', label: 'Column Borders', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show borders between columns' },
+                                  { id: 'rowBorders', label: 'Row Borders', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show borders between rows' },
+                                  { id: 'hover', label: 'Hover', type: 'checkbox', value: true, group: 'Features', checkboxLabel: 'Enable row hover effect' },
+                                  { id: 'editable', label: 'Editable', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable cell editing' },
+                                  { id: 'allowDragDrop', label: 'Allow Drag Drop', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable column drag-drop reordering' },
+                                  { id: 'bulkSelection', label: 'Bulk Selection', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable checkbox column for bulk selection' },
+                                  // Selection Group
+                                  {
+                                    id: 'select',
+                                    label: 'Selection Mode',
+                                    type: 'select',
+                                    value: 'false',
+                                    group: 'Selection',
+                                    selectOptions: [
+                                      { id: 'false', value: 'None' },
+                                      { id: 'row', value: 'Row' },
+                                      { id: 'cell', value: 'Cell' },
+                                      { id: 'column', value: 'Column' },
+                                    ],
+                                  },
+                                  { id: 'multiselect', label: 'Multi-select', type: 'checkbox', value: false, group: 'Selection', checkboxLabel: 'Allow multiple selection' },
+                                  // Pagination Group
+                                  {
+                                    id: 'pageSize',
+                                    label: 'Page Size',
+                                    type: 'select',
+                                    value: '5',
+                                    group: 'Pagination',
+                                    selectOptions: [
+                                      { id: '5', value: '5 rows' },
+                                      { id: '10', value: '10 rows' },
+                                      { id: '20', value: '20 rows' },
+                                      { id: '50', value: '50 rows' },
+                                    ],
+                                  },
+                                  // State Group
+                                  { id: 'loading', label: 'Loading', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Show loading state' },
+                                ]);
+                                addLog('Reset', 'playground configuration reset to defaults');
+                              }}
+                            />
+                          }
+                        />,
+                      ]}
                     />,
                     <AvakioProperty
+                      id="Property-playground-props"
                       key="config-property"
+                      className="avakio-fill-container"
                       items={playgroundProps}
                       onChange={handlePlaygroundPropsChange}
                       dense
                       showBorders
-                      maxHeight={500}
-                      style={{ overflowY: 'auto' }}
+                      autoHeight
+                      overflowY="auto"
                     />,
                   ]}
                 />,
@@ -736,6 +1281,9 @@ export function AvakioDataTableExample() {
               id="datatable-props-table"
               data={propsData}
               columns={propsColumns}
+              filterable={true}
+              sortable={true}
+              rowBorders={true}
               select={false}
               height={600}
             />,
@@ -760,10 +1308,136 @@ export function AvakioDataTableExample() {
               id="datatable-column-props-table"
               data={columnPropsData}
               columns={propsColumns}
+              filterable={true}
+              sortable={true}
+              rowBorders={true}
               select={false}
               height={500}
             />,
           ]}
+        />
+
+        {/* Methods Table */}
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[24, 0, 0, 16]}
+          content={<strong>Methods (via ref)</strong>}
+        />
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[4, 0, 0, 16]}
+          content="Access methods using a ref: const tableRef = useRef<AvakioDataTableRef<T>>(null)"
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={0}
+          rows={[
+            <AvakioDataTable<MethodDoc>
+              key="methods-table"
+              id="datatable-methods-table"
+              data={methodsData}
+              columns={methodsColumns}
+              filterable={true}
+              sortable={true}
+              rowBorders={true}
+              select={false}
+              height={400}
+            />,
+          ]}
+        />
+
+        {/* Events Table */}
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[24, 0, 0, 16]}
+          content={<strong>Events</strong>}
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={0}
+          rows={[
+            <AvakioDataTable<EventDoc>
+              key="events-table"
+              id="datatable-events-table"
+              data={eventsData}
+              columns={eventsColumns}
+              filterable={true}
+              sortable={true}
+              rowBorders={true}
+              select={false}
+              height={320}
+            />,
+          ]}
+        />
+
+        {/* Spans Configuration */}
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[24, 0, 0, 16]}
+          content={<strong>Spans Configuration (AvakioSpan)</strong>}
+        />
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[8, 0, 8, 16]}
+          content="The spans prop accepts an array of AvakioSpan tuples. Each span is defined as a tuple with the following elements:"
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={0}
+          rows={[
+            <AvakioDataTable<SpanDoc>
+              key="span-docs-table"
+              id="datatable-span-docs-table"
+              data={spanPropsData}
+              columns={spanColumns}
+              rowBorders={true}
+              select={false}
+              height={260}
+            />,
+          ]}
+        />
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[8, 0, 0, 16]}
+          content={
+            <code style={{ fontSize: '13px', background: '#f1f5f9', padding: '8px 12px', borderRadius: '4px', display: 'block' }}>
+              {`type AvakioSpan = [rowId: string | number, columnId: string, colspan: number, rowspan: number, value?: any, cssClass?: string]`}
+            </code>
+          }
+        />
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[16, 0, 0, 16]}
+          content={
+            <div>
+              <strong>Example:</strong>
+              <pre style={{ fontSize: '12px', background: '#f1f5f9', padding: '12px', borderRadius: '4px', marginTop: '8px', overflow: 'auto' }}>
+{`const spans: AvakioSpan[] = [
+  // Country column spans multiple rows
+  [1, 'country', 1, 3],           // Row 1, "country" column, colspan=1, rowspan=3
+  
+  // Highlight row spanning all columns
+  [4, 'country', 4, 1, 'Highest Rating', 'highlight'],  // Full row span with custom value and CSS class
+  
+  // Single cell highlight
+  [3, 'rating', 1, 1, null, 'highlight'],  // Apply highlight class to rating cell
+];`}
+              </pre>
+            </div>
+          }
         />
       </section>
     </div>
