@@ -59,10 +59,7 @@
   gap: 12px;
 }
 
-/* Borderless */
-.avakio-form--borderless {
-  border: none;
-}
+/* Borderless - uses base styles from avakio-base.css */
 
 /* Disabled State */
 .avakio-form--disabled {

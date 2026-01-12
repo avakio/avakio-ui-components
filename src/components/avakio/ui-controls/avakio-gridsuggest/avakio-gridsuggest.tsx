@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, X, Search } from 'lucide-react';
+import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-gridsuggest.css';
 
 export interface AvakioGridSuggestColumn {
@@ -287,6 +288,15 @@ export function AvakioGridSuggest({
   const maxHeight = body?.yCount ? body.yCount * 40 : enableScroll ? 300 : undefined;
 
   return (
+    <AvakioControlLabel
+      label={label}
+      labelAlign={labelAlign}
+      labelWidth={labelWidth}
+      required={required}
+      invalid={!!error}
+      invalidMessage={error}
+      classPrefix="avakio-gridsuggest"
+    >
     <div
       ref={containerRef}
       data-testid={testId}
@@ -296,19 +306,6 @@ export function AvakioGridSuggest({
       data-readonly={readonly}
       data-error={!!error}
     >
-      {label && (
-        <label
-          className="avakio-gridsuggest-label"
-          style={{
-            width: labelAlign === 'left' ? labelWidth : undefined,
-            textAlign: labelAlign,
-          }}
-        >
-          {label}
-          {required && <span className="avakio-gridsuggest-required">*</span>}
-        </label>
-      )}
-
       <div className="avakio-gridsuggest-wrapper">
         <div className="avakio-gridsuggest-input-wrapper">
           <input
@@ -413,9 +410,8 @@ export function AvakioGridSuggest({
           </div>
         )}
       </div>
-
-      {error && <div className="avakio-gridsuggest-error">{error}</div>}
     </div>
+    </AvakioControlLabel>
   );
 }
 

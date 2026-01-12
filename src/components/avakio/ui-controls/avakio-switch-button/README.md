@@ -188,8 +188,8 @@ switchRef.current?.refresh();
 |------|------|---------|-------------|
 | `value` | `boolean \| number` | `undefined` | Current on/off state (controlled) |
 | `defaultValue` | `boolean \| number` | `false` | Default state (uncontrolled) |
-| `label` | `string` | `undefined` | Left label text |
-| `labelWidth` | `number` | `80` | Width of left label in pixels |
+| `label` | `string` | `undefined` | Left label text (rendered via AvakioControlLabel) |
+| `labelWidth` | `number` | `80` | Width of left label in pixels (rendered via AvakioControlLabel) |
 | `labelRight` | `string` | `undefined` | Right label text |
 | `onLabel` | `string` | `undefined` | Text shown on switch when "on" |
 | `offLabel` | `string` | `undefined` | Text shown on switch when "off" |
@@ -199,7 +199,7 @@ switchRef.current?.refresh();
 | `required` | `boolean` | `false` | Shows required indicator |
 | `invalid` | `boolean` | `false` | Invalid/error state |
 | `invalidMessage` | `string` | `undefined` | Error message text |
-| `bottomLabel` | `string` | `undefined` | Help text below switch |
+| `bottomLabel` | `string` | `undefined` | Help text below switch (rendered via AvakioControlLabel) |
 | `tooltip` | `string` | `undefined` | Tooltip on hover |
 | `onChange` | `(value: boolean) => void` | `undefined` | Change callback |
 

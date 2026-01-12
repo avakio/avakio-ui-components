@@ -71,8 +71,8 @@
   width: 100%;
 }
 
+/* Borderless - uses base styles, removes track background */
 .avakio-segmented-borderless .avakio-segmented-track {
-  border-color: transparent;
   background: transparent;
   padding: 0;
 }

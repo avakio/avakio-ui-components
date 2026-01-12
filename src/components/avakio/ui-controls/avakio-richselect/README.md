@@ -152,11 +152,11 @@ const largeOptions = Array.from({ length: 100 }, (_, i) => ({
 | `readonly` | `boolean` | `false` | Make component read-only |
 | `template` | `(option) => ReactNode` | - | Custom option renderer |
 | `width` | `number \| string` | - | Component width |
-| `maxHeight` | `number` | `300` | Dropdown max height in pixels |
+| `maxHeight` | `number \| string` | - | Dropdown max height (defaults to 300px) |
 | `yCount` | `number` | - | Number of visible items in dropdown list |
 | `required` | `boolean` | `false` | Show required indicator (*) |
 | `error` | `string` | - | Error message to display |
-| `clearable` | `boolean` | `true` | Show clear button |
+| `clearable` | `boolean` | `false` | Show clear button |
 | `className` | `string` | `''` | Additional CSS classes |
 | `id` | `string` | - | HTML ID attribute |
 
@@ -239,18 +239,37 @@ Set theme via data attribute:
 - Large option lists that benefit from search
 - Autocomplete functionality is needed
 
-## API Methods
+## Ref Methods
 
-For advanced usage, helper methods are available:
+AvakioRichSelect exposes imperative methods via ref:
 
 ```tsx
-import { AvakioRichSelectAPI } from './avakio-richselect';
+const richSelectRef = useRef<AvakioRichSelectRef>(null);
 
-// Get the ID of selected option
-const selectedId = AvakioRichSelectAPI.getValue(ref);
+// Use ref methods
+richSelectRef.current?.focus();           // Focus the control
+richSelectRef.current?.blur();            // Remove focus
+richSelectRef.current?.getValue();        // Get current value (ID)
+richSelectRef.current?.getText();         // Get display text
+richSelectRef.current?.setValue('us');    // Set value by ID
+richSelectRef.current?.enable();          // Enable component
+richSelectRef.current?.disable();         // Disable component
+richSelectRef.current?.show();            // Show component
+richSelectRef.current?.hide();            // Hide component
+richSelectRef.current?.isEnabled();       // Check if enabled
+richSelectRef.current?.isVisible();       // Check if visible
+richSelectRef.current?.getElement();      // Get root DOM element
+richSelectRef.current?.getParentView();   // Get parent Avakio container ID or classname
+richSelectRef.current?.validate();        // Run validation
+```
 
-// Get the text value of selected option
-const selectedText = AvakioRichSelectAPI.getText(ref);
+### getParentView()
+
+Returns the ID of the nearest parent Avakio container (AvakioView, AvakioTemplate, AvakioMultiView, AvakioLayout, AvakioGrid, or AvakioAbsoluteLayout). If the container has no ID, returns its classname instead.
+
+```tsx
+const parentId = richSelectRef.current?.getParentView();
+// Returns: 'my-layout-id' or 'avakio-layout' if no ID is set
 ```
 
 ## Best Practices
@@ -259,7 +278,7 @@ const selectedText = AvakioRichSelectAPI.getText(ref);
 2. **Keep option lists reasonable** - Use yCount for large lists
 3. **Provide clear labels** - Help users understand the selection
 4. **Use templates** for rich option displays (icons, colors, etc.)
-5. **Enable clearable** unless selection is required
+5. **Enable clearable** when selection is optional
 6. **Set yCount** for lists with more than 10 items
 
 ## Examples

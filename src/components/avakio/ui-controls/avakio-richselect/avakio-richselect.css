@@ -3,31 +3,72 @@
    =================================== */
 
 .avakio-richselect {
+  --rs-surface: var(--avakio-bg-primary, var(--background, #fff));
+  --rs-border: var(--avakio-border-primary, var(--border, #ddd));
+  --rs-border-focus: var(--avakio-border-focus, #3b82f6);
+  --rs-bg-focus: var(--avakio-bg-selected, #e0f2fe);
+  --rs-text: var(--avakio-text-primary, var(--foreground, #333));
+  --rs-muted: var(--avakio-text-secondary, var(--muted-foreground, #888));
+  --rs-primary: var(--avakio-accent-primary, var(--primary, #3498db));
+  --rs-primary-strong: var(--avakio-accent-hover, var(--primary, #2980b9));
+  --rs-radius: 4px;
+  --rs-invalid: #dc3545;
+  
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
   position: relative;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   margin-bottom: 12px;
+  color: var(--rs-text);
 }
 
-.avakio-richselect-label {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--avakio-text-primary);
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+/* ===================================
+   LABEL OVERRIDES (component-specific)
+   =================================== */
+
+/* Vertical layout overrides for TOP position */
+.avakio-control-label-wrapper-vertical .avakio-control-label-label-top {
+  border-radius: var(--rs-radius) var(--rs-radius) 0 0;
+  border-right: 1px solid var(--rs-primary);
+  border-bottom: none;
+  padding: 6px 12px;
 }
 
-.avakio-richselect-required {
-  color: var(--avakio-text-error);
+.avakio-control-label-wrapper-vertical:has(.avakio-control-label-label-top) .avakio-richselect-button {
+  border-radius: 0 0 var(--rs-radius) var(--rs-radius);
 }
+
+/* Vertical layout overrides for BOTTOM position */
+.avakio-control-label-wrapper-vertical .avakio-control-label-label-bottom {
+  border-radius: 0 0 var(--rs-radius) var(--rs-radius);
+  border-right: 1px solid var(--rs-primary);
+  border-top: none;
+  padding: 6px 12px;
+}
+
+.avakio-control-label-wrapper-vertical:has(.avakio-control-label-label-bottom) .avakio-richselect-button {
+  border-radius: var(--rs-radius) var(--rs-radius) 0 0;
+}
+
+/* Horizontal layout overrides for LEFT position (default) */
+.avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-left) .avakio-control-label-label-left {
+  border-radius: var(--rs-radius) 0 0 var(--rs-radius);
+}
+
+/* Horizontal layout overrides for RIGHT position */
+.avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-right) .avakio-control-label-label-right {
+  border-radius: 0 var(--rs-radius) var(--rs-radius) 0;
+  border-left: none;
+}
+
+/* ===================================
+   SELECT WRAPPER
+   =================================== */
 
 .avakio-richselect-wrapper {
   position: relative;
   flex: 1;
+  display: flex;
 }
 
 .avakio-richselect-button {
@@ -37,46 +78,79 @@
   justify-content: space-between;
   gap: 8px;
   padding: 8px 12px;
-  background-color: var(--avakio-bg-input);
-  border: 1px solid var(--avakio-border-primary);
-  border-radius: 6px;
+  background-color: var(--rs-surface);
+  border: 1px solid var(--rs-border);
+  border-radius: 0 var(--rs-radius) var(--rs-radius) 0;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
   min-height: 38px;
+  box-sizing: border-box;
+  line-height: 1.2;
+}
+
+/* When no label, button has full border radius */
+.avakio-control-label-wrapper:not(:has(.avakio-control-label-label)) .avakio-richselect-button {
+  border-radius: var(--rs-radius);
+}
+
+/* When label is on the left (horizontal layout), button has no left radius */
+.avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-left) .avakio-richselect-button {
+  border-radius: 0 var(--rs-radius) var(--rs-radius) 0;
+}
+
+/* When label is on the right (horizontal layout), button has no right radius */
+.avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-right) .avakio-richselect-button {
+  border-radius: var(--rs-radius) 0 0 var(--rs-radius);
+  border-right: none;
 }
 
 .avakio-richselect-button:hover {
-  border-color: var(--avakio-border-hover);
-  background-color: var(--avakio-bg-hover);
+  border-color: var(--rs-border-focus);
+  background-color: var(--rs-bg-focus);
 }
 
 .avakio-richselect-button:focus {
   outline: none;
-  border-color: var(--avakio-border-focus);
+  border-color: var(--rs-border-focus);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .avakio-richselect-button:disabled {
-  background-color: var(--avakio-bg-disabled);
+  background-color: var(--avakio-bg-disabled, #f5f5f5);
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 .avakio-richselect[data-disabled="true"] .avakio-richselect-button {
-  background-color: var(--avakio-bg-disabled);
+  background-color: var(--avakio-bg-disabled, #f5f5f5);
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 .avakio-richselect[data-readonly="true"] .avakio-richselect-button {
-  background-color: var(--avakio-bg-secondary);
+  background-color: var(--avakio-bg-secondary, #f9f9f9);
   cursor: default;
 }
 
-.avakio-richselect[data-error="true"] .avakio-richselect-button {
-  border-color: var(--avakio-border-error);
+.avakio-richselect[data-invalid="true"] .avakio-richselect-button {
+  border-color: var(--rs-invalid);
+}
+
+/* ===================================
+   BORDERLESS VARIANT
+   Uses base .avakio-borderless styles from avakio-base.css
+   =================================== */
+
+.avakio-richselect-borderless .avakio-richselect-button {
+  border-color: transparent !important;
+  border-radius: 0;
+}
+
+.avakio-richselect-borderless .avakio-control-label-label {
+  border-color: transparent !important;
+  border-radius: 0;
 }
 
 .avakio-richselect-value {
@@ -84,11 +158,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--avakio-text-primary);
+  color: var(--rs-text);
 }
 
 .avakio-richselect-value.placeholder {
-  color: var(--avakio-text-tertiary);
+  color: var(--rs-muted);
 }
 
 .avakio-richselect-icons {
@@ -106,18 +180,18 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  color: var(--avakio-text-secondary);
+  color: var(--rs-muted);
   border-radius: 3px;
   transition: all 0.15s ease;
 }
 
 .avakio-richselect-clear:hover {
-  background-color: var(--avakio-bg-hover);
-  color: var(--avakio-text-primary);
+  background-color: var(--rs-bg-focus);
+  color: var(--rs-text);
 }
 
 .avakio-richselect-toggle {
-  color: var(--avakio-text-secondary);
+  color: var(--rs-muted);
   transition: transform 0.2s ease;
   flex-shrink: 0;
 }
@@ -131,9 +205,9 @@
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background-color: var(--avakio-bg-primary);
-  border: 1px solid var(--avakio-border-primary);
-  border-radius: 6px;
+  background-color: var(--rs-surface);
+  border: 1px solid var(--rs-border);
+  border-radius: var(--rs-radius);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   z-index: 9999;
   overflow-y: auto;
@@ -155,45 +229,118 @@
   padding: 10px 12px;
   cursor: pointer;
   transition: background-color 0.1s ease;
-  color: var(--avakio-text-primary);
+  color: var(--rs-text);
   font-size: 14px;
 }
 
 .avakio-richselect-option:hover,
 .avakio-richselect-option.highlighted {
-  background-color: var(--avakio-bg-hover);
+  background-color: var(--rs-bg-focus);
 }
 
 .avakio-richselect-option.selected {
-  background-color: var(--avakio-bg-selected);
-  color: var(--avakio-accent-primary);
+  background-color: var(--avakio-bg-selected, #e0f2fe);
+  color: var(--rs-primary);
   font-weight: 500;
 }
 
 .avakio-richselect-option.selected:hover {
-  background-color: var(--avakio-bg-selected-hover);
+  background-color: var(--avakio-bg-selected-hover, #bae6fd);
 }
 
 .avakio-richselect-empty {
   padding: 12px;
   text-align: center;
-  color: var(--avakio-text-tertiary);
+  color: var(--rs-muted);
   font-size: 14px;
 }
 
-.avakio-richselect-error {
-  margin-top: 4px;
+/* ===================================
+   SIZE VARIANT: COMPACT
+   =================================== */
+
+.avakio-richselect-compact {
+  margin-bottom: 0;
+}
+
+.avakio-richselect-compact .avakio-control-label-label {
   font-size: 12px;
-  color: var(--avakio-text-error);
+  padding: 4px 10px;
+  min-height: 28px;
+  height: 28px;
+  max-height: 28px;
+  box-sizing: border-box;
+  line-height: 28px;
+}
+
+/* Compact label on the LEFT - rounded left corners */
+.avakio-richselect-compact .avakio-control-label-label-left {
+  border-radius: var(--rs-radius) 0 0 var(--rs-radius);
+}
+
+/* Compact label on the RIGHT - rounded right corners */
+.avakio-richselect-compact .avakio-control-label-label-right {
+  border-radius: 0 var(--rs-radius) var(--rs-radius) 0;
+}
+
+/* Compact label on TOP - rounded top corners */
+.avakio-richselect-compact .avakio-control-label-label-top {
+  border-radius: var(--rs-radius) var(--rs-radius) 0 0;
+}
+
+/* Compact label on BOTTOM - rounded bottom corners */
+.avakio-richselect-compact .avakio-control-label-label-bottom {
+  border-radius: 0 0 var(--rs-radius) var(--rs-radius);
+}
+
+/* Compact button radius based on label position */
+/* LEFT label - button has right radius only */
+.avakio-richselect-compact .avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-left) .avakio-richselect-button {
+  border-radius: 0 var(--rs-radius) var(--rs-radius) 0;
+}
+
+/* RIGHT label - button has left radius only */
+.avakio-richselect-compact .avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-right) .avakio-richselect-button {
+  border-radius: var(--rs-radius) 0 0 var(--rs-radius);
+}
+
+/* TOP label - button has bottom radius */
+.avakio-richselect-compact .avakio-control-label-wrapper-vertical:has(.avakio-control-label-label-top) .avakio-richselect-button {
+  border-radius: 0 0 var(--rs-radius) var(--rs-radius);
+}
+
+/* BOTTOM label - button has top radius */
+.avakio-richselect-compact .avakio-control-label-wrapper-vertical:has(.avakio-control-label-label-bottom) .avakio-richselect-button {
+  border-radius: var(--rs-radius) var(--rs-radius) 0 0;
+}
+
+.avakio-richselect-compact .avakio-richselect-button {
+  padding: 4px 8px;
+  min-height: 28px;
+  height: 28px;
+  max-height: 28px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.avakio-richselect-compact .avakio-richselect-option {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.avakio-richselect-compact .avakio-richselect-toggle {
+  width: 14px;
+  height: 14px;
+}
+
+.avakio-richselect-compact .avakio-richselect-clear svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* ===================================
    THEME: MATERIAL (#1CA1C1)
    =================================== */
-
-[data-admin-theme="material"] .avakio-richselect-label {
-  color: var(--avakio-text-primary);
-}
 
 [data-admin-theme="material"] .avakio-richselect-button:focus {
   border-color: var(--avakio-accent-primary);
@@ -213,12 +360,12 @@
    THEME: FLAT (#5E81AC)
    =================================== */
 
-[data-admin-theme="flat"] .avakio-richselect-label {
-  color: var(--avakio-text-primary);
+[data-admin-theme="flat"] .avakio-richselect-inner-wrapper:not(:has(.avakio-control-label-label)) .avakio-richselect-button {
+  border-radius: 4px;
 }
 
-[data-admin-theme="flat"] .avakio-richselect-button {
-  border-radius: 4px;
+[data-admin-theme="flat"] .avakio-richselect-inner-wrapper:not(.avakio-richselect-inner-wrapper-vertical):has(.avakio-control-label-label) .avakio-richselect-button {
+  border-radius: 0 4px 4px 0;
 }
 
 [data-admin-theme="flat"] .avakio-richselect-button:focus {
@@ -247,16 +394,18 @@
   gap: 8px;
 }
 
-[data-admin-theme="compact"] .avakio-richselect-label {
-  font-size: 13px;
-  color: var(--avakio-text-primary);
-}
-
 [data-admin-theme="compact"] .avakio-richselect-button {
   padding: 6px 10px;
   font-size: 13px;
   min-height: 32px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-inner-wrapper:not(:has(.avakio-control-label-label)) .avakio-richselect-button {
   border-radius: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-richselect-inner-wrapper:not(.avakio-richselect-inner-wrapper-vertical):has(.avakio-control-label-label) .avakio-richselect-button {
+  border-radius: 0 4px 4px 0;
 }
 
 [data-admin-theme="compact"] .avakio-richselect-button:focus {
@@ -285,10 +434,6 @@
 /* ===================================
    THEME: DARK
    =================================== */
-
-[data-admin-theme="dark"] .avakio-richselect-label {
-  color: var(--avakio-text-white);
-}
 
 [data-admin-theme="dark"] .avakio-richselect-button {
   background-color: var(--avakio-bg-tertiary);
@@ -363,10 +508,6 @@
    THEME: OCEAN (#0277BD)
    =================================== */
 
-[data-admin-theme="ocean"] .avakio-richselect-label {
-  color: var(--avakio-accent-secondary);
-}
-
 [data-admin-theme="ocean"] .avakio-richselect-button:focus {
   border-color: var(--avakio-accent-primary);
   box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
@@ -384,10 +525,6 @@
 /* ===================================
    THEME: SUNSET (#f57c00)
    =================================== */
-
-[data-admin-theme="sunset"] .avakio-richselect-label {
-  color: var(--avakio-accent-secondary);
-}
 
 [data-admin-theme="sunset"] .avakio-richselect-button:focus {
   border-color: var(--avakio-accent-primary);

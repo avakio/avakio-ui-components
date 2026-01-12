@@ -52,10 +52,10 @@ function MyForm() {
 | `name` | `string` | - | Form field name |
 | `value` | `string \| string[]` | - | Controlled value |
 | `defaultValue` | `string \| string[]` | - | Default value (uncontrolled) |
-| `label` | `string` | - | Label text |
-| `labelWidth` | `number` | `100` | Label width in pixels |
-| `labelAlign` | `'left' \| 'right'` | `'left'` | Label text alignment |
-| `labelPosition` | `'left' \| 'top'` | `'left'` | Label position |
+| `label` | `string` | - | Label text (rendered via AvakioControlLabel) |
+| `labelWidth` | `number` | `100` | Label width in pixels (rendered via AvakioControlLabel) |
+| `labelAlign` | `'left' \| 'right'` | `'left'` | Label text alignment (rendered via AvakioControlLabel) |
+| `labelPosition` | `'left' \| 'top'` | `'left'` | Label position (rendered via AvakioControlLabel) |
 | `placeholder` | `string` | - | Input placeholder |
 | `required` | `boolean` | `false` | Mark as required |
 | `disabled` | `boolean` | `false` | Disable all inputs |
@@ -67,7 +67,7 @@ function MyForm() {
 | `subConfig` | `object` | - | Config for additional fields |
 | `error` | `string` | - | Error message to display |
 | `invalidMessage` | `string` | - | Validation error message |
-| `bottomLabel` | `string` | - | Help text below fields |
+| `bottomLabel` | `string` | - | Help text below fields (rendered via AvakioControlLabel) |
 | `maxLength` | `number` | - | Max characters per field |
 | `inputAlign` | `'left' \| 'center' \| 'right'` | `'left'` | Input text alignment |
 | `addButtonLabel` | `string` | - | Custom add button text |

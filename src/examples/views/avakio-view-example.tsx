@@ -960,39 +960,40 @@ interface PropDoc {
   defaultValue: string;
   description: string;
   rules: string;
+  from: string;
 }
 
 const propsData: PropDoc[] = [
-  { id: 1, name: 'children', type: 'ReactNode', defaultValue: 'undefined', description: 'Content to display inside the view', rules: 'Any valid React children' },
-  { id: 2, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: "'material'", description: 'Visual theme to apply', rules: 'Affects colors, borders, and overall styling' },
-  { id: 3, name: 'type', type: "'header' | 'section' | 'clean'", defaultValue: "'clean'", description: 'View layout type', rules: 'header: accent background. section: divider style. clean: default' },
-  { id: 4, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the view', rules: 'Accepts px, %, em, rem, or number (treated as px)' },
-  { id: 5, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the view', rules: 'Accepts px, %, em, rem, or number (treated as px)' },
-  { id: 6, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width constraint', rules: 'Same format as width' },
-  { id: 7, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height constraint', rules: 'Same format as height' },
-  { id: 8, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width constraint', rules: 'Same format as width' },
-  { id: 9, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height constraint', rules: 'Same format as height' },
-  { id: 10, name: 'padding', type: 'number | string | [t, r, b, l]', defaultValue: 'undefined', description: 'Inner spacing around content', rules: 'Number: all sides. Array: [top, right, bottom, left]' },
-  { id: 11, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove all borders', rules: 'When true, removes border and box-shadow' },
-  { id: 12, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Hide the view', rules: 'When true, view is not rendered. Triggers onHide callback' },
-  { id: 13, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable interactions', rules: 'Adds opacity and pointer-events: none' },
-  { id: 14, name: 'gravity', type: 'number', defaultValue: 'undefined', description: 'Flex grow factor', rules: 'Used in flex layouts to control space distribution' },
-  { id: 15, name: 'animate', type: "boolean | 'fade' | 'slide' | 'flip'", defaultValue: 'false', description: 'Animation on show/hide', rules: "true: fade. 'fade': fade in/out. 'slide': slide. 'flip': flip" },
-  { id: 16, name: 'className', type: 'string', defaultValue: "''", description: 'Additional CSS class names', rules: 'Appended to default classes' },
-  { id: 17, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Inline CSS styles', rules: 'Merged with computed styles' },
-  { id: 18, name: 'id', type: 'string', defaultValue: 'undefined', description: 'HTML id attribute', rules: 'For DOM selection and accessibility' },
-  { id: 19, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test identifier', rules: 'Sets data-testid attribute for testing' },
-  { id: 20, name: 'container', type: 'string | HTMLElement', defaultValue: 'undefined', description: 'Container element or selector', rules: 'For portal rendering' },
+  { id: 1, name: 'children', type: 'ReactNode', defaultValue: 'undefined', description: 'Content to display inside the view', rules: 'Any valid React children', from: 'View' },
+  { id: 2, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: "'material'", description: 'Visual theme to apply', rules: 'Affects colors, borders, and overall styling', from: 'View' },
+  { id: 3, name: 'type', type: "'header' | 'section' | 'clean'", defaultValue: "'clean'", description: 'View layout type', rules: 'header: accent background. section: divider style. clean: default', from: 'View' },
+  { id: 4, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the view', rules: 'Accepts px, %, em, rem, or number (treated as px)', from: 'Base' },
+  { id: 5, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the view', rules: 'Accepts px, %, em, rem, or number (treated as px)', from: 'Base' },
+  { id: 6, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width constraint', rules: 'Same format as width', from: 'Base' },
+  { id: 7, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height constraint', rules: 'Same format as height', from: 'Base' },
+  { id: 8, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width constraint', rules: 'Same format as width', from: 'Base' },
+  { id: 9, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height constraint', rules: 'Same format as height', from: 'Base' },
+  { id: 10, name: 'padding', type: 'number | string | [t, r, b, l]', defaultValue: 'undefined', description: 'Inner spacing around content', rules: 'Number: all sides. Array: [top, right, bottom, left]', from: 'Base' },
+  { id: 11, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove all borders', rules: 'When true, removes border and box-shadow', from: 'Base' },
+  { id: 12, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Hide the view', rules: 'When true, view is not rendered. Triggers onHide callback', from: 'Base' },
+  { id: 13, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable interactions', rules: 'Adds opacity and pointer-events: none', from: 'Base' },
+  { id: 14, name: 'gravity', type: 'number', defaultValue: 'undefined', description: 'Flex grow factor', rules: 'Used in flex layouts to control space distribution', from: 'View' },
+  { id: 15, name: 'animate', type: "boolean | 'fade' | 'slide' | 'flip'", defaultValue: 'false', description: 'Animation on show/hide', rules: "true: fade. 'fade': fade in/out. 'slide': slide. 'flip': flip", from: 'View' },
+  { id: 16, name: 'className', type: 'string', defaultValue: "''", description: 'Additional CSS class names', rules: 'Appended to default classes', from: 'Base' },
+  { id: 17, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Inline CSS styles', rules: 'Merged with computed styles', from: 'Base' },
+  { id: 18, name: 'id', type: 'string', defaultValue: 'undefined', description: 'HTML id attribute', rules: 'For DOM selection and accessibility', from: 'Base' },
+  { id: 19, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test identifier', rules: 'Sets data-testid attribute for testing', from: 'Base' },
+  { id: 20, name: 'container', type: 'string | HTMLElement', defaultValue: 'undefined', description: 'Container element or selector', rules: 'For portal rendering', from: 'View' },
 ];
 
 const eventPropsData: PropDoc[] = [
-  { id: 1, name: 'onShow', type: '() => void', defaultValue: 'undefined', description: 'Called when view becomes visible', rules: 'Fires after animation completes' },
-  { id: 2, name: 'onHide', type: '() => void', defaultValue: 'undefined', description: 'Called when view is hidden', rules: 'Fires when hidden prop becomes true' },
-  { id: 3, name: 'onResize', type: '(width: number, height: number) => void', defaultValue: 'undefined', description: 'Called when view is resized', rules: 'Uses ResizeObserver internally' },
-  { id: 4, name: 'onClick', type: '(e: MouseEvent) => void', defaultValue: 'undefined', description: 'Click event handler', rules: 'Disabled when disabled=true' },
-  { id: 5, name: 'onFocus', type: '() => void', defaultValue: 'undefined', description: 'Focus event handler', rules: 'View is focusable via tabIndex' },
-  { id: 6, name: 'onBlur', type: '() => void', defaultValue: 'undefined', description: 'Blur event handler', rules: 'Fires when view loses focus' },
-  { id: 7, name: 'onKeyPress', type: '(e: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Keyboard event handler', rules: 'Fires on keyDown events' },
+  { id: 1, name: 'onShow', type: '() => void', defaultValue: 'undefined', description: 'Called when view becomes visible', rules: 'Fires after animation completes', from: 'View' },
+  { id: 2, name: 'onHide', type: '() => void', defaultValue: 'undefined', description: 'Called when view is hidden', rules: 'Fires when hidden prop becomes true', from: 'View' },
+  { id: 3, name: 'onResize', type: '(width: number, height: number) => void', defaultValue: 'undefined', description: 'Called when view is resized', rules: 'Uses ResizeObserver internally', from: 'Base' },
+  { id: 4, name: 'onClick', type: '(e: MouseEvent) => void', defaultValue: 'undefined', description: 'Click event handler', rules: 'Disabled when disabled=true', from: 'Base' },
+  { id: 5, name: 'onFocus', type: '() => void', defaultValue: 'undefined', description: 'Focus event handler', rules: 'View is focusable via tabIndex', from: 'Base' },
+  { id: 6, name: 'onBlur', type: '() => void', defaultValue: 'undefined', description: 'Blur event handler', rules: 'Fires when view loses focus', from: 'Base' },
+  { id: 7, name: 'onKeyPress', type: '(e: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Keyboard event handler', rules: 'Fires on keyDown events', from: 'Base' },
 ];
 
 interface RefMethodDoc {
@@ -1000,17 +1001,18 @@ interface RefMethodDoc {
   name: string;
   description: string;
   rules: string;
+  from: string;
 }
 
 const refMethodsData: RefMethodDoc[] = [
-  { id: 1, name: 'show()', description: 'Make the view visible', rules: 'Sets hidden to false internally' },
-  { id: 2, name: 'hide()', description: 'Hide the view', rules: 'Sets hidden to true internally' },
-  { id: 3, name: 'enable()', description: 'Enable interactions', rules: 'Sets disabled to false' },
-  { id: 4, name: 'disable()', description: 'Disable interactions', rules: 'Sets disabled to true' },
-  { id: 5, name: 'resize(width?, height?)', description: 'Programmatically resize the view', rules: 'Accepts numbers or strings' },
-  { id: 6, name: 'getNode()', description: 'Get DOM element reference', rules: 'Returns HTMLDivElement or null' },
-  { id: 7, name: 'isVisible()', description: 'Check visibility state', rules: 'Returns boolean' },
-  { id: 8, name: 'isEnabled()', description: 'Check enabled state', rules: 'Returns boolean' },
+  { id: 1, name: 'show()', description: 'Make the view visible', rules: 'Sets hidden to false internally', from: 'View' },
+  { id: 2, name: 'hide()', description: 'Hide the view', rules: 'Sets hidden to true internally', from: 'View' },
+  { id: 3, name: 'enable()', description: 'Enable interactions', rules: 'Sets disabled to false', from: 'View' },
+  { id: 4, name: 'disable()', description: 'Disable interactions', rules: 'Sets disabled to true', from: 'View' },
+  { id: 5, name: 'resize(width?, height?)', description: 'Programmatically resize the view', rules: 'Accepts numbers or strings', from: 'View' },
+  { id: 6, name: 'getNode()', description: 'Get DOM element reference', rules: 'Returns HTMLDivElement or null', from: 'View' },
+  { id: 7, name: 'isVisible()', description: 'Check visibility state', rules: 'Returns boolean', from: 'View' },
+  { id: 8, name: 'isEnabled()', description: 'Check enabled state', rules: 'Returns boolean', from: 'View' },
 ];
 
 // Props columns for the DataTable
@@ -1020,12 +1022,14 @@ const propsColumns: AvakioColumn<PropDoc>[] = [
   { id: 'defaultValue', header: 'Default', width: 100 },
   { id: 'description', header: 'Description', width: 250 },
   { id: 'rules', header: 'Rules / Notes', width: 300 },
+  { id: 'from', header: 'From', width: 80, filterType: 'combo' },
 ];
 
 const refColumns: AvakioColumn<RefMethodDoc>[] = [
   { id: 'name', header: 'Method', width: 180, sort: true },
   { id: 'description', header: 'Description', width: 280 },
   { id: 'rules', header: 'Notes', width: 350 },
+  { id: 'from', header: 'From', width: 80, filterType: 'combo' },
 ];
 
 function PropsDocumentation({ theme }: { theme: string }) {
@@ -1060,6 +1064,7 @@ function PropsDocumentation({ theme }: { theme: string }) {
                   resizable={true}
                   paging={true}
                   pageSize={10}
+                  showRowNum={true}
                 />
               }
             />,
@@ -1084,6 +1089,7 @@ function PropsDocumentation({ theme }: { theme: string }) {
                   sortable={true}
                   resizable={true}
                   paging={false}
+                  showRowNum={true}
                 />
               }
             />,
@@ -1108,6 +1114,7 @@ function PropsDocumentation({ theme }: { theme: string }) {
                   sortable={true}
                   resizable={true}
                   paging={false}
+                  showRowNum={true}
                 />
               }
             />,

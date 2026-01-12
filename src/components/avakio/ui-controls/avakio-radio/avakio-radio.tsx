@@ -1,4 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect, useId } from 'react';
+import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-radio.css';
 
 export type AvakioRadioTheme = 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset';
@@ -340,6 +341,17 @@ export const AvakioRadio = forwardRef<AvakioRadioRef, AvakioRadioProps>(
     };
 
     return (
+      <AvakioControlLabel
+        label={label}
+        labelPosition={labelPosition}
+        labelAlign={labelAlign}
+        labelWidth={labelWidth}
+        bottomLabel={bottomLabel}
+        required={required}
+        invalid={invalid}
+        invalidMessage={invalidMessage}
+        classPrefix="avakio-radio"
+      >
       <div
         ref={containerRef}
         id={id}
@@ -352,18 +364,6 @@ export const AvakioRadio = forwardRef<AvakioRadioRef, AvakioRadioProps>(
         aria-required={required}
         aria-invalid={invalid}
       >
-        {/* Label */}
-        {label && (
-          <label
-            id={`${radioName}-label`}
-            className={`avakio-radio-label avakio-radio-label-${labelAlign}`}
-            style={{ width: labelPosition === 'left' ? labelWidth : undefined }}
-          >
-            {label}
-            {required && <span className="avakio-radio-required">*</span>}
-          </label>
-        )}
-
         {/* Options Container */}
         <div className="avakio-radio-options">
           {options.map((option, index) => {
@@ -430,18 +430,8 @@ export const AvakioRadio = forwardRef<AvakioRadioRef, AvakioRadioProps>(
             );
           })}
         </div>
-
-        {/* Bottom Section */}
-        {(bottomLabel || (invalid && invalidMessage)) && (
-          <div className="avakio-radio-bottom" style={{ paddingLeft: labelPosition === 'left' ? labelWidth + 8 : 0 }}>
-            {invalid && invalidMessage ? (
-              <span className="avakio-radio-invalid-message">{invalidMessage}</span>
-            ) : bottomLabel ? (
-              <span className="avakio-radio-bottom-label">{bottomLabel}</span>
-            ) : null}
-          </div>
-        )}
       </div>
+      </AvakioControlLabel>
     );
   }
 );

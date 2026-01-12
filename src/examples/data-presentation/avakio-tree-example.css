@@ -16,7 +16,7 @@
 .avakio-tree-sticky-header {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 200;
   background: var(--avakio-sticky-header-bg, #f8f9fa);
   border-bottom: 1px solid var(--avakio-sticky-header-border, #e5e7eb);
 }

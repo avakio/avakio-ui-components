@@ -1,5 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect, useCallback } from 'react';
 import { Plus, X } from 'lucide-react';
+import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-multitext.css';
 
 export type AvakioMultitextTheme = 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset';
@@ -510,6 +511,17 @@ export const AvakioMultitext = forwardRef<AvakioMultitextRef, AvakioMultitextPro
     }
 
     return (
+      <AvakioControlLabel
+        label={label}
+        labelPosition={labelPosition}
+        labelAlign={labelAlign}
+        labelWidth={labelWidth}
+        bottomLabel={bottomLabel}
+        required={required}
+        invalid={isInvalid}
+        invalidMessage={validationMessage}
+        classPrefix="avakio-multitext"
+      >
       <div
         ref={containerRef}
         id={id}
@@ -519,20 +531,6 @@ export const AvakioMultitext = forwardRef<AvakioMultitextRef, AvakioMultitextPro
         data-admin-theme={theme}
         key={refreshKey}
       >
-        {/* Label */}
-        {label && (
-          <label 
-            className="avakio-multitext__label"
-            style={{ 
-              width: labelPosition === 'left' ? `${labelWidth}px` : undefined,
-              textAlign: labelAlign,
-            }}
-          >
-            {label}
-            {required && <span className="avakio-multitext__required">*</span>}
-          </label>
-        )}
-
         {/* Fields container */}
         <div className="avakio-multitext__fields">
           {fields.map((field, index) => (
@@ -608,20 +606,9 @@ export const AvakioMultitext = forwardRef<AvakioMultitextRef, AvakioMultitextPro
               </div>
             </div>
           ))}
-
-          {/* Bottom label */}
-          {bottomLabel && (
-            <div className="avakio-multitext__bottom-label">{bottomLabel}</div>
-          )}
-
-          {/* Error message */}
-          {isInvalid && validationMessage && (
-            <div id={`${id}-error`} className="avakio-multitext__error" role="alert">
-              {validationMessage}
-            </div>
-          )}
         </div>
       </div>
+      </AvakioControlLabel>
     );
   }
 );

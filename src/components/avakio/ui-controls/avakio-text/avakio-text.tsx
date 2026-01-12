@@ -1,5 +1,6 @@
 import React, { forwardRef, useState, useEffect, useRef, useImperativeHandle, ChangeEvent, KeyboardEvent, FocusEvent } from 'react';
 import { X, Eye, EyeOff, Copy } from 'lucide-react';
+import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-text.css';
 
 export interface AvakioTextProps {
@@ -441,12 +442,17 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
 
     return (
       <div className={containerClasses} style={containerStyle} onClick={onClick}>
-        {label && (
-          <label className="avakio-text-label" style={labelStyle}>
-            {label}
-            {required && <span className="avakio-text-required">*</span>}
-          </label>
-        )}
+        <AvakioControlLabel
+          label={label}
+          labelPosition={labelPosition}
+          labelAlign={labelAlign}
+          labelWidth={labelWidth}
+          bottomLabel={bottomLabel}
+          required={required}
+          invalid={isInvalid}
+          invalidMessage={validationMessage}
+          classPrefix="avakio-text"
+        >
         <div className="avakio-text-content">
           <div className="avakio-text-input-wrapper" style={wrapperStyle}>
             {icon && iconPosition === 'left' && (
@@ -544,11 +550,8 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
               </button>
             )}
           </div>
-          {bottomLabel && <div className="avakio-text-bottom-label">{bottomLabel}</div>}
-          {isInvalid && validationMessage && (
-            <div className="avakio-text-error-message">{validationMessage}</div>
-          )}
         </div>
+        </AvakioControlLabel>
       </div>
     );
   }

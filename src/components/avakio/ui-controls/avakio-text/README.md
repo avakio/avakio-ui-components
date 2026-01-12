@@ -64,7 +64,7 @@ function MyForm() {
 | `labelPosition` | `'left' \| 'top'` | `'left'` | Label position |
 | `labelAlign` | `'left' \| 'right'` | `'left'` | Label alignment |
 | `inputAlign` | `'left' \| 'center' \| 'right'` | `'left'` | Input text alignment |
-| `bottomLabel` | `string` | - | Bottom label text |
+| `bottomLabel` | `string` | - | Bottom label text (rendered via AvakioControlLabel) |
 | `clear` | `boolean` | `false` | Shows clear button when input has value |
 | `enableValueCopyButton` | `boolean` | `false` | Enables copy button to copy the input value to clipboard |
 | `enablePlaceHolderCopyButton` | `boolean` | `false` | Enables copy button to copy the placeholder text to clipboard |

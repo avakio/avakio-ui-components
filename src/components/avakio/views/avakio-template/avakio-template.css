@@ -59,9 +59,8 @@
   cursor: not-allowed;
 }
 
-/* Borderless */
+/* Borderless - uses base styles, removes shadows */
 .avakio-template-borderless {
-  border: none !important;
   box-shadow: none !important;
 }
 

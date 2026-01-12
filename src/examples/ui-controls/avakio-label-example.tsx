@@ -9,6 +9,7 @@ import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
+import { formatSizingValue } from '../../lib/utils';
 import { 
   Type,
   Settings2,
@@ -160,62 +161,63 @@ export function AvakioLabelExample() {
     type: string;
     defaultValue: string;
     description: string;
+    from: string;
   }
 
   const propsData: PropDoc[] = [
     // Component-Specific Props
-    { id: 1, name: 'label', type: 'string', defaultValue: "''", description: 'The text content of the label' },
-    { id: 2, name: 'html', type: 'string', defaultValue: 'undefined', description: 'Custom HTML content (overrides label if provided)' },
-    { id: 3, name: 'autowidth', type: 'boolean', defaultValue: 'false', description: 'Whether to auto-adjust width based on content' },
-    { id: 4, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: "'material'", description: 'Theme variant for styling' },
+    { id: 1, name: 'label', type: 'string', defaultValue: "''", description: 'The text content of the label', from: 'Label' },
+    { id: 2, name: 'html', type: 'string', defaultValue: 'undefined', description: 'Custom HTML content (overrides label if provided)', from: 'Label' },
+    { id: 3, name: 'autowidth', type: 'boolean', defaultValue: 'false', description: 'Whether to auto-adjust width based on content', from: 'Label' },
+    { id: 4, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: "'material'", description: 'Theme variant for styling', from: 'Label' },
     
     // Identity Props
-    { id: 5, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Unique identifier for the label' },
-    { id: 6, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test identifier for testing' },
-    { id: 7, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name' },
+    { id: 5, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Unique identifier for the label', from: 'Base' },
+    { id: 6, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test identifier for testing', from: 'Base' },
+    { id: 7, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
     
     // Appearance Props
-    { id: 8, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Alignment of the label text' },
-    { id: 9, name: 'fontSize', type: 'number | string', defaultValue: 'undefined', description: 'Font size for the label text' },
-    { id: 10, name: 'fontWeight', type: "'normal' | 'bold' | '100'-'900'", defaultValue: 'undefined', description: 'Font weight for the label text' },
-    { id: 11, name: 'color', type: 'string', defaultValue: 'undefined', description: 'Text color of the label' },
-    { id: 12, name: 'backgroundColor', type: 'string', defaultValue: 'undefined', description: 'Background color of the label' },
-    { id: 13, name: 'border', type: 'string', defaultValue: 'undefined', description: 'Border style (e.g., "1px solid #ccc")' },
-    { id: 14, name: 'borderRadius', type: 'string | number', defaultValue: 'undefined', description: 'Border radius for rounded corners' },
-    { id: 15, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text shown on hover' },
+    { id: 8, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Alignment of the label text', from: 'Label' },
+    { id: 9, name: 'fontSize', type: 'number | string', defaultValue: 'undefined', description: 'Font size for the label text', from: 'Label' },
+    { id: 10, name: 'fontWeight', type: "'normal' | 'bold' | '100'-'900'", defaultValue: 'undefined', description: 'Font weight for the label text', from: 'Label' },
+    { id: 11, name: 'color', type: 'string', defaultValue: 'undefined', description: 'Text color of the label', from: 'Label' },
+    { id: 12, name: 'backgroundColor', type: 'string', defaultValue: 'undefined', description: 'Background color of the label', from: 'Label' },
+    { id: 13, name: 'border', type: 'string', defaultValue: 'undefined', description: 'Border style (e.g., "1px solid #ccc")', from: 'Label' },
+    { id: 14, name: 'borderRadius', type: 'string | number', defaultValue: 'undefined', description: 'Border radius for rounded corners', from: 'Label' },
+    { id: 15, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text shown on hover', from: 'Base' },
     
     // Sizing Props
-    { id: 16, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the label' },
-    { id: 17, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the label' },
-    { id: 18, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width of the label' },
-    { id: 19, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height of the label' },
-    { id: 20, name: 'margin', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the label' },
-    { id: 21, name: 'padding', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding inside the label' },
+    { id: 16, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the label', from: 'Base' },
+    { id: 17, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the label', from: 'Base' },
+    { id: 18, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width of the label', from: 'Base' },
+    { id: 19, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height of the label', from: 'Base' },
+    { id: 20, name: 'margin', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the label', from: 'Base' },
+    { id: 21, name: 'padding', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding inside the label', from: 'Base' },
     
     // State Props
-    { id: 22, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the label is in disabled state' },
-    { id: 23, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the label is hidden' },
+    { id: 22, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the label is in disabled state', from: 'Base' },
+    { id: 23, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the label is hidden', from: 'Base' },
     
     // Style Props
-    { id: 24, name: 'css', type: 'CSSProperties', defaultValue: '{}', description: 'Custom CSS styles object' },
-    { id: 25, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles for the root element' },
+    { id: 24, name: 'css', type: 'CSSProperties', defaultValue: '{}', description: 'Custom CSS styles object', from: 'Base' },
+    { id: 25, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles for the root element', from: 'Base' },
   ];
 
   const eventsData: PropDoc[] = [
-    { id: 1, name: 'onClick', type: '(e: React.MouseEvent<HTMLDivElement>) => void', defaultValue: 'undefined', description: 'Fires when the label is clicked' },
+    { id: 1, name: 'onClick', type: '(e: React.MouseEvent<HTMLDivElement>) => void', defaultValue: 'undefined', description: 'Fires when the label is clicked', from: 'Base' },
   ];
 
   const refMethodsData: PropDoc[] = [
-    { id: 1, name: 'getValue()', type: '() => string', defaultValue: '-', description: 'Get the label text content' },
-    { id: 2, name: 'setValue(value)', type: '(value: string) => void', defaultValue: '-', description: 'Set the label text content' },
-    { id: 3, name: 'setHTML(html)', type: '(html: string) => void', defaultValue: '-', description: 'Set HTML content for the label' },
-    { id: 4, name: 'getNode()', type: '() => HTMLDivElement | null', defaultValue: '-', description: 'Get the DOM element' },
-    { id: 5, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hide the label' },
-    { id: 6, name: 'show()', type: '() => void', defaultValue: '-', description: 'Show the label' },
-    { id: 7, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Check if label is visible' },
-    { id: 8, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disable the label' },
-    { id: 9, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enable the label' },
-    { id: 10, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Check if label is enabled' },
+    { id: 1, name: 'getValue()', type: '() => string', defaultValue: '-', description: 'Get the label text content', from: 'Label' },
+    { id: 2, name: 'setValue(value)', type: '(value: string) => void', defaultValue: '-', description: 'Set the label text content', from: 'Label' },
+    { id: 3, name: 'setHTML(html)', type: '(html: string) => void', defaultValue: '-', description: 'Set HTML content for the label', from: 'Label' },
+    { id: 4, name: 'getNode()', type: '() => HTMLDivElement | null', defaultValue: '-', description: 'Get the DOM element', from: 'Base' },
+    { id: 5, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hide the label', from: 'Base' },
+    { id: 6, name: 'show()', type: '() => void', defaultValue: '-', description: 'Show the label', from: 'Base' },
+    { id: 7, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Check if label is visible', from: 'Base' },
+    { id: 8, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disable the label', from: 'Base' },
+    { id: 9, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enable the label', from: 'Base' },
+    { id: 10, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Check if label is enabled', from: 'Base' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [
@@ -223,6 +225,7 @@ export function AvakioLabelExample() {
     { id: 'type', header: 'Type', width: 300 },
     { id: 'defaultValue', header: 'Default', width: 100 },
     { id: 'description', header: 'Description', width: 350 },
+    { id: 'from', header: 'From', width: 100, filterType: 'combo' },
   ];
 
   return (
@@ -589,10 +592,10 @@ export function AvakioLabelExample() {
                       backgroundColor={getPropValue('backgroundColor', '') || undefined}
                       border={getPropValue('border', '') || undefined}
                       borderRadius={getPropValue('borderRadius', '') || undefined}
-                      width={getPropValue('width', '') || undefined}
-                      height={getPropValue('height', '') || undefined}
-                      minWidth={getPropValue('minWidth', '') || undefined}
-                      minHeight={getPropValue('minHeight', '') || undefined}
+                      width={formatSizingValue(getPropValue('width', ''))}
+                      height={formatSizingValue(getPropValue('height', ''))}
+                      minWidth={formatSizingValue(getPropValue('minWidth', ''))}
+                      minHeight={formatSizingValue(getPropValue('minHeight', ''))}
                       margin={getPropValue('margin', '') ? getPropValue('margin', '').includes(',') ? getPropValue('margin', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('margin', '')) : undefined}
                       padding={getPropValue('padding', '') ? getPropValue('padding', '').includes(',') ? getPropValue('padding', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('padding', '')) : undefined}
                       autowidth={getPropValue('autowidth', false)}
@@ -873,6 +876,7 @@ export function AvakioLabelExample() {
               columns={propsColumns}
               select={false}
               height={700}
+              showRowNum={true}
             />,
           ]}
         />
@@ -897,6 +901,7 @@ export function AvakioLabelExample() {
               columns={propsColumns}
               select={false}
               height={100}
+              showRowNum={true}
             />,
           ]}
         />
@@ -921,6 +926,7 @@ export function AvakioLabelExample() {
               columns={propsColumns}
               select={false}
               height={320}
+              showRowNum={true}
             />,
           ]}
         />

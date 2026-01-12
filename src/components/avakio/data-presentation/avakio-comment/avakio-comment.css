@@ -397,10 +397,7 @@
   transform: none;
 }
 
-/* Borderless */
-.avakio-comment-borderless {
-  border: none;
-}
+/* Borderless - uses base styles from avakio-base.css */
 
 /* Disabled */
 .avakio-comment-disabled {

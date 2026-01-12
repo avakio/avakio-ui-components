@@ -83,7 +83,7 @@ function UsersTable() {
     <AvakioDataTable
       data={data}
       columns={columns}
-      height={600}
+      maxHeight={600}
       sortable
       filterable
       paging
@@ -201,7 +201,7 @@ function SelectableTable() {
 |------|------|---------|-------------|
 | `data` | `T[]` | Required | Array of data objects to display |
 | `columns` | `AvakioColumn<T>[]` | Required | Column configuration array |
-| `height` | `number \| string` | `'auto'` | Table height (px or CSS value) |
+| `maxHeight` | `number \| string` | - | Maximum height of the table (px or CSS value) |
 | `width` | `number \| string` | `'100%'` | Table width (px or CSS value) |
 | `select` | `boolean \| 'row' \| 'cell' \| 'column'` | `false` | Enable row/cell/column selection |
 | `multiselect` | `boolean` | `false` | Allow multiple row selection (Ctrl+Click) |

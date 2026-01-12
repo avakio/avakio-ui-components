@@ -112,9 +112,9 @@ Use `renderTab` to supply a fully custom layout. A ready-to-use `closeButton` is
 | `fill` | `boolean` | `false` | Stretch tabs to fill available width |
 | `size` | `'md' \| 'sm'` | `'md'` | Tab sizing preset |
 | `scrollable` | `boolean` | `true` | Allow horizontal scroll; `false` wraps tabs |
-| `label` | `string` | `undefined` | Optional label text |
-| `labelWidth` | `number` | `120` | Label width in pixels |
-| `labelAlign` | `'left' \| 'right'` | `'left'` | Label alignment |
+| `label` | `string` | `undefined` | Optional label text (rendered via AvakioControlLabel) |
+| `labelWidth` | `number` | `120` | Label width in pixels (rendered via AvakioControlLabel) |
+| `labelAlign` | `'left' \| 'right'` | `'left'` | Label alignment (rendered via AvakioControlLabel) |
 | `required` | `boolean` | `false` | Show required asterisk |
 | `error` | `string` | `undefined` | Error text below the control |
 | `disabled` | `boolean` | `false` | Disable all tabs |

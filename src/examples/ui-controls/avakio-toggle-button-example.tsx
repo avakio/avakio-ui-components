@@ -9,6 +9,7 @@ import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
+import { formatSizingValue } from '../../lib/utils';
 import { 
   Play, 
   Pause, 
@@ -739,12 +740,12 @@ export function AvakioToggleButtonExample() {
                         block={getPropValue('block', false)}
                         autowidth={getPropValue('autowidth', false)}
                         // Sizing props
-                        width={getPropValue('width', '') || undefined}
-                        height={getPropValue('height', '') || undefined}
-                        minWidth={getPropValue('minWidth', '') || undefined}
-                        maxWidth={getPropValue('maxWidth', '') || undefined}
-                        minHeight={getPropValue('minHeight', '') || undefined}
-                        maxHeight={getPropValue('maxHeight', '') || undefined}
+                        width={formatSizingValue(getPropValue('width', ''))}
+                        height={formatSizingValue(getPropValue('height', ''))}
+                        minWidth={formatSizingValue(getPropValue('minWidth', ''))}
+                        maxWidth={formatSizingValue(getPropValue('maxWidth', ''))}
+                        minHeight={formatSizingValue(getPropValue('minHeight', ''))}
+                        maxHeight={formatSizingValue(getPropValue('maxHeight', ''))}
                         // State props
                         disabled={getPropValue('disabled', false)}
                         hidden={getPropValue('hidden', false)}

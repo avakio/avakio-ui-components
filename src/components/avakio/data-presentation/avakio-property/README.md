@@ -6,7 +6,7 @@ property sheet for editing key/value settings. Supports grouped rows, multiple e
 - Per-row descriptions, disabled/required flags, and placeholders
 - Theme-aware styles for all admin themes (material, flat, compact, dark, ocean, sunset)
 - Controlled change handler returning the updated items and the row that changed
-- Dense mode and optional border emphasis
+- Size variants (default and compact) for different layouts
 
 ## Usage
 ```tsx
@@ -43,7 +43,7 @@ export function Example() {
       items={items}
       onChange={(next, changed) => setItems(next)}
       theme="material"
-      dense
+      size="compact"
     />
   );
 }
@@ -67,7 +67,7 @@ export function Example() {
     group: "General",
   },
 - `style?: React.CSSProperties` — inline styles for the root.
-- `dense?: boolean` — tighter padding.
+- `size?: 'default' | 'compact'` — size variant (compact for reduced spacing).
 - `showBorders?: boolean` — emphasizes outer border.
 
 ### Item shape

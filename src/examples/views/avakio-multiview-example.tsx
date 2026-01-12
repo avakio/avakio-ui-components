@@ -908,27 +908,28 @@ interface PropDoc {
   defaultValue: string;
   description: string;
   rules: string;
+  from: string;
 }
 
 const propsData: PropDoc[] = [
-  { id: 1, name: 'cells', type: 'AvakioMultiviewCell[]', defaultValue: '[]', description: 'Array of view cells to display', rules: 'Each cell must have a unique id and content' },
-  { id: 2, name: 'activeView', type: 'string', defaultValue: 'First cell id', description: 'Initially active view ID', rules: 'Must match a cell id' },
-  { id: 3, name: 'animate', type: "boolean | { type, duration, direction, flipDirection }", defaultValue: 'true', description: 'Animation configuration', rules: "type: 'slide' | 'flip' | 'none'. direction: 'left' | 'right' | 'top' | 'bottom' (for slide). flipDirection: 'horizontal' | 'vertical' (for flip). duration in ms" },
-  { id: 4, name: 'keepViews', type: 'boolean', defaultValue: 'false', description: 'Keep inactive views in DOM', rules: 'Useful for iframes/editors that need to maintain state' },
-  { id: 5, name: 'fitBiggest', type: 'boolean', defaultValue: 'false', description: 'Size container to biggest cell', rules: 'Prevents layout shifts when switching views' },
-  { id: 6, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: "'material'", description: 'Visual theme to apply', rules: 'Affects colors and styling' },
-  { id: 7, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the multiview', rules: 'Accepts px, %, or number (treated as px)' },
-  { id: 8, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the multiview', rules: 'Accepts px, %, or number (treated as px)' },
-  { id: 9, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class names', rules: 'Appended to default classes' },
-  { id: 10, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Inline CSS styles', rules: 'Merged with computed styles' },
-  { id: 11, name: 'id', type: 'string', defaultValue: 'undefined', description: 'HTML id attribute', rules: 'For DOM selection' },
-  { id: 12, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test identifier', rules: 'Sets data-testid attribute' },
+  { id: 1, name: 'cells', type: 'AvakioMultiviewCell[]', defaultValue: '[]', description: 'Array of view cells to display', rules: 'Each cell must have a unique id and content', from: 'Multiview' },
+  { id: 2, name: 'activeView', type: 'string', defaultValue: 'First cell id', description: 'Initially active view ID', rules: 'Must match a cell id', from: 'Multiview' },
+  { id: 3, name: 'animate', type: "boolean | { type, duration, direction, flipDirection }", defaultValue: 'true', description: 'Animation configuration', rules: "type: 'slide' | 'flip' | 'none'. direction: 'left' | 'right' | 'top' | 'bottom' (for slide). flipDirection: 'horizontal' | 'vertical' (for flip). duration in ms", from: 'Multiview' },
+  { id: 4, name: 'keepViews', type: 'boolean', defaultValue: 'false', description: 'Keep inactive views in DOM', rules: 'Useful for iframes/editors that need to maintain state', from: 'Multiview' },
+  { id: 5, name: 'fitBiggest', type: 'boolean', defaultValue: 'false', description: 'Size container to biggest cell', rules: 'Prevents layout shifts when switching views', from: 'Multiview' },
+  { id: 6, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: "'material'", description: 'Visual theme to apply', rules: 'Affects colors and styling', from: 'Base' },
+  { id: 7, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the multiview', rules: 'Accepts px, %, or number (treated as px)', from: 'Base' },
+  { id: 8, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the multiview', rules: 'Accepts px, %, or number (treated as px)', from: 'Base' },
+  { id: 9, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class names', rules: 'Appended to default classes', from: 'Base' },
+  { id: 10, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Inline CSS styles', rules: 'Merged with computed styles', from: 'Base' },
+  { id: 11, name: 'id', type: 'string', defaultValue: 'undefined', description: 'HTML id attribute', rules: 'For DOM selection', from: 'Base' },
+  { id: 12, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test identifier', rules: 'Sets data-testid attribute', from: 'Base' },
 ];
 
 const eventPropsData: PropDoc[] = [
-  { id: 1, name: 'onViewChange', type: '(newId: string, oldId: string) => void', defaultValue: 'undefined', description: 'Fired when view changes', rules: 'Called after animation starts' },
-  { id: 2, name: 'onViewShow', type: '(viewId: string) => void', defaultValue: 'undefined', description: 'Fired when a view is shown', rules: 'Called after view becomes active' },
-  { id: 3, name: 'onBeforeBack', type: '(currentViewId: string) => boolean | void', defaultValue: 'undefined', description: 'Called before going back', rules: 'Return false to cancel the back navigation' },
+  { id: 1, name: 'onViewChange', type: '(newId: string, oldId: string) => void', defaultValue: 'undefined', description: 'Fired when view changes', rules: 'Called after animation starts', from: 'Multiview' },
+  { id: 2, name: 'onViewShow', type: '(viewId: string) => void', defaultValue: 'undefined', description: 'Fired when a view is shown', rules: 'Called after view becomes active', from: 'Multiview' },
+  { id: 3, name: 'onBeforeBack', type: '(currentViewId: string) => boolean | void', defaultValue: 'undefined', description: 'Called before going back', rules: 'Return false to cancel the back navigation', from: 'Multiview' },
 ];
 
 interface RefMethodDoc {
@@ -958,6 +959,7 @@ const propsColumns: AvakioColumn<PropDoc>[] = [
   { id: 'defaultValue', header: 'Default', width: 100 },
   { id: 'description', header: 'Description', width: 250 },
   { id: 'rules', header: 'Rules / Notes', width: 280 },
+  { id: 'from', header: 'From', width: 100, filterType: 'combo' },
 ];
 
 const refColumns: AvakioColumn<RefMethodDoc>[] = [
@@ -998,6 +1000,7 @@ function PropsDocumentation({ theme }: { theme: string }) {
                   resizable={true}
                   paging={true}
                   pageSize={10}
+                  showRowNum={true}
                 />
               }
             />,
@@ -1022,6 +1025,7 @@ function PropsDocumentation({ theme }: { theme: string }) {
                   sortable={true}
                   resizable={true}
                   paging={false}
+                  showRowNum={true}
                 />
               }
             />,
@@ -1046,6 +1050,7 @@ function PropsDocumentation({ theme }: { theme: string }) {
                   sortable={true}
                   resizable={true}
                   paging={false}
+                  showRowNum={true}
                 />
               }
             />,

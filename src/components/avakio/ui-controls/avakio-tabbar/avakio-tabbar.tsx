@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-tabbar.css';
 
 export interface AvakioTabBarOption {
@@ -298,6 +299,15 @@ export function AvakioTabBar({
   };
 
   return (
+    <AvakioControlLabel
+      label={label}
+      labelAlign={labelAlign}
+      labelWidth={labelWidth}
+      required={required}
+      invalid={!!error}
+      invalidMessage={error}
+      classPrefix="avakio-tabbar"
+    >
     <div
       id={id}
       data-testid={testId}
@@ -310,16 +320,6 @@ export function AvakioTabBar({
       data-disabled={disabled}
       data-error={!!error}
     >
-      {label && (
-        <div
-          className="avakio-tabbar-label"
-          style={{ width: labelWidth, textAlign: labelAlign }}
-        >
-          <span>{label}</span>
-          {required && <span className="avakio-tabbar-required">*</span>}
-        </div>
-      )}
-
       <div className="avakio-tabbar-wrapper">
         {/* Left scroll arrow */}
         {scrollable && canScrollLeft && (
@@ -413,10 +413,9 @@ export function AvakioTabBar({
             <ChevronRight size={16} strokeWidth={2.5} />
           </button>
         )}
-
-        {error && <div className="avakio-tabbar-error">{error}</div>}
       </div>
     </div>
+    </AvakioControlLabel>
   );
 }
 

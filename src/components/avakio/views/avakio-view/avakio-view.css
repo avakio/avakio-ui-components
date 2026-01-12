@@ -66,9 +66,8 @@
   outline: none;
 }
 
-/* Borderless variant */
+/* Borderless variant - uses base styles, removes shadows */
 .avakio-view-borderless {
-  border: none !important;
   box-shadow: none !important;
 }
 

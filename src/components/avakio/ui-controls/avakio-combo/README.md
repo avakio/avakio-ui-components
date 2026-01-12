@@ -103,9 +103,9 @@ const users: AvakioComboOption[] = [
 | `onChange` | `(value: string \| number, option?: AvakioComboOption) => void` | `undefined` | Fired when selection changes |
 | `onInputChange` | `(inputValue: string) => void` | `undefined` | Fired on input text change |
 | `placeholder` | `string` | `"Select or type..."` | Input placeholder text |
-| `label` | `string` | `undefined` | Optional label text |
-| `labelAlign` | `'left' \| 'right'` | `'left'` | Label alignment |
-| `labelWidth` | `number` | `100` | Label width in pixels |
+| `label` | `string` | `undefined` | Optional label text (rendered via AvakioControlLabel) |
+| `labelAlign` | `'left' \| 'right'` | `'left'` | Label alignment (rendered via AvakioControlLabel) |
+| `labelWidth` | `number` | `100` | Label width in pixels (rendered via AvakioControlLabel) |
 | `disabled` | `boolean` | `false` | Disable all interactions |
 | `readonly` | `boolean` | `false` | Prevent edits/opening while showing value |
 | `filterMode` | `'startsWith' \| 'contains' \| 'custom'` | `'contains'` | Filtering strategy |

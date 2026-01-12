@@ -9,6 +9,7 @@ import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
+import { formatSizingValue } from '../../lib/utils';
 import { 
   CheckSquare,
   Settings2,
@@ -140,44 +141,45 @@ export function AvakioCheckboxExample() {
     type: string;
     defaultValue: string;
     description: string;
+    from: string;
   }
 
   const propsData: PropDoc[] = [
     // Component-Specific Props
-    { id: 1, name: 'checked', type: 'boolean', defaultValue: 'undefined', description: 'Controlled checked state of the checkbox' },
-    { id: 2, name: 'defaultChecked', type: 'boolean', defaultValue: 'false', description: 'Initial checked state for uncontrolled mode' },
-    { id: 3, name: 'indeterminate', type: 'boolean', defaultValue: 'false', description: 'Shows indeterminate state (partially checked)' },
-    { id: 4, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed next to the checkbox' },
-    { id: 5, name: 'description', type: 'string', defaultValue: 'undefined', description: 'Additional description text below the label' },
-    { id: 6, name: 'size', type: "'sm' | 'md'", defaultValue: "'md'", description: 'Size variant of the checkbox' },
-    { id: 7, name: 'error', type: 'string', defaultValue: 'undefined', description: 'Error message to display below the checkbox' },
-    { id: 8, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Marks the checkbox as required (shows asterisk)' },
-    { id: 9, name: 'onChange', type: '(checked: boolean) => void', defaultValue: 'undefined', description: 'Callback fired when checked state changes' },
+    { id: 1, name: 'checked', type: 'boolean', defaultValue: 'undefined', description: 'Controlled checked state of the checkbox', from: 'Checkbox' },
+    { id: 2, name: 'defaultChecked', type: 'boolean', defaultValue: 'false', description: 'Initial checked state for uncontrolled mode', from: 'Checkbox' },
+    { id: 3, name: 'indeterminate', type: 'boolean', defaultValue: 'false', description: 'Shows indeterminate state (partially checked)', from: 'Checkbox' },
+    { id: 4, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed next to the checkbox', from: 'ControlLabel' },
+    { id: 5, name: 'description', type: 'string', defaultValue: 'undefined', description: 'Additional description text below the label', from: 'Checkbox' },
+    { id: 6, name: 'size', type: "'sm' | 'md'", defaultValue: "'md'", description: 'Size variant of the checkbox', from: 'Checkbox' },
+    { id: 7, name: 'error', type: 'string', defaultValue: 'undefined', description: 'Error message to display below the checkbox', from: 'Checkbox' },
+    { id: 8, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Marks the checkbox as required (shows asterisk)', from: 'Checkbox' },
+    { id: 9, name: 'onChange', type: '(checked: boolean) => void', defaultValue: 'undefined', description: 'Callback fired when checked state changes', from: 'Checkbox' },
     
     // Identity Props
-    { id: 10, name: 'id', type: 'string', defaultValue: 'undefined', description: 'HTML id attribute for the input element' },
-    { id: 11, name: 'name', type: 'string', defaultValue: 'undefined', description: 'HTML name attribute for form submission' },
-    { id: 12, name: 'value', type: 'string | number | readonly string[]', defaultValue: 'undefined', description: 'Value attribute for form submission' },
-    { id: 13, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes' },
-    { id: 14, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name' },
+    { id: 10, name: 'id', type: 'string', defaultValue: 'undefined', description: 'HTML id attribute for the input element', from: 'Base' },
+    { id: 11, name: 'name', type: 'string', defaultValue: 'undefined', description: 'HTML name attribute for form submission', from: 'Checkbox' },
+    { id: 12, name: 'value', type: 'string | number | readonly string[]', defaultValue: 'undefined', description: 'Value attribute for form submission', from: 'Checkbox' },
+    { id: 13, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 14, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
     
     // State Props
-    { id: 15, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the checkbox is disabled' },
-    { id: 16, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden' },
-    { id: 17, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Whether the component is borderless' },
+    { id: 15, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the checkbox is disabled', from: 'Base' },
+    { id: 16, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
+    { id: 17, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Whether the component is borderless', from: 'Base' },
     
     // Sizing Props
-    { id: 18, name: 'padding', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding around the component' },
-    { id: 19, name: 'margin', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the component' },
-    { id: 20, name: 'minWidth', type: 'string | number', defaultValue: 'undefined', description: 'Minimum width of the component' },
-    { id: 21, name: 'minHeight', type: 'string | number', defaultValue: 'undefined', description: 'Minimum height of the component' },
-    { id: 22, name: 'maxWidth', type: 'string | number', defaultValue: 'undefined', description: 'Maximum width of the component' },
-    { id: 23, name: 'maxHeight', type: 'string | number', defaultValue: 'undefined', description: 'Maximum height of the component' },
-    { id: 24, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles' },
+    { id: 18, name: 'padding', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding around the component', from: 'Base' },
+    { id: 19, name: 'margin', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the component', from: 'Base' },
+    { id: 20, name: 'minWidth', type: 'string | number', defaultValue: 'undefined', description: 'Minimum width of the component', from: 'Base' },
+    { id: 21, name: 'minHeight', type: 'string | number', defaultValue: 'undefined', description: 'Minimum height of the component', from: 'Base' },
+    { id: 22, name: 'maxWidth', type: 'string | number', defaultValue: 'undefined', description: 'Maximum width of the component', from: 'Base' },
+    { id: 23, name: 'maxHeight', type: 'string | number', defaultValue: 'undefined', description: 'Maximum height of the component', from: 'Base' },
+    { id: 24, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles', from: 'Base' },
   ];
 
   const eventsData: PropDoc[] = [
-    { id: 1, name: 'onChange', type: '(checked: boolean) => void', defaultValue: 'undefined', description: 'Fires when the checked state changes' },
+    { id: 1, name: 'onChange', type: '(checked: boolean) => void', defaultValue: 'undefined', description: 'Fires when the checked state changes', from: 'Checkbox' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [
@@ -185,6 +187,7 @@ export function AvakioCheckboxExample() {
     { id: 'type', header: 'Type', width: 300 },
     { id: 'defaultValue', header: 'Default', width: 100 },
     { id: 'description', header: 'Description', width: 350 },
+    { id: 'from', header: 'From', width: 120, filterType: 'combo' },
   ];
 
   return (
@@ -552,8 +555,8 @@ export function AvakioCheckboxExample() {
                       // Validation props
                       required={getPropValue('required', false)}
                       // Sizing props
-                      minWidth={getPropValue('minWidth', '') || undefined}
-                      minHeight={getPropValue('minHeight', '') || undefined}
+                      minWidth={formatSizingValue(getPropValue('minWidth', ''))}
+                      minHeight={formatSizingValue(getPropValue('minHeight', ''))}
                       // Margin & Padding
                       margin={getPropValue('margin', '') ? getPropValue('margin', '').includes(',') ? getPropValue('margin', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('margin', '')) : undefined}
                       padding={getPropValue('padding', '') ? getPropValue('padding', '').includes(',') ? getPropValue('padding', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('padding', '')) : undefined}
@@ -736,6 +739,7 @@ export function AvakioCheckboxExample() {
               columns={propsColumns}
               select={false}
               height={600}
+              showRowNum={true}
             />,
           ]}
         />
@@ -760,6 +764,7 @@ export function AvakioCheckboxExample() {
               columns={propsColumns}
               select={false}
               height={100}
+              showRowNum={true}
             />,
           ]}
         />

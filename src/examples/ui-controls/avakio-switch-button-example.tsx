@@ -121,8 +121,8 @@ export function AvakioSwitchButtonExample() {
   const propsData: PropDoc[] = [
     { id: 1, name: 'value', type: 'boolean | number', defaultValue: 'undefined', description: 'Current on/off state (controlled) - true/1 for on, false/0 for off' },
     { id: 2, name: 'defaultValue', type: 'boolean | number', defaultValue: 'false', description: 'Default on/off state (uncontrolled)' },
-    { id: 3, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed to the left of the switch' },
-    { id: 4, name: 'labelWidth', type: 'number', defaultValue: '80', description: 'Width of the left label in pixels' },
+    { id: 3, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed to the left of the switch (rendered via AvakioControlLabel)' },
+    { id: 4, name: 'labelWidth', type: 'number', defaultValue: '80', description: 'Width of the left label in pixels (rendered via AvakioControlLabel)' },
     { id: 5, name: 'labelRight', type: 'string', defaultValue: 'undefined', description: 'Right-hand label text' },
     { id: 6, name: 'onLabel', type: 'string', defaultValue: 'undefined', description: 'Text label displayed on the switch when in the "on" state' },
     { id: 7, name: 'offLabel', type: 'string', defaultValue: 'undefined', description: 'Text label displayed on the switch when in the "off" state' },
@@ -132,7 +132,7 @@ export function AvakioSwitchButtonExample() {
     { id: 11, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Required field indicator' },
     { id: 12, name: 'invalid', type: 'boolean', defaultValue: 'false', description: 'Invalid state' },
     { id: 13, name: 'invalidMessage', type: 'string', defaultValue: 'undefined', description: 'Validation error message' },
-    { id: 14, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Bottom label/help text' },
+    { id: 14, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Bottom label/help text (rendered via AvakioControlLabel)' },
     { id: 15, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text' },
     { id: 16, name: 'onChange', type: '(value: boolean) => void', defaultValue: 'undefined', description: 'Callback when value changes' },
   ];

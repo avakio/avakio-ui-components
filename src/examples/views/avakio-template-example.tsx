@@ -863,38 +863,39 @@ interface PropDoc {
   defaultValue: string;
   description: string;
   rules: string;
+  from: string;
 }
 
 const propsData: PropDoc[] = [
-  { id: 1, name: 'template', type: 'string | ((data: any) => ReactNode)', defaultValue: 'undefined', description: 'Template string or function that returns HTML/JSX', rules: 'Use either template or content, not both' },
-  { id: 2, name: 'data', type: 'Record<string, any>', defaultValue: '{}', description: 'Data object to populate the template', rules: 'Used with template prop for data binding' },
-  { id: 3, name: 'content', type: 'ReactNode', defaultValue: 'undefined', description: 'Direct HTML/JSX content', rules: 'Alternative to template prop. Use one or the other' },
-  { id: 4, name: 'url', type: 'string', defaultValue: 'undefined', description: 'URL to load content from', rules: 'Fetches content asynchronously. Triggers onLoad when complete' },
-  { id: 5, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: "'material'", description: 'Visual theme to apply', rules: 'Affects colors, borders, and overall styling' },
-  { id: 6, name: 'borderType', type: "'space' | 'wide' | 'clean' | 'line' | 'material'", defaultValue: "'material'", description: 'Border style variant', rules: 'Controls border radius and shadow styles' },
-  { id: 7, name: 'type', type: "'header' | 'section' | 'clean'", defaultValue: "'clean'", description: 'Template layout type', rules: 'header: colored background with accent. section: divider style with lines. clean: no special styling' },
-  { id: 8, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove all borders', rules: 'When true, removes border and box-shadow' },
-  { id: 9, name: 'autoheight', type: 'boolean', defaultValue: 'false', description: 'Auto-adjust height to content', rules: 'Ignores fixed height when enabled' },
-  { id: 10, name: 'scroll', type: "boolean | 'x' | 'y' | 'xy'", defaultValue: 'false', description: 'Enable scrolling', rules: "true: both axes. 'x': horizontal only. 'y': vertical only. 'xy': both axes" },
-  { id: 11, name: 'width', type: 'number | string', defaultValue: "'100%'", description: 'Width of the template', rules: 'Accepts px, %, em, rem, or number (treated as px)' },
-  { id: 12, name: 'height', type: 'number | string', defaultValue: "'auto'", description: 'Height of the template', rules: 'Accepts px, %, em, rem, or number (treated as px)' },
-  { id: 13, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width constraint', rules: 'Same format as width' },
-  { id: 14, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height constraint', rules: 'Same format as height' },
-  { id: 15, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width constraint', rules: 'Same format as width' },
-  { id: 16, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height constraint', rules: 'Same format as height' },
-  { id: 17, name: 'padding', type: 'number | string | [t, r, b, l]', defaultValue: '16', description: 'Inner spacing around content', rules: 'Number: all sides. Array: [top, right, bottom, left]' },
-  { id: 18, name: 'margin', type: 'number | string | [t, r, b, l]', defaultValue: '0', description: 'Outer spacing around template', rules: 'Number: all sides. Array: [top, right, bottom, left]' },
-  { id: 19, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class names', rules: 'Appended to default classes' },
-  { id: 20, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Inline CSS styles', rules: 'Merged with computed styles. Has highest priority' },
-  { id: 21, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Hide the template', rules: 'Sets display: none. Can be toggled via ref.show()/hide()' },
-  { id: 22, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable interactions', rules: 'Adds opacity and pointer-events: none. Toggle via ref.enable()/disable()' },
-  { id: 23, name: 'id', type: 'string', defaultValue: 'undefined', description: 'HTML id attribute', rules: 'For DOM selection and accessibility' },
-  { id: 24, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test identifier', rules: 'Sets data-testid attribute for testing' },
-  { id: 25, name: 'onLoad', type: '() => void', defaultValue: 'undefined', description: 'Callback when content loads', rules: 'Fires after URL content is fetched or on initial render' },
-  { id: 26, name: 'onChange', type: '(data: any) => void', defaultValue: 'undefined', description: 'Callback when data changes', rules: 'Fires when setValues() is called on ref' },
-  { id: 27, name: 'onClick', type: '(e: MouseEvent) => void', defaultValue: 'undefined', description: 'Click event handler', rules: 'Disabled when disabled=true' },
-  { id: 28, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Horizontal alignment of content', rules: 'Aligns child content within the template container' },
-  { id: 29, name: 'flexWrap', type: 'boolean', defaultValue: 'false', description: 'Wrap content in a flex container with flexWrap', rules: 'When true, wraps content in a div with display: flex and flexWrap: wrap' },
+  { id: 1, name: 'template', type: 'string | ((data: any) => ReactNode)', defaultValue: 'undefined', description: 'Template string or function that returns HTML/JSX', rules: 'Use either template or content, not both', from: 'Template' },
+  { id: 2, name: 'data', type: 'Record<string, any>', defaultValue: '{}', description: 'Data object to populate the template', rules: 'Used with template prop for data binding', from: 'Template' },
+  { id: 3, name: 'content', type: 'ReactNode', defaultValue: 'undefined', description: 'Direct HTML/JSX content', rules: 'Alternative to template prop. Use one or the other', from: 'Template' },
+  { id: 4, name: 'url', type: 'string', defaultValue: 'undefined', description: 'URL to load content from', rules: 'Fetches content asynchronously. Triggers onLoad when complete', from: 'Template' },
+  { id: 5, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: "'material'", description: 'Visual theme to apply', rules: 'Affects colors, borders, and overall styling', from: 'Template' },
+  { id: 6, name: 'borderType', type: "'space' | 'wide' | 'clean' | 'line' | 'material'", defaultValue: "'material'", description: 'Border style variant', rules: 'Controls border radius and shadow styles', from: 'Template' },
+  { id: 7, name: 'type', type: "'header' | 'section' | 'clean'", defaultValue: "'clean'", description: 'Template layout type', rules: 'header: colored background with accent. section: divider style with lines. clean: no special styling', from: 'Template' },
+  { id: 8, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove all borders', rules: 'When true, removes border and box-shadow', from: 'Base' },
+  { id: 9, name: 'autoheight', type: 'boolean', defaultValue: 'false', description: 'Auto-adjust height to content', rules: 'Ignores fixed height when enabled', from: 'Template' },
+  { id: 10, name: 'scroll', type: "boolean | 'x' | 'y' | 'xy'", defaultValue: 'false', description: 'Enable scrolling', rules: "true: both axes. 'x': horizontal only. 'y': vertical only. 'xy': both axes", from: 'Template' },
+  { id: 11, name: 'width', type: 'number | string', defaultValue: "'100%'", description: 'Width of the template', rules: 'Accepts px, %, em, rem, or number (treated as px)', from: 'Base' },
+  { id: 12, name: 'height', type: 'number | string', defaultValue: "'auto'", description: 'Height of the template', rules: 'Accepts px, %, em, rem, or number (treated as px)', from: 'Base' },
+  { id: 13, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width constraint', rules: 'Same format as width', from: 'Base' },
+  { id: 14, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height constraint', rules: 'Same format as height', from: 'Base' },
+  { id: 15, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width constraint', rules: 'Same format as width', from: 'Base' },
+  { id: 16, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height constraint', rules: 'Same format as height', from: 'Base' },
+  { id: 17, name: 'padding', type: 'number | string | [t, r, b, l]', defaultValue: '16', description: 'Inner spacing around content', rules: 'Number: all sides. Array: [top, right, bottom, left]', from: 'Base' },
+  { id: 18, name: 'margin', type: 'number | string | [t, r, b, l]', defaultValue: '0', description: 'Outer spacing around template', rules: 'Number: all sides. Array: [top, right, bottom, left]', from: 'Base' },
+  { id: 19, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class names', rules: 'Appended to default classes', from: 'Base' },
+  { id: 20, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Inline CSS styles', rules: 'Merged with computed styles. Has highest priority', from: 'Base' },
+  { id: 21, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Hide the template', rules: 'Sets display: none. Can be toggled via ref.show()/hide()', from: 'Base' },
+  { id: 22, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable interactions', rules: 'Adds opacity and pointer-events: none. Toggle via ref.enable()/disable()', from: 'Base' },
+  { id: 23, name: 'id', type: 'string', defaultValue: 'undefined', description: 'HTML id attribute', rules: 'For DOM selection and accessibility', from: 'Base' },
+  { id: 24, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test identifier', rules: 'Sets data-testid attribute for testing', from: 'Base' },
+  { id: 25, name: 'onLoad', type: '() => void', defaultValue: 'undefined', description: 'Callback when content loads', rules: 'Fires after URL content is fetched or on initial render', from: 'Template' },
+  { id: 26, name: 'onChange', type: '(data: any) => void', defaultValue: 'undefined', description: 'Callback when data changes', rules: 'Fires when setValues() is called on ref', from: 'Template' },
+  { id: 27, name: 'onClick', type: '(e: MouseEvent) => void', defaultValue: 'undefined', description: 'Click event handler', rules: 'Disabled when disabled=true', from: 'Template' },
+  { id: 28, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Horizontal alignment of content', rules: 'Aligns child content within the template container', from: 'Template' },
+  { id: 29, name: 'flexWrap', type: 'boolean', defaultValue: 'false', description: 'Wrap content in a flex container with flexWrap', rules: 'When true, wraps content in a div with display: flex and flexWrap: wrap', from: 'Template' },
 ];
 
 interface RefMethodDoc {
@@ -925,6 +926,7 @@ const propsColumns: AvakioColumn<PropDoc>[] = [
   { id: 'defaultValue', header: 'Default', width: 100 },
   { id: 'description', header: 'Description', width: 250 },
   { id: 'rules', header: 'Rules / Conditions', width: 300 },
+  { id: 'from', header: 'From', width: 100, filterType: 'combo' },
 ];
 
 const refColumns: AvakioColumn<RefMethodDoc>[] = [
@@ -966,6 +968,7 @@ function PropsDocumentation({ theme }: { theme: string }) {
                   resizable={true}
                   paging={true}
                   pageSize={10}
+                  showRowNum={true}
                 />
               }
             />,
@@ -990,6 +993,7 @@ function PropsDocumentation({ theme }: { theme: string }) {
                   sortable={true}
                   resizable={true}
                   paging={false}
+                  showRowNum={true}
                 />
               }
             />

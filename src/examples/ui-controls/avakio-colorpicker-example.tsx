@@ -9,6 +9,7 @@ import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
+import { formatSizingValue } from '../../lib/utils';
 import { 
   Palette,
   Settings2,
@@ -155,43 +156,44 @@ export function AvakioColorPickerExample() {
     type: string;
     defaultValue: string;
     description: string;
+    from: string;
   }
 
   const propsData: PropDoc[] = [
     // Component-Specific Props
-    { id: 1, name: 'value', type: 'string', defaultValue: 'undefined', description: 'Current color value in hex format (e.g., #1ca1c1)' },
-    { id: 2, name: 'defaultValue', type: 'string', defaultValue: "'#1ca1c1'", description: 'Default color value when uncontrolled' },
-    { id: 3, name: 'onChange', type: '(color: string) => void', defaultValue: 'undefined', description: 'Callback when color value changes' },
-    { id: 4, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed above the picker' },
-    { id: 5, name: 'description', type: 'string', defaultValue: 'undefined', description: 'Description text displayed below the label' },
-    { id: 6, name: 'error', type: 'string', defaultValue: 'undefined', description: 'Error message to display in error state' },
-    { id: 7, name: 'presets', type: 'AvakioColorPickerPreset[]', defaultValue: '[]', description: 'Array of preset color swatches to display' },
-    { id: 8, name: 'showPreview', type: 'boolean', defaultValue: 'true', description: 'Show color preview swatch next to input' },
-    { id: 9, name: 'allowCustomInput', type: 'boolean', defaultValue: 'true', description: 'Allow manual hex input' },
+    { id: 1, name: 'value', type: 'string', defaultValue: 'undefined', description: 'Current color value in hex format (e.g., #1ca1c1)', from: 'ColorPicker' },
+    { id: 2, name: 'defaultValue', type: 'string', defaultValue: "'#1ca1c1'", description: 'Default color value when uncontrolled', from: 'ColorPicker' },
+    { id: 3, name: 'onChange', type: '(color: string) => void', defaultValue: 'undefined', description: 'Callback when color value changes', from: 'ColorPicker' },
+    { id: 4, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed above the picker', from: 'ControlLabel' },
+    { id: 5, name: 'description', type: 'string', defaultValue: 'undefined', description: 'Description text displayed below the label', from: 'ControlLabel' },
+    { id: 6, name: 'error', type: 'string', defaultValue: 'undefined', description: 'Error message to display in error state', from: 'ColorPicker' },
+    { id: 7, name: 'presets', type: 'AvakioColorPickerPreset[]', defaultValue: '[]', description: 'Array of preset color swatches to display', from: 'ColorPicker' },
+    { id: 8, name: 'showPreview', type: 'boolean', defaultValue: 'true', description: 'Show color preview swatch next to input', from: 'ColorPicker' },
+    { id: 9, name: 'allowCustomInput', type: 'boolean', defaultValue: 'true', description: 'Allow manual hex input', from: 'ColorPicker' },
     
     // State Props
-    { id: 10, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the component is disabled' },
-    { id: 11, name: 'readOnly', type: 'boolean', defaultValue: 'false', description: 'Whether the component is read-only' },
-    { id: 12, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Mark the field as required' },
-    { id: 13, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden' },
-    { id: 14, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove component borders' },
+    { id: 10, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the component is disabled', from: 'Base' },
+    { id: 11, name: 'readOnly', type: 'boolean', defaultValue: 'false', description: 'Whether the component is read-only', from: 'Base' },
+    { id: 12, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Mark the field as required', from: 'ColorPicker' },
+    { id: 13, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
+    { id: 14, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove component borders', from: 'Base' },
     
     // Identity Props
-    { id: 15, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID' },
-    { id: 16, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes' },
-    { id: 17, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name' },
-    { id: 18, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles' },
+    { id: 15, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
+    { id: 16, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 17, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
+    { id: 18, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles', from: 'Base' },
     
     // Sizing Props
-    { id: 19, name: 'minWidth', type: 'string | number', defaultValue: 'undefined', description: 'Minimum width of the component' },
-    { id: 20, name: 'minHeight', type: 'string | number', defaultValue: 'undefined', description: 'Minimum height of the component' },
-    { id: 21, name: 'maxWidth', type: 'string | number', defaultValue: 'undefined', description: 'Maximum width of the component' },
-    { id: 22, name: 'maxHeight', type: 'string | number', defaultValue: 'undefined', description: 'Maximum height of the component' },
+    { id: 19, name: 'minWidth', type: 'string | number', defaultValue: 'undefined', description: 'Minimum width of the component', from: 'Base' },
+    { id: 20, name: 'minHeight', type: 'string | number', defaultValue: 'undefined', description: 'Minimum height of the component', from: 'Base' },
+    { id: 21, name: 'maxWidth', type: 'string | number', defaultValue: 'undefined', description: 'Maximum width of the component', from: 'Base' },
+    { id: 22, name: 'maxHeight', type: 'string | number', defaultValue: 'undefined', description: 'Maximum height of the component', from: 'Base' },
   ];
 
   const presetPropsData: PropDoc[] = [
-    { id: 1, name: 'value', type: 'string', defaultValue: 'required', description: 'Hex color value (e.g., #1ca1c1)' },
-    { id: 2, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Optional label for the preset color' },
+    { id: 1, name: 'value', type: 'string', defaultValue: 'required', description: 'Hex color value (e.g., #1ca1c1)', from: 'ColorPicker' },
+    { id: 2, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Optional label for the preset color', from: 'ColorPicker' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [
@@ -199,6 +201,7 @@ export function AvakioColorPickerExample() {
     { id: 'type', header: 'Type', width: 280 },
     { id: 'defaultValue', header: 'Default', width: 100 },
     { id: 'description', header: 'Description', width: 350 },
+    { id: 'from', header: 'From', width: 120, filterType: 'combo' },
   ];
 
   return (
@@ -669,10 +672,10 @@ export function AvakioColorPickerExample() {
                       allowCustomInput={getPropValue('allowCustomInput', true)}
                       presets={getPropValue('useCustomPresets', false) ? CUSTOM_PRESETS : DEFAULT_PRESETS}
                       // Sizing props
-                      minWidth={getPropValue('minWidth', '') || undefined}
-                      minHeight={getPropValue('minHeight', '') || undefined}
-                      maxWidth={getPropValue('maxWidth', '') || undefined}
-                      maxHeight={getPropValue('maxHeight', '') || undefined}
+                      minWidth={formatSizingValue(getPropValue('minWidth', ''))}
+                      minHeight={formatSizingValue(getPropValue('minHeight', ''))}
+                      maxWidth={formatSizingValue(getPropValue('maxWidth', ''))}
+                      maxHeight={formatSizingValue(getPropValue('maxHeight', ''))}
                       // State props
                       disabled={getPropValue('disabled', false)}
                       readOnly={getPropValue('readOnly', false)}
@@ -881,6 +884,7 @@ export function AvakioColorPickerExample() {
               columns={propsColumns}
               select={false}
               height={600}
+              showRowNum={true}
             />,
           ]}
         />
@@ -905,6 +909,7 @@ export function AvakioColorPickerExample() {
               columns={propsColumns}
               select={false}
               height={150}
+              showRowNum={true}
             />,
           ]}
         />

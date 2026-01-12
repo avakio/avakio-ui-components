@@ -1,4 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect, useCallback } from 'react';
+import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-segmented-button.css';
 
 export type AvakioSegmentedButtonTheme = 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset';
@@ -483,6 +484,17 @@ export const AvakioSegmentedButton = forwardRef<AvakioSegmentedButtonRef, Avakio
     const hasError = !!error || !!invalidMessage;
 
     return (
+      <AvakioControlLabel
+        label={label}
+        labelPosition={labelPosition}
+        labelAlign={labelAlign}
+        labelWidth={labelWidth}
+        bottomLabel={!hasError ? bottomLabel : undefined}
+        required={required}
+        invalid={hasError}
+        invalidMessage={error || invalidMessage}
+        classPrefix="avakio-segmented"
+      >
       <div
         ref={containerRef}
         id={id}
@@ -503,19 +515,6 @@ export const AvakioSegmentedButton = forwardRef<AvakioSegmentedButtonRef, Avakio
         title={tooltip}
         key={refreshKey}
       >
-        {label && (
-          <label
-            className="avakio-segmented-label"
-            style={{
-              width: labelPosition === 'left' ? labelWidth : 'auto',
-              textAlign: labelAlign,
-            }}
-          >
-            {label}
-            {required && <span className="avakio-segmented-required">*</span>}
-          </label>
-        )}
-
         <div className="avakio-segmented-wrapper" style={inputContainerStyles}>
           <div 
             className="avakio-segmented-track"
@@ -567,15 +566,8 @@ export const AvakioSegmentedButton = forwardRef<AvakioSegmentedButtonRef, Avakio
             />
           )}
         </div>
-
-        {(error || invalidMessage) && (
-          <div className="avakio-segmented-error-text">{error || invalidMessage}</div>
-        )}
-
-        {bottomLabel && !hasError && (
-          <div className="avakio-segmented-bottom-label">{bottomLabel}</div>
-        )}
       </div>
+      </AvakioControlLabel>
     );
   }
 );

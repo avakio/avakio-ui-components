@@ -217,8 +217,8 @@ export interface AvakioPropertyProps extends AvakioBaseProps {
   items: AvakioPropertyItem[];
   /** Callback when any property value changes */
   onChange?: (items: AvakioPropertyItem[], changed: AvakioPropertyItem) => void;
-  /** Enable dense/compact mode */
-  dense?: boolean;
+  /** Size variant - compact for reduced spacing, ideal for sidebars or panels */
+  size?: 'default' | 'compact';
   /** Show borders between rows */
   showBorders?: boolean;
   /** Enable vertical overflow scrolling */
@@ -240,7 +240,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
       // Property-specific props
       items,
       onChange,
-      dense,
+      size = 'default',
       showBorders = true,
       overflowY,
       autoHeight,
@@ -806,7 +806,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
   const rootClass = [
     "avakio-property",
     (height || width || autoHeight) ? "avakio-layout-sized" : "",
-    dense ? "is-dense" : "",
+    size === 'compact' ? "size-compact" : "",
     showBorders === false ? "no-row-borders" : "",
     borderless ? "is-borderless" : "",
     isDisabled ? "is-disabled" : "",

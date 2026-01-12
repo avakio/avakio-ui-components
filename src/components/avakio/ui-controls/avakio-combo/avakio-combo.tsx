@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { ChevronDown, X, Search } from 'lucide-react';
+import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-combo.css';
 
 export interface AvakioComboOption {
@@ -233,6 +234,15 @@ export function AvakioCombo({
   };
 
   return (
+    <AvakioControlLabel
+      label={label}
+      labelAlign={labelAlign}
+      labelWidth={labelWidth}
+      required={required}
+      invalid={!!error}
+      invalidMessage={error}
+      classPrefix="avakio-combo"
+    >
     <div
       ref={containerRef}
       data-testid={testId}
@@ -244,16 +254,6 @@ export function AvakioCombo({
         ...style,
       }}
     >
-      {label && (
-        <label
-          htmlFor={id}
-          className={`avakio-combo-label avakio-combo-label-${labelAlign}`}
-          style={{ width: labelWidth }}
-        >
-          {label}
-          {required && <span className="avakio-combo-required">*</span>}
-        </label>
-      )}
       <div className="avakio-combo-container">
         <div
           className={`avakio-combo-input-wrapper ${isOpen ? 'open' : ''} ${
@@ -321,10 +321,9 @@ export function AvakioCombo({
             </div>
           </div>
         )}
-
-        {error && <div className="avakio-combo-error-message">{error}</div>}
       </div>
     </div>
+    </AvakioControlLabel>
   );
 }
 

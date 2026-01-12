@@ -131,56 +131,57 @@ export function AvakioCommentExample() {
     type: string;
     defaultValue: string;
     description: string;
+    from: string;
   }
 
   const propsData: PropDoc[] = [
-    { id: 1, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID' },
-    { id: 2, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes' },
-    { id: 3, name: 'data', type: 'CommentItem[]', defaultValue: '[]', description: 'Array of comment objects with id, user_id, date, and text' },
-    { id: 4, name: 'users', type: 'CommentUser[]', defaultValue: '[]', description: 'Array of user objects with id, value, image, and status' },
-    { id: 5, name: 'currentUser', type: 'string | number', defaultValue: 'undefined', description: 'Current user ID - their comments can be edited/deleted' },
-    { id: 6, name: 'mode', type: "'default' | 'chat'", defaultValue: "'default'", description: 'Display mode - default shows oldest first, chat shows newest first' },
-    { id: 7, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Read-only mode - hides input and disables editing' },
-    { id: 8, name: 'sendAction', type: "'enter' | 'shift+enter'", defaultValue: "'enter'", description: 'Key combination to send a comment' },
-    { id: 9, name: 'placeholder', type: 'string', defaultValue: "'Write a comment...'", description: 'Placeholder text for the input' },
-    { id: 10, name: 'mentions', type: 'boolean', defaultValue: 'false', description: 'Enable @mentions functionality' },
-    { id: 11, name: 'keepButtonVisible', type: 'boolean', defaultValue: 'false', description: 'Keep send button always visible' },
-    { id: 12, name: 'hasMore', type: 'boolean', defaultValue: 'false', description: 'Show "Load more" button' },
-    { id: 13, name: 'moreButtonLabel', type: 'string', defaultValue: "'Load more comments'", description: 'Label for the more button' },
-    { id: 14, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove border from component' },
-    { id: 15, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable the component' },
-    { id: 16, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden' },
-    { id: 17, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: 'undefined', description: 'Theme variant' },
-    { id: 18, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the component' },
-    { id: 19, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the component' },
-    { id: 20, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width' },
-    { id: 21, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height' },
-    { id: 22, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width' },
-    { id: 23, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height' },
-    { id: 24, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name' },
-    { id: 25, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom CSS styles' },
-    { id: 26, name: 'onAdd', type: '(comment: CommentItem) => void', defaultValue: 'undefined', description: 'Callback when a comment is added' },
-    { id: 27, name: 'onDelete', type: '(id: string | number) => void', defaultValue: 'undefined', description: 'Callback when a comment is deleted' },
-    { id: 28, name: 'onEdit', type: '(comment: CommentItem) => void', defaultValue: 'undefined', description: 'Callback when a comment is edited' },
-    { id: 29, name: 'onUserMentioned', type: '(userId, comment) => void', defaultValue: 'undefined', description: 'Callback when a user is mentioned' },
-    { id: 30, name: 'onLoadMore', type: '() => void', defaultValue: 'undefined', description: 'Callback when more comments are requested' },
-    { id: 31, name: 'dateFormatter', type: '(date: Date | string) => string', defaultValue: 'undefined', description: 'Custom date formatter' },
-    { id: 32, name: 'renderAvatar', type: '(user?: CommentUser) => ReactNode', defaultValue: 'undefined', description: 'Custom avatar renderer' },
+    { id: 1, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
+    { id: 2, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 3, name: 'data', type: 'CommentItem[]', defaultValue: '[]', description: 'Array of comment objects with id, user_id, date, and text', from: 'Comment' },
+    { id: 4, name: 'users', type: 'CommentUser[]', defaultValue: '[]', description: 'Array of user objects with id, value, image, and status', from: 'Comment' },
+    { id: 5, name: 'currentUser', type: 'string | number', defaultValue: 'undefined', description: 'Current user ID - their comments can be edited/deleted', from: 'Comment' },
+    { id: 6, name: 'mode', type: "'default' | 'chat'", defaultValue: "'default'", description: 'Display mode - default shows oldest first, chat shows newest first', from: 'Comment' },
+    { id: 7, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Read-only mode - hides input and disables editing', from: 'Comment' },
+    { id: 8, name: 'sendAction', type: "'enter' | 'shift+enter'", defaultValue: "'enter'", description: 'Key combination to send a comment', from: 'Comment' },
+    { id: 9, name: 'placeholder', type: 'string', defaultValue: "'Write a comment...'", description: 'Placeholder text for the input', from: 'Comment' },
+    { id: 10, name: 'mentions', type: 'boolean', defaultValue: 'false', description: 'Enable @mentions functionality', from: 'Comment' },
+    { id: 11, name: 'keepButtonVisible', type: 'boolean', defaultValue: 'false', description: 'Keep send button always visible', from: 'Comment' },
+    { id: 12, name: 'hasMore', type: 'boolean', defaultValue: 'false', description: 'Show "Load more" button', from: 'Comment' },
+    { id: 13, name: 'moreButtonLabel', type: 'string', defaultValue: "'Load more comments'", description: 'Label for the more button', from: 'Comment' },
+    { id: 14, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove border from component', from: 'Base' },
+    { id: 15, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable the component', from: 'Base' },
+    { id: 16, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
+    { id: 17, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: 'undefined', description: 'Theme variant', from: 'Comment' },
+    { id: 18, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the component', from: 'Base' },
+    { id: 19, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the component', from: 'Base' },
+    { id: 20, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width', from: 'Base' },
+    { id: 21, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height', from: 'Base' },
+    { id: 22, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width', from: 'Base' },
+    { id: 23, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height', from: 'Base' },
+    { id: 24, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
+    { id: 25, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom CSS styles', from: 'Base' },
+    { id: 26, name: 'onAdd', type: '(comment: CommentItem) => void', defaultValue: 'undefined', description: 'Callback when a comment is added', from: 'Comment' },
+    { id: 27, name: 'onDelete', type: '(id: string | number) => void', defaultValue: 'undefined', description: 'Callback when a comment is deleted', from: 'Comment' },
+    { id: 28, name: 'onEdit', type: '(comment: CommentItem) => void', defaultValue: 'undefined', description: 'Callback when a comment is edited', from: 'Comment' },
+    { id: 29, name: 'onUserMentioned', type: '(userId, comment) => void', defaultValue: 'undefined', description: 'Callback when a user is mentioned', from: 'Comment' },
+    { id: 30, name: 'onLoadMore', type: '() => void', defaultValue: 'undefined', description: 'Callback when more comments are requested', from: 'Comment' },
+    { id: 31, name: 'dateFormatter', type: '(date: Date | string) => string', defaultValue: 'undefined', description: 'Custom date formatter', from: 'Comment' },
+    { id: 32, name: 'renderAvatar', type: '(user?: CommentUser) => ReactNode', defaultValue: 'undefined', description: 'Custom avatar renderer', from: 'Comment' },
   ];
 
   const refMethodsData: PropDoc[] = [
-    { id: 1, name: 'getNode()', type: '() => HTMLDivElement | null', defaultValue: '-', description: 'Get the component DOM node' },
-    { id: 2, name: 'getComments()', type: '() => CommentItem[]', defaultValue: '-', description: 'Get all comments' },
-    { id: 3, name: 'add(comment)', type: '(comment: Omit<CommentItem, "id">) => void', defaultValue: '-', description: 'Add a new comment' },
-    { id: 4, name: 'remove(id)', type: '(id: string | number) => void', defaultValue: '-', description: 'Remove a comment by ID' },
-    { id: 5, name: 'edit(id)', type: '(id: string | number) => void', defaultValue: '-', description: 'Open edit mode for a comment' },
-    { id: 6, name: 'getUsers()', type: '() => CommentUser[]', defaultValue: '-', description: 'Get users data' },
-    { id: 7, name: 'setCurrentUser(id)', type: '(id: string | number) => void', defaultValue: '-', description: 'Set the current user' },
-    { id: 8, name: 'focus()', type: '() => void', defaultValue: '-', description: 'Focus the input area' },
-    { id: 9, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Check if enabled' },
-    { id: 10, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enable the component' },
-    { id: 11, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disable the component' },
-    { id: 12, name: 'clear()', type: '() => void', defaultValue: '-', description: 'Clear all comments' },
+    { id: 1, name: 'getNode()', type: '() => HTMLDivElement | null', defaultValue: '-', description: 'Get the component DOM node', from: 'Base' },
+    { id: 2, name: 'getComments()', type: '() => CommentItem[]', defaultValue: '-', description: 'Get all comments', from: 'Comment' },
+    { id: 3, name: 'add(comment)', type: '(comment: Omit<CommentItem, "id">) => void', defaultValue: '-', description: 'Add a new comment', from: 'Comment' },
+    { id: 4, name: 'remove(id)', type: '(id: string | number) => void', defaultValue: '-', description: 'Remove a comment by ID', from: 'Comment' },
+    { id: 5, name: 'edit(id)', type: '(id: string | number) => void', defaultValue: '-', description: 'Open edit mode for a comment', from: 'Comment' },
+    { id: 6, name: 'getUsers()', type: '() => CommentUser[]', defaultValue: '-', description: 'Get users data', from: 'Comment' },
+    { id: 7, name: 'setCurrentUser(id)', type: '(id: string | number) => void', defaultValue: '-', description: 'Set the current user', from: 'Comment' },
+    { id: 8, name: 'focus()', type: '() => void', defaultValue: '-', description: 'Focus the input area', from: 'Comment' },
+    { id: 9, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Check if enabled', from: 'Base' },
+    { id: 10, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enable the component', from: 'Base' },
+    { id: 11, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disable the component', from: 'Base' },
+    { id: 12, name: 'clear()', type: '() => void', defaultValue: '-', description: 'Clear all comments', from: 'Comment' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [
@@ -188,6 +189,7 @@ export function AvakioCommentExample() {
     { id: 'type', header: 'Type', width: 280 },
     { id: 'defaultValue', header: 'Default', width: 120 },
     { id: 'description', header: 'Description', width: 380 },
+    { id: 'from', header: 'From', width: 100, filterType: 'combo' },
   ];
 
   const themes: AvakioCommentTheme[] = ['material', 'flat', 'compact', 'dark', 'ocean', 'sunset'];
@@ -695,6 +697,7 @@ export function AvakioCommentExample() {
               data={propsData}
               columns={propsColumns}
               select={false}
+              showRowNum={true}
               height={700}
             />,
           ]}
@@ -719,6 +722,7 @@ export function AvakioCommentExample() {
               data={refMethodsData}
               columns={propsColumns}
               select={false}
+              showRowNum={true}
               height={380}
             />,
           ]}

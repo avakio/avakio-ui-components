@@ -83,11 +83,7 @@
   overflow: hidden;
 }
 
-/* Borderless variant */
-.avakio-fieldset-borderless {
-  border: none;
-}
-
+/* Borderless variant - uses base styles */
 .avakio-fieldset-borderless .avakio-fieldset-legend {
   margin-left: 0;
   padding-left: 0;

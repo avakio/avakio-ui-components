@@ -64,10 +64,10 @@ function MyComponent() {
 | `value` | `string \| number \| null` | - | Current selected value (controlled) |
 | `defaultValue` | `string \| number \| null` | `null` | Default selected value (uncontrolled) |
 | `options` | `AvakioRadioOption[] \| string[]` | **required** | Array of radio options |
-| `label` | `string` | - | Label text |
-| `labelWidth` | `number` | `80` | Width of the label in pixels |
-| `labelAlign` | `'left' \| 'right'` | `'left'` | Label alignment |
-| `labelPosition` | `'left' \| 'top'` | `'left'` | Label position relative to options |
+| `label` | `string` | - | Label text (rendered via AvakioControlLabel) |
+| `labelWidth` | `number` | `80` | Width of the label in pixels (rendered via AvakioControlLabel) |
+| `labelAlign` | `'left' \| 'right'` | `'left'` | Label alignment (rendered via AvakioControlLabel) |
+| `labelPosition` | `'left' \| 'top'` | `'left'` | Label position relative to options (rendered via AvakioControlLabel) |
 | `vertical` | `boolean` | `false` | Stack options vertically |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Radio button size |
 | `theme` | `string` | - | Theme variant |
@@ -75,7 +75,7 @@ function MyComponent() {
 | `required` | `boolean` | `false` | Mark as required field |
 | `invalid` | `boolean` | `false` | Invalid state |
 | `invalidMessage` | `string` | - | Error message to display |
-| `bottomLabel` | `string` | - | Helper text below the options |
+| `bottomLabel` | `string` | - | Helper text below the options (rendered via AvakioControlLabel) |
 | `customRadio` | `boolean` | `true` | Use custom styled radio (vs native) |
 | `optionHeight` | `number` | - | Fixed height for each option |
 | `className` | `string` | - | Additional CSS class |

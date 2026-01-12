@@ -7,11 +7,18 @@
   background-color: var(--background);
   overflow: visible;
   font-family: var(--font-sans);
+  box-sizing: border-box;
 }
 
-/* Borderless variant */
+/* Ensure all child elements use border-box sizing */
+.avakio-datatable *,
+.avakio-datatable *::before,
+.avakio-datatable *::after {
+  box-sizing: border-box;
+}
+
+/* Borderless variant - uses base styles, removes table-specific borders */
 .avakio-datatable-borderless {
-  border: none;
   border-radius: 0;
 }
 
@@ -28,6 +35,28 @@
 .avakio-datatable.avakio-datatable-column-borders .avakio-datatable-header-cell,
 .avakio-datatable.avakio-datatable-column-borders .avakio-datatable-cell {
   border-right: 1px solid var(--border, #e5e7eb) !important;
+}
+
+/* Column borders - horizontal border between header label and filter using pseudo-element */
+.avakio-datatable.avakio-datatable-column-borders .avakio-datatable-header-cell.with-filter {
+  position: relative;
+}
+
+.avakio-datatable.avakio-datatable-column-borders .avakio-datatable-header-cell.with-filter .avakio-datatable-header-filter,
+.avakio-datatable.avakio-datatable-column-borders .avakio-datatable-header-cell.with-filter .avakio-datatable-header-filter-empty {
+  position: relative;
+  padding-top: 8px;
+}
+
+.avakio-datatable.avakio-datatable-column-borders .avakio-datatable-header-cell.with-filter .avakio-datatable-header-filter::before,
+.avakio-datatable.avakio-datatable-column-borders .avakio-datatable-header-cell.with-filter .avakio-datatable-header-filter-empty::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -8px;
+  right: -8px;
+  height: 1px;
+  background-color: var(--border, #e5e7eb);
 }
 
 /* Row borders - show borders between rows (includes last row bottom border) */
@@ -99,7 +128,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
   /* Clip the vertical scrollbar from the body */
   position: relative;
 }
@@ -108,7 +137,9 @@
 .avakio-datatable-scrollable-header-container {
   flex-shrink: 0;
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: visible;
+  position: relative;
+  z-index: 100;
 }
 
 /* Header inside scrollable container should not be sticky (container handles scroll) */
@@ -165,6 +196,8 @@
   flex: 1;
   overflow: auto;
   min-height: 0;
+  position: relative;
+  z-index: 1;
 }
 
 /* When frozen columns exist, hide all scrollbars on middle panel */
@@ -246,7 +279,7 @@
   flex-shrink: 0;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
   overflow: visible;
 }
 
@@ -273,7 +306,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 8px 8px;
+  padding: 8px;
+  overflow: visible;
 }
 
 .avakio-datatable-header-cell:last-child {
@@ -298,6 +332,48 @@
 .avakio-datatable-header-cell.drag-over {
   background-color: var(--accent);
   box-shadow: inset 2px 0 0 0 var(--primary, #3b82f6);
+}
+
+/* Row number column */
+.avakio-datatable-rownum-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border);
+}
+
+/* Row number header - not clickable */
+.avakio-datatable-header-cell.avakio-datatable-rownum-cell {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Override with-filter column layout for rownum header - keep "#" centered */
+.avakio-datatable-header-cell.avakio-datatable-rownum-cell.with-filter {
+  flex-direction: row;
+  gap: 0;
+  padding: 0;
+}
+
+.avakio-datatable-header-cell.avakio-datatable-rownum-cell .avakio-datatable-header-filter-empty {
+  display: none;
+}
+
+/* Override with-filter column layout for checkbox header - keep checkbox centered */
+.avakio-datatable-header-cell.avakio-datatable-checkbox-cell.with-filter {
+  flex-direction: row;
+  gap: 0;
+  padding: 0;
+}
+
+.avakio-datatable-header-cell.avakio-datatable-checkbox-cell .avakio-datatable-header-filter-empty {
+  display: none;
+}
+
+.avakio-datatable-rownum-text {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  font-weight: 500;
 }
 
 /* Checkbox column for bulk selection */
@@ -329,6 +405,12 @@
 
 /* Remove cell selection outline from checkbox cell */
 .avakio-datatable-cell.avakio-datatable-checkbox-cell.selected {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove cell selection outline from row number cell */
+.avakio-datatable-cell.avakio-datatable-rownum-cell.selected {
   outline: none !important;
   box-shadow: none !important;
 }
@@ -392,11 +474,85 @@
 /* Header Filter (filter inside header cell) */
 .avakio-datatable-header-filter {
   width: 100%;
-  min-height: 28px;
+  min-height: 24px;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: visible;
+}
+
+/* AvakioText component inside header filter */
+.avakio-datatable-header-filter .avakio-text {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin-bottom: 0;
+  box-sizing: border-box;
+}
+
+.avakio-datatable-header-filter .avakio-text-content {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.avakio-datatable-header-filter .avakio-text-input-wrapper {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.avakio-datatable-header-filter .avakio-text-input {
+  max-width: 100%;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+/* AvakioDatePicker component inside header filter - compact */
+.avakio-datatable-header-filter .avakio-datepicker-input {
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+/* AvakioRichSelect component inside header filter - compact */
+.avakio-datatable-header-filter .avakio-richselect {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.avakio-datatable-header-filter .avakio-richselect-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.avakio-datatable-header-filter .avakio-richselect-trigger {
+  padding: 3px 8px;
+  font-size: 13px;
+  min-height: auto;
+  height: 24px;
+  box-sizing: border-box;
+}
+
+.avakio-datatable-header-filter .avakio-richselect-dropdown {
+  min-width: 100px;
+  z-index: 10000;
 }
 
 .avakio-datatable-header-filter-empty {
-  min-height: 28px;
+  min-height: 24px;
 }
 
 .avakio-datatable-filter-cell {
@@ -656,6 +812,7 @@
   border-bottom: 1px solid var(--border);
   transition: background-color 0.15s;
   cursor: pointer;
+  align-items: stretch; /* Ensure cells stretch to fill row height */
 }
 
 .avakio-datatable-row:last-child {
@@ -708,7 +865,6 @@
   display: flex;
   align-items: center;
   line-height: 20px;
-  min-height: 40px;
   box-sizing: border-box;
   min-width: 0;
 }

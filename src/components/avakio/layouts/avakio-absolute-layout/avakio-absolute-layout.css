@@ -23,8 +23,8 @@
   box-sizing: border-box;
 }
 
+/* Borderless - uses base styles */
 .avakio-absolute-layout.borderless {
-  border: none;
   border-radius: 0;
 }
 

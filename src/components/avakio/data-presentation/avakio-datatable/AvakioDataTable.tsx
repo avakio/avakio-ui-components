@@ -3,6 +3,7 @@ import { ChevronUp, ChevronDown, ChevronsUpDown, ChevronLeft, ChevronRight, Sear
 import { AvakioText } from '../../ui-controls/avakio-text/avakio-text';
 import { AvakioButton } from '../../ui-controls/avakio-button/avakio-button';
 import { AvakioRichSelect } from '../../ui-controls/avakio-richselect/avakio-richselect';
+import { AvakioMultiCombo } from '../../ui-controls/avakio-multicombo/avakio-multicombo';
 import { AvakioCheckbox } from '../../ui-controls/avakio-checkbox/avakio-checkbox';
 import { AvakioDatePicker } from '../../ui-controls/avakio-datepicker/avakio-datepicker';
 import { 
@@ -53,6 +54,7 @@ import './avakio-datatable.css';
 /** Props excluded from AvakioBaseProps for DataTable component */
 export type AvakioDataTableExcludedProps = 
   | 'clearable'
+  | 'height'
   | 'inputAlign'
   | 'inputHeight'
   | 'inputWidth'
@@ -84,6 +86,7 @@ export interface AvakioColumn<T = any> {
   minWidth?: number;
   maxWidth?: number;
   sort?: 'asc' | 'desc' | boolean;
+  /** Whether the column is filterable when table-level filterable is enabled (default: true) */
   filterable?: boolean;
   filterComponent?: (value: any, onChange: (value: any) => void) => React.ReactNode;
   filterType?: 'text' | 'date' | 'number' | 'multicombo' | 'combo';
@@ -92,6 +95,8 @@ export interface AvakioColumn<T = any> {
   template?: (row: T) => React.ReactNode;
   cssClass?: string;
   headerCssClass?: string;
+  /** Inline CSS styles for the header label */
+  cssHeader?: React.CSSProperties;
   align?: 'left' | 'center' | 'right';
   format?: (value: any) => string;
   /** Auto-adjust column width: 'data' (widest content), 'header' (header text), or true (both) */
@@ -247,6 +252,8 @@ export interface AvakioDataTableProps<T = any> extends Omit<AvakioBaseProps, Ava
   onColumnReorder?: (newColumnOrder: string[]) => void;
   /** Enable bulk selection with checkbox column on the left */
   bulkSelection?: boolean;
+  /** Show row number as first column */
+  showRowNum?: boolean;
 }
 
 // Inner component with generic type parameter
@@ -292,6 +299,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
     allowDragDrop = false,
     onColumnReorder,
     bulkSelection = false,
+    showRowNum = false,
     // Base props
     className,
     style,
@@ -665,6 +673,8 @@ function AvakioDataTableInner<T extends Record<string, any>>(
 
   useEffect(() => {
     setLocalPageSize(pageSize);
+    // Reset to page 1 when page size changes to avoid showing empty results
+    setPage(1);
   }, [pageSize]);
 
   // Filter data (skip if server-side)
@@ -692,11 +702,11 @@ function AvakioDataTableInner<T extends Record<string, any>>(
           return filterValue.some(fv => stringValue.includes(fv.toLowerCase()));
         }
         
-        // Handle combo filtering (single selected value)
+        // Handle combo filtering (single selected value) - exact match
         if (column?.filterType === 'combo' && filterValue) {
           const stringValue = String(value || '').toLowerCase();
           const filterStringValue = String(filterValue).toLowerCase();
-          return stringValue.includes(filterStringValue);
+          return stringValue === filterStringValue;
         }
         
         // Handle date filtering
@@ -878,7 +888,11 @@ function AvakioDataTableInner<T extends Record<string, any>>(
 
     const handleMouseMove = (event: MouseEvent) => {
       const diff = event.clientX - resizeStartX;
-      const newWidth = Math.max(50, resizeStartWidth + diff);
+      // Check if column has filter to determine minimum width
+      const column = columns.find(c => c.id === resizingColumn);
+      const hasFilter = filterable && column?.filterable !== false;
+      const minWidth = hasFilter ? 90 : 50;
+      const newWidth = Math.max(minWidth, resizeStartWidth + diff);
       setColumnWidths(prev => ({ ...prev, [resizingColumn]: newWidth }));
     };
 
@@ -893,7 +907,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [resizingColumn, resizeStartX, resizeStartWidth]);
+  }, [resizingColumn, resizeStartX, resizeStartWidth, columns, filterable]);
 
   // Drag-and-drop column reordering handlers
   const handleDragStart = useCallback((columnId: string, event: React.DragEvent) => {
@@ -1309,6 +1323,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
           >
             <span 
               className={`avakio-datatable-header-text ${column.headerWrap ? 'avakio-datatable-header-text-wrap' : ''}`}
+              style={column.cssHeader}
             >
               {column.header}
             </span>
@@ -1329,13 +1344,59 @@ function AvakioDataTableInner<T extends Record<string, any>>(
             >
               {column.filterComponent ? (
                 column.filterComponent(filters[column.id], (value) => handleFilter(column.id, value))
+              ) : column.filterType === 'combo' ? (
+                <AvakioRichSelect
+                  value={filters[column.id] || ''}
+                  onChange={(value) => handleFilter(column.id, value)}
+                  options={[
+                    { id: '', value: 'All' },
+                    ...Array.from(new Set(internalData.map(row => String(row[column.id] || '')).filter(v => v)))
+                      .sort()
+                      .map(v => ({ id: v, value: v }))
+                  ]}
+                  width="100%"
+                  clearable={true}
+                  size="compact"
+                />
+              ) : column.filterType === 'multicombo' ? (
+                <AvakioMultiCombo
+                  value={Array.isArray(filters[column.id]) ? filters[column.id] : []}
+                  onChange={(value) => handleFilter(column.id, value)}
+                  options={Array.from(new Set(internalData.map(row => String(row[column.id] || '')).filter(v => v)))
+                    .sort()
+                    .map(v => ({ value: v, label: v }))
+                  }
+                  placeholder="All"
+                  showCount={true}
+                  maxDisplayItems={1}
+                />
               ) : column.filterType === 'date' ? (
                 <AvakioDatePicker
                   value={filters[column.id] || ''}
                   onChange={(value) => handleFilter(column.id, value)}
                   clearable={true}
                   className="avakio-datatable-filter-input"
-                  height={28}
+                  height={24}
+                  width="100%"
+                />
+              ) : column.filterType === 'number' ? (
+                <AvakioText
+                  type="number"
+                  value={filters[column.id] || ''}
+                  onChange={(value) => handleFilter(column.id, value)}
+                  clear={true}
+                  className="avakio-datatable-filter-input"
+                  height={24}
+                  width="100%"
+                />
+              ) : (column.filterType === 'text' || !column.filterType) ? (
+                <AvakioText
+                  type="text"
+                  value={filters[column.id] || ''}
+                  onChange={(value) => handleFilter(column.id, value)}
+                  clear={true}
+                  className="avakio-datatable-filter-input"
+                  height={24}
                   width="100%"
                 />
               ) : (
@@ -1345,7 +1406,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
                   onChange={(value) => handleFilter(column.id, value)}
                   clear={true}
                   className="avakio-datatable-filter-input"
-                  height={28}
+                  height={24}
                   width="100%"
                 />
               )}
@@ -1451,7 +1512,10 @@ function AvakioDataTableInner<T extends Record<string, any>>(
             }
           }}
         >
-          <span className="avakio-datatable-cell-content" style={{ pointerEvents: 'none' }}>
+          <span 
+            className="avakio-datatable-cell-content" 
+            style={{ pointerEvents: column.template ? 'auto' : 'none' }}
+          >
             {spanInfo?.value !== undefined ? spanInfo.value : renderCell(column, row, rowIndex)}
           </span>
         </div>
@@ -1484,7 +1548,6 @@ function AvakioDataTableInner<T extends Record<string, any>>(
   // Compute base styles from AvakioBaseProps
   const baseStyles = computeBaseStyles({
     align,
-    height,
     hidden: isHidden,
     margin,
     minHeight,
@@ -1518,6 +1581,20 @@ function AvakioDataTableInner<T extends Record<string, any>>(
               {/* Left Frozen Header */}
               <div className={`avakio-datatable-header ${filterable ? 'has-filters' : ''}`} style={{ minHeight: `${headerHeight}px` }}>
                 <div className="avakio-datatable-header-row">
+                  {/* Row Number Header in frozen left panel */}
+                  {showRowNum && (
+                    <div
+                      className={`avakio-datatable-header-cell avakio-datatable-rownum-cell ${filterable ? 'with-filter' : ''}`}
+                      style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                    >
+                      <div className="avakio-datatable-header-content" style={{ justifyContent: 'center' }}>
+                        <span className="avakio-datatable-header-text">#</span>
+                      </div>
+                      {filterable && (
+                        <div className="avakio-datatable-header-filter avakio-datatable-header-filter-empty" />
+                      )}
+                    </div>
+                  )}
                   {/* Bulk Selection Checkbox in frozen left panel */}
                   {bulkSelection && (
                     <div
@@ -1575,6 +1652,15 @@ function AvakioDataTableInner<T extends Record<string, any>>(
                           onClick={(e) => handleRowClick(row, rowIndex, e)}
                           onDoubleClick={() => handleRowDoubleClick(row, rowIndex)}
                         >
+                          {/* Row Number Cell in frozen left */}
+                          {showRowNum && (
+                            <div
+                              className={`avakio-datatable-cell avakio-datatable-rownum-cell ${selectedRows.has(rowIndex) ? 'selected' : ''}`}
+                              style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                            >
+                              <span className="avakio-datatable-rownum-text">{(page - 1) * localPageSize + rowIndex + 1}</span>
+                            </div>
+                          )}
                           {/* Bulk Selection Checkbox Cell in frozen left */}
                           {bulkSelection && (
                             <div
@@ -1617,6 +1703,20 @@ function AvakioDataTableInner<T extends Record<string, any>>(
             >
               <div className={`avakio-datatable-header ${filterable ? 'has-filters' : ''}`} style={{ minHeight: `${headerHeight}px` }}>
                 <div className="avakio-datatable-header-row">
+                  {/* Row Number Header - only if no frozen left columns */}
+                  {showRowNum && frozenLeftColumns.length === 0 && (
+                    <div
+                      className={`avakio-datatable-header-cell avakio-datatable-rownum-cell ${filterable ? 'with-filter' : ''}`}
+                      style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                    >
+                      <div className="avakio-datatable-header-content" style={{ justifyContent: 'center' }}>
+                        <span className="avakio-datatable-header-text">#</span>
+                      </div>
+                      {filterable && (
+                        <div className="avakio-datatable-header-filter avakio-datatable-header-filter-empty" />
+                      )}
+                    </div>
+                  )}
                   {/* Bulk Selection only in left frozen panel when frozen columns exist */}
                   {bulkSelection && frozenLeftColumns.length === 0 && (
                     <div
@@ -1684,6 +1784,15 @@ function AvakioDataTableInner<T extends Record<string, any>>(
                         onClick={(e) => handleRowClick(row, rowIndex, e)}
                         onDoubleClick={() => handleRowDoubleClick(row, rowIndex)}
                       >
+                        {/* Row Number Cell - only if no frozen left columns */}
+                        {showRowNum && frozenLeftColumns.length === 0 && (
+                          <div
+                            className={`avakio-datatable-cell avakio-datatable-rownum-cell ${selectedRows.has(rowIndex) ? 'selected' : ''}`}
+                            style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                          >
+                            <span className="avakio-datatable-rownum-text">{(page - 1) * localPageSize + rowIndex + 1}</span>
+                          </div>
+                        )}
                         {/* Bulk Selection only if no frozen left columns */}
                         {bulkSelection && frozenLeftColumns.length === 0 && (
                           <div
@@ -1772,6 +1881,20 @@ function AvakioDataTableInner<T extends Record<string, any>>(
             {/* Header */}
             <div className={`avakio-datatable-header ${filterable ? 'has-filters' : ''}`} style={{ minHeight: `${headerHeight}px` }}>
               <div className="avakio-datatable-header-row">
+                {/* Row Number Column Header */}
+                {showRowNum && (
+                  <div
+                    className={`avakio-datatable-header-cell avakio-datatable-rownum-cell ${filterable ? 'with-filter' : ''}`}
+                    style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                  >
+                    <div className="avakio-datatable-header-content" style={{ justifyContent: 'center' }}>
+                      <span className="avakio-datatable-header-text">#</span>
+                    </div>
+                    {filterable && (
+                      <div className="avakio-datatable-header-filter avakio-datatable-header-filter-empty" />
+                    )}
+                  </div>
+                )}
                 {/* Bulk Selection Checkbox Column Header */}
                 {bulkSelection && (
                   <div
@@ -1834,6 +1957,15 @@ function AvakioDataTableInner<T extends Record<string, any>>(
                         onClick={(e) => handleRowClick(row, rowIndex, e)}
                         onDoubleClick={() => handleRowDoubleClick(row, rowIndex)}
                       >
+                        {/* Row Number Cell */}
+                        {showRowNum && (
+                          <div
+                            className={`avakio-datatable-cell avakio-datatable-rownum-cell ${selectedRows.has(rowIndex) ? 'selected' : ''}`}
+                            style={{ width: '48px', minWidth: '48px', maxWidth: '48px', flexShrink: 0, justifyContent: 'center' }}
+                          >
+                            <span className="avakio-datatable-rownum-text">{(page - 1) * localPageSize + rowIndex + 1}</span>
+                          </div>
+                        )}
                         {/* Bulk Selection Checkbox Cell */}
                         {bulkSelection && (
                           <div
@@ -1895,6 +2027,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
               className="avakio-datatable-page-size-select"
               clearable={false}
               width={130}
+              size="compact"
             />
 
             <div className="avakio-datatable-pagination-controls">

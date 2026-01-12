@@ -1,4 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect } from 'react';
+import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-switch-button.css';
 
 export type AvakioSwitchButtonTheme = 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset';
@@ -241,32 +242,25 @@ export const AvakioSwitchButton = forwardRef<AvakioSwitchButtonRef, AvakioSwitch
       ...style,
     };
 
-    const labelStyles: React.CSSProperties = {
-      width: labelWidth > 0 ? `${labelWidth}px` : undefined,
-      minWidth: labelWidth > 0 ? `${labelWidth}px` : undefined,
-    };
-
     // Determine switch inner text
     const switchInnerText = isOn ? onLabel : offLabel;
     const hasInnerLabels = onLabel || offLabel;
 
     return (
+      <AvakioControlLabel
+        label={label}
+        labelWidth={labelWidth}
+        bottomLabel={bottomLabel}
+        required={required}
+        invalid={invalid}
+        invalidMessage={invalidMessage}
+        classPrefix="avakio-switch"
+      >
       <div
         className={containerClassNames}
         style={containerStyles}
         data-admin-theme={theme}
       >
-        {/* Left Label */}
-        {label && (
-          <label 
-            className="avakio-switch-label avakio-switch-label-left"
-            style={labelStyles}
-          >
-            {label}
-            {required && <span className="avakio-switch-required">*</span>}
-          </label>
-        )}
-
         {/* Switch Track */}
         <button
           ref={switchRef}
@@ -304,18 +298,8 @@ export const AvakioSwitchButton = forwardRef<AvakioSwitchButtonRef, AvakioSwitch
             {required && !label && <span className="avakio-switch-required">*</span>}
           </label>
         )}
-
-        {/* Bottom Label / Invalid Message */}
-        {(bottomLabel || (invalid && invalidMessage)) && (
-          <div className="avakio-switch-bottom">
-            {invalid && invalidMessage ? (
-              <span className="avakio-switch-invalid-message">{invalidMessage}</span>
-            ) : (
-              <span className="avakio-switch-bottom-label">{bottomLabel}</span>
-            )}
-          </div>
-        )}
       </div>
+      </AvakioControlLabel>
     );
   }
 );

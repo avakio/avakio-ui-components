@@ -197,9 +197,9 @@ const invoiceData = [
 | `body` | `object` | `{autoConfig: true}` | Grid configuration object |
 | `editable` | `boolean` | `true` | Allow text input/filtering |
 | `filterMode` | `'startsWith' \| 'contains'` | `'contains'` | Filter matching mode |
-| `label` | `string` | - | Label text |
-| `labelAlign` | `'left' \| 'right'` | `'left'` | Label alignment |
-| `labelWidth` | `number` | `100` | Label width in pixels |
+| `label` | `string` | - | Label text (rendered via AvakioControlLabel) |
+| `labelAlign` | `'left' \| 'right'` | `'left'` | Label alignment (rendered via AvakioControlLabel) |
+| `labelWidth` | `number` | `100` | Label width in pixels (rendered via AvakioControlLabel) |
 | `placeholder` | `string` | `'Select...'` | Placeholder text |
 | `disabled` | `boolean` | `false` | Disable the component |
 | `readonly` | `boolean` | `false` | Make component read-only |

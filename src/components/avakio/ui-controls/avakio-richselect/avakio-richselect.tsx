@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { ChevronDown, X } from 'lucide-react';
+import { AvakioControlLabel } from '../../base/avakio-control-label';
 import './avakio-richselect.css';
 
 export interface AvakioRichSelectOption {
@@ -8,24 +9,76 @@ export interface AvakioRichSelectOption {
   [key: string]: any;
 }
 
+/**
+ * Ref interface for AvakioRichSelect component
+ */
+export interface AvakioRichSelectRef {
+  /** Removes focus from the control */
+  blur: () => void;
+  /** Sets focus to the control */
+  focus: () => void;
+  /** Disables the component */
+  disable: () => void;
+  /** Enables the component */
+  enable: () => void;
+  /** Hides the component */
+  hide: () => void;
+  /** Makes the component visible */
+  show: () => void;
+  /** Returns the current value (id) of the selected option */
+  getValue: () => string | number | undefined;
+  /** Sets a new value for the component */
+  setValue: (value: string | number) => void;
+  /** Gets the text value of the selected option */
+  getText: () => string;
+  /** Checks whether the component is enabled */
+  isEnabled: () => boolean;
+  /** Checks whether the component is visible */
+  isVisible: () => boolean;
+  /** Returns the root DOM element */
+  getElement: () => HTMLElement | null;
+  /** Returns the ID of the parent Avakio container (AvakioView, AvakioTemplate, AvakioMultiView, AvakioLayout, AvakioGrid, or AvakioAbsoluteLayout) */
+  getParentView: () => string | null;
+  /** Validates the component */
+  validate: () => boolean | string;
+  /** Redefines configuration properties */
+  define: (config: Partial<AvakioRichSelectProps> | string, value?: unknown) => void;
+}
+
 export interface AvakioRichSelectProps {
   id?: string;
   value?: string | number;
   options: AvakioRichSelectOption[] | string[];
   onChange?: (value: string | number, option?: AvakioRichSelectOption) => void;
   placeholder?: string;
+  /** Sets the text of the label */
   label?: string;
-  labelAlign?: 'left' | 'right';
-  labelWidth?: number;
+  /** The alignment of a label inside its container */
+  labelAlign?: 'left' | 'right' | 'center';
+  /** The width of the label */
+  labelWidth?: number | string;
+  /** Positions a label in relation to the control */
+  labelPosition?: 'left' | 'top' | 'right' | 'bottom';
+  /** Form label displayed above the component */
+  labelForm?: string;
+  /** Sets a label under the control */
+  bottomLabel?: string;
+  /** Sets the bottom offset of the control input */
+  bottomPadding?: number;
   disabled?: boolean;
   readonly?: boolean;
   template?: (option: AvakioRichSelectOption) => React.ReactNode;
   width?: number | string;
   yCount?: number; // Number of visible items in the list
   required?: boolean;
-  error?: string;
+  /** Marks the component as invalid */
+  invalid?: boolean;
+  /** Sets the text of a validation message */
+  invalidMessage?: string;
   className?: string;
   clearable?: boolean;
+  /** Size variant - compact for filters/tables */
+  size?: 'default' | 'compact';
   /** Padding - can be a number (all sides), string, or array [top, right, bottom, left] */
   padding?: string | number | [number, number, number, number];
   /** Margin - can be a number (all sides), string, or array [top, right, bottom, left] */
@@ -48,7 +101,7 @@ export interface AvakioRichSelectProps {
   style?: React.CSSProperties;
 }
 
-export function AvakioRichSelect({
+export const AvakioRichSelect = forwardRef<AvakioRichSelectRef, AvakioRichSelectProps>(function AvakioRichSelect({
   id,
   value,
   options = [],
@@ -57,29 +110,50 @@ export function AvakioRichSelect({
   label,
   labelAlign = 'left',
   labelWidth = 100,
+  labelPosition = 'left',
+  labelForm,
+  bottomLabel,
+  bottomPadding,
   disabled = false,
   readonly = false,
   template,
   width,
-  maxHeight = 300,
+  maxHeight,
   yCount,
   required = false,
-  error,
+  invalid = false,
+  invalidMessage,
   className = '',
-  clearable = true,
+  clearable = false,
+  size = 'default',
   padding,
   margin,
   minWidth,
   minHeight,
   testId,
   style,
-}: AvakioRichSelectProps) {
+  hidden = false,
+  borderless = false,
+}, ref) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [selectedOption, setSelectedOption] = useState<AvakioRichSelectOption | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  
+  // Internal state for imperative control
+  const [isDisabled, setIsDisabled] = useState(disabled);
+  const [isHidden, setIsHidden] = useState(hidden);
+
+  // Sync with prop changes
+  useEffect(() => {
+    setIsDisabled(disabled);
+  }, [disabled]);
+
+  useEffect(() => {
+    setIsHidden(hidden);
+  }, [hidden]);
 
   // Normalize options to AvakioRichSelectOption format
   const normalizedOptions: AvakioRichSelectOption[] = options.map((opt) => {
@@ -189,7 +263,7 @@ export function AvakioRichSelect({
   };
 
   const handleToggle = () => {
-    if (!disabled && !readonly) {
+    if (!isDisabled && !readonly) {
       setIsOpen(!isOpen);
       if (!isOpen) {
         // Set highlighted index to current selection when opening
@@ -204,13 +278,141 @@ export function AvakioRichSelect({
   const displayValue = selectedOption ? selectedOption.value : '';
   const calculatedMaxHeight = yCount
     ? yCount * 40 // Approximate item height
-    : maxHeight;
+    : maxHeight ?? 300; // Default to 300px if not specified
+
+  // Ref methods
+  const blur = useCallback(() => {
+    buttonRef.current?.blur();
+  }, []);
+
+  const focus = useCallback(() => {
+    buttonRef.current?.focus();
+  }, []);
+
+  const disable = useCallback(() => {
+    setIsDisabled(true);
+  }, []);
+
+  const enable = useCallback(() => {
+    setIsDisabled(false);
+  }, []);
+
+  const hide = useCallback(() => {
+    setIsHidden(true);
+  }, []);
+
+  const show = useCallback(() => {
+    setIsHidden(false);
+  }, []);
+
+  const getValue = useCallback(() => {
+    return selectedOption?.id;
+  }, [selectedOption]);
+
+  const setValue = useCallback((newValue: string | number) => {
+    const option = normalizedOptions.find(
+      (opt) => opt.id === newValue || String(opt.id) === String(newValue)
+    );
+    if (option) {
+      setSelectedOption(option);
+      onChange?.(option.id, option);
+    }
+  }, [normalizedOptions, onChange]);
+
+  const getText = useCallback(() => {
+    return selectedOption?.value || '';
+  }, [selectedOption]);
+
+  const isEnabled = useCallback(() => {
+    return !isDisabled;
+  }, [isDisabled]);
+
+  const isVisible = useCallback(() => {
+    return !isHidden;
+  }, [isHidden]);
+
+  const getElement = useCallback(() => {
+    return containerRef.current;
+  }, []);
+
+  const getParentView = useCallback(() => {
+    // List of Avakio container class prefixes to search for
+    const containerClasses = [
+      'avakio-layout',
+      'avakio-template',
+      'avakio-view',
+      'avakio-multiview',
+      'avakio-grid',
+      'avakio-absolute-layout',
+    ];
+    
+    let element = containerRef.current?.parentElement;
+    while (element) {
+      // Check if this element is an Avakio container
+      const classList = element.className || '';
+      const matchingClass = containerClasses.find(prefix => 
+        classList.split(' ').some(cls => cls.startsWith(prefix))
+      );
+      
+      if (matchingClass) {
+        // Return ID if available, otherwise return the matching Avakio class name
+        return element.id || matchingClass;
+      }
+      element = element.parentElement;
+    }
+    return null;
+  }, []);
+
+  const validate = useCallback(() => {
+    if (required && !selectedOption) {
+      return invalidMessage || 'This field is required';
+    }
+    return true;
+  }, [required, selectedOption, invalidMessage]);
+
+  const define = useCallback((
+    configOrKey: Partial<AvakioRichSelectProps> | string,
+    propValue?: unknown
+  ) => {
+    // This is a simplified implementation - in production you'd handle all props
+    if (typeof configOrKey === 'string') {
+      if (configOrKey === 'disabled') setIsDisabled(propValue as boolean);
+      if (configOrKey === 'hidden') setIsHidden(propValue as boolean);
+    } else {
+      if (configOrKey.disabled !== undefined) setIsDisabled(configOrKey.disabled);
+      if (configOrKey.hidden !== undefined) setIsHidden(configOrKey.hidden);
+    }
+  }, []);
+
+  // Expose ref methods
+  useImperativeHandle(ref, () => ({
+    blur,
+    focus,
+    disable,
+    enable,
+    hide,
+    show,
+    getValue,
+    setValue,
+    getText,
+    isEnabled,
+    isVisible,
+    getElement,
+    getParentView,
+    validate,
+    define,
+  }), [blur, focus, disable, enable, hide, show, getValue, setValue, getText, isEnabled, isVisible, getElement, getParentView, validate, define]);
+
+  // Don't render if hidden
+  if (isHidden) {
+    return null;
+  }
 
   return (
     <div
       ref={containerRef}
       data-testid={testId}
-      className={`avakio-richselect ${className}`}
+      className={`avakio-richselect ${size === 'compact' ? 'avakio-richselect-compact' : ''} ${borderless ? 'avakio-richselect-borderless' : ''} ${(labelPosition === 'top' || labelPosition === 'bottom') ? 'avakio-richselect-label-vertical' : ''} ${className}`}
       style={{
         width,
         padding: Array.isArray(padding) 
@@ -219,110 +421,105 @@ export function AvakioRichSelect({
         margin: Array.isArray(margin) 
           ? `${margin[0]}px ${margin[1]}px ${margin[2]}px ${margin[3]}px`
           : typeof margin === 'number' ? `${margin}px` : margin,
+        paddingBottom: bottomPadding !== undefined 
+          ? typeof bottomPadding === 'number' ? `${bottomPadding}px` : bottomPadding 
+          : undefined,
         ...style,
       }}
-      data-disabled={disabled}
+      data-disabled={isDisabled}
       data-readonly={readonly}
-      data-error={!!error}
+      data-invalid={invalid ? "true" : undefined}
+      data-size={size}
     >
-      {label && (
-        <label
-          className="avakio-richselect-label"
-          style={{
-            width: labelAlign === 'left' ? labelWidth : undefined,
-            textAlign: labelAlign,
-          }}
-        >
-          {label}
-          {required && <span className="avakio-richselect-required">*</span>}
-        </label>
-      )}
-
-      <div className="avakio-richselect-wrapper">
-        <button
-          ref={buttonRef}
-          type="button"
-          id={id}
-          className="avakio-richselect-button"
-          onClick={handleToggle}
-          disabled={disabled}
-          aria-haspopup="listbox"
-          aria-expanded={isOpen}
-          aria-label={label || 'Select option'}
-        >
-          <span className={`avakio-richselect-value ${!displayValue ? 'placeholder' : ''}`}>
-            {displayValue || placeholder}
-          </span>
-
-          <div className="avakio-richselect-icons">
-            {clearable && selectedOption && !disabled && !readonly && (
-              <span
-                role="button"
-                tabIndex={-1}
-                className="avakio-richselect-clear"
-                onClick={handleClear}
-                aria-label="Clear selection"
-              >
-                <X size={16} />
-              </span>
-            )}
-            <ChevronDown
-              size={18}
-              className={`avakio-richselect-toggle ${isOpen ? 'open' : ''}`}
-            />
-          </div>
-        </button>
-
-        {isOpen && (
-          <div
-            ref={dropdownRef}
-            className="avakio-richselect-dropdown"
-            style={{ maxHeight: calculatedMaxHeight }}
-            role="listbox"
+      <AvakioControlLabel
+        label={label}
+        labelForm={labelForm}
+        labelPosition={labelPosition}
+        labelAlign={labelAlign}
+        labelWidth={labelWidth}
+        bottomLabel={bottomLabel}
+        required={required}
+        invalid={invalid}
+        invalidMessage={invalidMessage}
+        classPrefix="avakio-richselect"
+        wrapperClassName={(labelPosition === 'top' || labelPosition === 'bottom') ? 'avakio-richselect-inner-wrapper-vertical' : ''}
+        size={size}
+      >
+        <div className="avakio-richselect-wrapper">
+          <button
+            ref={buttonRef}
+            type="button"
+            id={id}
+            className="avakio-richselect-button"
+            onClick={handleToggle}
+            disabled={isDisabled}
+            aria-haspopup="listbox"
+            aria-expanded={isOpen}
+            aria-label={label || 'Select option'}
           >
-            {normalizedOptions.length === 0 ? (
-              <div className="avakio-richselect-empty">No options available</div>
-            ) : (
-              normalizedOptions.map((option, index) => {
-                const isSelected = selectedOption?.id === option.id;
-                const isHighlighted = index === highlightedIndex;
+            <span className={`avakio-richselect-value ${!displayValue ? 'placeholder' : ''}`}>
+              {displayValue || placeholder}
+            </span>
 
-                return (
-                  <div
-                    key={option.id}
-                    data-index={index}
-                    className={`avakio-richselect-option ${isSelected ? 'selected' : ''} ${
-                      isHighlighted ? 'highlighted' : ''
-                    }`}
-                    onClick={() => handleSelect(option)}
-                    role="option"
-                    aria-selected={isSelected}
-                  >
-                    {template ? template(option) : option.value}
-                  </div>
-                );
-              })
-            )}
-          </div>
-        )}
-      </div>
+            <div className="avakio-richselect-icons">
+              {clearable && selectedOption && !isDisabled && !readonly && (
+                <span
+                  role="button"
+                  tabIndex={-1}
+                  className="avakio-richselect-clear"
+                  onClick={handleClear}
+                  aria-label="Clear selection"
+                >
+                  <X size={16} />
+                </span>
+              )}
+              <ChevronDown
+                size={18}
+                className={`avakio-richselect-toggle ${isOpen ? 'open' : ''}`}
+              />
+            </div>
+          </button>
 
-      {error && <div className="avakio-richselect-error">{error}</div>}
+          {isOpen && (
+            <div
+              ref={dropdownRef}
+              className="avakio-richselect-dropdown"
+              style={{ maxHeight: calculatedMaxHeight }}
+              role="listbox"
+            >
+              {normalizedOptions.length === 0 ? (
+                <div className="avakio-richselect-empty">No options available</div>
+              ) : (
+                normalizedOptions.map((option, index) => {
+                  const isSelected = selectedOption?.id === option.id;
+                  const isHighlighted = index === highlightedIndex;
+
+                  return (
+                    <div
+                      key={option.id}
+                      data-index={index}
+                      className={`avakio-richselect-option ${isSelected ? 'selected' : ''} ${
+                        isHighlighted ? 'highlighted' : ''
+                      }`}
+                      onClick={() => handleSelect(option)}
+                      role="option"
+                      aria-selected={isSelected}
+                    >
+                      {template ? template(option) : option.value}
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          )}
+        </div>
+      </AvakioControlLabel>
     </div>
   );
-}
+});
 
-// Helper methods for API compatibility
-export const AvakioRichSelectAPI = {
-  getValue: (ref: React.RefObject<any>) => {
-    // Returns the ID of the selected option
-    return ref.current?.selectedOption?.id;
-  },
-  getText: (ref: React.RefObject<any>) => {
-    // Returns the text value of the selected option
-    return ref.current?.selectedOption?.value;
-  },
-};
+// Re-export the ref type for consumers
+export type { AvakioRichSelectRef };
 
 
 

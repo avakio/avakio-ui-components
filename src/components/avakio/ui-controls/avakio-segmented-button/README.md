@@ -193,14 +193,14 @@ function MyComponent() {
 | `value` | `string \| number \| null` | - | Selected value (controlled) |
 | `defaultValue` | `string \| number` | - | Default value (uncontrolled) |
 | `options` | `AvakioSegmentedOption[] \| string[]` | `[]` | Array of options |
-| `label` | `string` | - | Label text |
-| `labelWidth` | `number` | `120` | Label width in pixels |
-| `labelAlign` | `'left' \| 'right'` | `'left'` | Label text alignment |
-| `labelPosition` | `'left' \| 'top'` | `'left'` | Label position |
+| `label` | `string` | - | Label text (rendered via AvakioControlLabel) |
+| `labelWidth` | `number` | `120` | Label width in pixels (rendered via AvakioControlLabel) |
+| `labelAlign` | `'left' \| 'right'` | `'left'` | Label text alignment (rendered via AvakioControlLabel) |
+| `labelPosition` | `'left' \| 'top'` | `'left'` | Label position (rendered via AvakioControlLabel) |
 | `required` | `boolean` | `false` | Mark as required |
 | `error` | `string` | - | Error message |
 | `invalidMessage` | `string` | - | Validation message |
-| `bottomLabel` | `string` | - | Text below the control |
+| `bottomLabel` | `string` | - | Text below the control (rendered via AvakioControlLabel) |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Button size |
 | `align` | `'left' \| 'center' \| 'right'` | `'left'` | Content alignment |
 | `theme` | `string` | - | Theme variant |

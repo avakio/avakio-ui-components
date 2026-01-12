@@ -12,6 +12,7 @@ import {
   computeLabelStyles,
   AVAKIO_BASE_DEFAULTS 
 } from '../../base/avakio-base-props';
+import { AvakioControlLabel } from '../../base/avakio-control-label';
 import './avakio-datepicker.css';
 
 export interface AvakioDatePickerProps extends AvakioControlledProps<string> {
@@ -675,12 +676,6 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     ...(compWidth !== 'auto' && { flexShrink: 0 }), // Don't shrink label
   };
 
-  // LabelForm styles based on position
-  const labelFormStyle: React.CSSProperties = {
-    width: labelPosition === 'left' ? formatSize(labelWidth) : undefined,
-    textAlign: labelAlign,
-  };
-
   // Input styles - shrink input when compWidth is set
   const inputStyle: React.CSSProperties = {
     textAlign: inputAlign,
@@ -710,6 +705,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
           'avakio-dp-inline', 
           borderless && 'avakio-dp-borderless',
           isDisabled && 'avakio-dp-disabled',
+          (labelPosition === 'top' || labelPosition === 'bottom') && 'avakio-dp-label-vertical',
           className
         )}
         data-admin-theme={themeAttr || undefined}
@@ -718,23 +714,28 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
         tabIndex={isDisabled ? -1 : 0}
         onClick={eventHandlers.onClick}
       >
-        {labelForm && (
-          <div 
-            className={cn('avakio-dp-label-form', `avakio-dp-label-form-${labelPosition}`)}
-            style={labelFormStyle}
-          >
-            {labelForm}
-          </div>
-        )}
-        <AvakioDatePickerCalendar 
-          value={value} 
-          onChange={handleValueChange} 
-          showTime={showTime}
-          showYearSelector={showYearSelector}
-          minYear={minYear}
-          maxYear={maxYear}
-        />
-        {bottomLabel && <div className="avakio-dp-bottom-label">{bottomLabel}</div>}
+        <AvakioControlLabel
+          label={label}
+          labelForm={labelForm}
+          labelPosition={labelPosition}
+          labelAlign={labelAlign}
+          labelWidth={labelWidth}
+          bottomLabel={bottomLabel}
+          required={required}
+          classPrefix="avakio-dp"
+          wrapperClassName={(labelPosition === 'top' || labelPosition === 'bottom') ? 'avakio-dp-wrapper-vertical' : ''}
+          wrapperStyle={wrapperStyle}
+          labelStyle={labelStyle}
+        >
+          <AvakioDatePickerCalendar 
+            value={value} 
+            onChange={handleValueChange} 
+            showTime={showTime}
+            showYearSelector={showYearSelector}
+            minYear={minYear}
+            maxYear={maxYear}
+          />
+        </AvakioControlLabel>
       </div>
     );
   }
@@ -751,6 +752,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
           borderless && 'avakio-dp-borderless',
           isInvalid && 'avakio-dp-invalid',
           isDisabled && 'avakio-dp-disabled',
+          (labelPosition === 'top' || labelPosition === 'bottom') && 'avakio-dp-label-vertical',
           className
         )}
         data-admin-theme={themeAttr || undefined}
@@ -758,80 +760,85 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
         title={tooltip}
         onClick={eventHandlers.onClick}
       >
-        {labelForm && (
-          <div 
-            className={cn('avakio-dp-label-form', `avakio-dp-label-form-${labelPosition}`)}
-            style={labelFormStyle}
-          >
-            {labelForm}
-          </div>
-        )}
-        <Popover open={!isDisabled && open} onOpenChange={(o) => !isDisabled && setOpen(o)}>
-          <PopoverTrigger asChild>
-            <div className="avakio-dp-input-group-compact" style={wrapperStyle}>
-              <input
-                type="text"
-                className="avakio-dp-input-compact"
-                placeholder={placeholder}
-                value={inputDisplayValue}
-                readOnly={readonly || true}
-                disabled={isDisabled}
-                style={inputStyle}
-                onBlur={eventHandlers.onBlur}
-                onFocus={eventHandlers.onFocus}
-                onKeyDown={eventHandlers.onKeyPress}
-              />
-              {enableValueCopyButton && value && (
-                <button
-                  type="button"
-                  className="avakio-dp-copy-btn-compact"
-                  onClick={handleCopyValue}
-                  title="Copy to clipboard"
+        <AvakioControlLabel
+          label={label}
+          labelForm={labelForm}
+          labelPosition={labelPosition}
+          labelAlign={labelAlign}
+          labelWidth={labelWidth}
+          bottomLabel={bottomLabel}
+          required={required}
+          invalid={isInvalid}
+          invalidMessage={invalidMessage}
+          classPrefix="avakio-dp"
+          wrapperClassName={(labelPosition === 'top' || labelPosition === 'bottom') ? 'avakio-dp-wrapper-vertical' : ''}
+          wrapperStyle={wrapperStyle}
+          labelStyle={labelStyle}
+          size="compact"
+        >
+          <Popover open={!isDisabled && open} onOpenChange={(o) => !isDisabled && setOpen(o)}>
+            <PopoverTrigger asChild>
+              <div className="avakio-dp-input-group-compact" style={inputGroupStyle}>
+                <input
+                  type="text"
+                  className="avakio-dp-input-compact"
+                  placeholder={placeholder}
+                  value={inputDisplayValue}
+                  readOnly={readonly || true}
                   disabled={isDisabled}
-                >
-                  <Copy size={12} />
-                </button>
-              )}
-              {clearable && value && !isDisabled && (
-                <button
-                  type="button"
-                  className="avakio-dp-clear-btn-compact"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleValueChange('');
-                  }}
-                >
-                  <X size={12} />
-                </button>
-              )}
-              {!value && (
-                <button type="button" className="avakio-dp-icon-btn-compact" disabled={isDisabled}>
-                  <CalendarIcon size={12} />
-                </button>
-              )}
-            </div>
-          </PopoverTrigger>
-          <PopoverContent
-            className="avakio-dp-popover"
-            align="start"
-            data-admin-theme={themeAttr || undefined}
-          >
-            <AvakioDatePickerCalendar 
-              value={value} 
-              onChange={handleValueChange} 
-              showTime={showTime}
-              showYearSelector={showYearSelector}
-              minYear={minYear}
-              maxYear={maxYear}
-              onDateSelect={() => setOpen(false)}
-              onCancel={handleCancel}
-            />
-          </PopoverContent>
-        </Popover>
-        {isInvalid && invalidMessage && (
-          <div className="avakio-dp-invalid-message">{invalidMessage}</div>
-        )}
-        {bottomLabel && <div className="avakio-dp-bottom-label">{bottomLabel}</div>}
+                  style={inputStyle}
+                  onBlur={eventHandlers.onBlur}
+                  onFocus={eventHandlers.onFocus}
+                  onKeyDown={eventHandlers.onKeyPress}
+                />
+                {enableValueCopyButton && value && (
+                  <button
+                    type="button"
+                    className="avakio-dp-copy-btn-compact"
+                    onClick={handleCopyValue}
+                    title="Copy to clipboard"
+                    disabled={isDisabled}
+                  >
+                    <Copy size={12} />
+                  </button>
+                )}
+                {clearable && value && !isDisabled && (
+                  <button
+                    type="button"
+                    className="avakio-dp-clear-btn-compact"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleValueChange('');
+                    }}
+                  >
+                    <X size={12} />
+                  </button>
+                )}
+                {!value && (
+                  <button type="button" className="avakio-dp-icon-btn-compact" disabled={isDisabled}>
+                    <CalendarIcon size={12} />
+                  </button>
+                )}
+              </div>
+            </PopoverTrigger>
+            <PopoverContent
+              className="avakio-dp-popover"
+              align="start"
+              data-admin-theme={themeAttr || undefined}
+            >
+              <AvakioDatePickerCalendar 
+                value={value} 
+                onChange={handleValueChange} 
+                showTime={showTime}
+                showYearSelector={showYearSelector}
+                minYear={minYear}
+                maxYear={maxYear}
+                onDateSelect={() => setOpen(false)}
+                onCancel={handleCancel}
+              />
+            </PopoverContent>
+          </Popover>
+        </AvakioControlLabel>
       </div>
     );
   }
@@ -847,7 +854,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
         borderless && 'avakio-dp-borderless',
         isInvalid && 'avakio-dp-invalid',
         isDisabled && 'avakio-dp-disabled',
-        labelPosition === 'top' && 'avakio-dp-label-top',
+        (labelPosition === 'top' || labelPosition === 'bottom') && 'avakio-dp-label-vertical',
         className
       )}
       data-admin-theme={themeAttr || undefined}
@@ -855,22 +862,22 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
       title={tooltip}
       onClick={eventHandlers.onClick}
     >
-      {labelForm && (
-        <div 
-          className={cn('avakio-dp-label-form', `avakio-dp-label-form-${labelPosition}`)}
-          style={labelFormStyle}
-        >
-          {labelForm}
-        </div>
-      )}
-      <Popover open={!isDisabled && open} onOpenChange={(o) => !isDisabled && setOpen(o)}>
-        <div className={cn('avakio-dp-wrapper', labelPosition === 'top' && 'avakio-dp-wrapper-vertical')} style={wrapperStyle}>
-          {label && (
-            <div className="avakio-dp-label" style={labelStyle}>
-              {label}
-              {required && <span className="avakio-dp-required">*</span>}
-            </div>
-          )}
+      <AvakioControlLabel
+        label={label}
+        labelForm={labelForm}
+        labelPosition={labelPosition}
+        labelAlign={labelAlign}
+        labelWidth={labelWidth}
+        bottomLabel={bottomLabel}
+        required={required}
+        invalid={isInvalid}
+        invalidMessage={invalidMessage}
+        classPrefix="avakio-dp"
+        wrapperClassName={(labelPosition === 'top' || labelPosition === 'bottom') ? 'avakio-dp-wrapper-vertical' : ''}
+        wrapperStyle={wrapperStyle}
+        labelStyle={labelStyle}
+      >
+        <Popover open={!isDisabled && open} onOpenChange={(o) => !isDisabled && setOpen(o)}>
           <PopoverTrigger asChild>
             <div className="avakio-dp-input-group" style={inputGroupStyle}>
               <input
@@ -916,28 +923,24 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
               )}
             </div>
           </PopoverTrigger>
-        </div>
-        <PopoverContent
-          className="avakio-dp-popover"
-          align="end"
-          data-admin-theme={themeAttr || undefined}
-        >
-          <AvakioDatePickerCalendar 
-            value={value} 
-            onChange={handleValueChange} 
-            showTime={showTime}
-            showYearSelector={showYearSelector}
-            minYear={minYear}
-            maxYear={maxYear}
-            onDateSelect={() => setOpen(false)}
-            onCancel={handleCancel}
-          />
-        </PopoverContent>
-      </Popover>
-      {isInvalid && invalidMessage && (
-        <div className="avakio-dp-invalid-message">{invalidMessage}</div>
-      )}
-      {bottomLabel && <div className="avakio-dp-bottom-label">{bottomLabel}</div>}
+          <PopoverContent
+            className="avakio-dp-popover"
+            align="end"
+            data-admin-theme={themeAttr || undefined}
+          >
+            <AvakioDatePickerCalendar 
+              value={value} 
+              onChange={handleValueChange} 
+              showTime={showTime}
+              showYearSelector={showYearSelector}
+              minYear={minYear}
+              maxYear={maxYear}
+              onDateSelect={() => setOpen(false)}
+              onCancel={handleCancel}
+            />
+          </PopoverContent>
+        </Popover>
+      </AvakioControlLabel>
     </div>
   );
 });

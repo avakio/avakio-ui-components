@@ -96,37 +96,38 @@ export function AvakioFieldsetExample({ theme = 'material' }: { theme?: string }
     type: string;
     defaultValue: string;
     description: string;
+    from: string;
   }
 
   const propsData: PropDoc[] = [
-    { id: 1, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Legend/label text displayed at the top border of the fieldset' },
-    { id: 2, name: 'children', type: 'ReactNode', defaultValue: 'undefined', description: 'Body content of the fieldset' },
-    { id: 3, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Whether to hide the border' },
-    { id: 4, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: 'undefined', description: 'Theme variant' },
-    { id: 5, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disabled state - dims the fieldset' },
-    { id: 6, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the fieldset' },
-    { id: 7, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the fieldset' },
-    { id: 8, name: 'paddingX', type: 'number', defaultValue: '18', description: 'Horizontal padding (left and right) in pixels' },
-    { id: 9, name: 'paddingY', type: 'number', defaultValue: '16', description: 'Vertical padding (top and bottom) in pixels' },
-    { id: 10, name: 'collapsible', type: 'boolean', defaultValue: 'false', description: 'Whether the fieldset can be collapsed' },
-    { id: 11, name: 'defaultCollapsed', type: 'boolean', defaultValue: 'false', description: 'Default collapsed state (uncontrolled)' },
-    { id: 12, name: 'collapsed', type: 'boolean', defaultValue: 'undefined', description: 'Controlled collapsed state' },
-    { id: 13, name: 'onCollapse', type: '(collapsed: boolean) => void', defaultValue: 'undefined', description: 'Callback when collapsed state changes' },
-    { id: 14, name: 'icon', type: 'ReactNode', defaultValue: 'undefined', description: 'Icon to display before the label' },
-    { id: 15, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles' },
-    { id: 16, name: 'className', type: 'string', defaultValue: "''", description: 'Additional CSS class name' },
+    { id: 1, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Legend/label text displayed at the top border of the fieldset', from: 'Fieldset' },
+    { id: 2, name: 'children', type: 'ReactNode', defaultValue: 'undefined', description: 'Body content of the fieldset', from: 'Fieldset' },
+    { id: 3, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Whether to hide the border', from: 'Base' },
+    { id: 4, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: 'undefined', description: 'Theme variant', from: 'Base' },
+    { id: 5, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disabled state - dims the fieldset', from: 'Base' },
+    { id: 6, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the fieldset', from: 'Base' },
+    { id: 7, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the fieldset', from: 'Base' },
+    { id: 8, name: 'paddingX', type: 'number', defaultValue: '18', description: 'Horizontal padding (left and right) in pixels', from: 'Fieldset' },
+    { id: 9, name: 'paddingY', type: 'number', defaultValue: '16', description: 'Vertical padding (top and bottom) in pixels', from: 'Fieldset' },
+    { id: 10, name: 'collapsible', type: 'boolean', defaultValue: 'false', description: 'Whether the fieldset can be collapsed', from: 'Fieldset' },
+    { id: 11, name: 'defaultCollapsed', type: 'boolean', defaultValue: 'false', description: 'Default collapsed state (uncontrolled)', from: 'Fieldset' },
+    { id: 12, name: 'collapsed', type: 'boolean', defaultValue: 'undefined', description: 'Controlled collapsed state', from: 'Fieldset' },
+    { id: 13, name: 'onCollapse', type: '(collapsed: boolean) => void', defaultValue: 'undefined', description: 'Callback when collapsed state changes', from: 'Fieldset' },
+    { id: 14, name: 'icon', type: 'ReactNode', defaultValue: 'undefined', description: 'Icon to display before the label', from: 'Fieldset' },
+    { id: 15, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles', from: 'Base' },
+    { id: 16, name: 'className', type: 'string', defaultValue: "''", description: 'Additional CSS class name', from: 'Base' },
   ];
 
   const refMethodsData: PropDoc[] = [
-    { id: 1, name: 'getNode()', type: '() => HTMLFieldSetElement | null', defaultValue: '-', description: 'Get the fieldset DOM node' },
-    { id: 2, name: 'getBody()', type: '() => HTMLDivElement | null', defaultValue: '-', description: 'Get the body container element' },
-    { id: 3, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Check if the fieldset is enabled' },
-    { id: 4, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enable the fieldset' },
-    { id: 5, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disable the fieldset' },
-    { id: 6, name: 'collapse()', type: '() => void', defaultValue: '-', description: 'Collapse the fieldset (if collapsible)' },
-    { id: 7, name: 'expand()', type: '() => void', defaultValue: '-', description: 'Expand the fieldset (if collapsible)' },
-    { id: 8, name: 'isCollapsed()', type: '() => boolean', defaultValue: '-', description: 'Check if the fieldset is collapsed' },
-    { id: 9, name: 'toggle()', type: '() => void', defaultValue: '-', description: 'Toggle collapsed state' },
+    { id: 1, name: 'getNode()', type: '() => HTMLFieldSetElement | null', defaultValue: '-', description: 'Get the fieldset DOM node', from: 'Fieldset' },
+    { id: 2, name: 'getBody()', type: '() => HTMLDivElement | null', defaultValue: '-', description: 'Get the body container element', from: 'Fieldset' },
+    { id: 3, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Check if the fieldset is enabled', from: 'Base' },
+    { id: 4, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enable the fieldset', from: 'Base' },
+    { id: 5, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disable the fieldset', from: 'Base' },
+    { id: 6, name: 'collapse()', type: '() => void', defaultValue: '-', description: 'Collapse the fieldset (if collapsible)', from: 'Fieldset' },
+    { id: 7, name: 'expand()', type: '() => void', defaultValue: '-', description: 'Expand the fieldset (if collapsible)', from: 'Fieldset' },
+    { id: 8, name: 'isCollapsed()', type: '() => boolean', defaultValue: '-', description: 'Check if the fieldset is collapsed', from: 'Fieldset' },
+    { id: 9, name: 'toggle()', type: '() => void', defaultValue: '-', description: 'Toggle collapsed state', from: 'Fieldset' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [
@@ -134,6 +135,7 @@ export function AvakioFieldsetExample({ theme = 'material' }: { theme?: string }
     { id: 'type', header: 'Type', width: 280 },
     { id: 'defaultValue', header: 'Default', width: 100 },
     { id: 'description', header: 'Description', width: 400 },
+    { id: 'from', header: 'From', width: 100, filterType: 'combo' },
   ];
 
   const themes: AvakioFieldsetTheme[] = ['material', 'flat', 'compact', 'dark', 'ocean', 'sunset'];
@@ -775,6 +777,7 @@ export function AvakioFieldsetExample({ theme = 'material' }: { theme?: string }
               columns={propsColumns}
               select={false}
               height={450}
+              showRowNum={true}
             />,
           ]}
         />
@@ -799,6 +802,7 @@ export function AvakioFieldsetExample({ theme = 'material' }: { theme?: string }
               columns={propsColumns}
               select={false}
               height={300}
+              showRowNum={true}
             />,
           ]}
         />

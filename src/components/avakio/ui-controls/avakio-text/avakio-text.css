@@ -67,7 +67,7 @@
   line-height: 1.5;
   letter-spacing: 0.01em;
   color: var(--avakio-text-primary);
-  background-color: var(--avakio-bg-input);
+  background-color: var(--avakio-bg-primary);
   transition: all 0.2s ease;
   outline: none;
   box-sizing: border-box;
@@ -75,6 +75,7 @@
 
 .avakio-text-input:hover:not(:disabled) {
   border-color: var(--avakio-border-hover);
+  background-color: var(--avakio-bg-selected);
 }
 
 .avakio-text-input:focus {
@@ -227,7 +228,7 @@ textarea.avakio-text-input {
 }
 
 .avakio-text-theme-material .avakio-text-input {
-  border-color: var(--avakio-border-secondary);
+  border-color: var(--avakio-border-primary);
 }
 
 .avakio-text-theme-material .avakio-text-input:hover:not(:disabled) {
@@ -250,7 +251,6 @@ textarea.avakio-text-input {
 
 .avakio-text-theme-flat .avakio-text-input {
   border-color: var(--avakio-border-primary);
-  background-color: var(--avakio-bg-secondary);
 }
 
 .avakio-text-theme-flat .avakio-text-input:hover:not(:disabled) {
@@ -345,7 +345,6 @@ textarea.avakio-text-input {
 
 .avakio-text-theme-ocean .avakio-text-input {
   border-color: var(--avakio-border-secondary);
-  background-color: var(--avakio-bg-secondary);
 }
 
 .avakio-text-theme-ocean .avakio-text-input:hover:not(:disabled) {
@@ -365,7 +364,6 @@ textarea.avakio-text-input {
 
 .avakio-text-theme-sunset .avakio-text-input {
   border-color: var(--avakio-border-secondary);
-  background-color: var(--avakio-bg-secondary);
 }
 
 .avakio-text-theme-sunset .avakio-text-input:hover:not(:disabled) {
@@ -396,6 +394,48 @@ textarea.avakio-text-input {
 
 [data-admin-theme="dark"] .avakio-text-label {
   color: var(--avakio-text-white);
+}
+
+[data-admin-theme="dark"] .avakio-text-input {
+  background-color: var(--avakio-bg-tertiary);
+  border-color: var(--avakio-border-primary);
+  color: var(--avakio-text-white);
+}
+
+[data-admin-theme="dark"] .avakio-text-input:hover:not(:disabled) {
+  background-color: var(--avakio-bg-hover);
+  border-color: var(--avakio-border-hover);
+}
+
+[data-admin-theme="dark"] .avakio-text-input:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+}
+
+[data-admin-theme="dark"] .avakio-text-input::placeholder {
+  color: var(--avakio-text-tertiary);
+}
+
+[data-admin-theme="dark"] .avakio-text-input:disabled {
+  background-color: var(--avakio-bg-disabled);
+  color: var(--avakio-text-disabled);
+}
+
+[data-admin-theme="dark"] .avakio-text-icon {
+  color: var(--avakio-text-tertiary);
+}
+
+[data-admin-theme="dark"] .avakio-text-action {
+  color: var(--avakio-text-tertiary);
+}
+
+[data-admin-theme="dark"] .avakio-text-action:hover:not(:disabled) {
+  color: var(--avakio-text-white);
+  background-color: var(--avakio-bg-hover);
+}
+
+[data-admin-theme="dark"] .avakio-text-bottom-label {
+  color: var(--avakio-text-tertiary);
 }
 
 [data-admin-theme="ocean"] .avakio-text-label {

@@ -1,198 +1,186 @@
-/* ===================================
+/* ================================
    AVAKIO RICHSELECT EXAMPLE STYLES
-   =================================== */
+   ================================ */
 
-.avakio-richselect-example-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-  background-color: var(--avakio-bg-secondary);
+.avakio-richselect-demo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  padding: 0;
   min-height: 100vh;
 }
 
-.avakio-richselect-example-header {
-  margin-bottom: 32px;
+/* Sticky header with tabs */
+.avakio-richselect-demo-container .avakio-example-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--avakio-bg-primary, #ffffff);
+  border-bottom: 1px solid var(--avakio-border, #e5e7eb);
 }
 
-.avakio-richselect-example-title {
-  font-size: 32px;
-  font-weight: bold;
-  color: var(--avakio-text-primary);
-  margin-bottom: 8px;
+.avakio-richselect-tabbar-container {
+  padding: 0 16px 12px;
+  background: inherit;
 }
 
-.avakio-richselect-example-description {
-  font-size: 16px;
-  color: var(--avakio-text-secondary);
+/* Demo sections */
+.avakio-richselect-demo-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--avakio-section-border, #e5e7eb);
+  scroll-margin-top: 140px;
 }
 
-.avakio-richselect-example-card {
-  margin-bottom: 24px;
-  background-color: var(--avakio-bg-primary);
-  border: 1px solid var(--avakio-border-primary);
+.avakio-richselect-demo-section:last-child {
+  border-bottom: none;
+}
+
+/* Result display */
+.avakio-richselect-result {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: var(--avakio-result-bg, #f0f9ff);
+  border: 1px solid var(--avakio-result-border, #bae6fd);
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.avakio-richselect-example-card-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--avakio-text-primary);
-}
-
-.avakio-richselect-example-card-description {
   font-size: 14px;
-  color: var(--avakio-text-secondary);
+  color: var(--avakio-result-text, #0369a1);
 }
 
-.avakio-richselect-example-selected {
-  margin-top: 16px;
-  padding: 12px;
-  background-color: var(--avakio-bg-selected);
-  border: 1px solid var(--avakio-border-focus);
-  border-radius: 6px;
-  font-size: 14px;
-  color: var(--avakio-accent-secondary);
+.avakio-richselect-result strong {
+  color: var(--avakio-result-strong, #075985);
 }
 
-.avakio-richselect-example-features {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* Custom grid for variations */
+.avakio-richselect-custom-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
 }
 
-.avakio-richselect-example-features li {
-  font-size: 14px;
-  color: var(--avakio-text-primary);
-  padding: 8px 0;
+.avakio-richselect-custom-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.avakio-richselect-example-table-container {
+.avakio-richselect-custom-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--avakio-custom-label, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* API Table */
+.avakio-richselect-api-table {
+  width: 100%;
   overflow-x: auto;
 }
 
-.avakio-richselect-example-table {
+.avakio-richselect-api-table table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-.avakio-richselect-example-table th {
+.avakio-richselect-api-table th {
   text-align: left;
   padding: 12px;
-  background-color: var(--avakio-bg-secondary);
-  border-bottom: 2px solid var(--avakio-border-primary);
+  background: var(--avakio-bg-secondary, #f8fafc);
+  border-bottom: 2px solid var(--avakio-border, #e5e7eb);
   font-weight: 600;
-  color: var(--avakio-text-primary);
+  color: var(--avakio-text-primary, #1e293b);
 }
 
-.avakio-richselect-example-table td {
+.avakio-richselect-api-table td {
   padding: 12px;
-  border-bottom: 1px solid var(--avakio-border-primary);
-  color: var(--avakio-text-secondary);
+  border-bottom: 1px solid var(--avakio-border, #e5e7eb);
+  color: var(--avakio-text-secondary, #64748b);
 }
 
-.avakio-richselect-example-table code {
-  background-color: var(--avakio-code-bg);
+.avakio-richselect-api-table code {
+  background: var(--avakio-code-bg, #f1f5f9);
   padding: 2px 6px;
-  border-radius: 3px;
-  font-family: 'Courier New', monospace;
+  border-radius: 4px;
+  font-family: 'Fira Code', 'Courier New', monospace;
   font-size: 13px;
-  color: var(--avakio-code-text);
+  color: var(--avakio-code-text, #0f172a);
 }
 
+/* Event log styling */
+.avakio-richselect-event-log {
+  background: var(--avakio-bg-secondary, #f8fafc);
+  border: 1px solid var(--avakio-border, #e5e7eb);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.avakio-richselect-event-log-item {
+  padding: 4px 0;
+  color: var(--avakio-text-secondary, #64748b);
+  border-bottom: 1px dashed var(--avakio-border, #e5e7eb);
+}
+
+.avakio-richselect-event-log-item:last-child {
+  border-bottom: none;
+}
+
+/* Spacing utilities */
 .space-y-4 > * + * {
   margin-top: 16px;
 }
 
 /* ===================================
-   THEME: MATERIAL
+   THEME OVERRIDES
    =================================== */
 
-/* Theme-specific styles handled by global CSS variables */
-
-/* ===================================
-   THEME: FLAT
-   =================================== */
-
-/* Theme-specific styles handled by global CSS variables */
-
-/* ===================================
-   THEME: COMPACT
-   =================================== */
-
-[data-admin-theme="compact"] .avakio-richselect-example-container {
-  padding: 16px;
+/* Compact Theme */
+[data-admin-theme="compact"] .avakio-richselect-demo-container {
+  padding: 0;
 }
 
-[data-admin-theme="compact"] .avakio-richselect-example-title {
-  font-size: 28px;
-  color: #1a1a1a;
+[data-admin-theme="compact"] .avakio-richselect-demo-section {
+  padding: 12px;
 }
 
-[data-admin-theme="compact"] .avakio-richselect-example-description {
-  font-size: 14px;
+/* Dark Theme */
+[data-admin-theme="dark"] .avakio-richselect-demo-container {
+  background: var(--avakio-bg-primary);
 }
 
-[data-admin-theme="compact"] .avakio-richselect-example-card {
-  margin-bottom: 16px;
-  border-radius: 4px;
+[data-admin-theme="dark"] .avakio-richselect-result {
+  background: rgba(14, 165, 233, 0.1);
+  border-color: rgba(14, 165, 233, 0.3);
+  color: #7dd3fc;
 }
 
-[data-admin-theme="compact"] .avakio-richselect-example-card-title {
-  font-size: 16px;
-  color: #1a1a1a;
+[data-admin-theme="dark"] .avakio-richselect-result strong {
+  color: #bae6fd;
 }
 
-/* ===================================
-   THEME: COMPACT
-   =================================== */
-
-[data-admin-theme="compact"] .avakio-richselect-example-container {
-  padding: 16px;
+[data-admin-theme="dark"] .avakio-richselect-event-log {
+  background: rgba(0, 0, 0, 0.2);
 }
 
-[data-admin-theme="compact"] .avakio-richselect-example-title {
-  font-size: 28px;
+/* Ocean Theme */
+[data-admin-theme="ocean"] .avakio-richselect-result {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.3);
 }
 
-[data-admin-theme="compact"] .avakio-richselect-example-description {
-  font-size: 14px;
+/* Sunset Theme */
+[data-admin-theme="sunset"] .avakio-richselect-result {
+  background: rgba(251, 146, 60, 0.1);
+  border-color: rgba(251, 146, 60, 0.3);
+  color: #c2410c;
 }
 
-[data-admin-theme="compact"] .avakio-richselect-example-card {
-  margin-bottom: 16px;
-  border-radius: 4px;
+[data-admin-theme="sunset"] .avakio-richselect-result strong {
+  color: #9a3412;
 }
-
-[data-admin-theme="compact"] .avakio-richselect-example-card-title {
-  font-size: 16px;
-}
-
-[data-admin-theme="compact"] .avakio-richselect-example-card-description {
-  font-size: 13px;
-}
-
-/* Theme-specific styles handled by global CSS variables */
-
-/* ===================================
-   THEME: DARK
-   =================================== */
-
-/* Theme-specific styles handled by global CSS variables */
-
-/* ===================================
-   THEME: OCEAN
-   =================================== */
-
-/* Theme-specific styles handled by global CSS variables */
-
-/* ===================================
-   THEME: SUNSET
-   =================================== */
-
-/* Theme-specific styles handled by global CSS variables */
-

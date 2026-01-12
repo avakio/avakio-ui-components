@@ -1,0 +1,254 @@
+/* ===================================
+   AVAKIO CONTROL LABEL - SHARED STYLES
+   Inherits colors from global Avakio theme variables
+   =================================== */
+
+/* ===================================
+   FORM LABEL (labelForm - plain text)
+   =================================== */
+
+.avakio-control-label-form {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--avakio-text-primary, #333);
+  margin-bottom: 6px;
+}
+
+/* When labelPosition is left, labelForm appears inline in the wrapper */
+.avakio-control-label-form-left {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  margin-bottom: 0;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+/* When labelPosition is right, labelForm appears inline after control */
+.avakio-control-label-form-right {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  margin-bottom: 0;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+/* When labelPosition is top, labelForm appears above */
+.avakio-control-label-form-top {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* When labelPosition is bottom, labelForm appears below */
+.avakio-control-label-form-bottom {
+  display: block;
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+
+/* ===================================
+   OUTER WRAPPER (for labelForm layout)
+   =================================== */
+
+.avakio-control-label-outer {
+  display: flex;
+  width: 100%;
+}
+
+.avakio-control-label-outer-horizontal {
+  flex-direction: row;
+  align-items: center;
+}
+
+.avakio-control-label-outer-vertical {
+  flex-direction: column;
+}
+
+/* ===================================
+   WRAPPER (contains label + control)
+   =================================== */
+
+.avakio-control-label-wrapper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* Vertical layout for labelPosition="top" or "bottom" */
+.avakio-control-label-wrapper-vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* ===================================
+   STYLED LABEL (with background)
+   =================================== */
+
+.avakio-control-label-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px 16px;
+  background: var(--avakio-accent-primary, #3498db);
+  color: #ffffff !important;
+  font-weight: 400;
+  font-size: 14px;
+  white-space: nowrap;
+  border: 1px solid var(--avakio-accent-primary, #3498db);
+  box-sizing: border-box;
+  line-height: 1.2;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* Label on the LEFT - rounded left corners, no right border */
+.avakio-control-label-label-left {
+  border-radius: var(--avakio-radius, 4px) 0 0 var(--avakio-radius, 4px);
+  border-right: none;
+}
+
+/* Label on the RIGHT - rounded right corners, no left border */
+.avakio-control-label-label-right {
+  border-radius: 0 var(--avakio-radius, 4px) var(--avakio-radius, 4px) 0;
+  border-left: none;
+}
+
+/* Label on TOP - rounded top corners, no bottom border */
+.avakio-control-label-label-top {
+  border-radius: var(--avakio-radius, 4px) var(--avakio-radius, 4px) 0 0;
+  border-bottom: none;
+  padding: 6px 12px;
+}
+
+/* Label on BOTTOM - rounded bottom corners, no top border */
+.avakio-control-label-label-bottom {
+  border-radius: 0 0 var(--avakio-radius, 4px) var(--avakio-radius, 4px);
+  border-top: none;
+  padding: 6px 12px;
+}
+
+/* ===================================
+   COMPACT SIZE (for size="compact")
+   =================================== */
+
+.avakio-control-label-compact {
+  padding: 4px 10px;
+  font-size: 12px;
+  min-height: 28px;
+  box-sizing: border-box;
+}
+
+/* Compact label on the LEFT - rounded left corners */
+.avakio-control-label-compact.avakio-control-label-label-left {
+  border-radius: var(--avakio-radius, 4px) 0 0 var(--avakio-radius, 4px);
+}
+
+/* Compact label on the RIGHT - rounded right corners */
+.avakio-control-label-compact.avakio-control-label-label-right {
+  border-radius: 0 var(--avakio-radius, 4px) var(--avakio-radius, 4px) 0;
+}
+
+/* Compact label on TOP - rounded top corners */
+.avakio-control-label-compact.avakio-control-label-label-top {
+  border-radius: var(--avakio-radius, 4px) var(--avakio-radius, 4px) 0 0;
+}
+
+/* Compact label on BOTTOM - rounded bottom corners */
+.avakio-control-label-compact.avakio-control-label-label-bottom {
+  border-radius: 0 0 var(--avakio-radius, 4px) var(--avakio-radius, 4px);
+}
+
+.avakio-control-label-required {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+/* Required asterisk in labelForm needs red color (no colored background) */
+.avakio-control-label-form .avakio-control-label-required {
+  color: #dc3545 !important;
+  margin-left: 2px;
+  display: inline;
+}
+
+/* ===================================
+   CONTAINER (ensures bottom content is below)
+   =================================== */
+
+.avakio-control-label-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ===================================
+   BOTTOM LABEL (help text)
+   =================================== */
+
+.avakio-control-label-bottom {
+  font-size: 12px;
+  color: var(--avakio-text-secondary, #888);
+  margin-top: 4px;
+  padding-left: 2px;
+}
+
+/* ===================================
+   INVALID MESSAGE (validation error)
+   =================================== */
+
+.avakio-control-label-invalid-message {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--avakio-invalid, #dc3545);
+}
+
+/* ===================================
+   THEME-SPECIFIC OVERRIDES
+   =================================== */
+
+/* Dark theme - adjust label contrast */
+[data-admin-theme="dark"] .avakio-control-label-label {
+  color: var(--avakio-text-white, #ffffff);
+}
+
+[data-admin-theme="dark"] .avakio-control-label-required {
+  color: rgba(255, 200, 200, 0.9);
+}
+
+[data-admin-theme="dark"] .avakio-control-label-form {
+  color: var(--avakio-text-primary, #e0e0e0);
+}
+
+[data-admin-theme="dark"] .avakio-control-label-bottom {
+  color: var(--avakio-text-secondary, #cbd5e0);
+}
+
+/* Flat theme - slightly softer appearance */
+[data-admin-theme="flat"] .avakio-control-label-label {
+  font-weight: 500;
+}
+
+/* Sunset theme - ensure white text is readable on orange */
+[data-admin-theme="sunset"] .avakio-control-label-label {
+  color: var(--avakio-text-white, #ffffff);
+}
+
+[data-admin-theme="sunset"] .avakio-control-label-required {
+  color: rgba(255, 255, 200, 0.95);
+}
+
+/* Ocean theme - ensure contrast */
+[data-admin-theme="ocean"] .avakio-control-label-label {
+  color: var(--avakio-text-white, #ffffff);
+}
+
+/* Compact theme - slightly smaller padding */
+[data-admin-theme="compact"] .avakio-control-label-label {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+[data-admin-theme="compact"] .avakio-control-label-wrapper-vertical .avakio-control-label-label {
+  padding: 4px 10px;
+}

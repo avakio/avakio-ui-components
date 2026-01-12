@@ -1,0 +1,36 @@
+/* ===================================
+   AVAKIO BASE - SHARED UTILITY CLASSES
+   Common styles used across all Avakio components
+   =================================== */
+
+/* ===================================
+   BORDERLESS MODE
+   Removes borders from component inputs, buttons, and labels
+   =================================== */
+
+/* Base borderless class - removes borders on common input elements */
+.avakio-borderless input,
+.avakio-borderless button,
+.avakio-borderless select,
+.avakio-borderless textarea,
+.avakio-borderless .avakio-control-label-label {
+  border-color: transparent !important;
+}
+
+/* Remove border-radius when borderless */
+.avakio-borderless .avakio-control-label-label {
+  border-radius: 0;
+}
+
+/* For components with specific button classes */
+[class*="avakio-"][class*="-borderless"] [class*="-button"],
+[class*="avakio-"][class*="-borderless"] [class*="-input"],
+[class*="avakio-"][class*="-borderless"] [class*="-btn"] {
+  border-color: transparent !important;
+}
+
+/* Reset label styling in borderless mode */
+[class*="avakio-"][class*="-borderless"] .avakio-control-label-label {
+  border-color: transparent !important;
+  border-radius: 0;
+}

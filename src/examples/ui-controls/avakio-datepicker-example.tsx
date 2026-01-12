@@ -12,6 +12,7 @@ import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
+import { formatSizingValue } from '../../lib/utils';
 import { 
   Calendar,
   Settings2,
@@ -44,6 +45,8 @@ export function AvakioDatePickerExample() {
   // Label Positions section state
   const [labelLeftDate, setLabelLeftDate] = useState<string>('');
   const [labelTopDate, setLabelTopDate] = useState<string>('');
+  const [labelRightDate, setLabelRightDate] = useState<string>('');
+  const [labelBottomDate, setLabelBottomDate] = useState<string>('');
   
   // Validation States section state
   const [requiredDate, setRequiredDate] = useState<string>('');
@@ -71,7 +74,7 @@ export function AvakioDatePickerExample() {
     { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'Appearance', placeholder: 'Helper text' },
     { id: 'bottomPadding', label: 'Bottom Padding', type: 'number', value: '', group: 'Appearance', placeholder: 'e.g. 8' },
     { id: 'tooltip', label: 'Tooltip', type: 'text', value: '', group: 'Appearance', placeholder: 'Tooltip text' },
-    { id: 'invalidMessage', label: 'Invalid Message', type: 'text', value: 'This field is required', group: 'Appearance', placeholder: 'Error message' },
+    { id: 'invalidMessage', label: 'Error Message', type: 'text', value: 'This field is required', group: 'Appearance', placeholder: 'Error message' },
     {
       id: 'size',
       label: 'Size',
@@ -92,6 +95,8 @@ export function AvakioDatePickerExample() {
       selectOptions: [
         { id: 'left', value: 'Left' },
         { id: 'top', value: 'Top' },
+        { id: 'right', value: 'Right' },
+        { id: 'bottom', value: 'Bottom' },
       ],
     },
     {
@@ -239,106 +244,107 @@ export function AvakioDatePickerExample() {
     type: string;
     defaultValue: string;
     description: string;
+    from: string;
   }
 
   const propsData: PropDoc[] = [
     // Component-Specific Props
-    { id: 1, name: 'showTime', type: 'boolean', defaultValue: 'false', description: 'Enable time selection (returns datetime with time)' },
-    { id: 2, name: 'inline', type: 'boolean', defaultValue: 'false', description: 'Display calendar inline without dropdown' },
-    { id: 3, name: 'size', type: "'default' | 'compact'", defaultValue: "'default'", description: 'Size variant - compact for filters/tables' },
-    { id: 4, name: 'enableValueCopyButton', type: 'boolean', defaultValue: 'false', description: 'Show copy button to copy value to clipboard' },
-    { id: 5, name: 'showYearSelector', type: 'boolean', defaultValue: 'false', description: 'Show month/year selector to quickly jump to different dates' },
-    { id: 6, name: 'minYear', type: 'number', defaultValue: 'currentYear - 100', description: 'Minimum year available in the year selector' },
-    { id: 7, name: 'maxYear', type: 'number', defaultValue: 'currentYear + 50', description: 'Maximum year available in the year selector' },
-    { id: 8, name: 'labelForm', type: 'string', defaultValue: 'undefined', description: 'Form label displayed above the component' },
-    { id: 9, name: 'compWidth', type: 'number | string', defaultValue: "'auto'", description: 'Total width of the component (e.g., 300 or "100%")' },
+    { id: 1, name: 'showTime', type: 'boolean', defaultValue: 'false', description: 'Enable time selection (returns datetime with time)', from: 'DatePicker' },
+    { id: 2, name: 'inline', type: 'boolean', defaultValue: 'false', description: 'Display calendar inline without dropdown', from: 'DatePicker' },
+    { id: 3, name: 'size', type: "'default' | 'compact'", defaultValue: "'default'", description: 'Size variant - compact for filters/tables', from: 'DatePicker' },
+    { id: 4, name: 'enableValueCopyButton', type: 'boolean', defaultValue: 'false', description: 'Show copy button to copy value to clipboard', from: 'DatePicker' },
+    { id: 5, name: 'showYearSelector', type: 'boolean', defaultValue: 'false', description: 'Show month/year selector to quickly jump to different dates', from: 'DatePicker' },
+    { id: 6, name: 'minYear', type: 'number', defaultValue: 'currentYear - 100', description: 'Minimum year available in the year selector', from: 'DatePicker' },
+    { id: 7, name: 'maxYear', type: 'number', defaultValue: 'currentYear + 50', description: 'Maximum year available in the year selector', from: 'DatePicker' },
+    { id: 8, name: 'labelForm', type: 'string', defaultValue: 'undefined', description: 'Form label displayed above the component', from: 'ControlLabel' },
+    { id: 9, name: 'compWidth', type: 'number | string', defaultValue: "'auto'", description: 'Total width of the component (e.g., 300 or "100%")', from: 'DatePicker' },
     
     // AvakioControlledProps
-    { id: 10, name: 'value', type: 'string', defaultValue: 'undefined', description: 'ISO string of selected date/time' },
-    { id: 11, name: 'onChange', type: '(newValue: string, oldValue?: string) => void', defaultValue: 'undefined', description: 'Callback when date/time changes' },
-    { id: 12, name: 'validate', type: '(value: string) => boolean | string', defaultValue: 'undefined', description: 'Custom validation function' },
+    { id: 10, name: 'value', type: 'string', defaultValue: 'undefined', description: 'ISO string of selected date/time', from: 'DatePicker' },
+    { id: 11, name: 'validate', type: '(value: string) => boolean | string', defaultValue: 'undefined', description: 'Custom validation function', from: 'DatePicker' },
     
     // AvakioBaseProps - Identity
-    { id: 14, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID' },
-    { id: 15, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes' },
-    { id: 16, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name' },
-    { id: 17, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles' },
+    { id: 12, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
+    { id: 15, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 16, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
+    { id: 17, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles', from: 'Base' },
     
     // AvakioBaseProps - State
-    { id: 18, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the component is disabled' },
-    { id: 19, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden' },
-    { id: 20, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Configures readonly mode for the input' },
-    { id: 21, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Marks field as required' },
-    { id: 22, name: 'clearable', type: 'boolean', defaultValue: 'false', description: 'Whether the value can be cleared. When enabled and a value is present, displays X icon (calendar icon is hidden when value exists)' },
-    { id: 23, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Used to hide the component borders' },
+    { id: 18, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the component is disabled', from: 'Base' },
+    { id: 19, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
+    { id: 20, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Configures readonly mode for the input', from: 'Base' },
+    { id: 21, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Marks field as required', from: 'ControlLabel' },
+    { id: 22, name: 'clearable', type: 'boolean', defaultValue: 'false', description: 'Whether the value can be cleared. When enabled and a value is present, displays X icon (calendar icon is hidden when value exists)', from: 'DatePicker' },
+    { id: 23, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Used to hide the component borders', from: 'Base' },
     
     // AvakioBaseProps - Validation
-    { id: 24, name: 'invalid', type: 'boolean', defaultValue: 'false', description: 'Specifies whether the control is valid/invalid after validation' },
-    { id: 25, name: 'invalidMessage', type: 'string', defaultValue: 'undefined', description: 'Sets the text of a validation message' },
+    { id: 24, name: 'invalid', type: 'boolean', defaultValue: 'false', description: 'Specifies whether the control is valid/invalid after validation', from: 'ControlLabel' },
+    { id: 25, name: 'invalidMessage', type: 'string', defaultValue: 'undefined', description: 'Sets the text of a validation message', from: 'ControlLabel' },
     
     // AvakioBaseProps - Labels & Text
-    { id: 26, name: 'placeholder', type: 'string', defaultValue: "''", description: 'Placeholder text for the input' },
-    { id: 27, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Sets a popup message when cursor points to the component' },
-    { id: 28, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Sets the text of the label' },
-    { id: 29, name: 'labelAlign', type: "'left' | 'right' | 'center'", defaultValue: "'left'", description: 'The alignment of a label inside its container' },
-    { id: 30, name: 'labelPosition', type: "'top' | 'left' | 'right'", defaultValue: "'left'", description: 'Positions a label in relation to the control' },
-    { id: 31, name: 'labelWidth', type: 'number | string', defaultValue: '80', description: 'The width of the label' },
-    { id: 32, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Sets a label under the control' },
-    { id: 33, name: 'bottomPadding', type: 'number', defaultValue: '0', description: 'Sets the bottom offset of the control input' },
+    { id: 26, name: 'placeholder', type: 'string', defaultValue: "''", description: 'Placeholder text for the input', from: 'DatePicker' },
+    { id: 27, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Sets a popup message when cursor points to the component', from: 'Base' },
+    { id: 28, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Sets the text of the label', from: 'ControlLabel' },
+    { id: 29, name: 'labelAlign', type: "'left' | 'right' | 'center'", defaultValue: "'left'", description: 'The alignment of a label inside its container', from: 'ControlLabel' },
+    { id: 30, name: 'labelPosition', type: "'left' | 'top' | 'right' | 'bottom'", defaultValue: "'left'", description: 'Positions a label in relation to the control', from: 'ControlLabel' },
+    { id: 31, name: 'labelWidth', type: 'number | string', defaultValue: '80', description: 'The width of the label', from: 'ControlLabel' },
+    { id: 32, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Sets a label under the control (rendered via AvakioControlLabel)', from: 'ControlLabel' },
+    { id: 33, name: 'bottomPadding', type: 'number', defaultValue: '0', description: 'Sets the bottom offset of the control input', from: 'ControlLabel' },
     
     // AvakioBaseProps - Layout & Alignment
-    { id: 34, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'The alignment of the control within the parent container' },
-    { id: 35, name: 'inputAlign', type: "'left' | 'right'", defaultValue: "'left'", description: 'The alignment of an input inside its container' },
-    { id: 36, name: 'inputHeight', type: 'number | string', defaultValue: 'undefined', description: 'The height of the input area' },
-    { id: 37, name: 'inputWidth', type: 'number | string', defaultValue: 'undefined', description: 'The width of the input area' },
+    { id: 34, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'The alignment of the control within the parent container', from: 'Base' },
+    { id: 35, name: 'inputAlign', type: "'left' | 'right'", defaultValue: "'left'", description: 'The alignment of an input inside its container', from: 'DatePicker' },
+    { id: 36, name: 'inputHeight', type: 'number | string', defaultValue: 'undefined', description: 'The height of the input area', from: 'DatePicker' },
+    { id: 37, name: 'inputWidth', type: 'number | string', defaultValue: 'undefined', description: 'The width of the input area', from: 'DatePicker' },
     
     // AvakioBaseProps - Sizing
-    { id: 38, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Sets the height of the component' },
-    { id: 39, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Sets the width of a component' },
-    { id: 40, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Sets the minimal height for the view' },
-    { id: 41, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Sets the minimal width for the view' },
-    { id: 42, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Sets the maximum height for the view' },
-    { id: 43, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Sets the maximum width for the view' },
-    { id: 44, name: 'margin', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Sets the margin around the component' },
-    { id: 45, name: 'padding', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Sets the padding inside the component' },
+    { id: 38, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Sets the height of the component', from: 'Base' },
+    { id: 39, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Sets the width of a component', from: 'Base' },
+    { id: 40, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Sets the minimal height for the view', from: 'Base' },
+    { id: 41, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Sets the minimal width for the view', from: 'Base' },
+    { id: 42, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Sets the maximum height for the view', from: 'Base' },
+    { id: 43, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Sets the maximum width for the view', from: 'Base' },
+    { id: 44, name: 'margin', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Sets the margin around the component', from: 'Base' },
+    { id: 45, name: 'padding', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Sets the padding inside the component', from: 'Base' },
   ];
 
   const eventsData: PropDoc[] = [
-    { id: 1, name: 'onChange', type: '(newValue: string, oldValue?: string) => void', defaultValue: 'undefined', description: 'Fires when the value changes' },
-    { id: 2, name: 'onBlur', type: '(event: React.FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when focus is moved out of the view' },
-    { id: 3, name: 'onFocus', type: '(event: React.FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when a view gets focus' },
-    { id: 4, name: 'onItemClick', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires after the control has been clicked' },
-    { id: 5, name: 'onKeyPress', type: '(event: React.KeyboardEvent) => void', defaultValue: 'undefined', description: 'Occurs when keyboard key is pressed for the control in focus' },
-    { id: 6, name: 'onAfterRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately after the component has been rendered' },
-    { id: 7, name: 'onBeforeRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately before the component has been rendered' },
-    { id: 8, name: 'onViewShow', type: '() => void', defaultValue: 'undefined', description: 'Fires when any hidden view is shown' },
-    { id: 9, name: 'onViewResize', type: '(width: number, height: number) => void', defaultValue: 'undefined', description: 'Fires when the size of a view has been changed by resizer' },
-    { id: 10, name: 'onAfterScroll', type: '(scrollTop: number, scrollLeft: number) => void', defaultValue: 'undefined', description: 'Occurs when the view has been scrolled' },
+    { id: 1, name: 'onChange', type: '(newValue: string, oldValue?: string) => void', defaultValue: 'undefined', description: 'Fires when the value changes', from: 'DatePicker' },
+    { id: 2, name: 'onBlur', type: '(event: React.FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when focus is moved out of the view', from: 'Base' },
+    { id: 3, name: 'onFocus', type: '(event: React.FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when a view gets focus', from: 'Base' },
+    { id: 4, name: 'onItemClick', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires after the control has been clicked', from: 'Base' },
+    { id: 5, name: 'onKeyPress', type: '(event: React.KeyboardEvent) => void', defaultValue: 'undefined', description: 'Occurs when keyboard key is pressed for the control in focus', from: 'Base' },
+    { id: 6, name: 'onAfterRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately after the component has been rendered', from: 'Base' },
+    { id: 7, name: 'onBeforeRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately before the component has been rendered', from: 'Base' },
+    { id: 8, name: 'onViewShow', type: '() => void', defaultValue: 'undefined', description: 'Fires when any hidden view is shown', from: 'Base' },
+    { id: 9, name: 'onViewResize', type: '(width: number, height: number) => void', defaultValue: 'undefined', description: 'Fires when the size of a view has been changed by resizer', from: 'Base' },
+    { id: 10, name: 'onAfterScroll', type: '(scrollTop: number, scrollLeft: number) => void', defaultValue: 'undefined', description: 'Occurs when the view has been scrolled', from: 'Base' },
   ];
 
   const refMethodsData: PropDoc[] = [
-    { id: 1, name: 'blur()', type: '() => void', defaultValue: '-', description: 'Removes focus from the control' },
-    { id: 2, name: 'focus()', type: '() => void', defaultValue: '-', description: 'Sets focus to the control' },
-    { id: 3, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disables the component (makes it dimmed and unclickable)' },
-    { id: 4, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enables the component that was disabled' },
-    { id: 5, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hides the component' },
-    { id: 6, name: 'show()', type: '() => void', defaultValue: '-', description: 'Makes the component visible' },
-    { id: 7, name: 'getValue()', type: '() => string | undefined', defaultValue: '-', description: 'Returns the current value of the control' },
-    { id: 8, name: 'setValue(value)', type: '(value: string) => void', defaultValue: '-', description: 'Sets a new value for the component' },
-    { id: 9, name: 'getText()', type: '() => string', defaultValue: '-', description: 'Gets actual text value from the control input' },
-    { id: 10, name: 'validate()', type: '() => boolean | string', defaultValue: '-', description: 'Validates the value of the input. Returns true if valid, false or error message if invalid' },
-    { id: 11, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the component is enabled' },
-    { id: 12, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the component is visible' },
-    { id: 13, name: 'getElement()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the root DOM element of the component' },
-    { id: 14, name: 'getParentView()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the parent view/element of the component' },
-    { id: 15, name: 'define(config, value?)', type: '(config: Partial<Props> | string, value?: unknown) => void', defaultValue: '-', description: 'Redefines a single configuration property or multiple properties' },
+    { id: 1, name: 'blur()', type: '() => void', defaultValue: '-', description: 'Removes focus from the control', from: 'Base' },
+    { id: 2, name: 'focus()', type: '() => void', defaultValue: '-', description: 'Sets focus to the control', from: 'Base' },
+    { id: 3, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disables the component (makes it dimmed and unclickable)', from: 'Base' },
+    { id: 4, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enables the component that was disabled', from: 'Base' },
+    { id: 5, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hides the component', from: 'Base' },
+    { id: 6, name: 'show()', type: '() => void', defaultValue: '-', description: 'Makes the component visible', from: 'Base' },
+    { id: 7, name: 'getValue()', type: '() => string | undefined', defaultValue: '-', description: 'Returns the current value of the control', from: 'DatePicker' },
+    { id: 8, name: 'setValue(value)', type: '(value: string) => void', defaultValue: '-', description: 'Sets a new value for the component', from: 'DatePicker' },
+    { id: 9, name: 'getText()', type: '() => string', defaultValue: '-', description: 'Gets actual text value from the control input', from: 'DatePicker' },
+    { id: 10, name: 'validate()', type: '() => boolean | string', defaultValue: '-', description: 'Validates the value of the input. Returns true if valid, false or error message if invalid', from: 'DatePicker' },
+    { id: 11, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the component is enabled', from: 'Base' },
+    { id: 12, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the component is visible', from: 'Base' },
+    { id: 13, name: 'getElement()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the root DOM element of the component', from: 'Base' },
+    { id: 14, name: 'getParentView()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the parent view/element of the component', from: 'Base' },
+    { id: 15, name: 'define(config, value?)', type: '(config: Partial<Props> | string, value?: unknown) => void', defaultValue: '-', description: 'Redefines a single configuration property or multiple properties', from: 'Base' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [
     { id: 'name', header: 'Property', width: 180 },
-    { id: 'type', header: 'Type', width: 300 },
+    { id: 'type', header: 'Type', width: 280 },
     { id: 'defaultValue', header: 'Default', width: 100 },
-    { id: 'description', header: 'Description', width: 350 },
+    { id: 'from', header: 'From', width: 100, filterType: 'combo' },
+    { id: 'description', header: 'Description', width: 320 },
   ];
 
   return (
@@ -561,7 +567,7 @@ export function AvakioDatePickerExample() {
               content={<strong>Label Positions</strong>}
             />,
             <AvakioTemplate
-              key="other-title"
+              key="label-left-title"
               type="clean"
               borderType="clean"
               padding={[8, 0, 8, 0]}              
@@ -576,7 +582,7 @@ export function AvakioDatePickerExample() {
               showTime={false}
             />,
             <AvakioTemplate
-              key="other-title"
+              key="label-top-title"
               type="clean"
               borderType="clean"
               padding={[16, 0, 8, 0]}              
@@ -593,7 +599,41 @@ export function AvakioDatePickerExample() {
               showTime={true}
             />,
             <AvakioTemplate
-              key="other-title"
+              key="label-right-title"
+              type="clean"
+              borderType="clean"
+              padding={[16, 0, 8, 0]}              
+              content='labelPosition="right"'
+            />,
+            <AvakioDatePicker
+              value={labelRightDate}
+              onChange={(newVal) => setLabelRightDate(newVal)}
+              label="Date"
+              labelPosition="right"
+              placeholder='Select a date ...'
+              labelAlign='center'
+              clearable
+              showTime={false}
+            />,
+            <AvakioTemplate
+              key="label-bottom-title"
+              type="clean"
+              borderType="clean"
+              padding={[16, 0, 8, 0]}              
+              content='labelPosition="bottom"'
+            />,
+            <AvakioDatePicker
+              value={labelBottomDate}
+              onChange={(newVal) => setLabelBottomDate(newVal)}
+              label="Date"
+              labelPosition="bottom"
+              placeholder='Select a date ...'
+              labelAlign='center'
+              clearable
+              showTime={false}
+            />,
+            <AvakioTemplate
+              key="labelform-left-title"
               type="clean"
               borderType="clean"
               padding={[16, 0, 8, 0]}              
@@ -611,7 +651,7 @@ export function AvakioDatePickerExample() {
               labelForm='Date of birthday:'
             />,
             <AvakioTemplate
-              key="other-title"
+              key="labelform-top-title"
               type="clean"
               borderType="clean"
               padding={[16, 0, 8, 0]}              
@@ -805,18 +845,18 @@ export function AvakioDatePickerExample() {
                       labelForm={getPropValue('labelForm', '') || undefined}
                       placeholder={getPropValue('placeholder', '')}
                       bottomLabel={getPropValue('bottomLabel', '')}
-                      bottomPadding={getPropValue('bottomPadding', '') ? Number(getPropValue('bottomPadding', '')) : undefined}
+                      bottomPadding={formatSizingValue(getPropValue('bottomPadding', ''))}
                       tooltip={getPropValue('tooltip', '')}
                       size={getPropValue('size', 'default') as 'default' | 'compact'}
-                      labelPosition={getPropValue('labelPosition', 'left') as 'left' | 'top'}
+                      labelPosition={getPropValue('labelPosition', 'left') as 'left' | 'top' | 'right' | 'bottom'}
                       labelAlign={getPropValue('labelAlign', 'left') as 'left' | 'center' | 'right'}
-                      labelWidth={getPropValue('labelWidth', 100)}
+                      labelWidth={formatSizingValue(getPropValue('labelWidth', 100))}
                       // Layout & Alignment props
                       align={getPropValue('align', 'left') as 'left' | 'center' | 'right'}
                       inputAlign={getPropValue('inputAlign', 'left') as 'left' | 'right'}
-                      inputWidth={getPropValue('inputWidth', '') || undefined}
-                      inputHeight={getPropValue('inputHeight', '') || undefined}
-                      compWidth={getPropValue('compWidth', '') || undefined}
+                      inputWidth={formatSizingValue(getPropValue('inputWidth', ''))}
+                      inputHeight={formatSizingValue(getPropValue('inputHeight', ''))}
+                      compWidth={formatSizingValue(getPropValue('compWidth', ''))}
                       // Features props
                       showTime={getPropValue('showTime', false)}
                       inline={getPropValue('inline', false)}
@@ -827,12 +867,12 @@ export function AvakioDatePickerExample() {
                       minYear={getPropValue('minYear', '') ? Number(getPropValue('minYear', '')) : undefined}
                       maxYear={getPropValue('maxYear', '') ? Number(getPropValue('maxYear', '')) : undefined}
                       // Sizing props
-                      width={getPropValue('width', '') || undefined}
-                      height={getPropValue('height', '') ? Number(getPropValue('height', '')) : undefined}
-                      minWidth={getPropValue('minWidth', '') || undefined}
-                      maxWidth={getPropValue('maxWidth', '') || undefined}
-                      minHeight={getPropValue('minHeight', '') ? Number(getPropValue('minHeight', '')) : undefined}
-                      maxHeight={getPropValue('maxHeight', '') ? Number(getPropValue('maxHeight', '')) : undefined}
+                      width={formatSizingValue(getPropValue('width', ''))}
+                      height={formatSizingValue(getPropValue('height', ''))}
+                      minWidth={formatSizingValue(getPropValue('minWidth', ''))}
+                      maxWidth={formatSizingValue(getPropValue('maxWidth', ''))}
+                      minHeight={formatSizingValue(getPropValue('minHeight', ''))}
+                      maxHeight={formatSizingValue(getPropValue('maxHeight', ''))}
                       // State props
                       disabled={getPropValue('disabled', false)}
                       readonly={getPropValue('readonly', false)}
@@ -1136,7 +1176,7 @@ export function AvakioDatePickerExample() {
                                   { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'Appearance', placeholder: 'Helper text' },
                                   { id: 'bottomPadding', label: 'Bottom Padding', type: 'number', value: '', group: 'Appearance', placeholder: 'e.g. 8' },
                                   { id: 'tooltip', label: 'Tooltip', type: 'text', value: '', group: 'Appearance', placeholder: 'Tooltip text' },
-                                  { id: 'invalidMessage', label: 'Invalid Message', type: 'text', value: 'This field is required', group: 'Appearance', placeholder: 'Error message' },
+                                  { id: 'invalidMessage', label: 'Error Message', type: 'text', value: 'This field is required', group: 'Appearance', placeholder: 'Error message' },
                                   { id: 'size', label: 'Size', type: 'select', value: 'default', group: 'Appearance', selectOptions: [{ id: 'default', value: 'Default' }, { id: 'compact', value: 'Compact' }] },
                                   { id: 'labelPosition', label: 'Label Position', type: 'select', value: 'left', group: 'Appearance', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'top', value: 'Top' }] },
                                   { id: 'labelAlign', label: 'Label Align', type: 'select', value: 'left', group: 'Appearance', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'center', value: 'Center' }, { id: 'right', value: 'Right' }] },
@@ -1235,8 +1275,11 @@ export function AvakioDatePickerExample() {
               key="props-table"
               id="datepicker-props-table"
               data={propsData}
+              filterable
+              sortable
               columns={propsColumns}
               select={false}
+              showRowNum
               height={700}
             />,
           ]}
@@ -1260,7 +1303,10 @@ export function AvakioDatePickerExample() {
               id="datepicker-events-table"
               data={eventsData}
               columns={propsColumns}
+              filterable
+              sortable
               select={false}
+              showRowNum
               height={320}
             />,
           ]}
@@ -1284,7 +1330,10 @@ export function AvakioDatePickerExample() {
               id="datepicker-methods-table"
               data={refMethodsData}
               columns={propsColumns}
+              filterable
+              sortable
               select={false}
+              showRowNum
               height={420}
             />,
           ]}

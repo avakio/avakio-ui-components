@@ -147,9 +147,9 @@
 
 /* ===================================
    AVAKIO GAGE - STATE MODIFIERS
+   Uses base borderless styles from avakio-base.css
    =================================== */
 .avakio-gage-borderless {
-  border: none !important;
   box-shadow: none !important;
 }
 

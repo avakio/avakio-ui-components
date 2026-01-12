@@ -82,22 +82,19 @@
   pointer-events: none;
 }
 
-/* Container borderless - removes only the view/container border */
+/* Container borderless - uses base styles */
 .avakio-grid-borderless {
-  border: none !important;
   background: transparent !important;
 }
 
 /* Cell borderless - removes only the cell borders */
 .avakio-grid-cell-borderless .avakio-grid-cell {
-  border: none !important;
   box-shadow: none !important;
   background: transparent !important;
 }
 
 .avakio-grid-cell-borderless .avakio-grid-cell:hover {
   box-shadow: none !important;
-  border: none !important;
 }
 
 /* ===================================

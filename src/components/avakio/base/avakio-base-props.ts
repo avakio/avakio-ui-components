@@ -11,9 +11,6 @@ export interface AvakioBaseProps {
   /** Used to hide the component borders */
   borderless?: boolean;
   
-  /** Sets a label under the control */
-  bottomLabel?: string;
-  
   /** Sets the bottom offset of the control input */
   bottomPadding?: number;
   
@@ -60,7 +57,7 @@ export interface AvakioBaseProps {
   labelAlign?: 'left' | 'right' | 'center';
   
   /** Positions a label in relation to the control */
-  labelPosition?: 'top' | 'left' | 'right';
+  labelPosition?: 'left' | 'top' | 'right' | 'bottom';
   
   /** The width of the label */
   labelWidth?: number | string;
@@ -313,8 +310,8 @@ export interface AvakioBaseRef<T = string> {
   /** Sets focus to the control */
   focus: () => void;
   
-  /** Returns the parent view/element of the component */
-  getParentView: () => HTMLElement | null;
+  /** Returns the ID of the parent Avakio container (AvakioView, AvakioTemplate, AvakioMultiView, AvakioLayout, AvakioGrid, or AvakioAbsoluteLayout), or its classname if no ID is set */
+  getParentView: () => string | null;
   
   /** Gets actual text value from the control input */
   getText: () => string;
@@ -557,7 +554,31 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
   }, [isHidden]);
 
   const getParentView = useCallback(() => {
-    return rootRef.current?.parentElement ?? null;
+    // List of Avakio container class prefixes to search for
+    const containerClasses = [
+      'avakio-layout',
+      'avakio-template',
+      'avakio-view',
+      'avakio-multiview',
+      'avakio-grid',
+      'avakio-absolute-layout',
+    ];
+    
+    let element = rootRef.current?.parentElement;
+    while (element) {
+      // Check if this element is an Avakio container
+      const classList = element.className || '';
+      const matchingClass = containerClasses.find(prefix => 
+        classList.split(' ').some(cls => cls.startsWith(prefix))
+      );
+      
+      if (matchingClass) {
+        // Return ID if available, otherwise return the matching Avakio class name
+        return element.id || matchingClass;
+      }
+      element = element.parentElement;
+    }
+    return null;
   }, []);
 
   const getElement = useCallback(() => {

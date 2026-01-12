@@ -9,12 +9,15 @@ import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
+import { formatSizingValue } from '../../lib/utils';
 import { 
   Table2,
   Settings2,
   Book,
   Play,
   Edit3,
+  Pencil,
+  Trash2,
 } from 'lucide-react';
 import './avakio-datatable-example.css';
 
@@ -38,6 +41,32 @@ interface Person {
   salary: number;
 }
 
+// Extended employee data type for filter demo
+interface Employee {
+  id: number;
+  name: string;
+  email: string;
+  department: string;
+  status: string;
+  salary: number;
+  hireDate: string;
+  skills: string[];
+}
+
+// Sample employee data for filter types demo
+const employeeData: Employee[] = [
+  { id: 1, name: "John Doe", email: "john@example.com", department: "Engineering", status: "Active", salary: 85000, hireDate: "2020-03-15", skills: ["React", "TypeScript"] },
+  { id: 2, name: "Jane Smith", email: "jane@example.com", department: "Marketing", status: "Active", salary: 72000, hireDate: "2019-08-22", skills: ["SEO", "Analytics"] },
+  { id: 3, name: "Bob Johnson", email: "bob@example.com", department: "Sales", status: "Inactive", salary: 95000, hireDate: "2018-01-10", skills: ["Negotiation", "CRM"] },
+  { id: 4, name: "Alice Williams", email: "alice@example.com", department: "Engineering", status: "Active", salary: 92000, hireDate: "2021-05-03", skills: ["Python", "ML"] },
+  { id: 5, name: "Charlie Brown", email: "charlie@example.com", department: "HR", status: "Active", salary: 65000, hireDate: "2022-02-14", skills: ["Recruiting", "Training"] },
+  { id: 6, name: "Diana Ross", email: "diana@example.com", department: "Finance", status: "Active", salary: 88000, hireDate: "2020-11-08", skills: ["Accounting", "Excel"] },
+  { id: 7, name: "Edward King", email: "edward@example.com", department: "Engineering", status: "Inactive", salary: 78000, hireDate: "2017-06-25", skills: ["Java", "Spring"] },
+  { id: 8, name: "Fiona Green", email: "fiona@example.com", department: "Marketing", status: "Active", salary: 68000, hireDate: "2023-01-09", skills: ["Content", "Social Media"] },
+  { id: 9, name: "George Harris", email: "george@example.com", department: "Sales", status: "Active", salary: 82000, hireDate: "2019-04-17", skills: ["Sales", "Communication"] },
+  { id: 10, name: "Helen Martinez", email: "helen@example.com", department: "HR", status: "Inactive", salary: 71000, hireDate: "2021-09-30", skills: ["Compliance", "Benefits"] },
+];
+
 // Sample data
 const sampleData: Person[] = [
   { id: 1, name: "John Doe", email: "john@example.com", age: 32, department: "Engineering", status: "Active", salary: 85000 },
@@ -57,58 +86,69 @@ interface PropDoc {
   type: string;
   defaultValue: string;
   description: string;
+  from: string;
 }
 
 const propsData: PropDoc[] = [
-  { id: 1, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID' },
-  { id: 2, name: 'columns', type: 'AvakioColumn<T>[]', defaultValue: '[]', description: 'Array of column definitions' },
-  { id: 3, name: 'data', type: 'T[]', defaultValue: '[]', description: 'Array of data objects to display' },
-  { id: 4, name: 'spans', type: 'AvakioSpan[]', defaultValue: 'undefined', description: 'Cell span definitions: [rowId, columnId, colspan, rowspan, value?, cssClass?]' },
-  { id: 5, name: 'height', type: 'number | string', defaultValue: "'auto'", description: 'Fixed height of the table' },
-  { id: 6, name: 'width', type: 'number | string', defaultValue: "'100%'", description: 'Width of the table' },
-  { id: 7, name: 'paging', type: 'boolean', defaultValue: 'false', description: 'Enable pagination' },
-  { id: 8, name: 'pageSize', type: 'number', defaultValue: '20', description: 'Number of rows per page' },
-  { id: 9, name: 'currentPage', type: 'number', defaultValue: '1', description: 'Current page number' },
-  { id: 10, name: 'totalCount', type: 'number', defaultValue: 'undefined', description: 'Total record count (server-side)' },
-  { id: 11, name: 'sortable', type: 'boolean', defaultValue: 'false', description: 'Enable column sorting' },
-  { id: 12, name: 'filterable', type: 'boolean', defaultValue: 'false', description: 'Enable column filtering' },
-  { id: 13, name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Enable column resizing' },
-  { id: 14, name: 'columnBorders', type: 'boolean', defaultValue: 'false', description: 'Show borders between columns' },
-  { id: 15, name: 'rowBorders', type: 'boolean', defaultValue: 'false', description: 'Show borders between rows' },
-  { id: 16, name: 'select', type: "boolean | 'row' | 'cell' | 'column'", defaultValue: 'false', description: 'Selection mode' },
-  { id: 17, name: 'multiselect', type: 'boolean', defaultValue: 'false', description: 'Enable multi-row selection' },
-  { id: 18, name: 'hover', type: 'boolean', defaultValue: 'true', description: 'Enable row hover effect' },
-  { id: 19, name: 'editable', type: 'boolean', defaultValue: 'false', description: 'Enable cell editing based on column type' },
-  { id: 20, name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show loading state' },
-  { id: 21, name: 'emptyText', type: 'string', defaultValue: "'No data available'", description: 'Message when no data' },
-  { id: 22, name: 'serverSide', type: 'boolean', defaultValue: 'false', description: 'Enable server-side operations' },
-  { id: 23, name: 'allowDragDrop', type: 'boolean', defaultValue: 'false', description: 'Enable drag-and-drop column reordering' },
-  { id: 24, name: 'bulkSelection', type: 'boolean', defaultValue: 'false', description: 'Enable bulk selection with checkbox column on the left' },
+  { id: 1, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
+  { id: 2, name: 'columns', type: 'AvakioColumn<T>[]', defaultValue: '[]', description: 'Array of column definitions', from: 'DataTable' },
+  { id: 3, name: 'data', type: 'T[]', defaultValue: '[]', description: 'Array of data objects to display', from: 'DataTable' },
+  { id: 4, name: 'spans', type: 'AvakioSpan[]', defaultValue: 'undefined', description: 'Cell span definitions: [rowId, columnId, colspan, rowspan, value?, cssClass?]', from: 'DataTable' },
+  { id: 5, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height of the table', from: 'DataTable' },
+  { id: 6, name: 'width', type: 'number | string', defaultValue: "'100%'", description: 'Width of the table', from: 'Base' },
+  { id: 7, name: 'margin', type: 'number | [number, number?, number?, number?]', defaultValue: 'undefined', description: 'Outer margin. Single value or array [top, right?, bottom?, left?]', from: 'DataTable' },
+  { id: 8, name: 'padding', type: 'number | [number, number?, number?, number?]', defaultValue: 'undefined', description: 'Inner padding. Single value or array [top, right?, bottom?, left?]', from: 'DataTable' },
+  { id: 9, name: 'rowHeight', type: 'number', defaultValue: '40', description: 'Height of each data row in pixels', from: 'DataTable' },
+  { id: 10, name: 'headerHeight', type: 'number', defaultValue: '44', description: 'Height of the header row in pixels', from: 'DataTable' },
+  { id: 11, name: 'fixedRowNumber', type: 'number', defaultValue: '0', description: 'Number of fixed (frozen) rows at the top', from: 'DataTable' },
+  { id: 12, name: 'paging', type: 'boolean', defaultValue: 'false', description: 'Enable pagination', from: 'DataTable' },
+  { id: 13, name: 'pageSize', type: 'number', defaultValue: '20', description: 'Number of rows per page', from: 'DataTable' },
+  { id: 14, name: 'currentPage', type: 'number', defaultValue: '1', description: 'Current page number', from: 'DataTable' },
+  { id: 15, name: 'totalCount', type: 'number', defaultValue: 'undefined', description: 'Total record count (server-side)', from: 'DataTable' },
+  { id: 16, name: 'sortable', type: 'boolean', defaultValue: 'false', description: 'Enable column sorting', from: 'DataTable' },
+  { id: 17, name: 'filterable', type: 'boolean', defaultValue: 'false', description: 'Enable column filtering', from: 'DataTable' },
+  { id: 18, name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Enable column resizing', from: 'DataTable' },
+  { id: 19, name: 'columnBorders', type: 'boolean', defaultValue: 'false', description: 'Show borders between columns', from: 'DataTable' },
+  { id: 20, name: 'rowBorders', type: 'boolean', defaultValue: 'false', description: 'Show borders between rows', from: 'DataTable' },
+  { id: 21, name: 'select', type: "boolean | 'row' | 'cell' | 'column'", defaultValue: 'false', description: 'Selection mode', from: 'DataTable' },
+  { id: 22, name: 'multiselect', type: 'boolean', defaultValue: 'false', description: 'Enable multi-row selection', from: 'DataTable' },
+  { id: 23, name: 'hover', type: 'boolean', defaultValue: 'true', description: 'Enable row hover effect', from: 'DataTable' },
+  { id: 24, name: 'editable', type: 'boolean', defaultValue: 'false', description: 'Enable cell editing based on column type', from: 'DataTable' },
+  { id: 25, name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Show loading state', from: 'DataTable' },
+  { id: 26, name: 'emptyText', type: 'string', defaultValue: "'No data available'", description: 'Message when no data', from: 'DataTable' },
+  { id: 27, name: 'serverSide', type: 'boolean', defaultValue: 'false', description: 'Enable server-side operations', from: 'DataTable' },
+  { id: 28, name: 'allowDragDrop', type: 'boolean', defaultValue: 'false', description: 'Enable drag-and-drop column reordering', from: 'DataTable' },
+  { id: 29, name: 'bulkSelection', type: 'boolean', defaultValue: 'false', description: 'Enable bulk selection with checkbox column on the left', from: 'DataTable' },
+  { id: 30, name: 'showRowNum', type: 'boolean', defaultValue: 'false', description: 'Show row number as first column (no filter)', from: 'DataTable' },
+  { id: 31, name: 'autoConfig', type: 'boolean', defaultValue: 'false', description: 'Auto-configure columns from data keys', from: 'DataTable' },
+  { id: 32, name: 'scroll', type: "boolean | 'x' | 'y' | 'xy'", defaultValue: "'xy'", description: 'Scroll behavior: false (disabled), x, y, or xy', from: 'DataTable' },
+  { id: 33, name: 'css', type: 'string', defaultValue: "''", description: 'Additional CSS class for styling', from: 'Base' },
 ];
 
 const columnPropsData: PropDoc[] = [
-  { id: 1, name: 'id', type: 'string', defaultValue: '-', description: 'Unique column identifier (must match data property name)' },
-  { id: 2, name: 'header', type: 'string', defaultValue: '-', description: 'Column header text' },
-  { id: 3, name: 'type', type: "'text' | 'number' | 'boolean' | 'date' | 'json'", defaultValue: "'text'", description: 'Data type for editing and formatting' },
-  { id: 4, name: 'width', type: 'number | string', defaultValue: '150', description: 'Column width' },
-  { id: 5, name: 'minWidth', type: 'number', defaultValue: 'undefined', description: 'Minimum column width' },
-  { id: 6, name: 'maxWidth', type: 'number', defaultValue: 'undefined', description: 'Maximum column width' },
-  { id: 7, name: 'sort', type: "'asc' | 'desc' | boolean", defaultValue: 'false', description: 'Enable sorting or set initial direction' },
-  { id: 8, name: 'filterable', type: 'boolean', defaultValue: 'false', description: 'Enable column filtering' },
-  { id: 9, name: 'filterType', type: "'text' | 'combo' | 'multicombo' | 'date' | 'number'", defaultValue: "'text'", description: 'Filter input type' },
-  { id: 10, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Hide the column' },
-  { id: 11, name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Enable column resizing' },
-  { id: 12, name: 'template', type: '(row) => ReactNode', defaultValue: 'undefined', description: 'Custom cell renderer' },
-  { id: 13, name: 'format', type: '(value) => string', defaultValue: 'undefined', description: 'Format function for display' },
-  { id: 14, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Cell text alignment' },
-  { id: 15, name: 'fillspace', type: 'boolean', defaultValue: 'false', description: 'Column fills remaining space' },
-  { id: 16, name: 'adjust', type: "'data' | 'header' | boolean", defaultValue: 'undefined', description: 'Auto-adjust column width' },
-  { id: 17, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Inline styles for cells' },
-  { id: 18, name: 'cssClass', type: 'string', defaultValue: 'undefined', description: 'CSS class for cells' },
-  { id: 19, name: 'headerCssClass', type: 'string', defaultValue: 'undefined', description: 'CSS class for header' },
-  { id: 20, name: 'headerWrap', type: 'boolean', defaultValue: 'false', description: 'Allow header text wrapping' },
-  { id: 21, name: 'allowDragDrop', type: 'boolean', defaultValue: 'true', description: 'Allow drag-and-drop reordering for this column (only when table allowDragDrop is enabled)' },
-  { id: 22, name: 'frozen', type: "'left' | 'right' | false", defaultValue: 'false', description: 'Freeze column to left or right side. Frozen columns don\'t scroll horizontally.' },
+  { id: 1, name: 'id', type: 'string', defaultValue: '-', description: 'Unique column identifier (must match data property name)', from: 'Column' },
+  { id: 2, name: 'header', type: 'string', defaultValue: '-', description: 'Column header text', from: 'Column' },
+  { id: 3, name: 'type', type: "'text' | 'number' | 'boolean' | 'date' | 'json'", defaultValue: "'text'", description: 'Data type for editing and formatting', from: 'Column' },
+  { id: 4, name: 'width', type: 'number | string', defaultValue: '150', description: 'Column width', from: 'Column' },
+  { id: 5, name: 'minWidth', type: 'number', defaultValue: 'undefined', description: 'Minimum column width', from: 'Column' },
+  { id: 6, name: 'maxWidth', type: 'number', defaultValue: 'undefined', description: 'Maximum column width', from: 'Column' },
+  { id: 7, name: 'sort', type: "'asc' | 'desc' | boolean", defaultValue: 'false', description: 'Enable sorting or set initial direction', from: 'Column' },
+  { id: 8, name: 'filterable', type: 'boolean', defaultValue: 'false', description: 'Enable column filtering', from: 'Column' },
+  { id: 9, name: 'filterType', type: "'text' | 'combo' | 'multicombo' | 'date' | 'number'", defaultValue: "'text'", description: 'Filter input type', from: 'Column' },
+  { id: 10, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Hide the column', from: 'Column' },
+  { id: 11, name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Enable column resizing', from: 'Column' },
+  { id: 12, name: 'template', type: '(row) => ReactNode', defaultValue: 'undefined', description: 'Custom cell renderer', from: 'Column' },
+  { id: 13, name: 'format', type: '(value) => string', defaultValue: 'undefined', description: 'Format function for display', from: 'Column' },
+  { id: 14, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Cell text alignment', from: 'Column' },
+  { id: 15, name: 'fillspace', type: 'boolean', defaultValue: 'false', description: 'Column fills remaining space', from: 'Column' },
+  { id: 16, name: 'adjust', type: "'data' | 'header' | boolean", defaultValue: 'undefined', description: 'Auto-adjust column width', from: 'Column' },
+  { id: 17, name: 'css', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Inline styles for cells', from: 'Column' },
+  { id: 18, name: 'cssClass', type: 'string', defaultValue: 'undefined', description: 'CSS class for cells', from: 'Column' },
+  { id: 19, name: 'headerCssClass', type: 'string', defaultValue: 'undefined', description: 'CSS class for header', from: 'Column' },
+  { id: 20, name: 'cssHeader', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Inline styles for header label', from: 'Column' },
+  { id: 21, name: 'headerWrap', type: 'boolean', defaultValue: 'false', description: 'Allow header text wrapping', from: 'Column' },
+  { id: 22, name: 'allowDragDrop', type: 'boolean', defaultValue: 'true', description: 'Allow drag-and-drop reordering for this column (only when table allowDragDrop is enabled)', from: 'Column' },
+  { id: 23, name: 'frozen', type: "'left' | 'right' | false", defaultValue: 'false', description: 'Freeze column to left or right side. Frozen columns don\'t scroll horizontally.', from: 'Column' },
 ];
 
 // Span configuration documentation
@@ -203,6 +243,7 @@ const propsColumns: AvakioColumn<PropDoc>[] = [
   { id: 'name', header: 'Property', width: 160 },
   { id: 'type', header: 'Type', width: 280 },
   { id: 'defaultValue', header: 'Default', width: 120 },
+  { id: 'from', header: 'From', width: 100, filterable: true, filterType: 'combo' },
   { id: 'description', header: 'Description', fillspace: true },
 ];
 
@@ -215,6 +256,12 @@ export function AvakioDataTableExample() {
   // Playground DataTable ref for method testing
   const playgroundTableRef = useRef<AvakioDataTableRef<Person>>(null);
   
+  // Sorting example state
+  const [sortState, setSortState] = useState<{ column: string | null; direction: 'asc' | 'desc' | null }>({
+    column: null,
+    direction: null,
+  });
+
   // Editable table state
   const [editableData, setEditableData] = useState([
     { id: 1, name: 'John Doe', age: 28, email: 'john@example.com', active: true, joinDate: '2024-03-15' },
@@ -227,7 +274,7 @@ export function AvakioDataTableExample() {
   // Playground state with AvakioProperty
   const [playgroundProps, setPlaygroundProps] = useState<AvakioPropertyItem[]>([
     // Data & Display Group
-    { id: 'height', label: 'Height', type: 'number', value: 300, group: 'Display', placeholder: 'e.g. 400' },
+    { id: 'maxHeight', label: 'Max Height', type: 'number', value: 300, group: 'Display', placeholder: 'e.g. 400' },
     { id: 'emptyText', label: 'Empty Text', type: 'text', value: 'No data available', group: 'Display', placeholder: 'Message when empty' },
     
     // Features Group
@@ -241,6 +288,7 @@ export function AvakioDataTableExample() {
     { id: 'editable', label: 'Editable', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable cell editing' },
     { id: 'allowDragDrop', label: 'Allow Drag Drop', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable column drag-drop reordering' },
     { id: 'bulkSelection', label: 'Bulk Selection', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Enable checkbox column for bulk selection' },
+    { id: 'showRowNum', label: 'Show Row Number', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show row number column' },
     
     // Selection Group
     {
@@ -319,27 +367,68 @@ export function AvakioDataTableExample() {
   const basicColumns: AvakioColumn<Person>[] = [
     { id: 'id', header: 'ID', width: 60, align: 'center' },
     { id: 'name', header: 'Name', width: 150 },
-    { id: 'email', header: 'Email', fillspace: true },
+    { id: 'email', header: 'Email', fillspace: true, css: { fontSize: '10px' }, cssHeader: { fontSize: '12px', fontWeight: '600', color: '#8d2020ff'  } },
     { id: 'department', header: 'Department', width: 120 },
-    { id: 'status', header: 'Status', width: 100, align: 'center' },
+    { id: 'status', header: 'Status', width: 100, align: 'center', filterable: false },
   ];
 
   // Columns with sorting
   const sortableColumns: AvakioColumn<Person>[] = [
-    { id: 'id', header: 'ID', width: 60, align: 'center', sort: true },
+    { id: 'id', header: 'ID', width: 60, align: 'center', sort: true, hidden:true },
     { id: 'name', header: 'Name', width: 150, sort: true },
-    { id: 'email', header: 'Email', fillspace: true },
-    { id: 'age', header: 'Age', width: 80, align: 'center', sort: true },
+    { id: 'email', header: 'Email', fillspace: true, sort:false },
+    { id: 'age', header: 'Age', width: 120, align: 'center', sort: true },
     { id: 'salary', header: 'Salary', width: 120, align: 'right', sort: true, format: (val) => `$${val.toLocaleString()}` },
   ];
 
   // Columns with filtering
   const filterableColumns: AvakioColumn<Person>[] = [
-    { id: 'id', header: 'ID', width: 60, align: 'center' },
+    { id: 'id', header: 'ID', width: 60, align: 'center', hidden:true },
     { id: 'name', header: 'Name', width: 150, filterable: true },
-    { id: 'email', header: 'Email', fillspace: true, filterable: true },
+    { id: 'email', header: 'Email', fillspace: true, filterable: false },
     { id: 'department', header: 'Department', width: 140, filterable: true },
     { id: 'status', header: 'Status', width: 100, align: 'center', filterable: true },
+  ];
+
+  // Columns demonstrating all filter types
+  const filterTypesColumns: AvakioColumn<Employee>[] = [
+    { 
+      id: 'name', 
+      header: 'Name (text)', 
+      width: 150, 
+      filterable: true,
+      filterType: 'text',
+    },
+    { 
+      id: 'department', 
+      header: 'Department (combo)', 
+      width: 160, 
+      filterable: true,
+      filterType: 'combo',
+    },
+    { 
+      id: 'status', 
+      header: 'Status (multicombo)', 
+      width: 170, 
+      filterable: true,
+      filterType: 'multicombo',
+    },
+    { 
+      id: 'salary', 
+      header: 'Salary (number)', 
+      width: 140, 
+      align: 'right',
+      filterable: true,
+      filterType: 'number',
+      format: (val) => `$${val.toLocaleString()}`,
+    },
+    { 
+      id: 'hireDate', 
+      header: 'Hire Date (date)', 
+      width: 160, 
+      filterable: true,
+      filterType: 'date',
+    },
   ];
 
   // Editable columns
@@ -358,7 +447,14 @@ export function AvakioDataTableExample() {
     { id: 'name', header: 'Name', width: 150, sort: true, filterable: true },
     { id: 'email', header: 'Email', fillspace: true, filterable: true },
     { id: 'department', header: 'Department', width: 130, filterable: true },
-    { id: 'status', header: 'Status', width: 100, align: 'center', filterable: true },
+    { 
+      id: 'status', 
+      header: 'Status', 
+      width: 100, 
+      align: 'center', 
+      filterable: true,
+      filterType: 'combo',
+    },
     { id: 'salary', header: 'Salary', width: 120, align: 'right', sort: true, format: (val) => `$${val.toLocaleString()}` },
   ];
 
@@ -450,16 +546,20 @@ export function AvakioDataTableExample() {
           margin={12}
           padding={16}
           rows={[
-            <div key="basic-table">
-              <AvakioDataTable
-                data={sampleData}
-                columns={basicColumns}
-                height={280}
-                columnBorders={true}
-                rowBorders={true}
-                onRowClick={(row, index) => addLog('onRowClick', `row ${index}: ${row.name}`)}
-              />
-            </div>,
+            <AvakioDataTable
+              id="AvakioDataTable-basic-datatable"
+              testId="AvakioDataTable-basic-datatable-testid"
+              data={sampleData}     
+              filterable         
+              columns={basicColumns}
+              maxHeight={400}
+              rowHeight={40}
+              columnBorders={true}
+              rowBorders={true}
+              showRowNum={true}
+              onRowClick={(row, index) => addLog('onRowClick', `row ${index}: ${row.name}`)}
+              onRowDoubleClick={(row, index) => addLog('onRowDoubleClick', `row ${index}: ${row.name}`)}
+            />
           ]}
         />
 
@@ -474,7 +574,7 @@ export function AvakioDataTableExample() {
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="Add sort={true} to columns to enable sorting. Click column headers to sort ascending/descending."
+          content="Add sort={true} to columns to enable sorting. Click column headers to sort ascending/descending. The onSort callback returns the column id and sort direction."
         />
         <AvakioLayout
           type="clean"
@@ -482,14 +582,17 @@ export function AvakioDataTableExample() {
           margin={12}
           padding={16}
           rows={[
-            <div key="sortable-table">
-              <AvakioDataTable
-                data={sampleData}
-                columns={sortableColumns}
-                height={280}
-                onSort={(col, dir) => addLog('onSort', `${col} ${dir}`)}
-              />
-            </div>,
+            <AvakioDataTable
+              data={sampleData}
+              columns={sortableColumns}
+              maxHeight={280}
+              sortable
+              showRowNum={true}
+              onSort={(columnId, direction) => {
+                setSortState({ column: columnId, direction });
+                addLog('onSort', `columnId: "${columnId}", direction: "${direction}"`);
+              }}
+            />,         
           ]}
         />
 
@@ -512,14 +615,44 @@ export function AvakioDataTableExample() {
           margin={12}
           padding={16}
           rows={[
-            <div key="filterable-table">
-              <AvakioDataTable
-                data={sampleData}
-                columns={filterableColumns}
-                height={320}
-                onFilter={(filters) => addLog('onFilter', JSON.stringify(filters))}
-              />
-            </div>,
+            <AvakioDataTable
+              filterable
+              data={sampleData}
+              columns={filterableColumns}
+              maxHeight={320}
+              showRowNum={true}
+              onFilter={(filters) => addLog('onFilter', JSON.stringify(filters))}
+            />
+          ]}
+        />
+
+        {/* Filter Types */}
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[16, 0, 0, 16]}
+          content={<strong>Filter Types</strong>}
+        />
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[0, 0, 0, 16]}
+          content="DataTable supports 5 filter types: text (default), combo (dropdown), multicombo (multi-select), number, and date. Set filterType on each column to customize the filter input."
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioDataTable<Employee>
+              filterable
+              data={employeeData}
+              columns={filterTypesColumns}
+              maxHeight={400}
+              showRowNum={true}
+              onFilter={(filters) => addLog('onFilter', JSON.stringify(filters))}
+            />
           ]}
         />
       </section>
@@ -567,7 +700,8 @@ export function AvakioDataTableExample() {
                 columns={basicColumns}
                 paging
                 pageSize={3}
-                height={220}
+                maxHeight={220}
+                showRowNum={true}
                 onPageChange={(page) => addLog('onPageChange', `page ${page}`)}
                 onPageSizeChange={(size) => addLog('onPageSizeChange', `${size} rows`)}
               />
@@ -593,6 +727,7 @@ export function AvakioDataTableExample() {
               type="clean"
               borderType="clean"
               padding={[8, 0, 0, 0]}
+              maxHeight={280}
               content="Set select='row' for single selection or add multiselect={true} for multi-row selection with checkboxes."
             />,
             <div key="select-table" style={{ marginTop: '16px' }}>
@@ -601,7 +736,8 @@ export function AvakioDataTableExample() {
                 columns={basicColumns}
                 select="row"
                 multiselect
-                height={280}
+                maxHeight={280}
+                showRowNum={true}
                 onSelectChange={(rows) => addLog('onSelectChange', `${rows.length} rows selected`)}
               />
             </div>,
@@ -634,7 +770,8 @@ export function AvakioDataTableExample() {
                 columns={basicColumns}
                 select="column"
                 multiselect
-                height={280}
+                maxHeight={280}
+                showRowNum={true}
               />
             </div>,
           ]}
@@ -693,7 +830,78 @@ export function AvakioDataTableExample() {
                     css: { color: '#059669', fontWeight: '500' }
                   },
                 ]}
-                height={280}
+                maxHeight={280}
+                showRowNum={true}
+              />
+            </div>,
+          ]}
+        />
+
+        {/* Actions Column */}
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioTemplate
+              key="actions-title"
+              type="clean"
+              borderType="clean"
+              content={<strong>Actions Column</strong>}
+            />,
+            <AvakioTemplate
+              key="actions-desc"
+              type="clean"
+              borderType="clean"
+              padding={[8, 0, 0, 0]}
+              content="Add an actions column with icon buttons for edit, delete, or other row operations using the template function."
+            />,
+            <div key="actions-table" style={{ marginTop: '16px' }}>
+              <AvakioDataTable
+                data={sampleData}
+                columns={[
+                  { id: 'id', header: 'ID', width: 60, align: 'center' },
+                  { id: 'name', header: 'Name', width: 150 },
+                  { id: 'email', header: 'Email', fillspace: true },
+                  { id: 'department', header: 'Department', width: 120 },
+                  { 
+                    id: 'actions', 
+                    header: 'Actions', 
+                    width: 100, 
+                    align: 'center',
+                    template: (row) => (
+                      <div style={{ display: 'flex', gap: '4px', justifyContent: 'center' }}>
+                        <AvakioButton
+                          buttonType="icon"
+                          icon={<Pencil size={14} />}
+                          size="sm"
+                          variant="ghost"
+                          tooltip="Edit"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addLog('Edit clicked', `Row ID: ${row.id}, Name: ${row.name}`);
+                          }}
+                        />
+                        <AvakioButton
+                          buttonType="icon"
+                          icon={<Trash2 size={14} color="#dc2626" />}
+                          size="sm"
+                          variant="ghost"
+                          tooltip="Delete"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            addLog('Delete clicked', `Row ID: ${row.id}, Name: ${row.name}`);
+                          }}
+                        />
+                      </div>
+                    )
+                  },
+                ]}
+                maxHeight={280}
+                showRowNum={true}
+                hover
+                onRowClick={(row, index) => addLog('onRowClick', `row ${index}: ${row.name}`)}
               />
             </div>,
           ]}
@@ -726,7 +934,8 @@ export function AvakioDataTableExample() {
                 spans={filmSpans}
                 columnBorders
                 rowBorders
-                height={400}
+                maxHeight={400}
+                showRowNum={true}
               />
             </div>,
           ]}
@@ -764,9 +973,10 @@ export function AvakioDataTableExample() {
                   { id: 'salary', header: 'Salary', width: 120, align: 'right', format: (val) => `$${val.toLocaleString()}` },
                   { id: 'status', header: 'Status', width: 100, frozen: 'right' },
                 ]}
-                height={300}
+                maxHeight={300}
                 columnBorders
                 select="row"
+                showRowNum={true}
               />
             </div>,
           ]}
@@ -816,7 +1026,8 @@ export function AvakioDataTableExample() {
               editable
               onCellChange={handleCellChange}
               paging={false}
-              height={280}
+              maxHeight={280}
+              showRowNum={true}
             />,
             <AvakioTemplate
               key="editable-data"
@@ -897,7 +1108,7 @@ export function AvakioDataTableExample() {
                       data={sampleData}
                       columns={playgroundColumns}
                       // Display props
-                      height={getPropValue('height', 300)}
+                      maxHeight={formatSizingValue(getPropValue('maxHeight', 300))}
                       emptyText={getPropValue('emptyText', 'No data available')}
                       // Features props
                       paging={getPropValue('paging', true)}
@@ -910,6 +1121,7 @@ export function AvakioDataTableExample() {
                       editable={getPropValue('editable', false)}
                       allowDragDrop={getPropValue('allowDragDrop', false)}
                       bulkSelection={getPropValue('bulkSelection', false)}
+                      showRowNum={getPropValue('showRowNum', false)}
                       // Selection props
                       select={getPropValue('select', 'false') === 'false' ? false : getPropValue('select', 'row') as 'row' | 'cell' | 'column'}
                       multiselect={getPropValue('multiselect', false)}
@@ -1285,7 +1497,8 @@ export function AvakioDataTableExample() {
               sortable={true}
               rowBorders={true}
               select={false}
-              height={600}
+              maxHeight={600}
+              showRowNum={true}
             />,
           ]}
         />
@@ -1312,7 +1525,8 @@ export function AvakioDataTableExample() {
               sortable={true}
               rowBorders={true}
               select={false}
-              height={500}
+              maxHeight={500}
+              showRowNum={true}
             />,
           ]}
         />
@@ -1345,7 +1559,8 @@ export function AvakioDataTableExample() {
               sortable={true}
               rowBorders={true}
               select={false}
-              height={400}
+              maxHeight={400}
+              showRowNum={true}
             />,
           ]}
         />
@@ -1372,7 +1587,8 @@ export function AvakioDataTableExample() {
               sortable={true}
               rowBorders={true}
               select={false}
-              height={320}
+              maxHeight={320}
+              showRowNum={true}
             />,
           ]}
         />
@@ -1403,7 +1619,8 @@ export function AvakioDataTableExample() {
               columns={spanColumns}
               rowBorders={true}
               select={false}
-              height={260}
+              maxHeight={260}
+              showRowNum={true}
             />,
           ]}
         />

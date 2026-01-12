@@ -15,7 +15,7 @@
 .avakio-label-demo-container .avakio-example-sticky-header {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 200;
   background: var(--avakio-bg-primary, #ffffff);
   border-bottom: 1px solid var(--avakio-border, #e5e7eb);
 }

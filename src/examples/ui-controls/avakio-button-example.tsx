@@ -9,6 +9,7 @@ import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
+import { formatSizingValue } from '../../lib/utils';
 import { 
   Check,
   Loader2,
@@ -187,94 +188,95 @@ export function AvakioButtonExample() {
     type: string;
     defaultValue: string;
     description: string;
+    from: string;
   }
 
   const propsData: PropDoc[] = [
     // Component-Specific Props
-    { id: 1, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Button text (children override this)' },
-    { id: 2, name: 'icon', type: 'ReactNode', defaultValue: 'undefined', description: 'Icon displayed on the left side' },
-    { id: 3, name: 'iconRight', type: 'ReactNode', defaultValue: 'undefined', description: 'Icon displayed on the right side' },
-    { id: 4, name: 'image', type: 'string', defaultValue: 'undefined', description: 'Image URL to display (replaces icon)' },
-    { id: 5, name: 'variant', type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'", defaultValue: "'primary'", description: 'Visual style variant' },
-    { id: 6, name: 'size', type: "'sm' | 'md' | 'lg'", defaultValue: "'md'", description: 'Button size' },
-    { id: 7, name: 'buttonType', type: "'default' | 'icon' | 'iconButton' | 'iconTop'", defaultValue: "'default'", description: 'Layout type - icon for icon-only, iconTop for vertical layout' },
-    { id: 8, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'center'", description: 'Horizontal alignment of the button within its container (sets text-align on wrapper)' },
-    { id: 9, name: 'buttonWidth', type: 'number | string', defaultValue: 'undefined', description: 'Width of the button element (e.g., 200 or "100%")' },
-    { id: 10, name: 'buttonHeight', type: 'number | string', defaultValue: 'undefined', description: 'Height of the button element (e.g., 40 or "auto")' },
-    { id: 11, name: 'textAlign', type: "'left' | 'center' | 'right'", defaultValue: 'undefined', description: 'Text alignment inside the button' },
-    { id: 12, name: 'block', type: 'boolean', defaultValue: 'false', description: 'Makes button full width' },
-    { id: 13, name: 'autowidth', type: 'boolean', defaultValue: 'false', description: 'Button width fits content instead of fixed width' },
-    { id: 14, name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Shows loading spinner and disables button' },
-    { id: 15, name: 'badge', type: 'string | number', defaultValue: 'undefined', description: 'Small badge displayed beside the label' },
-    { id: 16, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text shown on hover' },
-    { id: 17, name: 'hotkey', type: 'string', defaultValue: 'undefined', description: 'Keyboard shortcut (e.g., "ctrl+s", "delete")' },
-    { id: 18, name: 'popup', type: 'string | ReactNode', defaultValue: 'undefined', description: 'Popup menu ID or component reference' },
-    { id: 19, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: 'undefined', description: 'Theme variant for styling' },
+    { id: 1, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Button text (children override this)', from: 'Button' },
+    { id: 2, name: 'icon', type: 'ReactNode', defaultValue: 'undefined', description: 'Icon displayed on the left side', from: 'Button' },
+    { id: 3, name: 'iconRight', type: 'ReactNode', defaultValue: 'undefined', description: 'Icon displayed on the right side', from: 'Button' },
+    { id: 4, name: 'image', type: 'string', defaultValue: 'undefined', description: 'Image URL to display (replaces icon)', from: 'Button' },
+    { id: 5, name: 'variant', type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'", defaultValue: "'primary'", description: 'Visual style variant', from: 'Button' },
+    { id: 6, name: 'size', type: "'sm' | 'md' | 'lg'", defaultValue: "'md'", description: 'Button size', from: 'Button' },
+    { id: 7, name: 'buttonType', type: "'default' | 'icon' | 'iconButton' | 'iconTop'", defaultValue: "'default'", description: 'Layout type - icon for icon-only, iconTop for vertical layout', from: 'Button' },
+    { id: 8, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'center'", description: 'Horizontal alignment of the button within its container (sets text-align on wrapper)', from: 'Button' },
+    { id: 9, name: 'buttonWidth', type: 'number | string', defaultValue: 'undefined', description: 'Width of the button element (e.g., 200 or "100%")', from: 'Button' },
+    { id: 10, name: 'buttonHeight', type: 'number | string', defaultValue: 'undefined', description: 'Height of the button element (e.g., 40 or "auto")', from: 'Button' },
+    { id: 11, name: 'textAlign', type: "'left' | 'center' | 'right'", defaultValue: 'undefined', description: 'Text alignment inside the button', from: 'Button' },
+    { id: 12, name: 'block', type: 'boolean', defaultValue: 'false', description: 'Makes button full width', from: 'Button' },
+    { id: 13, name: 'autowidth', type: 'boolean', defaultValue: 'false', description: 'Button width fits content instead of fixed width', from: 'Button' },
+    { id: 14, name: 'loading', type: 'boolean', defaultValue: 'false', description: 'Shows loading spinner and disables button', from: 'Button' },
+    { id: 15, name: 'badge', type: 'string | number', defaultValue: 'undefined', description: 'Small badge displayed beside the label', from: 'Button' },
+    { id: 16, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text shown on hover', from: 'Button' },
+    { id: 17, name: 'hotkey', type: 'string', defaultValue: 'undefined', description: 'Keyboard shortcut (e.g., "ctrl+s", "delete")', from: 'Button' },
+    { id: 18, name: 'popup', type: 'string | ReactNode', defaultValue: 'undefined', description: 'Popup menu ID or component reference', from: 'Button' },
+    { id: 19, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: 'undefined', description: 'Theme variant for styling', from: 'Button' },
     
     // Form Integration
-    { id: 20, name: 'name', type: 'string', defaultValue: 'undefined', description: 'Form field name attribute' },
-    { id: 21, name: 'value', type: 'string', defaultValue: 'undefined', description: 'Form field value attribute' },
-    { id: 22, name: 'type', type: "'button' | 'submit' | 'reset'", defaultValue: "'button'", description: 'HTML button type for form behavior' },
+    { id: 20, name: 'name', type: 'string', defaultValue: 'undefined', description: 'Form field name attribute', from: 'Button' },
+    { id: 21, name: 'value', type: 'string', defaultValue: 'undefined', description: 'Form field value attribute', from: 'Button' },
+    { id: 22, name: 'type', type: "'button' | 'submit' | 'reset'", defaultValue: "'button'", description: 'HTML button type for form behavior', from: 'Button' },
     
     // AvakioBaseProps - Identity
-    { id: 23, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component HTML ID' },
-    { id: 24, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes' },
-    { id: 25, name: 'className', type: 'string', defaultValue: "''", description: 'Additional CSS class names' },
+    { id: 23, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component HTML ID', from: 'Base' },
+    { id: 24, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 25, name: 'className', type: 'string', defaultValue: "''", description: 'Additional CSS class names', from: 'Base' },
     
     // AvakioBaseProps - State
-    { id: 26, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the button is disabled' },
-    { id: 27, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden' },
+    { id: 26, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the button is disabled', from: 'Base' },
+    { id: 27, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
     
     // AvakioBaseProps - Layout
-    { id: 28, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Removes borders and shadows' },
-    { id: 29, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the container wrapper' },
-    { id: 30, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the container wrapper' },
-    { id: 31, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width constraint' },
-    { id: 32, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height constraint' },
-    { id: 33, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width constraint' },
-    { id: 34, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height constraint' },
-    { id: 35, name: 'margin', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the component' },
-    { id: 36, name: 'padding', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding inside the component' },
-    { id: 37, name: 'style', type: 'React.CSSProperties', defaultValue: '{}', description: 'Custom inline styles' },
+    { id: 28, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Removes borders and shadows', from: 'Base' },
+    { id: 29, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the container wrapper', from: 'Base' },
+    { id: 30, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the container wrapper', from: 'Base' },
+    { id: 31, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width constraint', from: 'Base' },
+    { id: 32, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height constraint', from: 'Base' },
+    { id: 33, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width constraint', from: 'Base' },
+    { id: 34, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height constraint', from: 'Base' },
+    { id: 35, name: 'margin', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the component', from: 'Base' },
+    { id: 36, name: 'padding', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding inside the component', from: 'Base' },
+    { id: 37, name: 'style', type: 'React.CSSProperties', defaultValue: '{}', description: 'Custom inline styles', from: 'Base' },
   ];
 
   const eventsData: PropDoc[] = [
     // Button-specific events
-    { id: 1, name: 'onClick', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires when the button is clicked' },
-    { id: 2, name: 'onMouseEnter', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires when mouse enters the button' },
-    { id: 3, name: 'onMouseLeave', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires when mouse leaves the button' },
-    { id: 4, name: 'onKeyDown', type: '(event: React.KeyboardEvent) => void', defaultValue: 'undefined', description: 'Fires when a key is pressed down' },
-    { id: 5, name: 'onKeyUp', type: '(event: React.KeyboardEvent) => void', defaultValue: 'undefined', description: 'Fires when a key is released' },
+    { id: 1, name: 'onClick', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires when the button is clicked', from: 'Button' },
+    { id: 2, name: 'onMouseEnter', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires when mouse enters the button', from: 'Button' },
+    { id: 3, name: 'onMouseLeave', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires when mouse leaves the button', from: 'Button' },
+    { id: 4, name: 'onKeyDown', type: '(event: React.KeyboardEvent) => void', defaultValue: 'undefined', description: 'Fires when a key is pressed down', from: 'Button' },
+    { id: 5, name: 'onKeyUp', type: '(event: React.KeyboardEvent) => void', defaultValue: 'undefined', description: 'Fires when a key is released', from: 'Button' },
     
     // AvakioBaseProps events
-    { id: 6, name: 'onFocus', type: '(event: React.FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when button receives focus' },
-    { id: 7, name: 'onBlur', type: '(event: React.FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when button loses focus' },
-    { id: 8, name: 'onItemClick', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires after the control has been clicked (AvakioBase)' },
-    { id: 9, name: 'onKeyPress', type: '(event: React.KeyboardEvent) => void', defaultValue: 'undefined', description: 'Occurs when keyboard key is pressed (AvakioBase)' },
-    { id: 10, name: 'onAfterRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs after the component has been rendered' },
-    { id: 11, name: 'onBeforeRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs before the component has been rendered' },
-    { id: 12, name: 'onViewShow', type: '() => void', defaultValue: 'undefined', description: 'Fires when any hidden view is shown' },
+    { id: 6, name: 'onFocus', type: '(event: React.FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when button receives focus', from: 'Base' },
+    { id: 7, name: 'onBlur', type: '(event: React.FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when button loses focus', from: 'Base' },
+    { id: 8, name: 'onItemClick', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires after the control has been clicked (AvakioBase)', from: 'Base' },
+    { id: 9, name: 'onKeyPress', type: '(event: React.KeyboardEvent) => void', defaultValue: 'undefined', description: 'Occurs when keyboard key is pressed (AvakioBase)', from: 'Base' },
+    { id: 10, name: 'onAfterRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs after the component has been rendered', from: 'Base' },
+    { id: 11, name: 'onBeforeRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs before the component has been rendered', from: 'Base' },
+    { id: 12, name: 'onViewShow', type: '() => void', defaultValue: 'undefined', description: 'Fires when any hidden view is shown', from: 'Base' },
   ];
 
   const refMethodsData: PropDoc[] = [
     // Core methods
-    { id: 1, name: 'focus()', type: '() => void', defaultValue: '-', description: 'Sets focus to the button element' },
-    { id: 2, name: 'blur()', type: '() => void', defaultValue: '-', description: 'Removes focus from the button element' },
-    { id: 3, name: 'getElement()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the root DOM element of the component' },
+    { id: 1, name: 'focus()', type: '() => void', defaultValue: '-', description: 'Sets focus to the button element', from: 'Button' },
+    { id: 2, name: 'blur()', type: '() => void', defaultValue: '-', description: 'Removes focus from the button element', from: 'Button' },
+    { id: 3, name: 'getElement()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the root DOM element of the component', from: 'Base' },
     
     // AvakioBaseRef methods
-    { id: 4, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enables the button (makes it clickable)' },
-    { id: 5, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disables the button (makes it unclickable)' },
-    { id: 6, name: 'show()', type: '() => void', defaultValue: '-', description: 'Makes the component visible' },
-    { id: 7, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hides the component' },
-    { id: 8, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the button is enabled' },
-    { id: 9, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the button is visible' },
-    { id: 10, name: 'getText()', type: '() => string', defaultValue: '-', description: 'Gets the text content of the button' },
-    { id: 11, name: 'getValue()', type: '() => any', defaultValue: '-', description: 'Returns the current value (not applicable for button)' },
-    { id: 12, name: 'setValue(value)', type: '(value: any) => void', defaultValue: '-', description: 'Sets a new value (not applicable for button)' },
-    { id: 13, name: 'validate()', type: '() => boolean | string', defaultValue: '-', description: 'Validates the component (always returns true for button)' },
-    { id: 14, name: 'getParentView()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the parent view/element of the component' },
-    { id: 15, name: 'define(config, value?)', type: '(config: Partial<Props> | string, value?: any) => void', defaultValue: '-', description: 'Redefines component configuration properties' },
+    { id: 4, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enables the button (makes it clickable)', from: 'Base' },
+    { id: 5, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disables the button (makes it unclickable)', from: 'Base' },
+    { id: 6, name: 'show()', type: '() => void', defaultValue: '-', description: 'Makes the component visible', from: 'Base' },
+    { id: 7, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hides the component', from: 'Base' },
+    { id: 8, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the button is enabled', from: 'Base' },
+    { id: 9, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the button is visible', from: 'Base' },
+    { id: 10, name: 'getText()', type: '() => string', defaultValue: '-', description: 'Gets the text content of the button', from: 'Base' },
+    { id: 11, name: 'getValue()', type: '() => any', defaultValue: '-', description: 'Returns the current value (not applicable for button)', from: 'Base' },
+    { id: 12, name: 'setValue(value)', type: '(value: any) => void', defaultValue: '-', description: 'Sets a new value (not applicable for button)', from: 'Base' },
+    { id: 13, name: 'validate()', type: '() => boolean | string', defaultValue: '-', description: 'Validates the component (always returns true for button)', from: 'Base' },
+    { id: 14, name: 'getParentView()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the parent view/element of the component', from: 'Base' },
+    { id: 15, name: 'define(config, value?)', type: '(config: Partial<Props> | string, value?: any) => void', defaultValue: '-', description: 'Redefines component configuration properties', from: 'Base' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [
@@ -282,6 +284,7 @@ export function AvakioButtonExample() {
     { id: 'type', header: 'Type', width: 300 },
     { id: 'defaultValue', header: 'Default', width: 120 },
     { id: 'description', header: 'Description', width: 350 },
+    { id: 'from', header: 'From', width: 100, filterType: 'combo' },
   ];
 
   return (
@@ -710,12 +713,12 @@ export function AvakioButtonExample() {
                         badge={getPropValue('badge', '') || undefined}
                         tooltip={getPropValue('tooltip', '') || undefined}
                         hotkey={getPropValue('hotkey', '') || undefined}
-                        width={getPropValue('width', '') || undefined}
-                        height={getPropValue('height', '') || undefined}
-                        minWidth={getPropValue('minWidth', '') || undefined}
-                        minHeight={getPropValue('minHeight', '') || undefined}
-                        maxWidth={getPropValue('maxWidth', '') || undefined}
-                        maxHeight={getPropValue('maxHeight', '') || undefined}
+                        width={formatSizingValue(getPropValue('width', ''))}
+                        height={formatSizingValue(getPropValue('height', ''))}
+                        minWidth={formatSizingValue(getPropValue('minWidth', ''))}
+                        minHeight={formatSizingValue(getPropValue('minHeight', ''))}
+                        maxWidth={formatSizingValue(getPropValue('maxWidth', ''))}
+                        maxHeight={formatSizingValue(getPropValue('maxHeight', ''))}
                         margin={getPropValue('margin', '') || undefined}
                         padding={getPropValue('padding', '') || undefined}
                         onClick={() => {
@@ -1009,6 +1012,7 @@ export function AvakioButtonExample() {
               columns={propsColumns}
               select={false}
               height={600}
+              showRowNum={true}
             />,
           ]}
         />
@@ -1033,6 +1037,7 @@ export function AvakioButtonExample() {
               columns={propsColumns}
               select={false}
               height={250}
+              showRowNum={true}
             />,
           ]}
         />
@@ -1057,6 +1062,7 @@ export function AvakioButtonExample() {
               columns={propsColumns}
               select={false}
               height={150}
+              showRowNum={true}
             />,
           ]}
         />

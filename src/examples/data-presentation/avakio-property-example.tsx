@@ -8,6 +8,7 @@ import type { AvakioColumn } from '../../components/avakio/data-presentation/ava
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
 import { addEventLog } from '../../services/event-log-service';
+import { formatSizingValue } from '../../lib/utils';
 import { 
   Settings,
   Settings2,
@@ -65,8 +66,8 @@ export function AvakioPropertyExample() {
     { id: 'accent', label: 'Accent Color', type: 'colorpicker', value: '#1ca1c1', group: 'Appearance' },
   ]);
 
-  // Dense mode demo items
-  const [denseItems, setDenseItems] = useState<AvakioPropertyItem[]>([
+  // Compact size demo items
+  const [compactItems, setCompactItems] = useState<AvakioPropertyItem[]>([
     { id: 'width', label: 'Width', type: 'number', value: 800, group: 'Size' },
     { id: 'height', label: 'Height', type: 'number', value: 600, group: 'Size' },
     { id: 'padding', label: 'Padding', type: 'number', value: 16, group: 'Size' },
@@ -121,7 +122,7 @@ export function AvakioPropertyExample() {
   // Playground configuration items for AvakioProperty
   const [playgroundProps, setPlaygroundProps] = useState<AvakioPropertyItem[]>([
     // Component Props Group
-    { id: 'dense', label: 'Dense Mode', type: 'checkbox', value: false, group: 'Component Props', checkboxLabel: 'Enable compact layout' },
+    { id: 'size', label: 'Size', type: 'select', value: 'default', group: 'Component Props', selectOptions: [{ id: 'default', value: 'Default' }, { id: 'compact', value: 'Compact' }] },
     { id: 'showBorders', label: 'Show Borders', type: 'checkbox', value: true, group: 'Component Props', checkboxLabel: 'Show row borders' },
     { id: 'showLabel', label: 'Show Label', type: 'checkbox', value: true, group: 'Component Props', checkboxLabel: 'Show label column' },
     { id: 'labelWidth', label: 'Label Width', type: 'text', value: '150', group: 'Component Props', placeholder: 'e.g. 150 or 30%' },
@@ -183,69 +184,101 @@ export function AvakioPropertyExample() {
     type: string;
     defaultValue: string;
     description: string;
+    from: string;
   }
 
   const propsData: PropDoc[] = [
-    { id: 1, name: 'items', type: 'AvakioPropertyItem[]', defaultValue: '[]', description: 'Array of property items to display' },
-    { id: 2, name: 'onChange', type: '(items, changed) => void', defaultValue: 'undefined', description: 'Callback when any property value changes' },
-    { id: 3, name: 'dense', type: 'boolean', defaultValue: 'false', description: 'Enable dense/compact mode with reduced spacing' },
-    { id: 4, name: 'showBorders', type: 'boolean', defaultValue: 'true', description: 'Show borders between property rows' },
-    { id: 5, name: 'overflowY', type: "'auto' | 'scroll' | 'hidden' | 'visible'", defaultValue: "'auto'", description: 'Vertical overflow behavior' },
-    { id: 6, name: 'autoHeight', type: 'boolean', defaultValue: 'false', description: 'Auto-adjust height to fill parent container' },
-    { id: 19, name: 'labelWidth', type: 'number | string', defaultValue: 'undefined', description: 'Width of the label column (first column)' },
-    { id: 20, name: 'showLabel', type: 'boolean', defaultValue: 'true', description: 'Show or hide the label column' },
-    { id: 7, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID' },
-    { id: 8, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes' },
-    { id: 9, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name' },
-    { id: 10, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the component is disabled' },
-    { id: 11, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden' },
-    { id: 12, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Remove component borders' },
-    { id: 13, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Component width' },
-    { id: 14, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Component height' },
-    { id: 15, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height' },
-    { id: 16, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height' },
-    { id: 17, name: 'margin', type: 'number | string | [t,r,b,l]', defaultValue: 'undefined', description: 'Component margin' },
-    { id: 18, name: 'padding', type: 'number | string | [t,r,b,l]', defaultValue: 'undefined', description: 'Component padding' },
+    // Component-Specific Props
+    { id: 1, name: 'items', type: 'AvakioPropertyItem[]', defaultValue: '[]', description: 'Array of property items to display and edit', from: 'Property' },
+    { id: 2, name: 'size', type: "'default' | 'compact'", defaultValue: "'default'", description: 'Size variant - compact for reduced spacing, ideal for sidebars or panels', from: 'Property' },
+    { id: 3, name: 'showBorders', type: 'boolean', defaultValue: 'true', description: 'Show borders between property rows', from: 'Property' },
+    { id: 4, name: 'overflowY', type: "'auto' | 'scroll' | 'hidden' | 'visible'", defaultValue: "'auto'", description: 'Vertical overflow behavior for scrolling', from: 'Property' },
+    { id: 5, name: 'autoHeight', type: 'boolean', defaultValue: 'false', description: 'Auto-adjust height to fill parent container', from: 'Property' },
+    { id: 6, name: 'labelWidth', type: 'number | string', defaultValue: 'undefined', description: 'Width of the label column (first column)', from: 'Property' },
+    { id: 7, name: 'showLabel', type: 'boolean', defaultValue: 'true', description: 'Show or hide the label column', from: 'Property' },
+    
+    // AvakioBaseProps - Identity
+    { id: 8, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
+    { id: 9, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 10, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
+    { id: 11, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles', from: 'Base' },
+    
+    // AvakioBaseProps - State
+    { id: 12, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the component is disabled', from: 'Base' },
+    { id: 13, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
+    { id: 14, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Used to hide the component borders', from: 'Base' },
+    
+    // AvakioBaseProps - Sizing
+    { id: 15, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Sets the width of the component', from: 'Base' },
+    { id: 16, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Sets the height of the component', from: 'Base' },
+    { id: 17, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Sets the minimal height for the view', from: 'Base' },
+    { id: 18, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Sets the minimal width for the view', from: 'Base' },
+    { id: 19, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Sets the maximum height for the view', from: 'Base' },
+    { id: 20, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Sets the maximum width for the view', from: 'Base' },
+    { id: 21, name: 'margin', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Sets the margin around the component', from: 'Base' },
+    { id: 22, name: 'padding', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Sets the padding inside the component', from: 'Base' },
   ];
 
   const itemPropsData: PropDoc[] = [
-    { id: 1, name: 'id', type: 'string', defaultValue: 'required', description: 'Unique identifier for the property item' },
-    { id: 2, name: 'label', type: 'string', defaultValue: 'required', description: 'Display label for the property' },
-    { id: 3, name: 'type', type: 'AvakioPropertyEditor', defaultValue: "'text'", description: 'Editor type: text, number, select, checkbox, combo, colorpicker, counter, slider, date, datetime, textarea, etc.' },
-    { id: 4, name: 'value', type: 'string | number | boolean | string[]', defaultValue: 'undefined', description: 'Current value of the property' },
-    { id: 5, name: 'placeholder', type: 'string', defaultValue: 'undefined', description: 'Placeholder text for text inputs' },
-    { id: 6, name: 'description', type: 'string', defaultValue: 'undefined', description: 'Description text shown below the input' },
-    { id: 7, name: 'group', type: 'string', defaultValue: 'undefined', description: 'Group name for organizing properties' },
-    { id: 8, name: 'labelAlign', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Alignment of the label text (left, center, or right)' },
-    { id: 9, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable this specific property' },
-    { id: 10, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Mark property as required' },
-    { id: 11, name: 'selectOptions', type: 'AvakioRichSelectOption[]', defaultValue: 'undefined', description: 'Options for select type editor' },
-    { id: 12, name: 'comboOptions', type: 'AvakioComboOption[]', defaultValue: 'undefined', description: 'Options for combo type editor' },
-    { id: 13, name: 'checkboxLabel', type: 'string', defaultValue: 'undefined', description: 'Label shown next to checkbox' },
-    { id: 14, name: 'counterMin/Max/Step', type: 'number', defaultValue: 'undefined', description: 'Counter editor configuration' },
-    { id: 15, name: 'sliderMin/Max/Step', type: 'number', defaultValue: 'undefined', description: 'Slider editor configuration' },
-    { id: 16, name: 'colorPresets', type: 'AvakioColorPickerPreset[]', defaultValue: 'undefined', description: 'Color presets for colorpicker' },
+    { id: 1, name: 'id', type: 'string', defaultValue: 'required', description: 'Unique identifier for the property item', from: 'PropertyItem' },
+    { id: 2, name: 'label', type: 'string', defaultValue: 'required', description: 'Display label for the property', from: 'PropertyItem' },
+    { id: 3, name: 'type', type: 'AvakioPropertyEditor', defaultValue: "'text'", description: 'Editor type: text, number, select, checkbox, combo, colorpicker, counter, slider, date, datetime, textarea, etc.', from: 'PropertyItem' },
+    { id: 4, name: 'value', type: 'string | number | boolean | string[]', defaultValue: 'undefined', description: 'Current value of the property', from: 'PropertyItem' },
+    { id: 5, name: 'placeholder', type: 'string', defaultValue: 'undefined', description: 'Placeholder text for text inputs', from: 'PropertyItem' },
+    { id: 6, name: 'description', type: 'string', defaultValue: 'undefined', description: 'Description text shown below the input', from: 'PropertyItem' },
+    { id: 7, name: 'group', type: 'string', defaultValue: 'undefined', description: 'Group name for organizing properties into sections', from: 'PropertyItem' },
+    { id: 8, name: 'labelAlign', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Alignment of the label text within the label column', from: 'PropertyItem' },
+    { id: 9, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disable this specific property item', from: 'PropertyItem' },
+    { id: 10, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Mark property as required (shows asterisk)', from: 'PropertyItem' },
+    { id: 11, name: 'selectOptions', type: 'AvakioRichSelectOption[]', defaultValue: 'undefined', description: 'Options array for select type editor', from: 'PropertyItem' },
+    { id: 12, name: 'comboOptions', type: 'AvakioComboOption[]', defaultValue: 'undefined', description: 'Options array for combo type editor', from: 'PropertyItem' },
+    { id: 13, name: 'checkboxLabel', type: 'string', defaultValue: 'undefined', description: 'Label text shown next to checkbox', from: 'PropertyItem' },
+    { id: 14, name: 'counterMin', type: 'number', defaultValue: 'undefined', description: 'Minimum value for counter editor', from: 'PropertyItem' },
+    { id: 15, name: 'counterMax', type: 'number', defaultValue: 'undefined', description: 'Maximum value for counter editor', from: 'PropertyItem' },
+    { id: 16, name: 'counterStep', type: 'number', defaultValue: '1', description: 'Step increment for counter editor', from: 'PropertyItem' },
+    { id: 17, name: 'sliderMin', type: 'number', defaultValue: '0', description: 'Minimum value for slider editor', from: 'PropertyItem' },
+    { id: 18, name: 'sliderMax', type: 'number', defaultValue: '100', description: 'Maximum value for slider editor', from: 'PropertyItem' },
+    { id: 19, name: 'sliderStep', type: 'number', defaultValue: '1', description: 'Step increment for slider editor', from: 'PropertyItem' },
+    { id: 20, name: 'colorPresets', type: 'AvakioColorPickerPreset[]', defaultValue: 'undefined', description: 'Color presets for colorpicker editor', from: 'PropertyItem' },
+  ];
+
+  const eventsData: PropDoc[] = [
+    { id: 1, name: 'onChange', type: '(items: AvakioPropertyItem[], changedItem: AvakioPropertyItem) => void', defaultValue: 'undefined', description: 'Fires when any property value changes', from: 'Property' },
+    { id: 2, name: 'onBlur', type: '(event: React.FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when focus is moved out of the view', from: 'Base' },
+    { id: 3, name: 'onFocus', type: '(event: React.FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when a view gets focus', from: 'Base' },
+    { id: 4, name: 'onItemClick', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires after the control has been clicked', from: 'Base' },
+    { id: 5, name: 'onKeyPress', type: '(event: React.KeyboardEvent) => void', defaultValue: 'undefined', description: 'Occurs when keyboard key is pressed for the control in focus', from: 'Base' },
+    { id: 6, name: 'onAfterRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately after the component has been rendered', from: 'Base' },
+    { id: 7, name: 'onBeforeRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately before the component has been rendered', from: 'Base' },
+    { id: 8, name: 'onViewShow', type: '() => void', defaultValue: 'undefined', description: 'Fires when any hidden view is shown', from: 'Base' },
+    { id: 9, name: 'onViewResize', type: '(width: number, height: number) => void', defaultValue: 'undefined', description: 'Fires when the size of a view has been changed by resizer', from: 'Base' },
+    { id: 10, name: 'onAfterScroll', type: '(scrollTop: number, scrollLeft: number) => void', defaultValue: 'undefined', description: 'Occurs when the view has been scrolled', from: 'Base' },
   ];
 
   const refMethodsData: PropDoc[] = [
-    { id: 1, name: 'getValue()', type: '() => AvakioPropertyItem[]', defaultValue: '-', description: 'Returns the current items array' },
-    { id: 2, name: 'setValue(items)', type: '(items: AvakioPropertyItem[]) => void', defaultValue: '-', description: 'Sets new items array' },
-    { id: 3, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disables the component' },
-    { id: 4, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enables the component' },
-    { id: 5, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hides the component' },
-    { id: 6, name: 'show()', type: '() => void', defaultValue: '-', description: 'Shows the component' },
-    { id: 7, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Checks if component is enabled' },
-    { id: 8, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Checks if component is visible' },
-    { id: 9, name: 'getElement()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the root DOM element' },
-    { id: 10, name: 'focus()', type: '() => void', defaultValue: '-', description: 'Sets focus to the component' },
-    { id: 11, name: 'blur()', type: '() => void', defaultValue: '-', description: 'Removes focus from the component' },
+    { id: 1, name: 'blur()', type: '() => void', defaultValue: '-', description: 'Removes focus from the control', from: 'Base' },
+    { id: 2, name: 'focus()', type: '() => void', defaultValue: '-', description: 'Sets focus to the control', from: 'Base' },
+    { id: 3, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disables the component (makes it dimmed and unclickable)', from: 'Base' },
+    { id: 4, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enables the component that was disabled', from: 'Base' },
+    { id: 5, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hides the component', from: 'Base' },
+    { id: 6, name: 'show()', type: '() => void', defaultValue: '-', description: 'Makes the component visible', from: 'Base' },
+    { id: 7, name: 'getValue()', type: '() => AvakioPropertyItem[] | undefined', defaultValue: '-', description: 'Returns the current items array', from: 'Property' },
+    { id: 8, name: 'setValue(items)', type: '(items: AvakioPropertyItem[]) => void', defaultValue: '-', description: 'Sets a new items array for the component', from: 'Property' },
+    { id: 9, name: 'getText()', type: '() => string', defaultValue: '-', description: 'Gets text representation of the current value', from: 'Property' },
+    { id: 10, name: 'validate()', type: '() => boolean | string', defaultValue: '-', description: 'Validates the value of the input. Returns true if valid, false or error message if invalid', from: 'Property' },
+    { id: 11, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the component is enabled', from: 'Base' },
+    { id: 12, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the component is visible', from: 'Base' },
+    { id: 13, name: 'getElement()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the root DOM element of the component', from: 'Base' },
+    { id: 14, name: 'getParentView()', type: '() => string | null', defaultValue: '-', description: 'Returns the ID or classname of the parent Avakio container', from: 'Base' },
+    { id: 15, name: 'define(config, value?)', type: '(config: Partial<Props> | string, value?: unknown) => void', defaultValue: '-', description: 'Redefines a single configuration property or multiple properties', from: 'Base' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [
     { id: 'name', header: 'Property', width: 180 },
     { id: 'type', header: 'Type', width: 280 },
     { id: 'defaultValue', header: 'Default', width: 100 },
-    { id: 'description', header: 'Description', width: 350 },
+    { id: 'from', header: 'From', width: 100, filterType: 'combo' },
+    { id: 'description', header: 'Description', width: 320 },
   ];
 
   return (
@@ -309,18 +342,18 @@ export function AvakioPropertyExample() {
           ]}
         />
 
-        {/* Dense Mode */}
+        {/* Compact Size */}
         <AvakioTemplate
           type="clean"
           borderType="clean"
           padding={[16, 0, 0, 16]}
-          content={<strong>Dense Mode</strong>}
+          content={<strong>Compact Size</strong>}
         />
         <AvakioTemplate
           type="clean"
           borderType="clean"          
           padding={[0, 0, 0, 16]}
-          content="Use dense={true} for a more compact layout with reduced spacing, ideal for sidebars or panels."
+          content="Use size='compact' for a more compact layout with reduced spacing, ideal for sidebars or panels."
         />
         <AvakioLayout
           type="clean"
@@ -330,9 +363,9 @@ export function AvakioPropertyExample() {
           rows={[
             <AvakioProperty
               margin={16}
-              items={denseItems}
-              onChange={(items) => setDenseItems(items)}
-              dense
+              items={compactItems}
+              onChange={(items) => setCompactItems(items)}
+              size="compact"
               showBorders
             />,
           ]}
@@ -534,18 +567,18 @@ export function AvakioPropertyExample() {
                     <AvakioProperty
                       items={playgroundItems}
                       onChange={handlePlaygroundItemsChange}
-                      dense={getPropValue('dense', false)}
+                      size={getPropValue('size', 'default') as 'default' | 'compact'}
                       showBorders={getPropValue('showBorders', true)}
                       showLabel={getPropValue('showLabel', true)}
-                      labelWidth={getPropValue('labelWidth', '') || undefined}
+                      labelWidth={formatSizingValue(getPropValue('labelWidth', ''))}
                       overflowY={getPropValue('overflowY', 'auto') as 'auto' | 'scroll' | 'hidden' | 'visible'}
                       disabled={getPropValue('disabled', false)}
                       hidden={getPropValue('hidden', false)}
                       borderless={getPropValue('borderless', false)}
-                      width={getPropValue('width', '') || undefined}
-                      height={getPropValue('height', '') ? Number(getPropValue('height', '')) : undefined}
-                      minHeight={getPropValue('minHeight', '') ? Number(getPropValue('minHeight', '')) : undefined}
-                      maxHeight={getPropValue('maxHeight', '') ? Number(getPropValue('maxHeight', '')) : undefined}
+                      width={formatSizingValue(getPropValue('width', ''))}
+                      height={formatSizingValue(getPropValue('height', ''))}
+                      minHeight={formatSizingValue(getPropValue('minHeight', ''))}
+                      maxHeight={formatSizingValue(getPropValue('maxHeight', ''))}
                     />,
                   ]}
                 />,
@@ -578,7 +611,7 @@ export function AvakioPropertyExample() {
                               align="right"
                               onClick={() => {
                                 setPlaygroundProps([
-                                  { id: 'dense', label: 'Dense Mode', type: 'checkbox', value: false, group: 'Component Props', checkboxLabel: 'Enable compact layout' },
+                                  { id: 'size', label: 'Size', type: 'select', value: 'default', group: 'Component Props', selectOptions: [{ id: 'default', value: 'Default' }, { id: 'compact', value: 'Compact' }] },
                                   { id: 'showBorders', label: 'Show Borders', type: 'checkbox', value: true, group: 'Component Props', checkboxLabel: 'Show row borders' },
                                   { id: 'showLabel', label: 'Show Label', type: 'checkbox', value: true, group: 'Component Props', checkboxLabel: 'Show label column' },
                                   { id: 'labelWidth', label: 'Label Width', type: 'text', value: '', group: 'Component Props', placeholder: 'e.g. 150 or 30%' },
@@ -622,7 +655,7 @@ export function AvakioPropertyExample() {
                       className='avakio-fill-container'
                       items={playgroundProps}
                       onChange={handlePlaygroundPropsChange}
-                      dense
+                      size="compact"
                       showBorders
                       autoHeight
                       overflowY='auto'
@@ -664,8 +697,11 @@ export function AvakioPropertyExample() {
               key="props-table"
               id="property-props-table"
               data={propsData}
+              filterable
+              sortable
               columns={propsColumns}
               select={false}
+              showRowNum
               height={500}
             />,
           ]}
@@ -688,9 +724,39 @@ export function AvakioPropertyExample() {
               key="item-props-table"
               id="property-item-props-table"
               data={itemPropsData}
+              filterable
+              sortable
               columns={propsColumns}
               select={false}
-              height={420}
+              showRowNum
+              height={500}
+            />,
+          ]}
+        />
+
+        {/* Events Table */}
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[24, 0, 0, 16]}
+          content={<strong>Events</strong>}
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={0}
+          rows={[
+            <AvakioDataTable<PropDoc>
+              key="events-table"
+              id="property-events-table"
+              data={eventsData}
+              columns={propsColumns}
+              filterable
+              sortable
+              select={false}
+              showRowNum
+              height={320}
             />,
           ]}
         />
@@ -713,7 +779,10 @@ export function AvakioPropertyExample() {
               id="property-methods-table"
               data={refMethodsData}
               columns={propsColumns}
+              filterable
+              sortable
               select={false}
+              showRowNum
               height={350}
             />,
           ]}

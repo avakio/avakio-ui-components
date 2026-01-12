@@ -154,9 +154,7 @@
   animation: slideDown 0.15s ease-out;
 }
 
-.avakio-gridsuggest-dropdown.borderless {
-  border: none;
-}
+/* Borderless - uses base styles from avakio-base.css */
 
 @keyframes slideDown {
   from {

@@ -141,8 +141,8 @@
   border-radius: 4px;
 }
 
+/* Borderless - uses base styles, removes shadows */
 .avakio-layout-borderless {
-  border: none !important;
   box-shadow: none !important;
   background: transparent !important;
 }
