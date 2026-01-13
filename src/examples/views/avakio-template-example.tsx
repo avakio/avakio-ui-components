@@ -656,7 +656,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                       { id: 'line', value: 'Line' },
                       { id: 'material', value: 'Material' }
                     ]}
-                    onChange={(value) => setBorderType(value as AvakioTemplateBorderType)}              
+                    onChange={({ value }) => setBorderType(value as AvakioTemplateBorderType)}              
                   />
                   {/* Template Type */}
                   <AvakioRichSelect
@@ -670,7 +670,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                       { id: 'section', value: 'Section' },
                       { id: 'clean', value: 'Clean' }
                     ]}
-                    onChange={(value) => setTemplateType(value as AvakioTemplateType)}              
+                    onChange={({ value }) => setTemplateType(value as AvakioTemplateType)}              
                   />
                   {/*Scroll*/}
                   <AvakioRichSelect
@@ -686,7 +686,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                       { id: 'y', value: 'Vertical' },
                       { id: 'xy', value: 'XY' }
                     ]}
-                    onChange={(value) => {
+                    onChange={({ value }) => {
                       const val = value as string;
                       setScroll(val === 'false' ? false : val === 'true' ? true : val as 'x' | 'y' | 'xy');
                     }}              
@@ -699,7 +699,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     value={width}
                     width="100%"
                     padding={[0,0,10,0]} 
-                    onChange={(value) => setWidth(value)}
+                    onChange={({ value }) => setWidth(value)}
                     placeholder="e.g., 100%, 300px"                
                   />
                   {/* Height */}
@@ -709,7 +709,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     value={height}
                     padding={[0,0,10,0]} 
                     width="100%"
-                    onChange={(value) => setHeight(value)}
+                    onChange={({ value }) => setHeight(value)}
                     placeholder="e.g., auto, 200px"              
                   />  
                   {/* Padding */}
@@ -721,7 +721,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     min={0}
                     max={50}
                     step={1}
-                    onChange={(value) => setPadding(value)}
+                    onChange={({ value }) => setPadding(value)}
                     allowInput={true}
                   />
                   {/* Margin */}
@@ -733,35 +733,35 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     min={0}
                     max={50}
                     step={1}
-                    onChange={(value) => setMargin(value)}
+                    onChange={({ value }) => setMargin(value)}
                     allowInput={true}
                   />
                   {/* Boolean Props */}
                   <AvakioCheckbox
                     label="Borderless"
                     checked={borderless}
-                    onChange={(checked) => setBorderless(checked)}
+                    onChange={({ checked }) => setBorderless(checked)}
                   />
                   <AvakioCheckbox
                     label="Auto Height"
                     checked={autoheight}
-                    onChange={(checked) => setAutoheight(checked)}
+                    onChange={({ checked }) => setAutoheight(checked)}
                   />
                   <AvakioCheckbox
                     label="Hidden"
                     checked={hidden}
-                    onChange={(checked) => setHidden(checked)}
+                    onChange={({ checked }) => setHidden(checked)}
                   />
                   <AvakioCheckbox
                     label="Disabled"
                     checked={disabled}
-                    onChange={(checked) => setDisabled(checked)}
+                    onChange={({ checked }) => setDisabled(checked)}
                   />
                   <AvakioText
                     label="Content"
                     labelPosition="top"
                     value={content}
-                    onChange={(val) => setContent(val)}
+                    onChange={({ value }) => setContent(value)}
                     placeholder="Enter template content here"
                     multiline={true}
                     rows={4}

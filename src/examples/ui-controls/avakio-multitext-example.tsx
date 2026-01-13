@@ -114,7 +114,7 @@ export function AvakioMultitextExample({ theme = 'material' }: { theme?: string 
               labelWidth={100}
               placeholder="Enter email address"
               value={basicValue}
-              onChange={(values) => setBasicValue(values)}
+              onChange={({ values }) => setBasicValue(values)}
             />,
             <AvakioTemplate
               type="clean"
@@ -170,7 +170,7 @@ export function AvakioMultitextExample({ theme = 'material' }: { theme?: string 
               labelWidth={100}
               placeholder="+1 (555) 000-0000"
               value={dynamicValue}
-              onChange={(values) => setDynamicValue(values)}
+              onChange={({ values }) => setDynamicValue(values)}
               icon={<Phone size={16} />}
             />,
           ]}
@@ -569,7 +569,7 @@ export function AvakioMultitextExample({ theme = 'material' }: { theme?: string 
               labelWidth={80}
               placeholder="Enter value"
               defaultValue="Initial value"
-              onChange={(values) => logMethod(`onChange: [${values.join(', ')}]`)}
+              onChange={({ values }) => logMethod(`onChange: [${values.join(', ')}]`)}
               onSectionAdd={(id, idx) => logMethod(`onSectionAdd: ${id} at index ${idx}`)}
               onSectionRemove={(id, val) => logMethod(`onSectionRemove: ${id} (${val})`)}
             />,
@@ -799,7 +799,7 @@ export function AvakioMultitextExample({ theme = 'material' }: { theme?: string 
               labelWidth={100}
               placeholder="Enter tag"
               value={controlledValue}
-              onChange={(values) => setControlledValue(values)}
+              onChange={({ values }) => setControlledValue(values)}
             />,
             <AvakioTemplate
               type="clean"

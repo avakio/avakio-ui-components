@@ -129,6 +129,19 @@ export interface AvakioBaseProps {
 }
 
 /**
+ * Change event data passed to onChange callbacks.
+ * @template T The type of the value
+ */
+export interface AvakioChangeEvent<T = string> {
+  /** The ID of the component that triggered the change */
+  id: string | undefined;
+  /** The new value */
+  value: T;
+  /** The previous value (optional) */
+  oldValue?: T;
+}
+
+/**
  * Base props with value and onChange for controlled components.
  * @template T The type of the value
  */
@@ -136,8 +149,8 @@ export interface AvakioControlledProps<T = string> extends AvakioBaseProps {
   /** The current value of the control */
   value?: T;
   
-  /** Callback fired when the value changes. Receives new value and optionally the old value */
-  onChange?: (newValue: T, oldValue?: T) => void;
+  /** Callback fired when the value changes. Receives { id, value, oldValue } */
+  onChange?: (event: AvakioChangeEvent<T>) => void;
   
   /** Adds validation to the field. Return true if valid, false or error message if invalid */
   validate?: (value: T) => boolean | string;
@@ -354,10 +367,12 @@ export interface AvakioBaseState {
  * Options for useAvakioBase hook
  */
 export interface UseAvakioBaseOptions<T = string> {
+  /** Component ID for change events */
+  id?: string;
   /** Initial value */
   initialValue?: T;
-  /** Value change handler - receives newValue and oldValue */
-  onChange?: (newValue: T, oldValue?: T) => void;
+  /** Value change handler - receives { id, value, oldValue } */
+  onChange?: (event: AvakioChangeEvent<T>) => void;
   /** Validation function */
   validate?: (value: T) => boolean | string;
   /** Initial disabled state from props */
@@ -417,6 +432,7 @@ export interface UseAvakioBaseOptions<T = string> {
  */
 export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {}) {
   const {
+    id,
     initialValue,
     onChange,
     validate: validateFn,
@@ -538,8 +554,8 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
     const oldValue = previousValueRef.current;
     previousValueRef.current = newValue;
     setValueState(newValue);
-    onChange?.(newValue, oldValue);
-  }, [onChange]);
+    onChange?.({ id: id || '0', value: newValue, oldValue });
+  }, [id, onChange]);
 
   const getText = useCallback(() => {
     return getTextValue(value);

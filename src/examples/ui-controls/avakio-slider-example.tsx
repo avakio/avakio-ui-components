@@ -145,7 +145,7 @@ export function AvakioSliderExample({ theme = 'material' }: { theme?: string }) 
               max={1000}
               step={10}
               value={priceRange}
-              onChange={(val) => setPriceRange(val as [number, number])}
+              onChange={({ value }) => setPriceRange(value as [number, number])}
               marks={[0, 250, 500, 750, 1000]}
               formatValue={(v) => `$${v}`}
             />,
@@ -169,7 +169,7 @@ export function AvakioSliderExample({ theme = 'material' }: { theme?: string }) 
               max={65}
               step={1}
               value={ageRange}
-              onChange={(val) => setAgeRange(val as [number, number])}
+              onChange={({ value }) => setAgeRange(value as [number, number])}
               marks={[18, 30, 45, 65]}
             />,
             <div key="age-value" className="avakio-slider-value-chip">
@@ -192,7 +192,7 @@ export function AvakioSliderExample({ theme = 'material' }: { theme?: string }) 
               max={2025}
               step={1}
               value={dateRange}
-              onChange={(val) => setDateRange(val as [number, number])}
+              onChange={({ value }) => setDateRange(value as [number, number])}
               marks={[2010, 2015, 2020, 2025]}
             />,
             <div key="year-value" className="avakio-slider-value-chip">

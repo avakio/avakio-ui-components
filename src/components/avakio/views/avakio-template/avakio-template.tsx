@@ -1,4 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import './avakio-template.css';
 
 export type AvakioTemplateTheme = 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset';
@@ -81,8 +82,8 @@ export interface AvakioTemplateProps {
   /** Callback when content is loaded */
   onLoad?: () => void;
   
-  /** Callback when content changes */
-  onChange?: (data: any) => void;
+  /** Callback fired when content data changes. Receives { id, value } where value is the data */
+  onChange?: (event: AvakioChangeEvent<any>) => void;
   
   /** Callback on click */
   onClick?: (e: React.MouseEvent) => void;
@@ -263,7 +264,7 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
     useImperativeHandle(ref, () => ({
       setValues: (newData: Record<string, any>) => {
         setInternalData(newData);
-        onChange?.(newData);
+        onChange?.({ id: id || '0', value: newData });
       },
       getValues: () => internalData,
       setHTML: (html: string) => {
@@ -277,7 +278,7 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
       },
       parse: (newData: Record<string, any>) => {
         setInternalData(newData);
-        onChange?.(newData);
+        onChange?.({ id: id || '0', value: newData });
       },
       show: () => {
         setIsHidden(false);

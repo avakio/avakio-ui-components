@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import "./avakio-grouplist.css";
 
 export interface GroupListItem {
@@ -35,8 +36,8 @@ export interface AvakioGroupListProps {
   defaultValue?: string | number | null;
   /** Callback when an item is selected */
   onSelect?: (item: GroupListItem) => void;
-  /** Callback when selection changes (item or null if navigating) */
-  onChange?: (value: string | number | null, item: GroupListItem | null) => void;
+  /** Callback fired when the value changes. Receives { id, value, item } */
+  onChange?: (event: AvakioChangeEvent<string | number | null> & { item: GroupListItem | null }) => void;
   /** Callback when navigation state changes */
   onNavigate?: (state: GroupListOpenState) => void;
   /** Custom template for rendering items (leaf nodes) */
@@ -219,9 +220,9 @@ export function AvakioGroupList({
       // Select the item
       setInternalValue(item.id);
       onSelect?.(item);
-      onChange?.(item.id, item);
+      onChange?.({ id: id || '0', value: item.id, item });
     }
-  }, [navigateInto, select, onSelect, onChange]);
+  }, [navigateInto, select, onSelect, onChange, id]);
 
   // Get open state
   const getOpenState = useCallback((): GroupListOpenState => ({

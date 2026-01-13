@@ -1,5 +1,6 @@
 import React, { forwardRef, useState, useEffect, useRef, useImperativeHandle, ChangeEvent, KeyboardEvent, FocusEvent } from 'react';
 import { X, Eye, EyeOff, Copy } from 'lucide-react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-text.css';
 
@@ -72,8 +73,8 @@ export interface AvakioTextProps {
   multiline?: boolean;
   /** Number of visible rows (only for multiline) */
   rows?: number;
-  /** onChange callback */
-  onChange?: (value: string, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  /** Callback fired when the value changes. Receives { id, value, event } */
+  onChange?: (event: AvakioChangeEvent<string> & { event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> }) => void;
   /** onBlur callback */
   onBlur?: (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   /** onFocus callback */
@@ -136,6 +137,7 @@ export interface AvakioTextRef {
 export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
   (
     {
+      id,
       value = '',
       label,
       placeholder,
@@ -282,7 +284,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       }
 
       if (onChange) {
-        onChange(newValue, e);
+        onChange({ id: id || '0', value: newValue, event: e });
       }
     };
 
@@ -331,7 +333,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       setIsInvalid(false);
       setValidationMessage('');
       if (onChange) {
-        onChange('', {} as ChangeEvent<HTMLInputElement | HTMLTextAreaElement>);
+        onChange({ id: id || '0', value: '', event: {} as ChangeEvent<HTMLInputElement | HTMLTextAreaElement> });
       }
       inputRef.current?.focus();
     };

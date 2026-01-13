@@ -611,7 +611,7 @@ export function AvakioCommentExample() {
                     { id: 'default', value: 'Default (oldest first)' },
                     { id: 'chat', value: 'Chat (newest first)' },
                   ]}
-                  onChange={(val) => setPlaygroundMode(String(val))}
+                  onChange={({ value }) => setPlaygroundMode(String(value))}
                 />
                 <AvakioRichSelect
                   label="Send Action"
@@ -620,7 +620,7 @@ export function AvakioCommentExample() {
                     { id: 'enter', value: 'Enter' },
                     { id: 'shift+enter', value: 'Shift + Enter' },
                   ]}
-                  onChange={(val) => setPlaygroundSendAction(String(val))}
+                  onChange={({ value }) => setPlaygroundSendAction(String(value))}
                 />
                 <AvakioCheckbox
                   label="Read-only"

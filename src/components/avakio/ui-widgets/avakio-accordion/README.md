@@ -75,7 +75,7 @@ function App() {
 | `style` | `CSSProperties` | - | Inline styles |
 | `onExpand` | `(id) => void` | - | Called when item expands |
 | `onCollapse` | `(id) => void` | - | Called when item collapses |
-| `onChange` | `(expandedIds) => void` | - | Called when expanded state changes |
+| `onChange` | `({ id, value }) => void` | - | Called when expanded state changes. Receives `{ id, value }` where value is the expandedIds array |
 
 ## Accordion Item Properties
 
@@ -200,7 +200,7 @@ The accordion supports 6 themes:
 |-------|------------|-------------|
 | `onExpand` | `id: string \| number` | Fired when an item is expanded |
 | `onCollapse` | `id: string \| number` | Fired when an item is collapsed |
-| `onChange` | `expandedIds: (string \| number)[]` | Fired when expanded state changes |
+| `onChange` | `{ id, value }` where value is `(string \| number)[]` | Fired when expanded state changes. Receives `{ id, value }` object |
 
 ## Keyboard Navigation
 

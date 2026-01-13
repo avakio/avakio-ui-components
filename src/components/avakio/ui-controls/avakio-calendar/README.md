@@ -33,9 +33,10 @@ function MyComponent() {
 
   return (
     <AvakioCalendar
+      id="my-calendar"
       mode="single"
       value={selectedDate}
-      onChange={(value) => setSelectedDate(value as string)}
+      onChange={({ id, value }) => setSelectedDate(value as string)}
     />
   );
 }
@@ -47,9 +48,10 @@ function MyComponent() {
 const [selectedDates, setSelectedDates] = useState<string[]>([]);
 
 <AvakioCalendar
+  id="multi-calendar"
   mode="multiple"
   value={selectedDates}
-  onChange={(value) => setSelectedDates(value as string[])}
+  onChange={({ id, value }) => setSelectedDates(value as string[])}
 />
 ```
 
@@ -59,9 +61,10 @@ const [selectedDates, setSelectedDates] = useState<string[]>([]);
 const [dateRange, setDateRange] = useState<string[]>([]);
 
 <AvakioCalendar
+  id="range-calendar"
   mode="range"
   value={dateRange}
-  onChange={(value) => setDateRange(value as string[])}
+  onChange={({ id, value }) => setDateRange(value as string[])}
 />
 
 // dateRange will be ['2025-01-01', '2025-01-15'] when both dates are selected
@@ -71,8 +74,9 @@ const [dateRange, setDateRange] = useState<string[]>([]);
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `id` | `string` | `undefined` | Component ID passed to onChange callback |
 | `value` | `string \| string[]` | `undefined` | Selected date(s) in ISO format (YYYY-MM-DD) |
-| `onChange` | `(value: string \| string[]) => void` | `undefined` | Callback when selection changes |
+| `onChange` | `({ id, value }) => void` | `undefined` | Callback when selection changes. Receives `{ id, value }` object |
 | `mode` | `'single' \| 'multiple' \| 'range'` | `'single'` | Selection mode |
 | `minDate` | `string` | `undefined` | Minimum selectable date (ISO format) |
 | `maxDate` | `string` | `undefined` | Maximum selectable date (ISO format) |
@@ -255,10 +259,11 @@ Available themes via `data-admin-theme` attribute:
 
 ### onChange
 
-Called when selection changes:
+Called when selection changes. Receives an object with `id` and `value`:
 
 ```tsx
-onChange={(value) => {
+onChange={({ id, value }) => {
+  console.log('Component ID:', id);
   if (mode === 'single') {
     console.log('Selected date:', value); // string
   } else {

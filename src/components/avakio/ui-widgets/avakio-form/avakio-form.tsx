@@ -8,6 +8,7 @@ import React, {
   ReactNode,
   CSSProperties,
 } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import './avakio-form.css';
 
 // ============================================================================
@@ -173,8 +174,8 @@ export interface AvakioFormProps {
   style?: CSSProperties;
   /** Currently visible batch */
   visibleBatch?: string;
-  /** Callback when form values change */
-  onChange?: (name: string, value: any, values: FormValues) => void;
+  /** Callback fired when a form field value changes. Receives { id: fieldName, value, values } */
+  onChange?: (event: AvakioChangeEvent<any> & { values: FormValues }) => void;
   /** Callback after validation */
   onValidation?: (isValid: boolean, errors: FormErrors) => void;
   /** Callback on validation error */
@@ -360,7 +361,7 @@ export const AvakioForm = forwardRef<AvakioFormRef, AvakioFormProps>((props, ref
         : { ...prev, [name]: value };
       
       // Trigger onChange callback
-      onChange?.(name, value, newValues);
+      onChange?.({ id: id || '0', value: newValues, fieldName: name, fieldValue: value });
       
       return newValues;
     });

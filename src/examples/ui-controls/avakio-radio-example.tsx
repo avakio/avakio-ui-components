@@ -148,7 +148,7 @@ export function AvakioRadioExample({ theme = 'material' }: { theme?: string }) {
               key="basic-radio"
               value={basicValue}
               options={branchOptions}
-              onChange={(val) => setBasicValue(val)}
+              onChange={({ value }) => setBasicValue(value)}
               label="Branch"
               labelWidth={80}
               required
@@ -207,7 +207,7 @@ export function AvakioRadioExample({ theme = 'material' }: { theme?: string }) {
               key="vertical-radio"
               value={verticalValue}
               options={frequencyOptions}
-              onChange={(val) => setVerticalValue(val)}
+              onChange={({ value }) => setVerticalValue(value)}
               label="Frequency"
               labelPosition="top"
               vertical
@@ -246,7 +246,7 @@ export function AvakioRadioExample({ theme = 'material' }: { theme?: string }) {
               key="icon-radio"
               value={iconValue}
               options={navigationOptions}
-              onChange={(val) => setIconValue(val)}
+              onChange={({ value }) => setIconValue(value)}
               label="Navigate to"
               labelWidth={100}
             />,
@@ -309,7 +309,7 @@ export function AvakioRadioExample({ theme = 'material' }: { theme?: string }) {
               key="states-radio"
               value={statesValue}
               options={stateOptions}
-              onChange={(val) => setStatesValue(val)}
+              onChange={({ value }) => setStatesValue(value)}
               label="States Demo"
               labelWidth={110}
             />,
@@ -392,7 +392,7 @@ export function AvakioRadioExample({ theme = 'material' }: { theme?: string }) {
               <AvakioRadio
                 value={sizeSmValue}
                 options={sizeOptions}
-                onChange={(val) => setSizeSmValue(val)}
+                onChange={({ value }) => setSizeSmValue(value)}
                 label="Small"
                 labelWidth={80}
                 size="sm"
@@ -402,7 +402,7 @@ export function AvakioRadioExample({ theme = 'material' }: { theme?: string }) {
               <AvakioRadio
                 value={sizeMdValue}
                 options={sizeOptions}
-                onChange={(val) => setSizeMdValue(val)}
+                onChange={({ value }) => setSizeMdValue(value)}
                 label="Medium"
                 labelWidth={80}
                 size="md"
@@ -412,7 +412,7 @@ export function AvakioRadioExample({ theme = 'material' }: { theme?: string }) {
               <AvakioRadio
                 value={sizeLgValue}
                 options={sizeOptions}
-                onChange={(val) => setSizeLgValue(val)}
+                onChange={({ value }) => setSizeLgValue(value)}
                 label="Large"
                 labelWidth={80}
                 size="lg"
@@ -449,7 +449,7 @@ export function AvakioRadioExample({ theme = 'material' }: { theme?: string }) {
               ref={radioRef}
               value={imperativeValue}
               options={imperativeOptions}
-              onChange={(val) => setImperativeValue(val)}
+              onChange={({ value }) => setImperativeValue(value)}
               label="Controlled"
               labelWidth={100}
             />,

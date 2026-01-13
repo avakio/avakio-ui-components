@@ -759,7 +759,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                       { id: 'section', value: 'Section' },
                       { id: 'clean', value: 'Clean' },
                     ]}
-                    onChange={(value) => setViewType(value as 'header' | 'section' | 'clean')}
+                    onChange={({ value }) => setViewType(value as 'header' | 'section' | 'clean')}
                   />
                   {/* Animation */}
                   <AvakioRichSelect
@@ -775,7 +775,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                       { id: 'slide', value: 'Slide' },
                       { id: 'flip', value: 'Flip' },
                     ]}
-                    onChange={(value) => setAnimate(value as string)}
+                    onChange={({ value }) => setAnimate(value as string)}
                   />
                   {/* Width */}
                   <AvakioText
@@ -785,7 +785,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     value={width}
                     width="100%"
                     padding={[0, 0, 10, 0]}
-                    onChange={(value) => setWidth(value)}
+                    onChange={({ value }) => setWidth(value)}
                     placeholder="e.g., 100%, 300px"
                   />
                   {/* Height */}
@@ -795,7 +795,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     value={height}
                     padding={[0, 0, 10, 0]}
                     width="100%"
-                    onChange={(value) => setHeight(value)}
+                    onChange={({ value }) => setHeight(value)}
                     placeholder="e.g., auto, 200px"
                   />
                   {/* Min Height */}
@@ -805,7 +805,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     value={minHeight}
                     padding={[0, 0, 10, 0]}
                     width="100%"
-                    onChange={(value) => setMinHeight(value)}
+                    onChange={({ value }) => setMinHeight(value)}
                     placeholder="e.g., 100px"
                   />
                   {/* Max Height */}
@@ -815,7 +815,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     value={maxHeight}
                     padding={[0, 0, 10, 0]}
                     width="100%"
-                    onChange={(value) => setMaxHeight(value)}
+                    onChange={({ value }) => setMaxHeight(value)}
                     placeholder="e.g., 400px"
                   />
                   {/* Padding */}
@@ -827,7 +827,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     min={0}
                     max={50}
                     step={1}
-                    onChange={(value) => setPadding(value)}
+                    onChange={({ value }) => setPadding(value)}
                     allowInput={true}
                   />
                   {/* Gravity */}
@@ -837,24 +837,24 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     value={gravity}
                     padding={[0, 0, 10, 0]}
                     width="100%"
-                    onChange={(value) => setGravity(value)}
+                    onChange={({ value }) => setGravity(value)}
                     placeholder="e.g., 1, 2"
                   />
                   {/* Boolean Props */}
                   <AvakioCheckbox
                     label="Borderless"
                     checked={borderless}
-                    onChange={(checked) => setBorderless(checked)}
+                    onChange={({ checked }) => setBorderless(checked)}
                   />
                   <AvakioCheckbox
                     label="Hidden"
                     checked={hidden}
-                    onChange={(checked) => setHidden(checked)}
+                    onChange={({ checked }) => setHidden(checked)}
                   />
                   <AvakioCheckbox
                     label="Disabled"
                     checked={disabled}
-                    onChange={(checked) => setDisabled(checked)}
+                    onChange={({ checked }) => setDisabled(checked)}
                   />
                 </>
               }

@@ -27,7 +27,7 @@ export function AvakioCounterExample({ theme = 'material' }: { theme?: string })
             max={12}
             step={1}
             value={quantity}
-            onChange={setQuantity}
+            onChange={({ value }) => setQuantity(value)}
           />
           <span className="counter-value-display">{quantity}</span>
         </div>
@@ -39,7 +39,7 @@ export function AvakioCounterExample({ theme = 'material' }: { theme?: string })
             max={60}
             step={2}
             value={temperature}
-            onChange={setTemperature}
+            onChange={({ value }) => setTemperature(value)}
             allowInput
           />
           <span className="counter-value-display">{temperature}°C</span>
@@ -52,7 +52,7 @@ export function AvakioCounterExample({ theme = 'material' }: { theme?: string })
             max={100}
             step={5}
             value={step}
-            onChange={setStep}
+            onChange={({ value }) => setStep(value)}
             allowInput={false}
           />
           <span className="counter-value-display">step = {step}</span>

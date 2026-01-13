@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-tabbar.css';
 
@@ -22,7 +23,8 @@ export interface AvakioTabBarProps {
   id?: string;
   value?: string | number | null;
   options?: AvakioTabBarOption[];
-  onChange?: (value: string | number | null, option?: AvakioTabBarOption | null) => void;
+  /** Callback fired when the value changes. Receives { id, value, option } */
+  onChange?: (event: AvakioChangeEvent<string | number | null> & { option?: AvakioTabBarOption | null }) => void;
   onClose?: (value: string | number, option?: AvakioTabBarOption) => void;
   renderTab?: (option: AvakioTabBarOption, isActive: boolean, closeButton: React.ReactNode) => React.ReactNode;
   align?: AvakioTabBarAlign;
@@ -186,7 +188,7 @@ export function AvakioTabBar({
     if (value === undefined) {
       setInternalValue(option.id);
     }
-    onChange?.(option.id, option);
+    onChange?.({ id: id || '0', value: option.id, option });
   };
 
   const handleClose = (option: AvakioTabBarOption, event?: React.MouseEvent) => {

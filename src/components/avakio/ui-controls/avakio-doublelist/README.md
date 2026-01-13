@@ -46,9 +46,10 @@ function MyComponent() {
 
   return (
     <AvakioDoubleList
+      id="screen-selector"
       data={data}
       value={selected}
-      onChange={setSelected}
+      onChange={({ value }) => setSelected(value)}
       labelLeft="Available Screens"
       labelRight="Selected Screens"
     />
@@ -60,9 +61,10 @@ function MyComponent() {
 
 ```tsx
 <AvakioDoubleList
+  id="searchable-list"
   data={data}
   value={selected}
-  onChange={setSelected}
+  onChange={({ value }) => setSelected(value)}
   labelLeft="All Items"
   labelRight="Selected Items"
   labelBottomLeft="Double-click to add"
@@ -76,9 +78,10 @@ function MyComponent() {
 
 ```tsx
 <AvakioDoubleList
+  id="no-buttons-list"
   data={data}
   value={selected}
-  onChange={setSelected}
+  onChange={({ value }) => setSelected(value)}
   showButtons={false}
   draggable={true}
 />
@@ -94,9 +97,10 @@ const data = [
 ];
 
 <AvakioDoubleList
+  id="disabled-items-list"
   data={data}
   value={selected}
-  onChange={setSelected}
+  onChange={({ value }) => setSelected(value)}
 />
 ```
 
@@ -106,7 +110,7 @@ const data = [
 |------|------|---------|-------------|
 | `data` | `AvakioDoubleListItem[]` | `[]` | Array of all available items |
 | `value` | `string[]` | `[]` | Array of selected item IDs (items in right list) |
-| `onChange` | `(ids: string[]) => void` | - | Callback when selection changes |
+| `onChange` | `({ id, value }) => void` | - | Callback when selection changes. Receives `{ id, value }` object |
 | `labelLeft` | `string` | `"Available"` | Label for the left list |
 | `labelRight` | `string` | `"Selected"` | Label for the right list |
 | `labelBottomLeft` | `string` | `undefined` | Bottom label for left list |

@@ -41,9 +41,10 @@ const data = [
 ];
 
 <AvakioGridSuggest
+  id="product-suggest"
   value={value}
   data={data}
-  onChange={(value, option) => setValue(value)}
+  onChange={({ value: v, option }) => setValue(v)}
   label="Product"
   placeholder="Search products..."
   body={{
@@ -56,9 +57,10 @@ const data = [
 
 ```tsx
 <AvakioGridSuggest
+  id="custom-product-suggest"
   value={value}
   data={data}
-  onChange={(value) => setValue(value)}
+  onChange={({ value: v }) => setValue(v)}
   label="Product"
   textValue="#name# - $#price#"
   body={{
@@ -82,9 +84,10 @@ const data = [
 
 ```tsx
 <AvakioGridSuggest
+  id="employee-suggest"
   value={selectedEmployee}
   data={employeeData}
-  onChange={(value) => setSelectedEmployee(value)}
+  onChange={({ value }) => setSelectedEmployee(value)}
   label="Employee"
   textValue="#name# - #position#"
   body={{
@@ -103,9 +106,10 @@ const data = [
 
 ```tsx
 <AvakioGridSuggest
+  id="country-suggest"
   value={selectedCountry}
   data={countryData}
-  onChange={(value) => setSelectedCountry(value)}
+  onChange={({ value }) => setSelectedCountry(value)}
   label="Country"
   textValue="#name# (#code#)"
   body={{
@@ -130,9 +134,10 @@ const invoiceData = [
 ];
 
 <AvakioGridSuggest
+  id="invoice-suggest"
   value={selectedInvoice}
   data={invoiceData}
-  onChange={(value) => setSelectedInvoice(value)}
+  onChange={({ value }) => setSelectedInvoice(value)}
   label="Invoice"
   textValue="#invoiceNo# - #customer#"
   body={{
@@ -167,9 +172,10 @@ const invoiceData = [
 
 ```tsx
 <AvakioGridSuggest
+  id="noneditable-suggest"
   value={value}
   data={data}
-  onChange={(value) => setValue(value)}
+  onChange={({ value: v }) => setValue(v)}
   label="Employee"
   textValue="#name# - #department#"
   editable={false}  // Disable text input/filtering
@@ -191,7 +197,7 @@ const invoiceData = [
 |------|------|---------|-------------|
 | `value` | `string \| number` | - | Selected value (ID) |
 | `data` | `Array` | `[]` | Data array for the grid |
-| `onChange` | `(value, option?) => void` | - | Callback when value changes |
+| `onChange` | `({ id, value, option? }) => void` | - | Callback when value changes. Receives `{ id, value, option }` object |
 | `textValue` | `string` | - | Template for display value (e.g., `"#name# (#code#)"`) |
 | `template` | `(item) => ReactNode` | - | Custom input value renderer |
 | `body` | `object` | `{autoConfig: true}` | Grid configuration object |

@@ -1,4 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect, useId } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-radio.css';
 
@@ -71,8 +72,8 @@ export interface AvakioRadioProps {
   width?: number | string;
   /** Height */
   height?: number | string;
-  /** Callback when value changes */
-  onChange?: (value: string | number) => void;
+  /** Callback fired when the value changes. Receives { id, value } */
+  onChange?: (event: AvakioChangeEvent<string | number>) => void;
   /** Callback when an option is clicked */
   onClick?: (e: React.MouseEvent, option: AvakioRadioOption) => void;
   /** Callback when focused */
@@ -210,7 +211,7 @@ export const AvakioRadio = forwardRef<AvakioRadioRef, AvakioRadioProps>(
           setInternalValue(newValue);
         }
         if (newValue !== null) {
-          onChange?.(newValue);
+          onChange?.({ id: id || '0', value: newValue });
         }
       },
       focus: () => {
@@ -268,7 +269,7 @@ export const AvakioRadio = forwardRef<AvakioRadioRef, AvakioRadioProps>(
       if (!isControlled) {
         setInternalValue(optionId);
       }
-      onChange?.(optionId);
+      onChange?.({ id: id || '0', value: optionId });
     };
 
     const handleKeyDown = (e: React.KeyboardEvent, currentIndex: number) => {

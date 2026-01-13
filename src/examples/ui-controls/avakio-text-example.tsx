@@ -191,7 +191,7 @@ export function AvakioTextExample() {
             label="Name"
             placeholder="Enter your name"
             value={name}
-            onChange={(value) => setName(value)}
+            onChange={({ value }) => setName(value)}
             icon={<User size={16} />}
             iconPosition="left"
           />
@@ -200,7 +200,7 @@ export function AvakioTextExample() {
             placeholder="Enter your email"
             type="email"
             value={email}
-            onChange={(value) => setEmail(value)}
+            onChange={({ value }) => setEmail(value)}
             icon={<Mail size={16} />}
             iconPosition="left"
           />
@@ -209,7 +209,7 @@ export function AvakioTextExample() {
             placeholder="Enter password"
             type="password"
             value={password}
-            onChange={(value) => setPassword(value)}
+            onChange={({ value }) => setPassword(value)}
           />
         </div>
       </section>
@@ -237,7 +237,7 @@ export function AvakioTextExample() {
             placeholder="Search..."
             clear={true}
             value={searchTerm}
-            onChange={(value) => setSearchTerm(value)}
+            onChange={({ value }) => setSearchTerm(value)}
             icon={<Search size={16} />}
           />
           <AvakioText
@@ -285,7 +285,7 @@ export function AvakioTextExample() {
             label="Username"
             placeholder="Enter username"
             value={username}
-            onChange={(value) => setUsername(value)}
+            onChange={({ value }) => setUsername(value)}
             validate={(value) => {
               if (!value) return 'Username is required';
               if (value.length < 3) return 'Username must be at least 3 characters';
@@ -300,7 +300,7 @@ export function AvakioTextExample() {
             type="number"
             placeholder="Enter your age"
             value={age}
-            onChange={(value) => setAge(value)}
+            onChange={({ value }) => setAge(value)}
             min={18}
             max={120}
             validate={(value) => {
@@ -318,7 +318,7 @@ export function AvakioTextExample() {
             type="url"
             placeholder="https://yoursite.com"
             value={website}
-            onChange={(value) => setWebsite(value)}
+            onChange={({ value }) => setWebsite(value)}
             required
             bottomLabel="Required field"
           />
@@ -448,14 +448,14 @@ export function AvakioTextExample() {
             label="First Name"
             placeholder="Enter first name"
             value={formData.firstName}
-            onChange={(value) => setFormData({ ...formData, firstName: value })}
+            onChange={({ value }) => setFormData({ ...formData, firstName: value })}
             required
           />
           <AvakioText
             label="Last Name"
             placeholder="Enter last name"
             value={formData.lastName}
-            onChange={(value) => setFormData({ ...formData, lastName: value })}
+            onChange={({ value }) => setFormData({ ...formData, lastName: value })}
             required
           />
           <AvakioText
@@ -463,7 +463,7 @@ export function AvakioTextExample() {
             type="email"
             placeholder="email@example.com"
             value={formData.emailAddress}
-            onChange={(value) => setFormData({ ...formData, emailAddress: value })}
+            onChange={({ value }) => setFormData({ ...formData, emailAddress: value })}
             required
             icon={<Mail size={16} />}
           />
@@ -472,27 +472,27 @@ export function AvakioTextExample() {
             type="tel"
             placeholder="+1 (555) 123-4567"
             value={formData.phoneNumber}
-            onChange={(value) => setFormData({ ...formData, phoneNumber: value })}
+            onChange={({ value }) => setFormData({ ...formData, phoneNumber: value })}
             icon={<Phone size={16} />}
           />
           <AvakioText
             label="Address"
             placeholder="Street address"
             value={formData.address}
-            onChange={(value) => setFormData({ ...formData, address: value })}
+            onChange={({ value }) => setFormData({ ...formData, address: value })}
             labelPosition="top"
           />
           <AvakioText
             label="City"
             placeholder="City"
             value={formData.city}
-            onChange={(value) => setFormData({ ...formData, city: value })}
+            onChange={({ value }) => setFormData({ ...formData, city: value })}
           />
           <AvakioText
             label="ZIP Code"
             placeholder="12345"
             value={formData.zipCode}
-            onChange={(value) => setFormData({ ...formData, zipCode: value })}
+            onChange={({ value }) => setFormData({ ...formData, zipCode: value })}
             pattern="[0-9]{5}"
             maxLength={5}
           />

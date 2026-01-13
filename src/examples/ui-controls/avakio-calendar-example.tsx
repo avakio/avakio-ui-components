@@ -79,7 +79,7 @@ export function AvakioCalendarExample() {
           <AvakioCalendar
             mode="single"
             value={singleDate}
-            onChange={(val) => setSingleDate(val as string)}
+            onChange={({ value }) => setSingleDate(value as string)}
             markers={markers}
           />
         </div>
@@ -93,7 +93,7 @@ export function AvakioCalendarExample() {
           <AvakioCalendar
             mode="multiple"
             value={multipleDates}
-            onChange={(val) => setMultipleDates(val as string[])}
+            onChange={({ value }) => setMultipleDates(value as string[])}
             markers={markers}
           />
         </div>
@@ -108,7 +108,7 @@ export function AvakioCalendarExample() {
           <AvakioCalendar
             mode="range"
             value={rangeDate}
-            onChange={(val) => setRangeDate(val as string[])}
+            onChange={({ value }) => setRangeDate(value as string[])}
             markers={markers}
           />
         </div>
@@ -122,7 +122,7 @@ export function AvakioCalendarExample() {
           <AvakioCalendar
             mode="single"
             value={singleDate}
-            onChange={(val) => setSingleDate(val as string)}
+            onChange={({ value }) => setSingleDate(value as string)}
             disabledDates={disabledDates}
             markers={markers}
           />
@@ -137,7 +137,7 @@ export function AvakioCalendarExample() {
           <AvakioCalendar
             mode="single"
             value={singleDate}
-            onChange={(val) => setSingleDate(val as string)}
+            onChange={({ value }) => setSingleDate(value as string)}
             showWeekNumbers={true}
             markers={markers}
           />
@@ -152,7 +152,7 @@ export function AvakioCalendarExample() {
           <AvakioCalendar
             mode="range"
             value={rangeDate}
-            onChange={(val) => setRangeDate(val as string[])}
+            onChange={({ value }) => setRangeDate(value as string[])}
             monthsToShow={2}
             markers={markers}
           />

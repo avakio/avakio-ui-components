@@ -255,9 +255,9 @@ export function AvakioColorPickerExample() {
           rows={[
             <AvakioColorPicker
               value={basicColor}
-              onChange={(color) => {
-                setBasicColor(color);
-                addLog('onChange', `value: ${color}`);
+              onChange={({ value }) => {
+                setBasicColor(value);
+                addLog('onChange', `value: ${value}`);
               }}
               presets={DEFAULT_PRESETS}
             />,
@@ -297,9 +297,9 @@ export function AvakioColorPickerExample() {
             <AvakioColorPicker
               label="Primary Color"
               value={withLabelColor}
-              onChange={(color) => {
-                setWithLabelColor(color);
-                addLog('onChange (with label)', `value: ${color}`);
+              onChange={({ value }) => {
+                setWithLabelColor(value);
+                addLog('onChange (with label)', `value: ${value}`);
               }}
               presets={DEFAULT_PRESETS}
             />,
@@ -340,9 +340,9 @@ export function AvakioColorPickerExample() {
               label="Accent Color"
               description="Used for buttons and interactive elements"
               value={withDescriptionColor}
-              onChange={(color) => {
-                setWithDescriptionColor(color);
-                addLog('onChange (with description)', `value: ${color}`);
+              onChange={({ value }) => {
+                setWithDescriptionColor(value);
+                addLog('onChange (with description)', `value: ${value}`);
               }}
               presets={DEFAULT_PRESETS}
             />,
@@ -402,9 +402,9 @@ export function AvakioColorPickerExample() {
               label="Brand Colors"
               description="Select from brand-approved colors"
               value={customPresetsColor}
-              onChange={(color) => {
-                setCustomPresetsColor(color);
-                addLog('onChange (custom presets)', `value: ${color}`);
+              onChange={({ value }) => {
+                setCustomPresetsColor(value);
+                addLog('onChange (custom presets)', `value: ${value}`);
               }}
               presets={CUSTOM_PRESETS}
             />,
@@ -434,9 +434,9 @@ export function AvakioColorPickerExample() {
             <AvakioColorPicker
               label="Custom Color"
               value={noPresetsColor}
-              onChange={(color) => {
-                setNoPresetsColor(color);
-                addLog('onChange (no presets)', `value: ${color}`);
+              onChange={({ value }) => {
+                setNoPresetsColor(value);
+                addLog('onChange (no presets)', `value: ${value}`);
               }}
               presets={[]}
             />,
@@ -466,9 +466,9 @@ export function AvakioColorPickerExample() {
             <AvakioColorPicker
               label="Color (No Preview)"
               value={noPreviewColor}
-              onChange={(color) => {
-                setNoPreviewColor(color);
-                addLog('onChange (no preview)', `value: ${color}`);
+              onChange={({ value }) => {
+                setNoPreviewColor(value);
+                addLog('onChange (no preview)', `value: ${value}`);
               }}
               presets={DEFAULT_PRESETS}
               showPreview={false}
@@ -499,9 +499,9 @@ export function AvakioColorPickerExample() {
             <AvakioColorPicker
               label="Color (Picker Only)"
               value={noInputColor}
-              onChange={(color) => {
-                setNoInputColor(color);
-                addLog('onChange (no input)', `value: ${color}`);
+              onChange={({ value }) => {
+                setNoInputColor(value);
+                addLog('onChange (no input)', `value: ${value}`);
               }}
               presets={DEFAULT_PRESETS}
               allowCustomInput={false}
@@ -533,9 +533,9 @@ export function AvakioColorPickerExample() {
             <AvakioColorPicker
               label="Theme Color"
               value={requiredColor}
-              onChange={(color) => {
-                setRequiredColor(color);
-                addLog('onChange (required)', `value: ${color}`);
+              onChange={({ value }) => {
+                setRequiredColor(value);
+                addLog('onChange (required)', `value: ${value}`);
               }}
               presets={DEFAULT_PRESETS}
               required
@@ -552,9 +552,9 @@ export function AvakioColorPickerExample() {
               label="Accent Color"
               description="Pick a bright accent color"
               value={errorColor}
-              onChange={(color) => {
-                setErrorColor(color);
-                addLog('onChange (error)', `value: ${color}`);
+              onChange={({ value }) => {
+                setErrorColor(value);
+                addLog('onChange (error)', `value: ${value}`);
               }}
               presets={DEFAULT_PRESETS}
               error={errorColor.toLowerCase() === '#0f172a' ? 'Too dark for accent' : undefined}
@@ -587,7 +587,7 @@ export function AvakioColorPickerExample() {
               label="Disabled Color"
               description="This field is disabled for illustration"
               value={disabledColor}
-              onChange={setDisabledColor}
+              onChange={({ value }) => setDisabledColor(value)}
               presets={DEFAULT_PRESETS}
               disabled
             />,
@@ -603,7 +603,7 @@ export function AvakioColorPickerExample() {
               label="Read-Only Color"
               description="This field is read-only"
               value={readOnlyColor}
-              onChange={setReadOnlyColor}
+              onChange={({ value }) => setReadOnlyColor(value)}
               presets={DEFAULT_PRESETS}
               readOnly
             />,
@@ -659,9 +659,9 @@ export function AvakioColorPickerExample() {
                       testId={getPropValue('testId', '') || undefined}
                       className={getPropValue('className', '') || undefined}
                       value={playgroundValue}
-                      onChange={(color) => {
-                        setPlaygroundValue(color);
-                        if (getPropValue('logOnChange', true)) addLog('onChange', `value: ${color}`);
+                      onChange={({ value }) => {
+                        setPlaygroundValue(value);
+                        if (getPropValue('logOnChange', true)) addLog('onChange', `value: ${value}`);
                       }}
                       // Appearance props
                       label={getPropValue('label', '')}

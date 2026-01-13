@@ -149,6 +149,11 @@
   min-width: 100%;
 }
 
+.avakio-datatable-scrollable-header-container .avakio-datatable-header-row {
+  width: max-content;
+  min-width: 100%;
+}
+
 /* Hide scrollbar on header (scroll is synced from body) */
 .avakio-datatable-scrollable-header-container::-webkit-scrollbar {
   height: 0;
@@ -514,9 +519,35 @@
 }
 
 /* AvakioDatePicker component inside header filter - compact */
-.avakio-datatable-header-filter .avakio-datepicker-input {
+.avakio-datatable-header-filter .avakio-dp,
+.avakio-datatable-header-filter .avakio-dp-compact {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  margin-bottom: 0 !important;
+}
+
+.avakio-datatable-header-filter .avakio-dp-input-group-compact {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+}
+
+.avakio-datatable-header-filter .avakio-dp-input-compact {
+  min-width: 0 !important;
+  width: 100% !important;
+  flex: 1;
   padding: 4px 8px;
   font-size: 13px;
+  box-sizing: border-box;
+}
+
+.avakio-datatable-header-filter .avakio-dp-icon-btn-compact,
+.avakio-datatable-header-filter .avakio-dp-clear-btn-compact,
+.avakio-datatable-header-filter .avakio-dp-copy-btn-compact {
+  flex-shrink: 0;
 }
 
 /* AvakioRichSelect component inside header filter - compact */
@@ -549,6 +580,56 @@
 .avakio-datatable-header-filter .avakio-richselect-dropdown {
   min-width: 100px;
   z-index: 10000;
+}
+
+/* AvakioMultiCombo component inside header filter - compact */
+.avakio-datatable-header-filter .avakio-multicombo {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.avakio-datatable-header-filter .avakio-mc-input-wrapper {
+  padding: 3px 8px;
+  font-size: 13px;
+  min-height: 24px;
+  height: 24px;
+  box-sizing: border-box;
+}
+
+.avakio-datatable-header-filter .avakio-mc-input-content {
+  font-size: 13px;
+}
+
+.avakio-datatable-header-filter .avakio-mc-placeholder {
+  font-size: 13px;
+}
+
+.avakio-datatable-header-filter .avakio-mc-count {
+  font-size: 12px;
+}
+
+.avakio-datatable-header-filter .avakio-mc-dropdown {
+  min-width: 120px;
+  z-index: 10000;
+}
+
+.avakio-datatable-header-filter .avakio-mc-actions {
+  gap: 2px;
+}
+
+.avakio-datatable-header-filter .avakio-mc-clear-btn,
+.avakio-datatable-header-filter .avakio-mc-toggle-btn {
+  padding: 2px;
+}
+
+.avakio-datatable-header-filter .avakio-mc-clear-btn svg,
+.avakio-datatable-header-filter .avakio-mc-toggle-btn svg {
+  width: 14px;
+  height: 14px;
 }
 
 .avakio-datatable-header-filter-empty {

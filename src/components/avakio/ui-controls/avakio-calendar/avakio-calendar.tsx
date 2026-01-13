@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import './avakio-calendar.css';
 
 export type AvakioCalendarMode = 'single' | 'multiple' | 'range';
@@ -12,7 +13,8 @@ export interface AvakioCalendarMarker {
 
 export interface AvakioCalendarProps {
   value?: string | string[]; // ISO date string(s)
-  onChange?: (value: string | string[]) => void;
+  /** Callback fired when the value changes. Receives { id, value } */
+  onChange?: (event: AvakioChangeEvent<string | string[]>) => void;
   mode?: AvakioCalendarMode;
   minDate?: string; // ISO date string
   maxDate?: string; // ISO date string
@@ -250,28 +252,28 @@ export function AvakioCalendar({
     if (mode === 'single') {
       // Allow deselecting by clicking the same date
       const currentValue = typeof value === 'string' ? value : '';
-      onChange?.(currentValue === dateKey ? '' : dateKey);
+      onChange?.({ id: id || '0', value: currentValue === dateKey ? '' : dateKey });
     } else if (mode === 'multiple') {
       const currentDates = Array.isArray(value) ? value : value ? [value] : [];
       const exists = currentDates.includes(dateKey);
       const newDates = exists
         ? currentDates.filter(d => d !== dateKey)
         : [...currentDates, dateKey];
-      onChange?.(newDates);
+      onChange?.({ id: id || '0', value: newDates });
     } else if (mode === 'range') {
       // Normalize current range to an array for safety
       const currentRange = Array.isArray(value) ? value : value ? [value] : [];
 
       if (currentRange.length === 0 || currentRange.length === 2) {
         // Start new range
-        onChange?.([dateKey]);
+        onChange?.({ id: id || '0', value: [dateKey] });
       } else if (currentRange.length === 1) {
         // Complete range - if same date clicked, clear selection
         if (currentRange[0] === dateKey) {
-          onChange?.([]);
+          onChange?.({ id: id || '0', value: [] });
         } else {
           const sorted = [currentRange[0], dateKey].sort();
-          onChange?.(sorted);
+          onChange?.({ id: id || '0', value: sorted });
         }
       }
     }
@@ -297,14 +299,14 @@ export function AvakioCalendar({
     // Also select today's date
     const todayKey = formatDateKey(today);
     if (mode === 'single') {
-      onChange?.(todayKey);
+      onChange?.({ id: id || '0', value: todayKey });
     } else if (mode === 'multiple') {
       const currentDates = Array.isArray(value) ? value : value ? [value] : [];
       if (!currentDates.includes(todayKey)) {
-        onChange?.([...currentDates, todayKey]);
+        onChange?.({ id: id || '0', value: [...currentDates, todayKey] });
       }
     } else if (mode === 'range') {
-      onChange?.([todayKey]);
+      onChange?.({ id: id || '0', value: [todayKey] });
     }
   };
 

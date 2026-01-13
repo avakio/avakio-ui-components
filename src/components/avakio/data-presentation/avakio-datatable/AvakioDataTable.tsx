@@ -154,10 +154,10 @@ export interface AvakioDataTableRef<T = any> extends Omit<AvakioBaseRef<T[]>, 'g
   setSortState: (column: string | null, direction: 'asc' | 'desc') => void;
   
   /** Returns the current filter values */
-  getFilterValues: () => Record<string, string>;
+  getFilterValues: () => Record<string, string | string[]>;
   
   /** Sets filter values programmatically */
-  setFilterValues: (filters: Record<string, string>) => void;
+  setFilterValues: (filters: Record<string, string | string[]>) => void;
   
   /** Clears all filters */
   clearFilters: () => void;
@@ -229,7 +229,7 @@ export interface AvakioDataTableProps<T = any> extends Omit<AvakioBaseProps, Ava
   /** Callback when sorting changes (server-side mode) */
   onSort?: (columnId: string, direction: 'asc' | 'desc') => void;
   /** Callback when filters change (server-side mode) */
-  onFilter?: (filters: Record<string, string>) => void;
+  onFilter?: (filters: Record<string, string | string[]>) => void;
   /** Show loading spinner overlay */
   loading?: boolean;
   /** Text to display when table has no data */
@@ -388,7 +388,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
   const [selectedColumns, setSelectedColumns] = useState<Set<string>>(new Set());
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [filters, setFilters] = useState<Record<string, string>>({});
+  const [filters, setFilters] = useState<Record<string, string | string[]>>({});
   const [refreshKey, setRefreshKey] = useState(0);
   const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set());
   
@@ -533,7 +533,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
       setSortDirection(direction);
     },
     getFilterValues: () => filters,
-    setFilterValues: (newFilters: Record<string, string>) => {
+    setFilterValues: (newFilters: Record<string, string | string[]>) => {
       setFilters(newFilters);
     },
     clearFilters: () => {
@@ -775,8 +775,8 @@ function AvakioDataTableInner<T extends Record<string, any>>(
     }
   }, [sortable, sortColumn, sortDirection, onSort]);
 
-  // Handle filter
-  const handleFilter = useCallback((columnId: string, value: string) => {
+  // Handle filter - accepts string or string[] for multicombo support
+  const handleFilter = useCallback((columnId: string, value: string | string[]) => {
     const newFilters = { ...filters, [columnId]: value };
     setFilters(newFilters);
     setPage(1); // Reset to first page on filter
@@ -1209,16 +1209,26 @@ function AvakioDataTableInner<T extends Record<string, any>>(
 
   // Calculate total minimum width of all columns for horizontal scroll threshold
   const totalMinWidth = useMemo(() => {
-    return visibleColumns.reduce((total, column) => {
+    let total = 0;
+    // Add width for row number column if shown
+    if (showRowNum) {
+      total += 48;
+    }
+    // Add width for bulk selection column if enabled
+    if (bulkSelection) {
+      total += 48;
+    }
+    // Add width for each visible column
+    return visibleColumns.reduce((acc, column) => {
       const effectiveMinWidth = getEffectiveMinWidth(column);
       if (effectiveMinWidth) {
-        return total + effectiveMinWidth;
+        return acc + effectiveMinWidth;
       }
       // Use the column width or default
       const width = columnWidths[column.id] || (typeof column.width === 'number' ? column.width : 150);
-      return total + width;
-    }, 0);
-  }, [visibleColumns, columnWidths]);
+      return acc + width;
+    }, total);
+  }, [visibleColumns, columnWidths, showRowNum, bulkSelection]);
 
   // Render cell content
   const renderCell = (column: AvakioColumn<T>, row: T, rowIndex: number) => {
@@ -1250,7 +1260,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
           return (
             <AvakioDatePicker
               value={value ? String(value) : ''}
-              onChange={(newValue) => handleChange(newValue)}
+              onChange={({ value: newValue }) => handleChange(newValue)}
               size="compact"
               borderless
             />
@@ -1347,7 +1357,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
               ) : column.filterType === 'combo' ? (
                 <AvakioRichSelect
                   value={filters[column.id] || ''}
-                  onChange={(value) => handleFilter(column.id, value)}
+                  onChange={({ value }) => handleFilter(column.id, value)}
                   options={[
                     { id: '', value: 'All' },
                     ...Array.from(new Set(internalData.map(row => String(row[column.id] || '')).filter(v => v)))
@@ -1361,7 +1371,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
               ) : column.filterType === 'multicombo' ? (
                 <AvakioMultiCombo
                   value={Array.isArray(filters[column.id]) ? filters[column.id] : []}
-                  onChange={(value) => handleFilter(column.id, value)}
+                  onChange={({ value }) => handleFilter(column.id, value)}
                   options={Array.from(new Set(internalData.map(row => String(row[column.id] || '')).filter(v => v)))
                     .sort()
                     .map(v => ({ value: v, label: v }))
@@ -1369,12 +1379,14 @@ function AvakioDataTableInner<T extends Record<string, any>>(
                   placeholder="All"
                   showCount={true}
                   maxDisplayItems={1}
+                  size="compact"
                 />
               ) : column.filterType === 'date' ? (
                 <AvakioDatePicker
                   value={filters[column.id] || ''}
-                  onChange={(value) => handleFilter(column.id, value)}
+                  onChange={({ value }) => handleFilter(column.id, value)}
                   clearable={true}
+                  size="compact"
                   className="avakio-datatable-filter-input"
                   height={24}
                   width="100%"
@@ -1383,7 +1395,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
                 <AvakioText
                   type="number"
                   value={filters[column.id] || ''}
-                  onChange={(value) => handleFilter(column.id, value)}
+                  onChange={({ value }) => handleFilter(column.id, value)}
                   clear={true}
                   className="avakio-datatable-filter-input"
                   height={24}
@@ -1393,7 +1405,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
                 <AvakioText
                   type="text"
                   value={filters[column.id] || ''}
-                  onChange={(value) => handleFilter(column.id, value)}
+                  onChange={({ value }) => handleFilter(column.id, value)}
                   clear={true}
                   className="avakio-datatable-filter-input"
                   height={24}
@@ -1403,7 +1415,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
                 <AvakioText
                   type="text"
                   value={filters[column.id] || ''}
-                  onChange={(value) => handleFilter(column.id, value)}
+                  onChange={({ value }) => handleFilter(column.id, value)}
                   clear={true}
                   className="avakio-datatable-filter-input"
                   height={24}
@@ -2016,7 +2028,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
                 { id: '50', value: '50 / page' },
                 { id: '100', value: '100 / page' },
               ]}
-              onChange={(value) => {
+              onChange={({ value }) => {
                 const newPageSize = Number(value);
                 setLocalPageSize(newPageSize);
                 setPage(1);

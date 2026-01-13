@@ -1,123 +1,130 @@
-/* AvakioMultiCombo Example Demo Styles */
+/* ================================
+   AVAKIO MULTICOMBO EXAMPLE STYLES
+   ================================ */
+
 .avakio-multicombo-demo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
   padding: 0;
   min-height: 100vh;
 }
 
-/* Sticky wrapper for header + tabbar */
-.avakio-multicombo-sticky-header {
+/* Sticky header with tabs */
+.avakio-multicombo-demo-container .avakio-example-sticky-header {
   position: sticky;
   top: 0;
-  z-index: 100;
-  background: var(--avakio-bg-secondary, #f8fafc);
+  z-index: 200;
+  background: var(--avakio-bg-primary, #ffffff);
+  border-bottom: 1px solid var(--avakio-border, #e5e7eb);
 }
 
 .avakio-multicombo-tabbar-container {
-  background: var(--avakio-bg-secondary, #f8fafc);
-  border-bottom: 1px solid var(--avakio-border-primary);
-  padding: 8px 12px;
-  overflow: hidden;
+  padding: 0 16px 12px;
+  background: inherit;
 }
 
+/* Demo sections */
 .avakio-multicombo-demo-section {
-  border-bottom: 1px solid var(--avakio-border-primary);
-  scroll-margin-top: 160px; /* Offset for sticky header + tabbar */
+  padding: 16px;
+  border-bottom: 1px solid var(--avakio-section-border, #e5e7eb);
+  scroll-margin-top: 140px;
 }
 
-.avakio-multicombo-value-display {
-  padding: 8px 16px;
+.avakio-multicombo-demo-section:last-child {
+  border-bottom: none;
+}
+
+/* Result display */
+.avakio-multicombo-result {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: var(--avakio-result-bg, #f0f9ff);
+  border: 1px solid var(--avakio-result-border, #bae6fd);
   border-radius: 8px;
-  background: var(--avakio-bg-tertiary, #f3f4f6);
-  color: var(--avakio-text-primary, #374151);
   font-size: 14px;
-  font-weight: 600;
-  display: inline-block;
-  width: fit-content;
-  margin-top: 8px;
+  color: var(--avakio-result-text, #0369a1);
 }
 
-/* Props Table Styles */
-.avakio-multicombo-props-table {
+.avakio-multicombo-result strong {
+  color: var(--avakio-result-strong, #075985);
+}
+
+/* Custom grid for variations */
+.avakio-multicombo-custom-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.avakio-multicombo-custom-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.avakio-multicombo-custom-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--avakio-custom-label, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* API Table */
+.avakio-multicombo-api-table {
   width: 100%;
   overflow-x: auto;
 }
 
-.avakio-multicombo-props-table table {
+.avakio-multicombo-api-table table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-.avakio-multicombo-props-table th,
-.avakio-multicombo-props-table td {
-  padding: 12px 16px;
+.avakio-multicombo-api-table th {
   text-align: left;
-  border-bottom: 1px solid var(--avakio-border-primary, #e5e7eb);
-}
-
-.avakio-multicombo-props-table th {
-  background: var(--avakio-bg-tertiary, #f3f4f6);
+  padding: 12px;
+  background: var(--avakio-bg-secondary, #f8fafc);
+  border-bottom: 2px solid var(--avakio-border, #e5e7eb);
   font-weight: 600;
-  color: var(--avakio-text-primary, #374151);
+  color: var(--avakio-text-primary, #1e293b);
 }
 
-.avakio-multicombo-props-table td {
-  color: var(--avakio-text-secondary, #6b7280);
+.avakio-multicombo-api-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--avakio-border, #e5e7eb);
+  color: var(--avakio-text-secondary, #64748b);
 }
 
-.avakio-multicombo-props-table code {
-  background: var(--avakio-bg-tertiary, #f3f4f6);
+.avakio-multicombo-api-table code {
+  background: var(--avakio-code-bg, #f1f5f9);
   padding: 2px 6px;
   border-radius: 4px;
-  font-family: 'Fira Code', 'Consolas', monospace;
-  font-size: 12px;
-  color: var(--avakio-accent-primary, #3b82f6);
-}
-
-/* Code Example Styles */
-.avakio-multicombo-code-example {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.avakio-multicombo-code-example pre {
-  background: var(--avakio-bg-tertiary, #1e293b);
-  color: var(--avakio-text-primary, #e2e8f0);
-  padding: 16px;
-  border-radius: 8px;
-  font-family: 'Fira Code', 'Consolas', monospace;
+  font-family: monospace;
   font-size: 13px;
-  line-height: 1.6;
-  overflow-x: auto;
-  margin: 0;
 }
 
-/* Dark theme support */
-[data-admin-theme="dark"] .avakio-multicombo-sticky-header,
-[data-admin-theme="dark"] .avakio-multicombo-tabbar-container {
-  background: var(--avakio-bg-secondary, hsl(222, 47%, 11%));
+/* Event log */
+.avakio-multicombo-event-log {
+  background: var(--avakio-log-bg, #1e293b);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--avakio-log-text, #e2e8f0);
+  max-height: 200px;
+  overflow-y: auto;
 }
 
-[data-admin-theme="dark"] .avakio-multicombo-value-display {
-  background: var(--avakio-bg-tertiary, hsl(222, 47%, 20%));
-  color: var(--avakio-text-primary, hsl(210, 40%, 90%));
+.avakio-multicombo-event-log-item {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--avakio-log-border, #334155);
 }
 
-[data-admin-theme="dark"] .avakio-multicombo-props-table th {
-  background: var(--avakio-bg-tertiary, hsl(222, 47%, 15%));
-  color: var(--avakio-text-primary, hsl(210, 40%, 90%));
+.avakio-multicombo-event-log-item:last-child {
+  border-bottom: none;
 }
-
-[data-admin-theme="dark"] .avakio-multicombo-props-table td {
-  color: var(--avakio-text-secondary, hsl(210, 40%, 70%));
-}
-
-[data-admin-theme="dark"] .avakio-multicombo-props-table code {
-  background: var(--avakio-bg-quaternary, hsl(222, 47%, 20%));
-}
-
-[data-admin-theme="dark"] .avakio-multicombo-code-example pre {
-  background: hsl(222, 47%, 8%);
-  color: hsl(210, 40%, 90%);
-}
-

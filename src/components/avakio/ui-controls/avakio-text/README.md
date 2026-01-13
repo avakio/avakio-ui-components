@@ -35,10 +35,11 @@ function MyForm() {
 
   return (
     <AvakioText
+      id="name-input"
       label="Name"
       placeholder="Enter your name"
       value={name}
-      onChange={(value) => setName(value)}
+      onChange={({ value }) => setName(value)}
     />
   );
 }
@@ -84,7 +85,7 @@ function MyForm() {
 | `rows` | `number` | `4` | Number of visible rows (only for multiline) |
 | `padding` | `string \| number \| [number, number, number, number]` | - | Padding (number for all sides, string for CSS, or [top, right, bottom, left]) |
 | `margin` | `string \| number \| [number, number, number, number]` | - | Margin (number for all sides, string for CSS, or [top, right, bottom, left]) |
-| `onChange` | `(value: string, event: ChangeEvent<HTMLInputElement \| HTMLTextAreaElement>) => void` | - | Change callback |
+| `onChange` | `({ id, value, event }) => void` | - | Change callback. Receives `{ id, value, event }` object |
 | `onBlur` | `(event: FocusEvent<HTMLInputElement \| HTMLTextAreaElement>) => void` | - | Blur callback |
 | `onFocus` | `(event: FocusEvent<HTMLInputElement \| HTMLTextAreaElement>) => void` | - | Focus callback |
 | `onEnter` | `(value: string) => void` | - | Enter key callback (not triggered in multiline mode) |
@@ -143,11 +144,12 @@ textRef.current?.enable();
 
 ```tsx
 <AvakioText
+  id="search-input"
   label="Search"
   placeholder="Type to search..."
   clear={true}
   value={searchTerm}
-  onChange={(value) => setSearchTerm(value)}
+  onChange={({ value }) => setSearchTerm(value)}
 />
 ```
 
@@ -188,12 +190,13 @@ textRef.current?.enable();
 
 ```tsx
 <AvakioText
+  id="description-input"
   label="Description"
   placeholder="Enter description..."
   multiline={true}
   rows={6}
   value={description}
-  onChange={(value) => setDescription(value)}
+  onChange={({ value }) => setDescription(value)}
 />
 ```
 
@@ -267,7 +270,7 @@ Supports three formats: number (all sides), CSS string, or array [top, right, bo
 ### onChange
 Fired when the value changes:
 ```tsx
-<AvakioText onChange={(value, event) => console.log(value)} />
+<AvakioText onChange={({ id, value, event }) => console.log(id, value)} />
 ```
 
 ### onEnter

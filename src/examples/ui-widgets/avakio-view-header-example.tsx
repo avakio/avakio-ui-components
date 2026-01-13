@@ -86,7 +86,7 @@ export function AvakioViewHeaderExample() {
                     <AvakioRichSelect
                       value={playgroundTheme}
                       options={themes}
-                      onChange={(value) => {
+                      onChange={({ value }) => {
                         setPlaygroundTheme(value as string);
                         setAppliedProps(prev => ({ ...prev, theme: value as string }));
                       }}

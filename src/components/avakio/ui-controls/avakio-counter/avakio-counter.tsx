@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import './avakio-counter.css';
 import { Minus, Plus } from 'lucide-react';
 
@@ -21,7 +22,8 @@ export interface AvakioCounterProps {
   readOnly?: boolean;
   size?: Size;
   allowInput?: boolean;
-  onChange?: (value: number) => void;
+  /** Callback fired when the value changes. Receives { id, value } */
+  onChange?: (event: AvakioChangeEvent<number>) => void;
   className?: string;
   /** Padding (number for all sides, string for CSS, or [top, right, bottom, left]) */
   padding?: string | number | [number, number, number, number];
@@ -93,7 +95,7 @@ export function AvakioCounter({
     if (!isControlled) {
       setInternal(next);
     }
-    onChange?.(next);
+    onChange?.({ id: id || '0', value: next });
   };
 
   const handleStep = (delta: number) => {

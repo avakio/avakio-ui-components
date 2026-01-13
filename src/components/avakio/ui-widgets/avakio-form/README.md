@@ -30,22 +30,25 @@ function LoginForm() {
 
   return (
     <AvakioForm
+      id="login-form"
       width={400}
       padding={20}
       margin={12}
-      onChange={(name, value, allValues) => setValues(allValues)}
+      onChange={({ name, value, values: allValues }) => setValues(allValues)}
       onSubmit={(values) => console.log('Submit:', values)}
     >
       <AvakioText
+        id="email-input"
         label="Email"
         value={values.email}
-        onChange={(val) => setValues(prev => ({ ...prev, email: val }))}
+        onChange={({ value }) => setValues(prev => ({ ...prev, email: value }))}
       />
       <AvakioText
+        id="password-input"
         label="Password"
         type="password"
         value={values.password}
-        onChange={(val) => setValues(prev => ({ ...prev, password: val }))}
+        onChange={({ value }) => setValues(prev => ({ ...prev, password: value }))}
       />
       <AvakioButton value="Login" type="form" />
     </AvakioForm>
@@ -158,7 +161,7 @@ formRef.current?.enable();
 | `scroll` | `boolean \| 'x' \| 'y' \| 'xy'` | - | Enable scrolling |
 | `type` | `'clean' \| 'line' \| 'wide' \| 'space' \| 'form'` | `'form'` | Layout type |
 | `theme` | `AvakioFormTheme` | - | Theme variant |
-| `onChange` | `(name, value, values) => void` | - | Field change callback |
+| `onChange` | `({ id, name, value, values }) => void` | - | Field change callback. Receives `{ id, name, value, values }` object |
 | `onValidation` | `(isValid, errors) => void` | - | Validation callback |
 | `onSubmit` | `(values) => void` | - | Form submit callback |
 

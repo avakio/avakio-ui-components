@@ -10,11 +10,153 @@
   --drp-muted: var(--avakio-text-secondary);
   --drp-primary: var(--avakio-accent-primary);
   --drp-primary-strong: var(--avakio-accent-hover);
-  --drp-radius: 12px;
+  --drp-radius: 6px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   color: var(--drp-text);
 }
 
+/* Layout */
+.avakio-drp {
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.avakio-drp-label-vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.avakio-drp-wrapper-vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Input Group - default mode */
+.avakio-drp-input-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  background: var(--drp-surface);
+  border: 1px solid var(--drp-border);
+  border-radius: 0 var(--drp-radius) var(--drp-radius) 0;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.avakio-drp-input-group:hover {
+  border-color: color-mix(in srgb, var(--drp-primary) 40%, var(--drp-border));
+}
+
+.avakio-drp-input-group:focus-within {
+  border-color: var(--drp-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--drp-primary) 20%, transparent);
+}
+
+.avakio-drp-input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--drp-text);
+  cursor: pointer;
+  outline: none;
+}
+
+.avakio-drp-input::placeholder {
+  color: var(--drp-muted);
+}
+
+.avakio-drp-icon-btn,
+.avakio-drp-clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin-right: 4px;
+  border: none;
+  background: transparent;
+  color: var(--drp-muted);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.avakio-drp-icon-btn:hover,
+.avakio-drp-clear-btn:hover {
+  background: color-mix(in srgb, var(--drp-primary) 10%, transparent);
+  color: var(--drp-primary);
+}
+
+/* Compact mode */
+.avakio-drp-compact .avakio-drp-input-group-compact {
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  background: var(--drp-surface);
+  border: 1px solid var(--drp-border);
+  border-radius: 0 var(--drp-radius) var(--drp-radius) 0;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  height: 26px;
+}
+
+.avakio-drp-compact .avakio-drp-input-compact {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  color: var(--drp-text);
+  cursor: pointer;
+  outline: none;
+}
+
+.avakio-drp-compact .avakio-drp-icon-btn-compact,
+.avakio-drp-compact .avakio-drp-clear-btn-compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin-right: 2px;
+  border: none;
+  background: transparent;
+  color: var(--drp-muted);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+}
+
+/* Borderless mode */
+.avakio-drp-borderless .avakio-drp-input-group,
+.avakio-drp-borderless .avakio-drp-input-group-compact {
+  border-color: transparent;
+}
+
+/* Disabled mode */
+.avakio-drp-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Invalid mode */
+.avakio-drp-invalid .avakio-drp-input-group,
+.avakio-drp-invalid .avakio-drp-input-group-compact {
+  border-color: var(--avakio-error, #dc3545);
+}
+
+/* Old trigger button (kept for backwards compatibility) */
 .avakio-drp-trigger {
   width: 100%;
   min-width: 280px;

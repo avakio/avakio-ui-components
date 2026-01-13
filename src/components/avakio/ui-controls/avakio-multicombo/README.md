@@ -1,468 +1,193 @@
-# Avakio MultiCombo Component
+# AvakioMultiCombo
 
-A powerful multi-select dropdown component with search, chips display, and count mode, built with React and TypeScript.
+A multi-select dropdown component with chips display, search filtering, select all functionality, and comprehensive label support via `AvakioControlLabel`.
 
 ## Features
 
-- **🔍 Searchable**: Filter options with instant search
-- **☑️ Checkbox Selection**: Visual checkboxes for each option
-- **🏷️ Chips Display**: Selected items shown as removable chips
-- **🔢 Count Mode**: Option to show selection count instead of chips
-- **✅ Select All/None**: Bulk selection actions
-- **🧹 Clear All**: Quick way to deselect everything
-- **📊 Max Display**: Limit visible chips with "+N more" indicator
-- **🎨 Theme Support**: Integrates with 6 admin themes (Material, Flat, Compact, Dark, Ocean, Sunset)
-- **🚫 Disabled State**: Full support for disabled mode
-- **⌨️ Keyboard Accessible**: Full keyboard navigation
-- **📱 Responsive**: Mobile-friendly design
-- **🎯 Click Outside**: Closes dropdown when clicking outside
+- Multiple selection with checkboxes
+- Chips display with configurable max items
+- Show count mode alternative to chips
+- Search/filter functionality
+- Select All / Deselect All
+- Custom option templates
+- Full label support (left, top, right, bottom positions)
+- Compact size variant
+- Validation states (required, invalid)
+- forwardRef with imperative API
 
-## Installation
-
-The component is located at:
-```
-client/src/components/avakio/avakio-multicombo/
-```
-
-## Basic Usage
+## Usage
 
 ```tsx
-import { AvakioMultiCombo, AvakioMultiComboOption } from '@/components/avakio/avakio-multicombo/avakio-multicombo';
-import { useState } from 'react';
+import { AvakioMultiCombo } from '@avakio/ui-components';
 
-function MyComponent() {
-  const [selected, setSelected] = useState<string[]>([]);
-
-  const options: AvakioMultiComboOption[] = [
-    { value: 'js', label: 'JavaScript' },
-    { value: 'ts', label: 'TypeScript' },
+// Basic usage
+<AvakioMultiCombo
+  id="tech-select"
+  value={selectedValues}
+  options={[
     { value: 'react', label: 'React' },
-  ];
-
-  return (
-    <AvakioMultiCombo
-      options={options}
-      value={selected}
-      onChange={setSelected}
-      placeholder="Select items..."
-    />
-  );
-}
-```
-
-## Advanced Usage
-
-### With Chips Display (Default)
-
-```tsx
-<AvakioMultiCombo
-  options={options}
-  value={selected}
-  onChange={setSelected}
-  placeholder="Select your skills..."
-  maxDisplayItems={3}  // Show max 3 chips, then "+N more"
+    { value: 'vue', label: 'Vue.js' },
+    { value: 'angular', label: 'Angular' },
+  ]}
+  onChange={({ value }) => setSelectedValues(value)}
+  label="Technologies"
+  placeholder="Select technologies..."
 />
-```
 
-### With Count Display
-
-```tsx
+// With show count mode
 <AvakioMultiCombo
+  id="items-select"
+  value={selectedValues}
   options={options}
-  value={selected}
-  onChange={setSelected}
-  placeholder="Select departments..."
-  showCount={true}  // Shows "N items selected" instead of chips
+  onChange={({ value }) => setSelectedValues(value)}
+  label="Select Items"
+  showCount
 />
-```
 
-### Disabled State
-
-```tsx
+// With custom template
 <AvakioMultiCombo
-  options={options}
-  value={['js', 'react']}
-  onChange={() => {}}
-  placeholder="Cannot change..."
-  disabled={true}
+  id="countries-select"
+  value={selectedValues}
+  options={countryOptions}
+  onChange={({ value }) => setSelectedValues(value)}
+  label="Countries"
+  template={(option) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <span>{option.flag}</span>
+      <span>{option.label}</span>
+    </div>
+  )}
 />
-```
 
-### Pre-selected Values
-
-```tsx
-function MyComponent() {
-  const [selected, setSelected] = useState<string[]>(['js', 'ts', 'react']);
-
-  return (
-    <AvakioMultiCombo
-      options={options}
-      value={selected}
-      onChange={setSelected}
-    />
-  );
-}
+// Compact size for tables/filters
+<AvakioMultiCombo
+  id="compact-select"
+  value={selectedValues}
+  options={options}
+  onChange={({ value }) => setSelectedValues(value)}
+  size="compact"
+/>
 ```
 
 ## Props
 
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `options` | `AvakioMultiComboOption[]` | Yes | - | Array of available options |
-| `value` | `string[]` | Yes | - | Array of selected option values |
-| `onChange` | `(values: string[]) => void` | Yes | - | Callback when selection changes |
-| `placeholder` | `string` | No | `"Select items..."` | Placeholder text when empty |
-| `className` | `string` | No | `undefined` | Additional CSS classes |
-| `showCount` | `boolean` | No | `false` | Show count instead of chips |
-| `maxDisplayItems` | `number` | No | `3` | Max chips before "+N more" |
-| `disabled` | `boolean` | No | `false` | Disable the component |
+### Component-Specific Props
 
-## Types
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string[]` | `[]` | Array of selected values |
+| `options` | `AvakioMultiComboOption[]` | `[]` | Array of options with value and label |
+| `placeholder` | `string` | `'Select items...'` | Placeholder text when no selection |
+| `showCount` | `boolean` | `false` | Show count instead of chips |
+| `maxDisplayItems` | `number` | `3` | Max chips to display before "+N more" |
+| `clearable` | `boolean` | `true` | Whether the selection can be cleared |
+| `size` | `'default' \| 'compact'` | `'default'` | Size variant |
+| `template` | `(option) => ReactNode` | `undefined` | Custom render function for options |
+| `yCount` | `number` | `undefined` | Number of visible items in dropdown |
 
-### AvakioMultiComboOption
+### Label Props (via AvakioControlLabel)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | `undefined` | Label text displayed beside the control |
+| `labelForm` | `string` | `undefined` | Form label displayed above the component |
+| `labelPosition` | `'left' \| 'top' \| 'right' \| 'bottom'` | `'left'` | Position of the label |
+| `labelAlign` | `'left' \| 'center' \| 'right'` | `'left'` | Alignment of the label text |
+| `labelWidth` | `number \| string` | `100` | Width of the label |
+| `bottomLabel` | `string` | `undefined` | Help text displayed below the component |
+
+### State Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `disabled` | `boolean` | `false` | Whether the component is disabled |
+| `readonly` | `boolean` | `false` | Whether the component is read-only |
+| `hidden` | `boolean` | `false` | Whether the component is hidden |
+| `borderless` | `boolean` | `false` | Removes the border |
+
+### Validation Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `required` | `boolean` | `false` | Marks field as required (shows asterisk) |
+| `invalid` | `boolean` | `false` | Marks the component as invalid |
+| `invalidMessage` | `string` | `undefined` | Validation error message |
+
+### Sizing Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `width` | `number \| string` | `undefined` | Width of the component |
+| `maxHeight` | `number \| string` | `undefined` | Maximum height of the dropdown |
+| `minWidth` | `number \| string` | `undefined` | Minimum width |
+| `maxWidth` | `number \| string` | `undefined` | Maximum width |
+| `margin` | `number \| string \| [number, number, number, number]` | `undefined` | Margin around the component |
+| `padding` | `number \| string \| [number, number, number, number]` | `undefined` | Padding inside the component |
+
+### Events
+
+| Event | Type | Description |
+|-------|------|-------------|
+| `onChange` | `({ id, value }) => void` | Fires when selected values change. Receives `{ id, value }` object |
+
+## Ref Methods
+
+The component exposes imperative methods via `forwardRef`:
+
+```tsx
+const multiComboRef = useRef<AvakioMultiComboRef>(null);
+
+// Usage
+multiComboRef.current?.getValue();      // Returns string[]
+multiComboRef.current?.setValue(['a', 'b']);
+multiComboRef.current?.getText();       // Returns comma-separated labels
+multiComboRef.current?.clear();         // Clears all selections
+multiComboRef.current?.selectAll();     // Selects all options
+multiComboRef.current?.focus();
+multiComboRef.current?.blur();
+multiComboRef.current?.enable();
+multiComboRef.current?.disable();
+multiComboRef.current?.show();
+multiComboRef.current?.hide();
+multiComboRef.current?.isEnabled();     // Returns boolean
+multiComboRef.current?.isVisible();     // Returns boolean
+multiComboRef.current?.getElement();    // Returns HTMLElement | null
+multiComboRef.current?.getParentView(); // Returns string | null
+multiComboRef.current?.validate();      // Returns boolean | string
+```
+
+## Option Interface
 
 ```tsx
 interface AvakioMultiComboOption {
-  value: string;  // Unique identifier
-  label: string;  // Display text
+  value: string;
+  label: string;
+  [key: string]: any; // Additional custom properties for templates
 }
 ```
 
-## Display Modes
+## CSS Classes
 
-### Chips Mode (Default)
+The component uses the `avakio-multicombo` prefix for all CSS classes:
 
-Shows selected items as individual chips:
-```tsx
-<AvakioMultiCombo
-  options={options}
-  value={['js', 'ts', 'react']}
-  onChange={setSelected}
-/>
-// Displays: [JavaScript] [TypeScript] [React]
-```
-
-With `maxDisplayItems`:
-```tsx
-<AvakioMultiCombo
-  options={options}
-  value={['js', 'ts', 'react', 'vue', 'node']}
-  onChange={setSelected}
-  maxDisplayItems={2}
-/>
-// Displays: [JavaScript] [TypeScript] [+3 more]
-```
-
-### Count Mode
-
-Shows only the selection count:
-```tsx
-<AvakioMultiCombo
-  options={options}
-  value={['js', 'ts', 'react']}
-  onChange={setSelected}
-  showCount={true}
-/>
-// Displays: "3 items selected"
-```
-
-## Features in Detail
-
-### Search/Filter
-
-Type to filter options in real-time:
-- Case-insensitive search
-- Searches both value and label
-- Instant results
-- "No matches found" message when no results
-
-### Checkbox Selection
-
-Each option has a checkbox:
-- Click anywhere on the row to toggle
-- Checked state persists during search
-- Visual feedback with checkmark icon
-
-### Select All / Deselect All
-
-Located at the top of the dropdown:
-- **Select All**: Selects all filtered options
-- **Deselect All**: Removes all filtered options
-- Button text changes based on selection state
-- Works with search filter
-
-### Chip Management
-
-Individual chip removal:
-```tsx
-// Each chip has an X button to remove it
-[JavaScript] ✕  [TypeScript] ✕  [React] ✕
-```
-
-Chips are:
-- Removable (X button)
-- Ellipsized if too long (max-width: 150px)
-- Color-coded (muted background)
-- "+N more" chip is non-removable
-
-### Clear All
-
-X button in the input field:
-- Visible only when items are selected
-- Clears entire selection
-- Stops event propagation
-
-### Footer
-
-Shows selection count at bottom of dropdown:
-```
-2 items selected
-```
-
-## Examples
-
-### Skills Selector
-
-```tsx
-function SkillsSelector() {
-  const [skills, setSkills] = useState<string[]>([]);
-
-  const skillOptions: AvakioMultiComboOption[] = [
-    { value: 'js', label: 'JavaScript' },
-    { value: 'ts', label: 'TypeScript' },
-    { value: 'react', label: 'React' },
-    { value: 'vue', label: 'Vue.js' },
-    { value: 'angular', label: 'Angular' },
-    { value: 'node', label: 'Node.js' },
-    { value: 'python', label: 'Python' },
-    { value: 'java', label: 'Java' },
-    { value: 'csharp', label: 'C#' },
-    { value: 'go', label: 'Go' },
-  ];
-
-  return (
-    <div>
-      <label>Select Your Skills</label>
-      <AvakioMultiCombo
-        options={skillOptions}
-        value={skills}
-        onChange={setSkills}
-        placeholder="Choose skills..."
-        maxDisplayItems={4}
-      />
-      <p>You selected {skills.length} skills</p>
-    </div>
-  );
-}
-```
-
-### Department Filter
-
-```tsx
-function DepartmentFilter() {
-  const [departments, setDepartments] = useState<string[]>([]);
-
-  const departmentOptions: AvakioMultiComboOption[] = [
-    { value: 'eng', label: 'Engineering' },
-    { value: 'design', label: 'Design' },
-    { value: 'product', label: 'Product' },
-    { value: 'marketing', label: 'Marketing' },
-    { value: 'sales', label: 'Sales' },
-    { value: 'hr', label: 'HR' },
-  ];
-
-  return (
-    <AvakioMultiCombo
-      options={departmentOptions}
-      value={departments}
-      onChange={setDepartments}
-      placeholder="Filter by department..."
-      showCount={true}
-    />
-  );
-}
-```
-
-### Form Integration
-
-```tsx
-function UserForm() {
-  const [formData, setFormData] = useState({
-    name: '',
-    roles: [] as string[],
-  });
-
-  const roleOptions: AvakioMultiComboOption[] = [
-    { value: 'admin', label: 'Administrator' },
-    { value: 'editor', label: 'Editor' },
-    { value: 'viewer', label: 'Viewer' },
-  ];
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form data:', formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Name</label>
-        <input
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-        />
-      </div>
-      <div>
-        <label>Roles</label>
-        <AvakioMultiCombo
-          options={roleOptions}
-          value={formData.roles}
-          onChange={(roles) => setFormData({ ...formData, roles })}
-          placeholder="Assign roles..."
-        />
-      </div>
-      <button type="submit">Save User</button>
-    </form>
-  );
-}
-```
+- `.avakio-multicombo` - Root container
+- `.avakio-multicombo-trigger` - Clickable trigger area
+- `.avakio-multicombo-chips` - Chips container
+- `.avakio-multicombo-chip` - Individual chip
+- `.avakio-multicombo-dropdown` - Dropdown portal
+- `.avakio-multicombo-option` - Option item
+- `.avakio-multicombo-checkbox` - Option checkbox
+- `.avakio-multicombo-label` - Label element
+- `.avakio-multicombo-compact` - Compact size modifier
+- `.avakio-multicombo-disabled` - Disabled state
 
 ## Theme Support
 
-The component automatically adapts to the active admin theme:
-
-### Material Theme
-- Subtle box shadow
-- Rounded corners
-- Elevation effects
-
-### Flat Theme
-- No border radius (square corners)
-- Flat design aesthetic
-- No shadows
-
-### Compact Theme
-- Reduced padding
-- Smaller height (36px)
-- Tighter spacing
-- Smaller fonts (13px)
-
-### Dark Theme
-- Dark navy background
-- Light text
-- Dark borders
-- High contrast
-
-### Ocean Theme
-- Blue accent color (#0094ff)
-- Blue checkboxes and chips
-
-### Sunset Theme
-- Orange accent color (#ff5722)
-- Warm color palette
-
-### Applying Themes
-
-```tsx
-<div data-admin-theme="ocean">
-  <AvakioMultiCombo
-    options={options}
-    value={selected}
-    onChange={setSelected}
-  />
-</div>
-```
-
-## Styling
-
-### Default Styles
-The component comes with complete styling in `avakio-multicombo.css`.
-
-### Custom Styling
-
-```css
-/* Custom dropdown height */
-.avakio-mc-dropdown {
-  max-height: 400px;
-}
-
-/* Custom chip styling */
-.avakio-mc-chip {
-  background: #your-color;
-}
-
-/* Custom checkbox color */
-[data-admin-theme="custom"] .avakio-mc-checkbox-checked {
-  background: #your-primary-color;
-}
-```
-
-### CSS Classes
-
-| Class | Purpose |
-|-------|---------|
-| `.avakio-multicombo` | Main container |
-| `.avakio-mc-disabled` | Disabled state |
-| `.avakio-mc-input-wrapper` | Input area wrapper |
-| `.avakio-mc-input-wrapper-open` | Open state |
-| `.avakio-mc-placeholder` | Placeholder text |
-| `.avakio-mc-count` | Count display |
-| `.avakio-mc-chips` | Chips container |
-| `.avakio-mc-chip` | Individual chip |
-| `.avakio-mc-chip-remove` | Chip remove button |
-| `.avakio-mc-chip-more` | "+N more" indicator |
-| `.avakio-mc-search-input` | Search input field |
-| `.avakio-mc-dropdown` | Dropdown container |
-| `.avakio-mc-options` | Options list |
-| `.avakio-mc-option` | Individual option |
-| `.avakio-mc-checkbox` | Checkbox element |
-| `.avakio-mc-checkbox-checked` | Checked state |
-| `.avakio-mc-footer` | Footer with count |
-
-## Accessibility
-
-- **Keyboard Navigation**: All elements keyboard accessible
-- **ARIA Labels**: Proper labeling for screen readers
-- **Focus Management**: Automatic focus on search input
-- **Button Types**: Proper `button` types prevent form submission
-- **Visual Feedback**: Clear hover and selected states
-- **Click Outside**: Closes dropdown automatically
-
-## Performance
-
-- **Memoized Filtering**: Efficient search with `useMemo`
-- **Event Handling**: Optimized with `useCallback`
-- **Click Outside**: Cleanup on unmount
-- **Minimal Re-renders**: Only updates when necessary
-
-## Browser Support
-
-- Chrome/Edge (latest)
-- Firefox (latest)
-- Safari (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## Dependencies
-
-- React 18+
-- TypeScript 4.5+
-- Lucide React (icons)
-- Tailwind CSS (utility classes)
-
-## Related Components
-
-- **AvakioDatePicker**: Date and time picker component
-- **AvakioDataTable**: High-performance data table
-
-## Demo
-
-View the live demo at:
-```
-http://localhost:5000/avakio-multicombo-demo
-```
-
-## License
-
-Part of the Resume-Scribe project.
-
+The component supports all Avakio themes:
+- Default
+- Material
+- Flat
+- Compact
+- Dark
+- Ocean
+- Sunset

@@ -34,13 +34,14 @@ function MyComponent() {
 
   return (
     <AvakioSegmentedButton
+      id="section-selector"
       value={view}
       options={[
         { id: 'section-a', value: 'Section A' },
         { id: 'section-b', value: 'Section B' },
         { id: 'section-c', value: 'Section C' },
       ]}
-      onChange={(val) => setView(val as string)}
+      onChange={({ value }) => setView(value as string)}
     />
   );
 }
@@ -169,6 +170,7 @@ function MyComponent() {
 
 ```tsx
 <AvakioSegmentedButton
+  id="callback-example"
   options={options}
   onBeforeTabClick={(id) => {
     // Return false to prevent selection
@@ -177,7 +179,7 @@ function MyComponent() {
   onAfterTabClick={(id) => {
     console.log(`Clicked: ${id}`);
   }}
-  onChange={(value, option) => {
+  onChange={({ id, value, option }) => {
     console.log(`Changed to: ${value}`, option);
   }}
 />
@@ -214,7 +216,7 @@ function MyComponent() {
 | `height` | `number \| string` | - | Component height |
 | `multiview` | `boolean` | `false` | Connect to multiview |
 | `tooltip` | `string` | - | Tooltip text |
-| `onChange` | `(value, option) => void` | - | Value change callback |
+| `onChange` | `({ id, value, option }) => void` | - | Value change callback. Receives `{ id, value, option }` object |
 | `onBeforeTabClick` | `(id) => boolean \| void` | - | Before click callback |
 | `onAfterTabClick` | `(id) => void` | - | After click callback |
 | `onOptionAdd` | `(option) => void` | - | Option added callback |

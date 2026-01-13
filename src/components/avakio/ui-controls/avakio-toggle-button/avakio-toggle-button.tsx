@@ -1,4 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect, useCallback } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import './avakio-toggle-button.css';
 
 export type AvakioToggleButtonTheme = 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset';
@@ -76,8 +77,8 @@ export interface AvakioToggleButtonProps {
   maxWidth?: number | string;
   /** Custom inline styles for the root element */
   style?: React.CSSProperties;
-  /** Callback when value changes */
-  onChange?: (value: boolean) => void;
+  /** Callback fired when the value changes. Receives { id, value } */
+  onChange?: (event: AvakioChangeEvent<boolean>) => void;
   /** Callback when clicked */
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /** Callback when focused */
@@ -195,8 +196,8 @@ export const AvakioToggleButton = forwardRef<AvakioToggleButtonRef, AvakioToggle
         setInternalValue(newValue);
       }
       
-      onChange?.(newValue);
-    }, [disabled, isPressed, isControlled, onChange]);
+      onChange?.({ id: id || '0', value: newValue });
+    }, [disabled, isPressed, isControlled, onChange, id]);
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       handleToggle();
@@ -210,7 +211,7 @@ export const AvakioToggleButton = forwardRef<AvakioToggleButtonRef, AvakioToggle
         if (!isControlled) {
           setInternalValue(val);
         }
-        onChange?.(val);
+        onChange?.({ id: id || '0', value: val });
       },
       toggle: handleToggle,
       focus: () => buttonRef.current?.focus(),

@@ -140,7 +140,7 @@ import '@/components/avakio/views/avakio-template/avakio-template.css';
 | `id` | `string` | - | HTML id attribute |
 | `testId` | `string` | - | Test ID for testing |
 | `onLoad` | `() => void` | - | Callback when content loads |
-| `onChange` | `(data: any) => void` | - | Callback when data changes |
+| `onChange` | `({ id, value }) => void` | - | Callback when data changes. Receives `{ id, value }` object |
 | `onClick` | `(e: React.MouseEvent) => void` | - | Click handler |
 
 ## Ref Methods

@@ -1,4 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect, useCallback, useId } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import './avakio-accordion.css';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 
@@ -67,8 +68,8 @@ export interface AvakioAccordionProps {
   onExpand?: (id: string | number) => void;
   /** Callback when an item is collapsed */
   onCollapse?: (id: string | number) => void;
-  /** Callback when state changes */
-  onChange?: (expandedIds: (string | number)[]) => void;
+  /** Callback fired when expanded state changes. Receives { id, value } where value is expandedIds array */
+  onChange?: (event: AvakioChangeEvent<(string | number)[]>) => void;
   /** Whether the component is borderless */
   borderless?: boolean;
   /** Whether the component is disabled */
@@ -216,12 +217,12 @@ export const AvakioAccordion = forwardRef<AvakioAccordionRef, AvakioAccordionPro
           }
 
           if (newExpandedIds !== prev) {
-            onChange?.(newExpandedIds);
+            onChange?.({ id: id || '0', value: newExpandedIds });
           }
           return newExpandedIds;
         });
       },
-      [multi, items, disabledIds, onExpand, onCollapse, onChange]
+      [multi, items, disabledIds, onExpand, onCollapse, onChange, id]
     );
 
     // Handle keyboard navigation
@@ -309,26 +310,26 @@ export const AvakioAccordion = forwardRef<AvakioAccordionRef, AvakioAccordionPro
             .filter((item) => !disabledIds.has(item.id) && item.headerVisible !== false)
             .map((item) => item.id);
           setExpandedIds(allIds);
-          allIds.forEach((id) => {
-            if (!expandedIds.includes(id)) {
-              onExpand?.(id);
+          allIds.forEach((itemId) => {
+            if (!expandedIds.includes(itemId)) {
+              onExpand?.(itemId);
             }
           });
-          onChange?.(allIds);
+          onChange?.({ id: id || '0', value: allIds });
         }
       },
       collapseAll: () => {
         if (multi === true) {
-          expandedIds.forEach((id) => onCollapse?.(id));
+          expandedIds.forEach((itemId) => onCollapse?.(itemId));
           setExpandedIds([]);
-          onChange?.([]);
+          onChange?.({ id: id || '0', value: [] });
         } else if (multi === 'mixed') {
           // Keep only the first expanded item
           const firstExpanded = expandedIds[0];
           if (firstExpanded) {
-            expandedIds.slice(1).forEach((id) => onCollapse?.(id));
+            expandedIds.slice(1).forEach((itemId) => onCollapse?.(itemId));
             setExpandedIds([firstExpanded]);
-            onChange?.([firstExpanded]);
+            onChange?.({ id: id || '0', value: [firstExpanded] });
           }
         }
       },

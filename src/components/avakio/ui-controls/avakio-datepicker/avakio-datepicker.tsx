@@ -179,6 +179,10 @@ function AvakioDatePickerCalendar({
 
   const handleDateSelect = (date: Date) => {
     const newDate = new Date(date);
+    // Guard against invalid dates
+    if (Number.isNaN(newDate.getTime())) {
+      return;
+    }
     if (showTime) {
       // Include time in the result
       if (selectedDate) {
@@ -548,8 +552,9 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     getRefMethods,
     eventHandlers,
   } = useAvakioBase<string>({
+    id,
     initialValue: value,
-    onChange: (newVal, oldVal) => onChange?.(newVal, oldVal),
+    onChange,
     validate,
     disabled,
     hidden,
@@ -691,7 +696,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
 
   // Handle value change with old value tracking
   const handleValueChange = (newValue: string) => {
-    onChange?.(newValue, value);
+    onChange?.({ id: id || '0', value: newValue, oldValue: value });
   };
 
   // If inline mode, render the calendar directly

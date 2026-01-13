@@ -537,8 +537,8 @@
   --dp-radius: 4px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   color: var(--dp-text);
-  width: auto;
-  min-width: 280px;
+  width: 300px;
+  min-width: 300px;
   background: var(--dp-surface, #fff);
   border: 1px solid var(--dp-border, #ddd);
   border-radius: var(--dp-radius);
@@ -551,6 +551,8 @@
 .avakio-dp-popover .avakio-datepicker-container {
   border: none;
   border-radius: 0;
+  width: 100%;
+  min-width: 276px;
   max-width: none;
   padding: 12px;
   background: transparent;
@@ -773,7 +775,7 @@
 /* Weekdays */
 .avakio-dp-weekdays {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(32px, 1fr));
   gap: 2px;
   margin-bottom: 4px;
 }
@@ -785,18 +787,20 @@
   color: var(--dp-muted, var(--muted-foreground, #888));
   padding: 4px 2px;
   text-transform: capitalize;
+  min-width: 32px;
 }
 
 /* Calendar Days */
 .avakio-dp-days {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(32px, 1fr));
   gap: 2px;
   margin-bottom: 8px;
 }
 
 .avakio-dp-day {
   width: 32px;
+  min-width: 32px;
   height: 32px;
   padding: 0;
   background: transparent;

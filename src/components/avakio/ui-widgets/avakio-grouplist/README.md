@@ -19,7 +19,7 @@ A hierarchical list component that displays data in groups with drill-down navig
 | `value` | `string \| number` | - | Controlled selected value |
 | `defaultValue` | `string \| number` | - | Default selected value (uncontrolled) |
 | `onSelect` | `(item) => void` | - | Called when a leaf item is selected |
-| `onChange` | `(value, item) => void` | - | Called when selection changes |
+| `onChange` | `({ id, value, item }) => void` | - | Called when selection changes. Receives `{ id, value, item }` object |
 | `onNavigate` | `(state) => void` | - | Called when navigation state changes |
 | `templateItem` | `(item) => ReactNode` | - | Custom renderer for leaf items |
 | `templateGroup` | `(item, count) => ReactNode` | - | Custom renderer for group headers |

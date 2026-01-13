@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { ChevronDown, X, Search } from 'lucide-react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-combo.css';
 
@@ -13,7 +14,8 @@ export interface AvakioComboProps {
   id?: string;
   value?: string | number;
   options: AvakioComboOption[] | string[];
-  onChange?: (value: string | number, option?: AvakioComboOption) => void;
+  /** Callback fired when the value changes. Receives { id, value, option } */
+  onChange?: (event: AvakioChangeEvent<string | number> & { option?: AvakioComboOption }) => void;
   onInputChange?: (inputValue: string) => void;
   placeholder?: string;
   label?: string;
@@ -141,7 +143,7 @@ export function AvakioCombo({
     setIsOpen(false);
     setHighlightedIndex(-1);
     
-    onChange?.(option.id, option);
+    onChange?.({ id: id || '0', value: option.id, option });
   };
 
   // Handle clear
@@ -151,7 +153,7 @@ export function AvakioCombo({
     setInputValue('');
     setIsOpen(false);
     
-    onChange?.('', undefined);
+    onChange?.({ id: id || '0', value: '', option: undefined });
     inputRef.current?.focus();
   };
 

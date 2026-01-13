@@ -8,6 +8,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { AvakioGrid, AvakioGridCell, AvakioGridRef } from '../../layouts/avakio-grid/avakio-grid';
 import './avakio-dashboard.css';
 
@@ -94,7 +95,8 @@ export interface AvakioDashboardProps {
   className?: string;
   style?: React.CSSProperties;
 
-  onChange?: (widgets: AvakioDashboardWidget[]) => void;
+  /** Callback fired when widgets change. Receives { id, value } where value is widgets array */
+  onChange?: (event: AvakioChangeEvent<AvakioDashboardWidget[]>) => void;
   onWidgetClick?: (widget: AvakioDashboardWidget) => void;
   onDragStart?: (widget: AvakioDashboardWidget) => void;
   onDragEnd?: (widget: AvakioDashboardWidget, newPosition: { x: number; y: number }) => void;
@@ -247,11 +249,11 @@ export const AvakioDashboard = forwardRef<AvakioDashboardRef, AvakioDashboardPro
       ) => {
         setWidgets((prev) => {
           const next = typeof nextOrUpdater === 'function' ? nextOrUpdater(prev) : nextOrUpdater;
-          onChange?.(next);
+          onChange?.({ id: id || '0', value: next });
           return next;
         });
       },
-      [onChange]
+      [onChange, id]
     );
 
     const getWidgetById = useCallback(

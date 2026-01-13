@@ -4,9 +4,10 @@ A slider control with themed styling, marks, size variants, and controlled/uncon
 
 ## Props
 
+- `id?: string` – Component ID passed to onChange callback.
 - `value?: number` – Controlled value.
 - `defaultValue?: number` – Initial value for uncontrolled mode.
-- `onChange?: (value: number) => void` – Fired when the value changes.
+- `onChange?: ({ id, value }) => void` – Fired when the value changes. Receives `{ id, value }` object.
 - `min?: number` – Minimum value (default 0).
 - `max?: number` – Maximum value (default 100).
 - `step?: number` – Step interval (default 1).
@@ -31,12 +32,13 @@ export function Example() {
   const [value, setValue] = useState(40);
   return (
     <AvakioSlider
+      id="volume-slider"
       label="Volume"
       min={0}
       max={100}
       step={5}
       value={value}
-      onChange={setValue}
+      onChange={({ value: v }) => setValue(v)}
       marks={[0, 25, 50, 75, 100]}
     />
   );

@@ -31,26 +31,29 @@ import { AvakioSwitchButton } from '@/components/avakio/ui-controls/avakio-switc
 
 // Simple switch with left label
 <AvakioSwitchButton
+  id="sound-switch"
   label="Sound"
   value={soundOn}
-  onChange={setSoundOn}
+  onChange={({ value }) => setSoundOn(value)}
 />
 
 // Switch with right label
 <AvakioSwitchButton
+  id="notifications-switch"
   labelWidth={0}
   labelRight="Enable notifications"
   value={notificationsOn}
-  onChange={setNotificationsOn}
+  onChange={({ value }) => setNotificationsOn(value)}
 />
 
 // Switch with on/off labels on track
 <AvakioSwitchButton
+  id="power-switch"
   label="Power"
   onLabel="ON"
   offLabel="OFF"
   value={powerOn}
-  onChange={setPowerOn}
+  onChange={({ value }) => setPowerOn(value)}
 />
 ```
 
@@ -60,9 +63,10 @@ import { AvakioSwitchButton } from '@/components/avakio/ui-controls/avakio-switc
 
 ```tsx
 <AvakioSwitchButton
+  id="sound-switch"
   label="Sound"
   value={soundOn}
-  onChange={setSoundOn}
+  onChange={({ value }) => setSoundOn(value)}
 />
 ```
 
@@ -70,10 +74,11 @@ import { AvakioSwitchButton } from '@/components/avakio/ui-controls/avakio-switc
 
 ```tsx
 <AvakioSwitchButton
+  id="darkmode-switch"
   labelWidth={0}
   labelRight="Enable dark mode"
   value={darkMode}
-  onChange={setDarkMode}
+  onChange={({ value }) => setDarkMode(value)}
 />
 ```
 
@@ -81,11 +86,12 @@ import { AvakioSwitchButton } from '@/components/avakio/ui-controls/avakio-switc
 
 ```tsx
 <AvakioSwitchButton
+  id="status-switch"
   label="Status"
   onLabel="ON"
   offLabel="OFF"
   value={isOn}
-  onChange={setIsOn}
+  onChange={({ value }) => setIsOn(value)}
 />
 ```
 
@@ -109,10 +115,11 @@ import { AvakioSwitchButton } from '@/components/avakio/ui-controls/avakio-switc
 <AvakioSwitchButton label="Disabled" disabled value={true} />
 
 // Required
-<AvakioSwitchButton label="Required" required value={value} onChange={setValue} />
+<AvakioSwitchButton id="required-switch" label="Required" required value={value} onChange={({ value: v }) => setValue(v)} />
 
 // Invalid with message
 <AvakioSwitchButton
+  id="invalid-switch"
   label="Invalid"
   invalid
   invalidMessage="This field is required"
@@ -121,10 +128,11 @@ import { AvakioSwitchButton } from '@/components/avakio/ui-controls/avakio-switc
 
 // With bottom label
 <AvakioSwitchButton
+  id="setting-switch"
   label="Setting"
   bottomLabel="This affects all users"
   value={value}
-  onChange={setValue}
+  onChange={({ value: v }) => setValue(v)}
 />
 ```
 
@@ -201,7 +209,7 @@ switchRef.current?.refresh();
 | `invalidMessage` | `string` | `undefined` | Error message text |
 | `bottomLabel` | `string` | `undefined` | Help text below switch (rendered via AvakioControlLabel) |
 | `tooltip` | `string` | `undefined` | Tooltip on hover |
-| `onChange` | `(value: boolean) => void` | `undefined` | Change callback |
+| `onChange` | `({ id, value }) => void` | `undefined` | Change callback. Receives `{ id, value }` object |
 
 ## Ref Methods
 

@@ -33,9 +33,10 @@ const tabs = [
 ];
 
 <AvakioTabBar
+  id="section-tabs"
   value={activeTab}
   options={tabs}
-  onChange={(val) => setActiveTab(val as string)}
+  onChange={({ value }) => setActiveTab(value as string)}
   label="Section"
   required
 />
@@ -53,9 +54,10 @@ const tabs = [
 ];
 
 <AvakioTabBar
+  id="nav-tabs"
   value={active}
   options={tabs}
-  onChange={(val) => setActive(val as string)}
+  onChange={({ value }) => setActive(value as string)}
   align="justify"
   fill
   size="sm"
@@ -66,9 +68,10 @@ const tabs = [
 
 ```tsx
 <AvakioTabBar
+  id="closable-tabs"
   value={active}
   options={tabs}
-  onChange={(val) => setActive(val as string)}
+  onChange={({ value }) => setActive(value as string)}
   onClose={(val) => setTabs((prev) => prev.filter((t) => t.id !== val))}
   closable
 />
@@ -80,9 +83,10 @@ Use `renderTab` to supply a fully custom layout. A ready-to-use `closeButton` is
 
 ```tsx
 <AvakioTabBar
+  id="custom-tabs"
   value={active}
   options={tabs}
-  onChange={(val) => setActive(val as string)}
+  onChange={({ value }) => setActive(value as string)}
   closable
   renderTab={(option, isActive, closeButton) => (
     <div style={{ display: 'grid', gap: 4 }}>
@@ -103,7 +107,7 @@ Use `renderTab` to supply a fully custom layout. A ready-to-use `closeButton` is
 | --- | --- | --- | --- |
 | `value` | `string \| number \| null` | `null` | Active tab id (controlled) |
 | `options` | `AvakioTabBarOption[]` | `[]` | Tabs to render |
-| `onChange` | `(value, option?) => void` | `undefined` | Fired when a tab is selected |
+| `onChange` | `({ id, value, option? }) => void` | `undefined` | Fired when a tab is selected. Receives `{ id, value, option }` object |
 | `onClose` | `(value, option?) => void` | `undefined` | Fired when a tab is closed |
 | `renderTab` | `(option, isActive, closeButton) => ReactNode` | `undefined` | Custom renderer for tab content; use `closeButton` to place the built-in closer |
 | `align` | `'left' \| 'center' \| 'justify'` | `'left'` | Tab alignment |

@@ -250,14 +250,14 @@ export function AvakioFormExample() {
                     label="Email"
                     placeholder="Enter your email"
                     value={formValues.email}
-                    onChange={(val) => setFormValues((prev) => ({ ...prev, email: String(val) }))}
+                    onChange={({ value }) => setFormValues((prev) => ({ ...prev, email: String(value) }))}                    
                   />
                   <AvakioText
                     label="Password"
                     type="password"
                     placeholder="Enter your password"
                     value={formValues.password}
-                    onChange={(val) => setFormValues((prev) => ({ ...prev, password: String(val) }))}
+                    onChange={({ value }) => setFormValues((prev) => ({ ...prev, password: String(value) }))}
                   />
                   <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
                     <AvakioButton
@@ -466,8 +466,8 @@ export function AvakioFormExample() {
                     label="Email *"
                     placeholder="Enter email"
                     value={validationValues.email}
-                    onChange={(val) =>
-                      setValidationValues((prev) => ({ ...prev, email: String(val) }))
+                    onChange={({ value }) =>
+                      setValidationValues((prev) => ({ ...prev, email: String(value) }))
                     }
                     invalid={!!validationErrors.email}
                     invalidMessage={validationErrors.email}
@@ -477,8 +477,8 @@ export function AvakioFormExample() {
                     type="password"
                     placeholder="Enter password"
                     value={validationValues.password}
-                    onChange={(val) =>
-                      setValidationValues((prev) => ({ ...prev, password: String(val) }))
+                    onChange={({ value }) =>
+                      setValidationValues((prev) => ({ ...prev, password: String(value) }))
                     }
                     invalid={!!validationErrors.password}
                     invalidMessage={validationErrors.password}
@@ -488,8 +488,8 @@ export function AvakioFormExample() {
                     type="password"
                     placeholder="Confirm password"
                     value={validationValues.confirmPassword}
-                    onChange={(val) =>
-                      setValidationValues((prev) => ({ ...prev, confirmPassword: String(val) }))
+                    onChange={({ value }) =>
+                      setValidationValues((prev) => ({ ...prev, confirmPassword: String(value) }))
                     }
                     invalid={!!validationErrors.confirmPassword}
                     invalidMessage={validationErrors.confirmPassword}
@@ -498,8 +498,8 @@ export function AvakioFormExample() {
                     label="Age (18-120)"
                     placeholder="Enter age"
                     value={validationValues.age}
-                    onChange={(val) =>
-                      setValidationValues((prev) => ({ ...prev, age: String(val) }))
+                    onChange={({ value }) =>
+                      setValidationValues((prev) => ({ ...prev, age: String(value) }))
                     }
                     invalid={!!validationErrors.age}
                     invalidMessage={validationErrors.age}
@@ -575,21 +575,21 @@ export function AvakioFormExample() {
                   <AvakioText
                     label="First Name"
                     value={formValues.firstName}
-                    onChange={(val) =>
-                      setFormValues((prev) => ({ ...prev, firstName: String(val) }))
+                    onChange={({ value }) =>
+                      setFormValues((prev) => ({ ...prev, firstName: String(value) }))
                     }
                   />
                   <AvakioText
                     label="Last Name"
                     value={formValues.lastName}
-                    onChange={(val) =>
-                      setFormValues((prev) => ({ ...prev, lastName: String(val) }))
+                    onChange={({ value }) =>
+                      setFormValues((prev) => ({ ...prev, lastName: String(value) }))
                     }
                   />
                   <AvakioText
                     label="Email"
                     value={formValues.email}
-                    onChange={(val) => setFormValues((prev) => ({ ...prev, email: String(val) }))}
+                    onChange={({ value }) => setFormValues((prev) => ({ ...prev, email: String(value) }))}
                   />
                 </AvakioForm>
 
@@ -743,17 +743,17 @@ export function AvakioFormExample() {
                       { id: 'wide', value: 'Wide (more padding)' },
                       { id: 'space', value: 'Space (extra spacing)' },
                     ]}
-                    onChange={(val) => setPlaygroundType(String(val))}
+                    onChange={({ value }) => setPlaygroundType(String(value))}
                   />
                   <AvakioText
                     label="Width"
                     value={playgroundWidth}
-                    onChange={(val) => setPlaygroundWidth(String(val))}
+                    onChange={({ value }) => setPlaygroundWidth(String(value))}
                   />
                   <AvakioText
                     label="Height"
                     value={playgroundHeight}
-                    onChange={(val) => setPlaygroundHeight(String(val))}
+                    onChange={({ value }) => setPlaygroundHeight(String(value))}
                   />
                   <AvakioCheckbox
                     label="Borderless"

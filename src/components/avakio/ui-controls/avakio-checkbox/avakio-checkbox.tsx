@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import './avakio-checkbox.css';
 
 export type AvakioCheckboxSize = 'sm' | 'md';
@@ -12,7 +13,8 @@ export interface AvakioCheckboxProps extends Omit<React.InputHTMLAttributes<HTML
   size?: AvakioCheckboxSize;
   error?: string;
   required?: boolean;
-  onChange?: (checked: boolean) => void;
+  /** Callback fired when the value changes. Receives { id, value } */
+  onChange?: (event: AvakioChangeEvent<boolean>) => void;
   /** Padding (number for all sides, string for CSS, or [top, right, bottom, left]) */
   padding?: string | number | [number, number, number, number];
   /** Margin (number for all sides, string for CSS, or [top, right, bottom, left]) */
@@ -81,7 +83,7 @@ export function AvakioCheckbox({
       setInternalChecked((prev) => (indeterminate ? true : !prev));
     }
     const next = indeterminate ? true : !isChecked;
-    onChange?.(next);
+    onChange?.({ id: id || '0', value: next });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {

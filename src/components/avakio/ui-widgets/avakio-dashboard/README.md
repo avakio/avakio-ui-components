@@ -33,6 +33,7 @@ export function MyDashboard() {
 
   return (
     <AvakioDashboard
+      id="my-dashboard"
       gridColumns={4}
       gridRows={3}
       cellMargin={10}
@@ -40,7 +41,7 @@ export function MyDashboard() {
       widgets={widgets}
       editable
       dragHandle="header"
-      onChange={setWidgets}
+      onChange={({ value }) => setWidgets(value)}
     />
   );
 }
@@ -88,6 +89,6 @@ ref.current?.restore(layout ?? []);
 
 ## Notes
 
-- `widgets` is treated as the source of truth; use `onChange` to keep parent state in sync.
+- `widgets` is treated as the source of truth; use `onChange` (receives `{ id, value }` object) to keep parent state in sync.
 - When `dragHandle="header"`, dragging is restricted to the header area.
 - Resizing uses grid units (`dx`/`dy`) and respects `gridColumns`/`gridRows` bounds.

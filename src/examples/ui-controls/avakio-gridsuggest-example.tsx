@@ -124,7 +124,7 @@ export function AvakioGridSuggestExample({ theme = 'material' }: { theme?: strin
           <AvakioGridSuggest
             value={selectedValue1}
             data={productData}
-            onChange={(value, option) => {
+            onChange={({ value, option }) => {
               setSelectedValue1(value);
               console.log('Selected product:', option);
             }}
@@ -154,7 +154,7 @@ export function AvakioGridSuggestExample({ theme = 'material' }: { theme?: strin
           <AvakioGridSuggest
             value={selectedValue2}
             data={productData}
-            onChange={(value) => setSelectedValue2(value)}
+            onChange={({ value }) => setSelectedValue2(value)}
             label="Product"
             labelWidth={120}
             placeholder="Search products..."
@@ -187,7 +187,7 @@ export function AvakioGridSuggestExample({ theme = 'material' }: { theme?: strin
           <AvakioGridSuggest
             value={selectedValue3}
             data={employeeData}
-            onChange={(value) => setSelectedValue3(value)}
+            onChange={({ value }) => setSelectedValue3(value)}
             label="Employee"
             labelWidth={120}
             placeholder="Search employees..."
@@ -221,7 +221,7 @@ export function AvakioGridSuggestExample({ theme = 'material' }: { theme?: strin
           <AvakioGridSuggest
             value={selectedValue4}
             data={countryData}
-            onChange={(value) => setSelectedValue4(value)}
+            onChange={({ value }) => setSelectedValue4(value)}
             label="Country"
             labelWidth={120}
             placeholder="Search countries..."
@@ -256,7 +256,7 @@ export function AvakioGridSuggestExample({ theme = 'material' }: { theme?: strin
           <AvakioGridSuggest
             value={selectedValue5}
             data={invoiceData}
-            onChange={(value) => setSelectedValue5(value)}
+            onChange={({ value }) => setSelectedValue5(value)}
             label="Invoice"
             labelWidth={120}
             placeholder="Search invoices..."
@@ -317,7 +317,7 @@ export function AvakioGridSuggestExample({ theme = 'material' }: { theme?: strin
           <AvakioGridSuggest
             value={selectedValue6}
             data={employeeData}
-            onChange={(value) => setSelectedValue6(value)}
+            onChange={({ value }) => setSelectedValue6(value)}
             label="Employee"
             labelWidth={120}
             placeholder="Select employee..."

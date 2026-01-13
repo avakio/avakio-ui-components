@@ -343,7 +343,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={basicValue}
               options={simpleOptions}
-              onChange={(value) => {
+              onChange={({ value }) => {
                 setBasicValue(value);
                 addLog('onChange', `value: ${value || '(empty)'}`);
               }}
@@ -382,7 +382,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={objectValue}
               options={fullOptions}
-              onChange={(value, option) => {
+              onChange={({ value, option }) => {
                 setObjectValue(value);
                 addLog('onChange', `ID: ${value}, Value: ${option?.value || '(empty)'}`);
               }}
@@ -421,7 +421,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={templateValue}
               options={countryOptions}
-              onChange={(value) => {
+              onChange={({ value }) => {
                 setTemplateValue(value);
                 addLog('onChange (template)', `value: ${value || '(empty)'}`);
               }}
@@ -466,7 +466,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={statusValue}
               options={statusOptions}
-              onChange={(value) => {
+              onChange={({ value }) => {
                 setStatusValue(value);
                 addLog('onChange (status)', `value: ${value || '(empty)'}`);
               }}
@@ -537,7 +537,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={largeListValue}
               options={largeOptions}
-              onChange={(value) => {
+              onChange={({ value }) => {
                 setLargeListValue(value);
                 addLog('onChange (large)', `value: ${value || '(empty)'}`);
               }}
@@ -579,7 +579,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={labelLeftValue}
               options={simpleOptions}
-              onChange={(newVal) => setLabelLeftValue(newVal)}
+              onChange={({ value }) => setLabelLeftValue(value)}
               label="Left"
               labelPosition="left"
               labelWidth={100}
@@ -595,7 +595,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={labelTopValue}
               options={simpleOptions}
-              onChange={(newVal) => setLabelTopValue(newVal)}
+              onChange={({ value }) => setLabelTopValue(value)}
               label="Top"
               labelPosition="top"
               labelWidth={100}
@@ -611,7 +611,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={labelRightValue}
               options={simpleOptions}
-              onChange={(newVal) => setLabelRightValue(newVal)}
+              onChange={({ value }) => setLabelRightValue(value)}
               label="Right"
               labelPosition="right"
               labelWidth={100}
@@ -627,7 +627,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={labelBottomValue}
               options={simpleOptions}
-              onChange={(newVal) => setLabelBottomValue(newVal)}
+              onChange={({ value }) => setLabelBottomValue(value)}
               label="Bottom"
               labelPosition="bottom"
               labelWidth={100}
@@ -659,7 +659,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={labelLeftValue}
               options={simpleOptions}
-              onChange={(newVal) => setLabelLeftValue(newVal)}
+              onChange={({ value }) => setLabelLeftValue(value)}
               label="Left Aligned"
               labelAlign="left"
               labelWidth={120}
@@ -675,7 +675,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={labelRightValue}
               options={simpleOptions}
-              onChange={(newVal) => setLabelRightValue(newVal)}
+              onChange={({ value }) => setLabelRightValue(value)}
               label="Right Aligned"
               labelAlign="right"
               labelWidth={120}
@@ -708,7 +708,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={requiredValue}
               options={simpleOptions}
-              onChange={(newVal) => setRequiredValue(newVal)}
+              onChange={({ value }) => setRequiredValue(value)}
               label="Required Field"
               labelWidth={120}
               required
@@ -725,7 +725,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={errorValue}
               options={simpleOptions}
-              onChange={(newVal) => setErrorValue(newVal)}
+              onChange={({ value }) => setErrorValue(value)}
               label="With Error"
               labelWidth={120}
               invalid
@@ -759,7 +759,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={disabledValue}
               options={countryOptions}
-              onChange={(newVal) => setDisabledValue(newVal)}
+              onChange={({ value }) => setDisabledValue(value)}
               label="Disabled"
               labelWidth={120}
               disabled
@@ -781,7 +781,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={readonlyValue}
               options={countryOptions}
-              onChange={(newVal) => setReadonlyValue(newVal)}
+              onChange={({ value }) => setReadonlyValue(value)}
               label="Read Only"
               labelWidth={120}
               readonly
@@ -803,7 +803,7 @@ export function AvakioRichSelectExample() {
             <AvakioRichSelect
               value={notClearableValue}
               options={countryOptions}
-              onChange={(newVal) => setNotClearableValue(newVal)}
+              onChange={({ value }) => setNotClearableValue(value)}
               label="Not Clearable"
               labelWidth={120}
               clearable={false}
@@ -868,7 +868,7 @@ export function AvakioRichSelectExample() {
                       className={getPropValue('className', '') || undefined}
                       value={playgroundValue}
                       options={countryOptions}
-                      onChange={(value, option) => {
+                      onChange={({ value, option }) => {
                         setPlaygroundValue(value);
                         if (getPropValue('logOnChange', true)) addLog('onChange', `ID: ${value}, Value: ${option?.value || '(empty)'}`);
                       }}

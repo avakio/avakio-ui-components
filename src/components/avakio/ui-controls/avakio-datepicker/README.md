@@ -36,8 +36,9 @@ function MyComponent() {
 
   return (
     <AvakioDatePicker
+      id="my-datepicker"
       value={date}
-      onChange={setDate}
+      onChange={({ value }) => setDate(value)}
       label="Select Date"
     />
   );
@@ -64,7 +65,7 @@ function MyComponent() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `string` | `undefined` | ISO string of selected date/time |
-| `onChange` | `(newValue: string, oldValue?: string) => void` | `undefined` | Callback when date/time changes |
+| `onChange` | `({ id, value, oldValue? }) => void` | `undefined` | Callback when date/time changes. Receives `{ id, value, oldValue }` object |
 | `validate` | `(value: string) => boolean \| string` | `undefined` | Custom validation function |
 
 ### Inherited from AvakioBaseProps
@@ -110,7 +111,7 @@ All events are inherited from `AvakioBaseProps`:
 
 | Event | Type | Description |
 |-------|------|-------------|
-| `onChange` | `(newValue: string, oldValue?: string) => void` | Fires when the value changes |
+| `onChange` | `({ id, value, oldValue? }) => void` | Fires when the value changes. Receives `{ id, value, oldValue }` object |
 | `onBlur` | `(event: React.FocusEvent) => void` | Fires when focus is moved out of the view |
 | `onFocus` | `(event: React.FocusEvent) => void` | Fires when a view gets focus |
 | `onItemClick` | `(event: React.MouseEvent) => void` | Fires after the control has been clicked |
@@ -211,8 +212,9 @@ const formatted = date.toLocaleString('en-US', {
 
 ```tsx
 <AvakioDatePicker
+  id="event-datetime"
   value={date}
-  onChange={setDate}
+  onChange={({ value }) => setDate(value)}
   showTime
   label="Event Date & Time"
 />
@@ -222,8 +224,9 @@ const formatted = date.toLocaleString('en-US', {
 
 ```tsx
 <AvakioDatePicker
+  id="inline-calendar"
   value={date}
-  onChange={setDate}
+  onChange={({ value }) => setDate(value)}
   inline
   showTime
 />
@@ -233,8 +236,9 @@ const formatted = date.toLocaleString('en-US', {
 
 ```tsx
 <AvakioDatePicker
+  id="compact-date"
   value={date}
-  onChange={setDate}
+  onChange={({ value }) => setDate(value)}
   size="compact"
   clearable
 />
@@ -244,8 +248,9 @@ const formatted = date.toLocaleString('en-US', {
 
 ```tsx
 <AvakioDatePicker
+  id="year-select-date"
   value={date}
-  onChange={setDate}
+  onChange={({ value }) => setDate(value)}
   showYearSelector
   minYear={1900}
   maxYear={2100}
@@ -256,8 +261,9 @@ const formatted = date.toLocaleString('en-US', {
 
 ```tsx
 <AvakioDatePicker
+  id="validated-date"
   value={date}
-  onChange={setDate}
+  onChange={({ value }) => setDate(value)}
   required
   invalidMessage="Date is required"
   validate={(value) => {
@@ -273,8 +279,9 @@ const formatted = date.toLocaleString('en-US', {
 
 ```tsx
 <AvakioDatePicker
+  id="labeled-date"
   value={date}
-  onChange={setDate}
+  onChange={({ value }) => setDate(value)}
   label="Start Date"
   labelPosition="top"
   labelWidth={100}
@@ -286,8 +293,9 @@ const formatted = date.toLocaleString('en-US', {
 
 ```tsx
 <AvakioDatePicker
+  id="form-date"
   value={date}
-  onChange={setDate}
+  onChange={({ value }) => setDate(value)}
   labelForm="Appointment Date"
   placeholder="Select a date..."
 />
@@ -297,8 +305,9 @@ const formatted = date.toLocaleString('en-US', {
 
 ```tsx
 <AvakioDatePicker
+  id="copy-date"
   value={date}
-  onChange={setDate}
+  onChange={({ value }) => setDate(value)}
   enableValueCopyButton
 />
 ```
@@ -307,8 +316,9 @@ const formatted = date.toLocaleString('en-US', {
 
 ```tsx
 <AvakioDatePicker
+  id="readonly-date"
   value={date}
-  onChange={setDate}
+  onChange={({ value }) => setDate(value)}
   readonly
 />
 ```

@@ -34,9 +34,10 @@ function MyComponent() {
 
   return (
     <AvakioToggleButton
+      id="feature-toggle"
       label="Toggle Feature"
       value={isEnabled}
-      onChange={setIsEnabled}
+      onChange={({ value }) => setIsEnabled(value)}
     />
   );
 }
@@ -46,10 +47,11 @@ function MyComponent() {
 
 ```tsx
 <AvakioToggleButton
+  id="enable-toggle"
   onLabel="Enabled"
   offLabel="Disabled"
   value={isEnabled}
-  onChange={setIsEnabled}
+  onChange={({ value }) => setIsEnabled(value)}
 />
 ```
 
@@ -59,12 +61,13 @@ function MyComponent() {
 import { Play, Pause } from 'lucide-react';
 
 <AvakioToggleButton
+  id="play-toggle"
   onLabel="Playing"
   offLabel="Paused"
   onIcon={<Pause size={16} />}
   offIcon={<Play size={16} />}
   value={isPlaying}
-  onChange={setIsPlaying}
+  onChange={({ value }) => setIsPlaying(value)}
 />
 ```
 
@@ -72,11 +75,12 @@ import { Play, Pause } from 'lucide-react';
 
 ```tsx
 <AvakioToggleButton
+  id="sound-toggle"
   type="icon"
   onIcon={<Volume2 size={16} />}
   offIcon={<VolumeX size={16} />}
   value={isMuted}
-  onChange={setIsMuted}
+  onChange={({ value }) => setIsMuted(value)}
   tooltip="Toggle sound"
 />
 ```
@@ -85,12 +89,13 @@ import { Play, Pause } from 'lucide-react';
 
 ```tsx
 <AvakioToggleButton
+  id="power-toggle"
   type="iconTop"
   onLabel="Power On"
   offLabel="Power Off"
   icon={<Power size={24} />}
   value={isPowerOn}
-  onChange={setIsPowerOn}
+  onChange={({ value }) => setIsPowerOn(value)}
 />
 ```
 
@@ -98,7 +103,7 @@ import { Play, Pause } from 'lucide-react';
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `id` | `string` | - | Unique identifier |
+| `id` | `string` | - | Unique identifier passed to onChange callback |
 | `testId` | `string` | - | Test ID for testing purposes |
 | `name` | `string` | - | Name for form submission |
 | `value` | `boolean` | - | Current pressed state (controlled) |
@@ -126,7 +131,7 @@ import { Play, Pause } from 'lucide-react';
 | `height` | `number \| string` | - | Height |
 | `padding` | `string \| number \| [number, number, number, number]` | - | Padding |
 | `margin` | `string \| number \| [number, number, number, number]` | - | Margin |
-| `onChange` | `(value: boolean) => void` | - | Callback when value changes |
+| `onChange` | `({ id, value }) => void` | - | Callback when value changes. Receives `{ id, value }` object |
 | `onClick` | `(e: MouseEvent) => void` | - | Callback when clicked |
 | `onFocus` | `(e: FocusEvent) => void` | - | Callback when focused |
 | `onBlur` | `(e: FocusEvent) => void` | - | Callback when blurred |
@@ -178,10 +183,11 @@ Bind a keyboard shortcut to toggle the button:
 
 ```tsx
 <AvakioToggleButton
+  id="hotkey-toggle"
   label="Toggle (Ctrl+T)"
   hotkey="ctrl+t"
   value={isEnabled}
-  onChange={setIsEnabled}
+  onChange={({ value }) => setIsEnabled(value)}
 />
 ```
 
@@ -193,10 +199,11 @@ The component automatically adapts to the current Avakio theme. You can also exp
 
 ```tsx
 <AvakioToggleButton
+  id="dark-theme-toggle"
   theme="dark"
   label="Dark Theme Toggle"
   value={isEnabled}
-  onChange={setIsEnabled}
+  onChange={({ value }) => setIsEnabled(value)}
 />
 ```
 

@@ -242,7 +242,7 @@ export function AvakioCheckboxExample() {
             <div key="basic-checkboxes" className="avakio-checkbox-demo-grid">
               <AvakioCheckbox
                 checked={basicChecked}
-                onChange={(checked) => {
+                onChange={({ checked }) => {
                   setBasicChecked(checked);
                   addLog('onChange', `checked: ${checked}`);
                 }}
@@ -250,7 +250,7 @@ export function AvakioCheckboxExample() {
               />
               <AvakioCheckbox
                 checked={uncheckedDemo}
-                onChange={(checked) => {
+                onChange={({ checked }) => {
                   setUncheckedDemo(checked);
                   addLog('onChange', `checked: ${checked}`);
                 }}
@@ -287,7 +287,7 @@ export function AvakioCheckboxExample() {
           rows={[
             <AvakioCheckbox
               checked={withDescription}
-              onChange={(checked) => {
+              onChange={({ checked }) => {
                 setWithDescription(checked);
                 addLog('onChange (with description)', `checked: ${checked}`);
               }}
@@ -320,7 +320,7 @@ export function AvakioCheckboxExample() {
               <AvakioCheckbox
                 checked={allChildrenChecked}
                 indeterminate={isIndeterminate}
-                onChange={(checked) => {
+                onChange={({ checked }) => {
                   const newState: Record<string, boolean> = {};
                   Object.keys(childOptions).forEach(key => {
                     newState[key] = checked;
@@ -336,7 +336,7 @@ export function AvakioCheckboxExample() {
                     key={key}
                     checked={value}
                     size="sm"
-                    onChange={(checked) => {
+                    onChange={({ checked }) => {
                       setChildOptions(prev => ({ ...prev, [key]: checked }));
                       addLog(`onChange (${key})`, `checked: ${checked}`);
                     }}
@@ -426,7 +426,7 @@ export function AvakioCheckboxExample() {
             />,
             <AvakioCheckbox
               checked={requiredChecked}
-              onChange={(checked) => {
+              onChange={({ checked }) => {
                 setRequiredChecked(checked);
                 addLog('onChange (required)', `checked: ${checked}`);
               }}
@@ -443,7 +443,7 @@ export function AvakioCheckboxExample() {
             />,
             <AvakioCheckbox
               checked={errorChecked}
-              onChange={(checked) => {
+              onChange={({ checked }) => {
                 setErrorChecked(checked);
                 addLog('onChange (error)', `checked: ${checked}`);
               }}
@@ -539,7 +539,7 @@ export function AvakioCheckboxExample() {
                       testId={getPropValue('testId', '') || undefined}
                       className={getPropValue('className', '') || undefined}
                       checked={playgroundChecked}
-                      onChange={(checked) => {
+                      onChange={({ checked }) => {
                         setPlaygroundChecked(checked);
                         if (getPropValue('logOnChange', true)) addLog('onChange', `checked: ${checked}`);
                       }}

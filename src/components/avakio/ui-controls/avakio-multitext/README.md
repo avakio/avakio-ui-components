@@ -34,11 +34,12 @@ function MyForm() {
 
   return (
     <AvakioMultitext
+      id="emails-input"
       label="Email Addresses"
       labelWidth={120}
       placeholder="Enter email"
       value={emails}
-      onChange={(values) => setEmails(values)}
+      onChange={({ value }) => setEmails(value)}
     />
   );
 }
@@ -79,7 +80,7 @@ function MyForm() {
 
 | Event | Parameters | Description |
 |-------|------------|-------------|
-| `onChange` | `(values: string[], combined: string)` | Fired when any value changes |
+| `onChange` | `({ id, value, combinedValue })` | Fired when any value changes. Receives `{ id, value, combinedValue }` object |
 | `onSectionAdd` | `(fieldId: string, index: number)` | Fired when a field is added |
 | `onSectionRemove` | `(fieldId: string, value: string)` | Fired when a field is removed |
 | `onFocus` | `(fieldId: string, event: FocusEvent)` | Fired when a field gains focus |

@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useRef, useCallback } from "react";
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import "./avakio-slider.css";
 
 export type AvakioSliderValue = number | [number, number];
@@ -8,8 +9,8 @@ export interface AvakioSliderProps {
   value?: AvakioSliderValue;
   /** Default single value or range [min, max] */
   defaultValue?: AvakioSliderValue;
-  /** Callback when value changes */
-  onChange?: (value: AvakioSliderValue) => void;
+  /** Callback fired when the value changes. Receives { id, value } */
+  onChange?: (event: AvakioChangeEvent<AvakioSliderValue>) => void;
   /** Minimum value */
   min?: number;
   /** Maximum value */
@@ -148,8 +149,8 @@ export function AvakioSlider({
   const handleSingleChange = useCallback((next: number) => {
     const clamped = clamp(next, min, max);
     if (!isControlled) setInternalSingle(clamped);
-    onChange?.(clamped);
-  }, [min, max, isControlled, onChange]);
+    onChange?.({ id: id || '0', value: clamped });
+  }, [min, max, isControlled, onChange, id]);
 
   // Handle change for range slider
   const handleRangeChange = useCallback((index: 0 | 1, next: number) => {
@@ -165,8 +166,8 @@ export function AvakioSlider({
     }
     
     if (!isControlled) setInternalRange(newRange);
-    onChange?.(newRange);
-  }, [min, max, currentRange, isControlled, onChange]);
+    onChange?.({ id: id || '0', value: newRange });
+  }, [min, max, currentRange, isControlled, onChange, id]);
 
   // Track click handler for range mode
   const trackRef = useRef<HTMLDivElement>(null);

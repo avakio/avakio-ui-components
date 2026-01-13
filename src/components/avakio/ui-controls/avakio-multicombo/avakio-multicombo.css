@@ -1,467 +1,804 @@
-/* Avakio MultiCombo Styles */
+/* ===================================
+   AVAKIO MULTICOMBO - BASE STYLES
+   =================================== */
+
 .avakio-multicombo {
+  --mc-surface: var(--avakio-bg-primary, var(--background, #fff));
+  --mc-border: var(--avakio-border-primary, var(--border, #ddd));
+  --mc-border-focus: var(--avakio-border-focus, #3b82f6);
+  --mc-bg-focus: var(--avakio-bg-selected, #e0f2fe);
+  --mc-text: var(--avakio-text-primary, var(--foreground, #333));
+  --mc-muted: var(--avakio-text-secondary, var(--muted-foreground, #888));
+  --mc-primary: var(--avakio-accent-primary, var(--primary, #3498db));
+  --mc-primary-strong: var(--avakio-accent-hover, var(--primary, #2980b9));
+  --mc-radius: 4px;
+  --mc-invalid: #dc3545;
+  
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
   position: relative;
   width: 100%;
-  font-family: var(--font-sans);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  margin-bottom: 12px;
+  color: var(--mc-text);
 }
 
-.avakio-mc-disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.avakio-multicombo-label-vertical {
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-/* Input Wrapper */
-.avakio-mc-input-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 40px;
+.avakio-multicombo-inner-wrapper-vertical {
+  width: 100%;
+}
+
+/* ===================================
+   LABEL POSITION OVERRIDES
+   =================================== */
+
+/* Vertical layout overrides for TOP position */
+.avakio-control-label-wrapper-vertical .avakio-control-label-label-top {
+  border-radius: var(--mc-radius) var(--mc-radius) 0 0;
+  border-right: 1px solid var(--mc-primary);
+  border-bottom: none;
   padding: 6px 12px;
-  background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
 }
 
-.avakio-mc-input-wrapper:hover {
-  border-color: var(--primary);
+.avakio-control-label-wrapper-vertical:has(.avakio-control-label-label-top) .avakio-multicombo-trigger {
+  border-radius: 0 0 var(--mc-radius) var(--mc-radius);
 }
 
-.avakio-mc-input-wrapper-open {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 1px var(--primary);
+/* Vertical layout overrides for BOTTOM position */
+.avakio-control-label-wrapper-vertical .avakio-control-label-label-bottom {
+  border-radius: 0 0 var(--mc-radius) var(--mc-radius);
+  border-right: 1px solid var(--mc-primary);
+  border-top: none;
+  padding: 6px 12px;
 }
 
-.avakio-mc-disabled .avakio-mc-input-wrapper {
-  cursor: not-allowed;
-  background: var(--muted);
+.avakio-control-label-wrapper-vertical:has(.avakio-control-label-label-bottom) .avakio-multicombo-trigger {
+  border-radius: var(--mc-radius) var(--mc-radius) 0 0;
 }
 
-.avakio-mc-disabled .avakio-mc-input-wrapper:hover {
-  border-color: var(--border);
+/* Horizontal layout overrides for LEFT position (default) */
+.avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-left) .avakio-control-label-label-left {
+  border-radius: var(--mc-radius) 0 0 var(--mc-radius);
 }
 
-/* Input Content */
-.avakio-mc-input-content {
+.avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-left) .avakio-multicombo-trigger {
+  border-radius: 0 var(--mc-radius) var(--mc-radius) 0;
+}
+
+/* Horizontal layout overrides for RIGHT position */
+.avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-right) .avakio-control-label-label-right {
+  border-radius: 0 var(--mc-radius) var(--mc-radius) 0;
+  border-left: none;
+}
+
+.avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-right) .avakio-multicombo-trigger {
+  border-radius: var(--mc-radius) 0 0 var(--mc-radius);
+  border-right: none;
+}
+
+/* When no label, trigger has full border radius */
+.avakio-control-label-wrapper:not(:has(.avakio-control-label-label)) .avakio-multicombo-trigger {
+  border-radius: var(--mc-radius);
+}
+
+/* Inner Wrapper */
+.avakio-multicombo-inner-wrapper {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-width: 0;
 }
 
-.avakio-mc-placeholder {
-  color: var(--muted-foreground);
+/* Main Wrapper */
+.avakio-multicombo-wrapper {
+  position: relative;
+  width: 100%;
+  min-width: 120px;
+}
+
+/* Trigger Area */
+.avakio-multicombo-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 12px;
+  background-color: var(--mc-surface);
+  border: 1px solid var(--mc-border);
+  border-radius: 0 var(--mc-radius) var(--mc-radius) 0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  box-sizing: border-box;
+  line-height: 1.2;
+}
+
+/* When no label, trigger has full border radius */
+.avakio-control-label-wrapper:not(:has(.avakio-control-label-label)) .avakio-multicombo-trigger {
+  border-radius: var(--mc-radius);
+}
+
+/* When label is on the left (horizontal layout), trigger has no left radius */
+.avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-left) .avakio-multicombo-trigger {
+  border-radius: 0 var(--mc-radius) var(--mc-radius) 0;
+}
+
+/* When label is on the right (horizontal layout), trigger has no right radius */
+.avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-right) .avakio-multicombo-trigger {
+  border-radius: var(--mc-radius) 0 0 var(--mc-radius);
+  border-right: none;
+}
+
+.avakio-multicombo-trigger:hover:not([data-disabled="true"]) {
+  border-color: var(--mc-border-focus);
+  background-color: var(--mc-bg-focus);
+}
+
+.avakio-multicombo-trigger:focus {
+  outline: none;
+  border-color: var(--mc-border-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.avakio-multicombo-trigger-open {
+  border-color: var(--mc-border-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Content Area */
+.avakio-multicombo-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.avakio-multicombo-placeholder {
+  color: var(--mc-muted);
   font-size: 14px;
 }
 
-.avakio-mc-count {
+.avakio-multicombo-count {
   font-size: 14px;
-  color: var(--foreground);
-  font-weight: 500;
+  color: var(--mc-text);
 }
 
-.avakio-mc-search-input {
+/* Chips Display */
+.avakio-multicombo-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.avakio-multicombo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background-color: var(--mc-primary);
+  color: white;
+  border-radius: 4px;
+  font-size: 12px;
+  max-width: 150px;
+}
+
+.avakio-multicombo-chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avakio-multicombo-chip-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: white;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.avakio-multicombo-chip-remove:hover {
+  opacity: 1;
+}
+
+.avakio-multicombo-chip-more {
+  background-color: var(--mc-muted);
+  color: var(--mc-text);
+}
+
+/* Search Input */
+.avakio-multicombo-search {
   width: 100%;
   border: none;
   outline: none;
   background: transparent;
   font-size: 14px;
-  color: var(--foreground);
+  color: var(--mc-text);
+  padding: 0;
 }
 
-.avakio-mc-search-input::placeholder {
-  color: var(--muted-foreground);
+.avakio-multicombo-search::placeholder {
+  color: var(--mc-muted);
 }
 
-/* Chips */
-.avakio-mc-chips {
+/* Icons Area */
+.avakio-multicombo-icons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.avakio-mc-chip {
-  display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 8px;
-  background: var(--muted);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  font-size: 13px;
-  color: var(--foreground);
+  margin-left: 8px;
 }
 
-.avakio-mc-chip-label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 150px;
-}
-
-.avakio-mc-chip-remove {
+.avakio-multicombo-clear {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2px;
-  background: transparent;
-  border: none;
   cursor: pointer;
-  color: var(--muted-foreground);
-  border-radius: 2px;
-  transition: all 0.2s;
-}
-
-.avakio-mc-chip-remove:hover {
-  background: var(--background);
-  color: var(--foreground);
-}
-
-.avakio-mc-chip-more {
-  background: var(--primary);
-  color: var(--primary-foreground);
-  border-color: var(--primary);
-  font-weight: 500;
-  cursor: default;
-}
-
-/* Actions */
-.avakio-mc-actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.avakio-mc-clear-btn,
-.avakio-mc-toggle-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  background: transparent;
+  color: var(--mc-muted);
+  transition: color 0.15s ease;
   border: none;
-  cursor: pointer;
-  color: var(--muted-foreground);
-  border-radius: 4px;
-  transition: all 0.2s;
+  background: transparent;
 }
 
-.avakio-mc-clear-btn:hover,
-.avakio-mc-toggle-btn:hover {
-  background: var(--muted);
-  color: var(--foreground);
+.avakio-multicombo-clear:hover {
+  color: var(--mc-text);
 }
 
-.avakio-mc-toggle-open {
+.avakio-multicombo-toggle {
+  color: var(--mc-muted);
+  transition: transform 0.2s ease;
+}
+
+.avakio-multicombo-toggle.open {
   transform: rotate(180deg);
 }
 
-/* Dropdown */
-.avakio-mc-dropdown {
+/* Dropdown - absolute positioned like RichSelect */
+.avakio-multicombo-dropdown {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  max-height: 300px;
-  background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  background-color: var(--mc-surface);
+  border: 1px solid var(--mc-border);
+  border-radius: var(--mc-radius);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  z-index: 50;
+  z-index: 9999;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  animation: avakio-multicombo-slideDown 0.15s ease-out;
 }
 
-/* Select All */
-.avakio-mc-select-all {
-  border-bottom: 1px solid var(--border);
-  background: var(--muted);
+@keyframes avakio-multicombo-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.avakio-mc-select-all-label {
-  font-weight: 600;
+.avakio-multicombo-select-all {
+  border-bottom: 1px solid var(--mc-border);
 }
 
-/* Options */
-.avakio-mc-options {
-  flex: 1;
+.avakio-multicombo-select-all-label {
+  font-weight: 500;
+}
+
+/* Options List */
+.avakio-multicombo-options {
   overflow-y: auto;
-  min-height: 0;
+  max-height: inherit;
 }
 
-.avakio-mc-option {
+.avakio-multicombo-option {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
   padding: 10px 12px;
-  background: transparent;
   border: none;
-  cursor: pointer;
+  background: transparent;
   text-align: left;
-  transition: background-color 0.2s;
-}
-
-.avakio-mc-option:hover {
-  background: var(--muted);
-}
-
-.avakio-mc-option-label {
-  flex: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
   font-size: 14px;
-  color: var(--foreground);
+  color: var(--mc-text);
 }
 
-/* Checkbox */
-.avakio-mc-checkbox {
+.avakio-multicombo-option:hover {
+  background-color: var(--mc-bg-focus);
+}
+
+.avakio-multicombo-option.selected {
+  background-color: var(--mc-bg-focus);
+}
+
+.avakio-multicombo-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--mc-border);
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--border);
-  border-radius: 3px;
-  background: var(--background);
-  transition: all 0.2s;
   flex-shrink: 0;
+  transition: all 0.15s ease;
+  background-color: var(--mc-surface);
 }
 
-.avakio-mc-checkbox-checked {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--primary-foreground);
+.avakio-multicombo-checkbox-checked {
+  background-color: var(--mc-primary);
+  border-color: var(--mc-primary);
+  color: white;
 }
 
-/* No Results */
-.avakio-mc-no-results {
+.avakio-multicombo-option-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Empty State */
+.avakio-multicombo-empty {
   padding: 20px;
   text-align: center;
+  color: var(--mc-muted);
   font-size: 14px;
-  color: var(--muted-foreground);
 }
 
 /* Footer */
-.avakio-mc-footer {
+.avakio-multicombo-footer {
   padding: 8px 12px;
-  border-top: 1px solid var(--border);
-  background: var(--muted);
+  border-top: 1px solid var(--mc-border);
   font-size: 12px;
-  color: var(--muted-foreground);
-  text-align: center;
+  color: var(--mc-muted);
+  background-color: var(--mc-bg-focus);
 }
 
-/* Theme-specific overrides */
-
-/* Material Theme */
-[data-admin-theme="material"] .avakio-mc-dropdown {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-radius: 8px;
+/* Compact Size */
+.avakio-multicombo-compact {
+  margin-bottom: 0;
 }
 
-[data-admin-theme="material"] .avakio-mc-input-wrapper {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-[data-admin-theme="material"] .avakio-mc-input-wrapper:hover {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-[data-admin-theme="material"] .avakio-mc-chip {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-/* Flat Theme */
-[data-admin-theme="flat"] .avakio-mc-input-wrapper,
-[data-admin-theme="flat"] .avakio-mc-dropdown,
-[data-admin-theme="flat"] .avakio-mc-chip,
-[data-admin-theme="flat"] .avakio-mc-checkbox,
-[data-admin-theme="flat"] .avakio-mc-clear-btn,
-[data-admin-theme="flat"] .avakio-mc-toggle-btn,
-[data-admin-theme="flat"] .avakio-mc-chip-remove {
-  border-radius: 0;
-}
-
-[data-admin-theme="flat"] .avakio-mc-input-wrapper {
-  border-width: 2px;
-}
-
-[data-admin-theme="flat"] .avakio-mc-dropdown {
-  border-width: 2px;
-}
-
-/* Compact Theme */
-[data-admin-theme="compact"] .avakio-mc-input-wrapper {
-  min-height: 36px;
+.avakio-multicombo-compact .avakio-control-label-label {
+  font-size: 12px;
   padding: 4px 10px;
+  min-height: 28px;
+  height: 28px;
+  max-height: 28px;
+  box-sizing: border-box;
+  line-height: 18px;
 }
 
-[data-admin-theme="compact"] .avakio-mc-option {
+/* Compact label on the LEFT - rounded left corners */
+.avakio-multicombo-compact .avakio-control-label-label-left {
+  border-radius: var(--mc-radius) 0 0 var(--mc-radius);
+}
+
+/* Compact label on the RIGHT - rounded right corners */
+.avakio-multicombo-compact .avakio-control-label-label-right {
+  border-radius: 0 var(--mc-radius) var(--mc-radius) 0;
+}
+
+/* Compact label on TOP - rounded top corners */
+.avakio-multicombo-compact .avakio-control-label-label-top {
+  border-radius: var(--mc-radius) var(--mc-radius) 0 0;
+}
+
+/* Compact label on BOTTOM - rounded bottom corners */
+.avakio-multicombo-compact .avakio-control-label-label-bottom {
+  border-radius: 0 0 var(--mc-radius) var(--mc-radius);
+}
+
+/* Compact trigger radius based on label position */
+/* LEFT label - trigger has right radius only */
+.avakio-multicombo-compact .avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-left) .avakio-multicombo-trigger {
+  border-radius: 0 var(--mc-radius) var(--mc-radius) 0;
+}
+
+/* RIGHT label - trigger has left radius only */
+.avakio-multicombo-compact .avakio-control-label-wrapper:not(.avakio-control-label-wrapper-vertical):has(.avakio-control-label-label-right) .avakio-multicombo-trigger {
+  border-radius: var(--mc-radius) 0 0 var(--mc-radius);
+}
+
+/* TOP label - trigger has bottom radius */
+.avakio-multicombo-compact .avakio-control-label-wrapper-vertical:has(.avakio-control-label-label-top) .avakio-multicombo-trigger {
+  border-radius: 0 0 var(--mc-radius) var(--mc-radius);
+}
+
+/* BOTTOM label - trigger has top radius */
+.avakio-multicombo-compact .avakio-control-label-wrapper-vertical:has(.avakio-control-label-label-bottom) .avakio-multicombo-trigger {
+  border-radius: var(--mc-radius) var(--mc-radius) 0 0;
+}
+
+.avakio-multicombo-compact .avakio-multicombo-trigger {
+  min-height: 28px;
+  height: 28px;
+  max-height: 28px;
+  padding: 2px 8px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+.avakio-multicombo-compact .avakio-multicombo-placeholder,
+.avakio-multicombo-compact .avakio-multicombo-count,
+.avakio-multicombo-compact .avakio-multicombo-search {
+  font-size: 12px;
+}
+
+.avakio-multicombo-compact .avakio-multicombo-chip {
+  padding: 1px 6px;
+  font-size: 11px;
+}
+
+.avakio-multicombo-compact .avakio-multicombo-option {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.avakio-multicombo-compact .avakio-multicombo-toggle {
+  width: 14px;
+  height: 14px;
+}
+
+.avakio-multicombo-compact .avakio-multicombo-clear svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Borderless */
+.avakio-multicombo-borderless .avakio-multicombo-trigger {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.avakio-multicombo-borderless .avakio-multicombo-trigger:focus {
+  border-color: var(--mc-border-focus);
+}
+
+/* Disabled State */
+.avakio-multicombo-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.avakio-multicombo-disabled .avakio-multicombo-trigger {
+  background-color: var(--mc-surface);
+  cursor: not-allowed;
+}
+
+/* Invalid State */
+.avakio-multicombo[data-invalid="true"] .avakio-multicombo-trigger {
+  border-color: var(--mc-invalid);
+}
+
+.avakio-multicombo[data-invalid="true"] .avakio-multicombo-trigger:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* ===================================
+   THEME: MATERIAL (#1CA1C1)
+   =================================== */
+
+[data-admin-theme="material"] .avakio-multicombo-trigger:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+}
+
+[data-admin-theme="material"] .avakio-multicombo-chip {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="material"] .avakio-multicombo-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="material"] .avakio-multicombo-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
+}
+
+[data-admin-theme="material"] .avakio-multicombo-checkbox-checked {
+  background-color: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
+}
+
+/* ===================================
+   THEME: FLAT (#5E81AC)
+   =================================== */
+
+[data-admin-theme="flat"] .avakio-multicombo-inner-wrapper:not(:has(.avakio-control-label-label)) .avakio-multicombo-trigger {
+  border-radius: 4px;
+}
+
+[data-admin-theme="flat"] .avakio-multicombo-inner-wrapper:not(.avakio-multicombo-inner-wrapper-vertical):has(.avakio-control-label-label) .avakio-multicombo-trigger {
+  border-radius: 0 4px 4px 0;
+}
+
+[data-admin-theme="flat"] .avakio-multicombo-trigger:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
+}
+
+[data-admin-theme="flat"] .avakio-multicombo-dropdown {
+  border-radius: 4px;
+}
+
+[data-admin-theme="flat"] .avakio-multicombo-chip {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="flat"] .avakio-multicombo-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-primary);
+}
+
+[data-admin-theme="flat"] .avakio-multicombo-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
+}
+
+[data-admin-theme="flat"] .avakio-multicombo-checkbox-checked {
+  background-color: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
+}
+
+/* ===================================
+   THEME: COMPACT (#00796B)
+   =================================== */
+
+[data-admin-theme="compact"] .avakio-multicombo {
+  gap: 8px;
+}
+
+[data-admin-theme="compact"] .avakio-multicombo-trigger {
+  padding: 6px 10px;
+  font-size: 13px;
+  min-height: 32px;
+}
+
+[data-admin-theme="compact"] .avakio-multicombo-inner-wrapper:not(:has(.avakio-control-label-label)) .avakio-multicombo-trigger {
+  border-radius: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-multicombo-inner-wrapper:not(.avakio-multicombo-inner-wrapper-vertical):has(.avakio-control-label-label) .avakio-multicombo-trigger {
+  border-radius: 0 4px 4px 0;
+}
+
+[data-admin-theme="compact"] .avakio-multicombo-trigger:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 2px var(--avakio-shadow-focus);
+}
+
+[data-admin-theme="compact"] .avakio-multicombo-dropdown {
+  border-radius: 4px;
+}
+
+[data-admin-theme="compact"] .avakio-multicombo-option {
   padding: 8px 10px;
   font-size: 13px;
 }
 
-[data-admin-theme="compact"] .avakio-mc-option-label {
-  font-size: 13px;
+[data-admin-theme="compact"] .avakio-multicombo-chip {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
 }
 
-[data-admin-theme="compact"] .avakio-mc-chip {
-  padding: 1px 6px;
-  font-size: 12px;
+[data-admin-theme="compact"] .avakio-multicombo-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
 }
 
-[data-admin-theme="compact"] .avakio-mc-placeholder,
-[data-admin-theme="compact"] .avakio-mc-count {
-  font-size: 13px;
+[data-admin-theme="compact"] .avakio-multicombo-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
 }
 
-[data-admin-theme="compact"] .avakio-mc-footer {
-  padding: 6px 10px;
-  font-size: 11px;
+[data-admin-theme="compact"] .avakio-multicombo-checkbox-checked {
+  background-color: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
 }
 
-[data-admin-theme="compact"] .avakio-mc-checkbox {
-  width: 16px;
-  height: 16px;
+/* ===================================
+   THEME: DARK
+   =================================== */
+
+[data-admin-theme="dark"] .avakio-multicombo-trigger {
+  background-color: var(--avakio-bg-tertiary);
+  border-color: var(--avakio-border-primary);
+  color: var(--avakio-text-white);
 }
 
-/* Dark Theme */
-[data-admin-theme="dark"] .avakio-mc-input-wrapper {
-  background: hsl(222.2, 84%, 4.9%);
-  border-color: hsl(217.2, 32.6%, 17.5%);
+[data-admin-theme="dark"] .avakio-multicombo-trigger:hover {
+  background-color: var(--avakio-bg-hover);
+  border-color: var(--avakio-border-hover);
 }
 
-[data-admin-theme="dark"] .avakio-mc-dropdown {
-  background: hsl(222.2, 84%, 4.9%);
-  border-color: hsl(217.2, 32.6%, 17.5%);
+[data-admin-theme="dark"] .avakio-multicombo-trigger:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
 }
 
-[data-admin-theme="dark"] .avakio-mc-select-all {
-  background: hsl(217.2, 32.6%, 12%);
-  border-bottom-color: hsl(217.2, 32.6%, 17.5%);
+[data-admin-theme="dark"] .avakio-multicombo-trigger:disabled {
+  background-color: var(--avakio-bg-disabled);
 }
 
-[data-admin-theme="dark"] .avakio-mc-option:hover {
-  background: hsl(217.2, 32.6%, 17.5%);
+[data-admin-theme="dark"] .avakio-multicombo-placeholder {
+  color: var(--avakio-text-tertiary);
 }
 
-[data-admin-theme="dark"] .avakio-mc-placeholder,
-[data-admin-theme="dark"] .avakio-mc-option-label,
-[data-admin-theme="dark"] .avakio-mc-count {
-  color: hsl(210, 40%, 98%);
+[data-admin-theme="dark"] .avakio-multicombo-count {
+  color: var(--avakio-text-white);
 }
 
-[data-admin-theme="dark"] .avakio-mc-chip {
-  background: hsl(217.2, 32.6%, 17.5%);
-  border-color: hsl(217.2, 32.6%, 25%);
-  color: hsl(210, 40%, 98%);
+[data-admin-theme="dark"] .avakio-multicombo-search {
+  color: var(--avakio-text-white);
 }
 
-[data-admin-theme="dark"] .avakio-mc-chip-remove:hover {
-  background: hsl(217.2, 32.6%, 25%);
+[data-admin-theme="dark"] .avakio-multicombo-chip {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-text-white);
 }
 
-[data-admin-theme="dark"] .avakio-mc-footer {
-  background: hsl(217.2, 32.6%, 12%);
-  border-top-color: hsl(217.2, 32.6%, 17.5%);
-  color: hsl(215, 20.2%, 65.1%);
+[data-admin-theme="dark"] .avakio-multicombo-chip-remove {
+  color: var(--avakio-text-white);
 }
 
-[data-admin-theme="dark"] .avakio-mc-no-results {
-  color: hsl(215, 20.2%, 65.1%);
+[data-admin-theme="dark"] .avakio-multicombo-dropdown {
+  background-color: var(--avakio-bg-tertiary);
+  border-color: var(--avakio-border-primary);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 }
 
-/* Ocean Theme */
-[data-admin-theme="ocean"] .avakio-mc-input-wrapper {
-  border-color: hsl(205, 100%, 85%);
+[data-admin-theme="dark"] .avakio-multicombo-option {
+  color: var(--avakio-text-white);
 }
 
-[data-admin-theme="ocean"] .avakio-mc-input-wrapper:hover {
-  border-color: hsl(205, 100%, 45%);
+[data-admin-theme="dark"] .avakio-multicombo-option:hover {
+  background-color: var(--avakio-bg-hover);
 }
 
-[data-admin-theme="ocean"] .avakio-mc-input-wrapper-open {
-  border-color: hsl(205, 100%, 45%);
-  box-shadow: 0 0 0 1px hsl(205, 100%, 45%);
+[data-admin-theme="dark"] .avakio-multicombo-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-text-white);
 }
 
-[data-admin-theme="ocean"] .avakio-mc-checkbox-checked {
-  background: hsl(205, 100%, 45%);
-  border-color: hsl(205, 100%, 45%);
+[data-admin-theme="dark"] .avakio-multicombo-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
 }
 
-[data-admin-theme="ocean"] .avakio-mc-chip-more {
-  background: hsl(205, 100%, 45%);
-  border-color: hsl(205, 100%, 45%);
+[data-admin-theme="dark"] .avakio-multicombo-checkbox {
+  border-color: var(--avakio-border-primary);
+  background-color: var(--avakio-bg-tertiary);
 }
 
-[data-admin-theme="ocean"] .avakio-mc-select-all-label {
-  color: hsl(205, 100%, 35%);
+[data-admin-theme="dark"] .avakio-multicombo-checkbox-checked {
+  background-color: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
 }
 
-[data-admin-theme="ocean"] .avakio-mc-footer {
-  background: hsl(205, 100%, 97%);
-  color: hsl(205, 100%, 35%);
+[data-admin-theme="dark"] .avakio-multicombo-empty {
+  color: var(--avakio-text-tertiary);
 }
 
-/* Sunset Theme */
-[data-admin-theme="sunset"] .avakio-mc-input-wrapper {
-  border-color: hsl(14, 100%, 85%);
+[data-admin-theme="dark"] .avakio-multicombo-clear {
+  color: var(--avakio-text-tertiary);
 }
 
-[data-admin-theme="sunset"] .avakio-mc-input-wrapper:hover {
-  border-color: hsl(14, 100%, 57%);
+[data-admin-theme="dark"] .avakio-multicombo-clear:hover {
+  background-color: var(--avakio-bg-hover);
+  color: var(--avakio-text-white);
 }
 
-[data-admin-theme="sunset"] .avakio-mc-input-wrapper-open {
-  border-color: hsl(14, 100%, 57%);
-  box-shadow: 0 0 0 1px hsl(14, 100%, 57%);
+[data-admin-theme="dark"] .avakio-multicombo-toggle {
+  color: var(--avakio-text-tertiary);
 }
 
-[data-admin-theme="sunset"] .avakio-mc-checkbox-checked {
-  background: hsl(14, 100%, 57%);
-  border-color: hsl(14, 100%, 57%);
+[data-admin-theme="dark"] .avakio-multicombo-select-all {
+  border-bottom-color: var(--avakio-border-primary);
 }
 
-[data-admin-theme="sunset"] .avakio-mc-chip-more {
-  background: hsl(14, 100%, 57%);
-  border-color: hsl(14, 100%, 57%);
+[data-admin-theme="dark"] .avakio-multicombo-footer {
+  border-top-color: var(--avakio-border-primary);
+  background-color: var(--avakio-bg-secondary);
+  color: var(--avakio-text-tertiary);
 }
 
-[data-admin-theme="sunset"] .avakio-mc-select-all-label {
-  color: hsl(14, 100%, 40%);
+/* ===================================
+   THEME: OCEAN (#0277BD)
+   =================================== */
+
+[data-admin-theme="ocean"] .avakio-multicombo-trigger:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
 }
 
-[data-admin-theme="sunset"] .avakio-mc-footer {
-  background: hsl(14, 100%, 97%);
-  color: hsl(14, 100%, 40%);
+[data-admin-theme="ocean"] .avakio-multicombo-chip {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
 }
 
-/* Scrollbar styling */
-.avakio-mc-options::-webkit-scrollbar {
-  width: 8px;
+[data-admin-theme="ocean"] .avakio-multicombo-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
 }
 
-.avakio-mc-options::-webkit-scrollbar-track {
-  background: var(--muted);
+[data-admin-theme="ocean"] .avakio-multicombo-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
 }
 
-.avakio-mc-options::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
+[data-admin-theme="ocean"] .avakio-multicombo-checkbox-checked {
+  background-color: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
 }
 
-.avakio-mc-options::-webkit-scrollbar-thumb:hover {
-  background: var(--muted-foreground);
+/* ===================================
+   THEME: SUNSET (#f57c00)
+   =================================== */
+
+[data-admin-theme="sunset"] .avakio-multicombo-trigger:focus {
+  border-color: var(--avakio-accent-primary);
+  box-shadow: 0 0 0 3px var(--avakio-shadow-focus);
 }
 
-/* Responsive */
+[data-admin-theme="sunset"] .avakio-multicombo-chip {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="sunset"] .avakio-multicombo-option.selected {
+  background-color: var(--avakio-bg-selected);
+  color: var(--avakio-accent-secondary);
+}
+
+[data-admin-theme="sunset"] .avakio-multicombo-option.selected:hover {
+  background-color: var(--avakio-bg-selected-hover);
+}
+
+[data-admin-theme="sunset"] .avakio-multicombo-checkbox-checked {
+  background-color: var(--avakio-accent-primary);
+  border-color: var(--avakio-accent-primary);
+}
+
+/* ========== RESPONSIVE ========== */
+
 @media (max-width: 640px) {
-  .avakio-mc-chip-label {
-    max-width: 100px;
+  .avakio-multicombo {
+    flex-direction: column;
   }
-  
-  .avakio-mc-dropdown {
-    max-height: 250px;
+
+  .avakio-multicombo-label {
+    padding: 0;
+    margin-bottom: 4px;
+    width: auto !important;
+  }
+
+  .avakio-multicombo-trigger {
+    min-height: 40px;
+  }
+
+  .avakio-multicombo-dropdown {
+    max-width: calc(100vw - 32px);
   }
 }
-

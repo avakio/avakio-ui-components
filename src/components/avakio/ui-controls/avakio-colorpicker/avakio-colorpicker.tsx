@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import './avakio-colorpicker.css';
 
 export interface AvakioColorPickerPreset {
@@ -10,7 +11,8 @@ export interface AvakioColorPickerProps {
   id?: string;
   value?: string;
   defaultValue?: string;
-  onChange?: (color: string) => void;
+  /** Callback fired when the value changes. Receives { id, value } */
+  onChange?: (event: AvakioChangeEvent<string>) => void;
   label?: string;
   description?: string;
   error?: string;
@@ -107,7 +109,7 @@ export function AvakioColorPicker({
     if (!isControlled) {
       setInternal(normalized);
     }
-    onChange?.(normalized);
+    onChange?.({ id: id || '0', value: normalized });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +119,7 @@ export function AvakioColorPicker({
       setInternal(val);
     }
     if (normalized) {
-      onChange?.(normalized);
+      onChange?.({ id: id || '0', value: normalized });
     }
   };
 

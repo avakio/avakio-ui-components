@@ -1,5 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect, useCallback } from 'react';
 import { Plus, X } from 'lucide-react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-multitext.css';
 
@@ -113,8 +114,8 @@ export interface AvakioMultitextProps {
   pattern?: string;
   /** Autocomplete attribute */
   autoComplete?: string;
-  /** Callback when value changes */
-  onChange?: (value: string[], combinedValue: string) => void;
+  /** Callback fired when the value changes. Receives { id, value } where value is string[] */
+  onChange?: (event: AvakioChangeEvent<string[]> & { combinedValue: string }) => void;
   /** Callback when a section is added */
   onSectionAdd?: (fieldId: string, index: number) => void;
   /** Callback when a section is removed */
@@ -336,7 +337,7 @@ export const AvakioMultitext = forwardRef<AvakioMultitextRef, AvakioMultitextPro
         setTimeout(() => {
           const values = updated.map(f => f.value);
           const combined = values.filter(v => v).join(separator);
-          onChange?.(values, combined);
+          onChange?.({ id: id || '0', value: values, combinedValue: combined });
           
           if (validateEvent === 'change') {
             validateFields();
@@ -345,7 +346,7 @@ export const AvakioMultitext = forwardRef<AvakioMultitextRef, AvakioMultitextPro
         
         return updated;
       });
-    }, [separator, onChange, validateEvent, validateFields]);
+    }, [separator, onChange, validateEvent, validateFields, id]);
 
     // Handle add section
     const handleAddSection = useCallback((initialValue: string = '') => {
@@ -373,11 +374,11 @@ export const AvakioMultitext = forwardRef<AvakioMultitextRef, AvakioMultitextPro
       setTimeout(() => {
         const values = [...fields.map(f => f.value), initialValue];
         const combined = values.filter(v => v).join(separator);
-        onChange?.(values, combined);
+        onChange?.({ id: id || '0', value: values, combinedValue: combined });
       }, 0);
 
       return newFieldId;
-    }, [fields, maxFields, separator, onChange, onSectionAdd]);
+    }, [fields, maxFields, separator, onChange, onSectionAdd, id]);
 
     // Handle remove section
     const handleRemoveSection = useCallback((fieldId?: string) => {
@@ -397,12 +398,12 @@ export const AvakioMultitext = forwardRef<AvakioMultitextRef, AvakioMultitextPro
         setTimeout(() => {
           const values = updated.map(f => f.value);
           const combined = values.filter(v => v).join(separator);
-          onChange?.(values, combined);
+          onChange?.({ id: id || '0', value: values, combinedValue: combined });
         }, 0);
 
         return updated;
       });
-    }, [separator, onChange, onSectionRemove]);
+    }, [separator, onChange, onSectionRemove, id]);
 
     // Handle key press
     const handleKeyPress = useCallback((fieldId: string, e: React.KeyboardEvent<HTMLInputElement>) => {

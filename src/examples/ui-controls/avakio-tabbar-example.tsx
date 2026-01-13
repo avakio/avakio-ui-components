@@ -134,7 +134,7 @@ export function AvakioTabBarExample({ theme = 'material' }: { theme?: string }) 
               key="basic-tabbar"
               value={basicTab}
               options={basicTabs}
-              onChange={(val) => setBasicTab(val as string)}
+              onChange={({ value }) => setBasicTab(value as string)}
               label="Section"
               labelWidth={110}
               required
@@ -172,7 +172,7 @@ export function AvakioTabBarExample({ theme = 'material' }: { theme?: string }) 
               key="icon-tabbar"
               value={iconTab}
               options={iconTabs}
-              onChange={(val) => setIconTab(val as string)}
+              onChange={({ value }) => setIconTab(value as string)}
               align="justify"
               fill
               size="sm"
@@ -210,7 +210,7 @@ export function AvakioTabBarExample({ theme = 'material' }: { theme?: string }) 
               key="closable-tabbar"
               value={closableValue}
               options={closableTabs}
-              onChange={(val) => setClosableValue(val as string)}
+              onChange={({ value }) => setClosableValue(value as string)}
               onClose={(val) => {
                 setClosableTabs((prev) => {
                   const next = prev.filter((t) => t.id !== val);
@@ -270,7 +270,7 @@ export function AvakioTabBarExample({ theme = 'material' }: { theme?: string }) 
               key="bottom-tabbar"
               value={bottomTab}
               options={bottomTabs}
-              onChange={(val) => setBottomTab(val as string)}
+              onChange={({ value }) => setBottomTab(value as string)}
               type="bottom"
               align="center"
               size="sm"
@@ -308,7 +308,7 @@ export function AvakioTabBarExample({ theme = 'material' }: { theme?: string }) 
               key="states-tabbar"
               value={statefulTab}
               options={hiddenTabs}
-              onChange={(val) => setStatefulTab(val as string)}
+              onChange={({ value }) => setStatefulTab(value as string)}
               label="Release"
               labelWidth={110}
               size="sm"
@@ -347,7 +347,7 @@ export function AvakioTabBarExample({ theme = 'material' }: { theme?: string }) 
               key="custom-tabbar"
               value={customTab}
               options={customTabs}
-              onChange={(val) => setCustomTab(val as string)}
+              onChange={({ value }) => setCustomTab(value as string)}
               closable
               renderTab={(option, isActive, closeButton) => (
                 <div className={`avakio-tabbar-custom-tab${isActive ? ' active' : ''}`}>

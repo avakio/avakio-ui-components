@@ -213,7 +213,7 @@ export function AvakioSegmentedButtonExample() {
             <AvakioSegmentedButton
               value={basicValue}
               options={basicOptions}
-              onChange={(val) => setBasicValue(val)}
+              onChange={({ value }) => setBasicValue(value)}
               label="Section"
               labelWidth={80}
             />,
@@ -286,7 +286,7 @@ export function AvakioSegmentedButtonExample() {
             <AvakioSegmentedButton
               value={iconValue}
               options={iconOptions}
-              onChange={(val) => setIconValue(val)}
+              onChange={({ value }) => setIconValue(value)}
             />,
             <AvakioTemplate
               type="clean"
@@ -345,7 +345,7 @@ export function AvakioSegmentedButtonExample() {
             <AvakioSegmentedButton
               options={playerOptions}
               value={playerValue}
-              onChange={(val) => setPlayerValue(val)}
+              onChange={({ value }) => setPlayerValue(value)}
               optionWidth={44}
             />,
           ]}
@@ -433,7 +433,7 @@ export function AvakioSegmentedButtonExample() {
             <AvakioSegmentedButton
               options={themeOptions}
               value={themeValue}
-              onChange={(val) => setThemeValue(val)}
+              onChange={({ value }) => setThemeValue(value)}
               fill
             />,
           ]}
@@ -460,7 +460,7 @@ export function AvakioSegmentedButtonExample() {
             <AvakioSegmentedButton
               value={alignValue}
               options={alignOptions}
-              onChange={(val) => setAlignValue(val)}
+              onChange={({ value }) => setAlignValue(value)}
               label="Alignment"
               labelWidth={80}
             />,
@@ -703,7 +703,7 @@ export function AvakioSegmentedButtonExample() {
               defaultValue="opt-a"
               label="Demo"
               labelWidth={80}
-              onChange={(val) => setMethodsStatus(`Selected: ${val}`)}
+              onChange={({ value }) => setMethodsStatus(`Selected: ${value}`)}
             />,
             <AvakioTemplate
               type="clean"
@@ -839,7 +839,7 @@ export function AvakioSegmentedButtonExample() {
             <AvakioSegmentedButton
               value={dynamicValue}
               options={dynamicOptions}
-              onChange={(val) => setDynamicValue(val)}
+              onChange={({ value }) => setDynamicValue(value)}
             />,
             <AvakioTemplate
               type="clean"
@@ -902,8 +902,8 @@ export function AvakioSegmentedButtonExample() {
               onAfterTabClick={(id) => {
                 console.log(`Tab clicked: ${id}`);
               }}
-              onChange={(val, opt) => {
-                console.log(`Value changed to: ${val}`, opt);
+              onChange={({ value, option }) => {
+                console.log(`Value changed to: ${value}`, option);
               }}
             />,
             <AvakioTemplate

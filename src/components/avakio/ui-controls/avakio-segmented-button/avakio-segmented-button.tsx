@@ -1,4 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect, useCallback } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-segmented-button.css';
 
@@ -96,8 +97,8 @@ export interface AvakioSegmentedButtonProps {
   inputWidth?: number;
   /** Input height */
   inputHeight?: number;
-  /** Callback when value changes */
-  onChange?: (value: string | number | null, option?: AvakioSegmentedOption | null) => void;
+  /** Callback fired when the value changes. Receives { id, value, option } */
+  onChange?: (event: AvakioChangeEvent<string | number | null> & { option?: AvakioSegmentedOption | null }) => void;
   /** Callback before segment is clicked (return false to cancel) */
   onBeforeTabClick?: (id: string | number) => boolean | void;
   /** Callback after segment is clicked */
@@ -288,9 +289,9 @@ export const AvakioSegmentedButton = forwardRef<AvakioSegmentedButtonRef, Avakio
         setInternalValue(optionId);
       }
 
-      onChange?.(optionId, option);
+      onChange?.({ id: id || '0', value: optionId, option });
       onAfterTabClick?.(optionId);
-    }, [disabled, internalOptions, disabledOptions, isControlled, onChange, onBeforeTabClick, onAfterTabClick]);
+    }, [disabled, internalOptions, disabledOptions, isControlled, onChange, onBeforeTabClick, onAfterTabClick, id]);
 
     // Handle keyboard navigation
     const handleKeyDown = useCallback((e: React.KeyboardEvent, index: number) => {
@@ -357,7 +358,7 @@ export const AvakioSegmentedButton = forwardRef<AvakioSegmentedButtonRef, Avakio
           setInternalValue(val);
         }
         const option = internalOptions.find(opt => opt.id === val);
-        onChange?.(val, option);
+        onChange?.({ id: id || '0', value: val, option });
       },
       getOption: (optId: string | number) => internalOptions.find(opt => opt.id === optId),
       getOptions: () => internalOptions,

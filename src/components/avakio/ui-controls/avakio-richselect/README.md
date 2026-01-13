@@ -36,9 +36,10 @@ const [value, setValue] = useState('');
 const options = ['Option One', 'Option Two', 'Option Three'];
 
 <AvakioRichSelect
+  id="simple-select"
   value={value}
   options={options}
-  onChange={(value) => setValue(value)}
+  onChange={({ value: v }) => setValue(v)}
   placeholder="Select an option..."
   label="Simple Select"
 />
@@ -55,10 +56,11 @@ const options = [
 ];
 
 <AvakioRichSelect
+  id="rich-select"
   value={value}
   options={options}
-  onChange={(value, option) => {
-    setValue(value);
+  onChange={({ value: v, option }) => {
+    setValue(v);
     console.log('Selected:', option);
   }}
   label="Rich Select"
@@ -77,9 +79,10 @@ const countryOptions = [
 ];
 
 <AvakioRichSelect
+  id="country-select"
   value={selectedCountry}
   options={countryOptions}
-  onChange={(value) => setSelectedCountry(value)}
+  onChange={({ value }) => setSelectedCountry(value)}
   label="Country"
   template={(option) => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -100,9 +103,10 @@ const statusOptions = [
 ];
 
 <AvakioRichSelect
+  id="status-select"
   value={status}
   options={statusOptions}
-  onChange={(value) => setStatus(value)}
+  onChange={({ value }) => setStatus(value)}
   label="Status"
   template={(option) => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -129,9 +133,10 @@ const largeOptions = Array.from({ length: 100 }, (_, i) => ({
 }));
 
 <AvakioRichSelect
+  id="large-list-select"
   value={selectedItem}
   options={largeOptions}
-  onChange={(value) => setSelectedItem(value)}
+  onChange={({ value }) => setSelectedItem(value)}
   label="Large List"
   yCount={5} // Show only 5 items at a time
 />
@@ -143,7 +148,7 @@ const largeOptions = Array.from({ length: 100 }, (_, i) => ({
 |------|------|---------|-------------|
 | `value` | `string \| number` | - | Selected value (ID or value) |
 | `options` | `Array` | `[]` | Options array (string[] or object[]) |
-| `onChange` | `(value, option?) => void` | - | Callback when value changes |
+| `onChange` | `({ id, value, option? }) => void` | - | Callback when value changes. Receives `{ id, value, option }` object |
 | `placeholder` | `string` | `'Select...'` | Placeholder text when no selection |
 | `label` | `string` | - | Label text |
 | `labelAlign` | `'left' \| 'right'` | `'left'` | Label alignment |
@@ -183,13 +188,14 @@ The object format allows:
 
 ## Getting Current Value
 
-When using object options, `onChange` provides both the ID and the full option:
+When using object options, `onChange` provides the ID, value, and the full option:
 
 ```tsx
-onChange={(value, option) => {
-  console.log('ID:', value);        // Returns the ID (e.g., 1)
-  console.log('Text:', option.value); // Returns the text (e.g., 'Option 1')
-  console.log('Full:', option);      // Returns the complete option object
+onChange={({ id, value, option }) => {
+  console.log('Component ID:', id);   // Returns the component's id prop
+  console.log('Value:', value);       // Returns the selected ID (e.g., 1)
+  console.log('Text:', option?.value); // Returns the text (e.g., 'Option 1')
+  console.log('Full:', option);       // Returns the complete option object
 }}
 ```
 

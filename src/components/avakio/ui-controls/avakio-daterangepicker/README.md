@@ -4,9 +4,10 @@ A range selector that opens a dropdown containing two AvakioDatePicker instances
 
 ## Props
 
+- `id?: string` – Component ID passed to onChange callback.
 - `value?: { start: string | null; end: string | null }` – Controlled range (ISO or YYYY-MM-DD).
 - `defaultValue?: { start: string | null; end: string | null }` – Initial value for uncontrolled mode.
-- `onChange?: (range) => void` – Fired whenever the range changes.
+- `onChange?: ({ id, value }) => void` – Fired whenever the range changes. Receives `{ id, value }` object where value is `{ start, end }`.
 - `presets?: { label: string; range: () => { start: string | null; end: string | null } }[]` – Quick actions list. Defaults to Today / Last 7 days / This month / Clear.
 - `allowSingleDay?: boolean` – Allow same-day ranges (default true).
 - `showTime?: boolean` – Pass-through to the inner AvakioDatePicker to enable time selection (default false).
@@ -24,8 +25,9 @@ export function Example() {
 
   return (
     <AvakioDateRangePicker
+      id="date-range-picker"
       value={range}
-      onChange={setRange}
+      onChange={({ value }) => setRange(value)}
       allowSingleDay
       showTime={false}
     />

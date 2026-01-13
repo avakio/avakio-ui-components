@@ -23,10 +23,11 @@ import '@/components/avakio/ui-controls/avakio-colorpicker/avakio-colorpicker.cs
 const [color, setColor] = useState('#1ca1c1');
 
 <AvakioColorPicker
+  id="accent-color"
   label="Accent color"
   description="Used for primary actions"
   value={color}
-  onChange={setColor}
+  onChange={({ value }) => setColor(value)}
 />
 ```
 
@@ -39,9 +40,10 @@ const presets = [
 ];
 
 <AvakioColorPicker
+  id="brand-color"
   label="Brand color"
   value={color}
-  onChange={setColor}
+  onChange={({ value }) => setColor(value)}
   presets={presets}
   error={color === '#000000' ? 'Too dark for branding' : undefined}
 />
@@ -53,7 +55,7 @@ const presets = [
 | --- | --- | --- | --- |
 | `value` | `string` | `undefined` | Controlled color (hex) |
 | `defaultValue` | `string` | `'#1ca1c1'` | Uncontrolled initial color |
-| `onChange` | `(color: string) => void` | `undefined` | Fired on color change |
+| `onChange` | `({ id, value }) => void` | `undefined` | Fired on color change. Receives `{ id, value }` object |
 | `label` | `string` | `undefined` | Label text |
 | `description` | `string` | `undefined` | Helper text |
 | `error` | `string` | `undefined` | Error message |

@@ -752,7 +752,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                       { id: 'flip', value: 'Flip' },
                       { id: 'none', value: 'None' },
                     ]}
-                    onChange={(value) => setAnimationType(value as string)}
+                    onChange={({ value }) => setAnimationType(value as string)}
                   />
                   {animationType === 'slide' && (
                     <AvakioRichSelect
@@ -767,7 +767,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                         { id: 'top', value: 'Top' },
                         { id: 'bottom', value: 'Bottom' },
                       ]}
-                      onChange={(value) => setAnimationDirection(value as string)}
+                      onChange={({ value }) => setAnimationDirection(value as string)}
                     />
                   )}
                   {animationType === 'flip' && (
@@ -781,7 +781,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                         { id: 'horizontal', value: 'Horizontal' },
                         { id: 'vertical', value: 'Vertical' },
                       ]}
-                      onChange={(value) => setFlipDirection(value as string)}
+                      onChange={({ value }) => setFlipDirection(value as string)}
                     />
                   )}
                   <AvakioCounter
@@ -792,7 +792,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     min={100}
                     max={1000}
                     step={50}
-                    onChange={(value) => setAnimationDuration(value)}
+                    onChange={({ value }) => setAnimationDuration(value)}
                     allowInput={true}
                   />
                   <AvakioText
@@ -801,7 +801,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     value={width}
                     width="100%"
                     padding={[0, 0, 10, 0]}
-                    onChange={(value) => setWidth(value)}
+                    onChange={({ value }) => setWidth(value)}
                     placeholder="e.g., 100%, 400px"
                   />
                   <AvakioText
@@ -810,13 +810,13 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     value={height}
                     width="100%"
                     padding={[0, 0, 10, 0]}
-                    onChange={(value) => setHeight(value)}
+                    onChange={({ value }) => setHeight(value)}
                     placeholder="e.g., 200, auto"
                   />
                   <AvakioCheckbox
                     label="Keep Views"
                     checked={keepViews}
-                    onChange={(checked) => setKeepViews(checked)}
+                    onChange={({ checked }) => setKeepViews(checked)}
                   />
                   <div style={{ marginTop: '16px' }}>
                     <p style={{ fontSize: '13px', marginBottom: '8px' }}>Navigate to view:</p>

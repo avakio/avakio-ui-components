@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, X, Search } from 'lucide-react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-gridsuggest.css';
 
@@ -30,7 +31,8 @@ export interface AvakioGridSuggestProps {
   id?: string;
   value?: string | number;
   data?: AvakioGridSuggestOption[];
-  onChange?: (value: string | number, option?: AvakioGridSuggestOption) => void;
+  /** Callback fired when the value changes. Receives { id, value, option } */
+  onChange?: (event: AvakioChangeEvent<string | number> & { option?: AvakioGridSuggestOption }) => void;
   onInputChange?: (inputValue: string) => void;
   placeholder?: string;
   label?: string;
@@ -250,7 +252,7 @@ export function AvakioGridSuggest({
     setInputValue(getDisplayText(option));
     setIsOpen(false);
     setHighlightedIndex(-1);
-    onChange?.(option.id, option);
+    onChange?.({ id: id || '0', value: option.id, option });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +270,7 @@ export function AvakioGridSuggest({
     e.stopPropagation();
     setSelectedOption(null);
     setInputValue('');
-    onChange?.('' as any, undefined);
+    onChange?.({ id: id || '0', value: '' as any, option: undefined });
     inputRef.current?.focus();
   };
 

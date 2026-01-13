@@ -400,15 +400,15 @@ export function AvakioDatePickerExample() {
               margin={[8, 0, 0, 0]} 
               value={basicDate}
               align='left'
-              labelWidth={150}                 
-              compWidth={150}
+              labelWidth={100}                 
+              compWidth={350}
               placeholder='Select a date'
               //enableValueCopyButton              
-              onChange={(newVal) => {
-                setBasicDate(newVal);
-                addLog('onChange', `value: ${newVal || '(empty)'}`);
+              onChange={({ value }) => {
+                setBasicDate(value);
+                addLog('onChange', `value: ${value || '(empty)'}`);
               }}
-              labelForm="Select Date"
+              label="Select Date"
               showTime={false}
               
             />,
@@ -443,9 +443,9 @@ export function AvakioDatePickerExample() {
             <AvakioDatePicker
               align='center'
               value={inlineDate}
-              onChange={(newVal) => {
-                setInlineDate(newVal);
-                addLog('onChange (inline)', `value: ${newVal || '(empty)'}`);
+              onChange={({ value }) => {
+                setInlineDate(value);
+                addLog('onChange (inline)', `value: ${value || '(empty)'}`);
               }}
               showTime={true}
               inline
@@ -485,7 +485,7 @@ export function AvakioDatePickerExample() {
           rows={[
             <AvakioDatePicker
               value={timeDate}
-              onChange={setTimeDate}
+              onChange={({ value }) => setTimeDate(value)}
               label="Date & Time"
               labelWidth={100}
               labelAlign='center'
@@ -541,7 +541,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
                 value={compactDate}
-                onChange={setCompactDate}
+                onChange={({ value }) => setCompactDate(value)}
                 showTime={false}
                 padding={[8, 0, 0, 0]}
                 size="compact"
@@ -575,7 +575,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={labelLeftDate}
-              onChange={(newVal) => setLabelLeftDate(newVal)}
+              onChange={({ value }) => setLabelLeftDate(value)}
               labelAlign='center'
               label="Date"
               labelPosition="left"
@@ -590,7 +590,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={labelTopDate}
-              onChange={(newVal) => setLabelTopDate(newVal)}
+              onChange={({ value }) => setLabelTopDate(value)}
               label="Date"
               labelPosition="top"
               placeholder='Select a date ...'
@@ -607,7 +607,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={labelRightDate}
-              onChange={(newVal) => setLabelRightDate(newVal)}
+              onChange={({ value }) => setLabelRightDate(value)}
               label="Date"
               labelPosition="right"
               placeholder='Select a date ...'
@@ -624,7 +624,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={labelBottomDate}
-              onChange={(newVal) => setLabelBottomDate(newVal)}
+              onChange={({ value }) => setLabelBottomDate(value)}
               label="Date"
               labelPosition="bottom"
               placeholder='Select a date ...'
@@ -641,7 +641,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={labelTopDate}
-              onChange={(newVal) => setLabelTopDate(newVal)}                            
+              onChange={({ value }) => setLabelTopDate(value)}                            
               placeholder='Select a date ...'              
               clearable
               showTime={false}              
@@ -659,7 +659,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={labelTopDate}
-              onChange={(newVal) => setLabelTopDate(newVal)}                            
+              onChange={({ value }) => setLabelTopDate(value)}                            
               placeholder='Select a date ...'              
               clearable
               showTime={false}              
@@ -695,7 +695,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={requiredDate}              
-              onChange={(newVal) => setRequiredDate(newVal)}
+              onChange={({ value }) => setRequiredDate(value)}
               labelAlign='center'
               label="Birth Date"
               required
@@ -711,7 +711,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={invalidDate}
-              onChange={(newVal) => setInvalidDate(newVal)}
+              onChange={({ value }) => setInvalidDate(value)}
               labelAlign='center'
               label="Due Date"
               invalid
@@ -744,7 +744,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={disabledDate}
-              onChange={(newVal) => setDisabledDate(newVal)}
+              onChange={({ value }) => setDisabledDate(value)}
               label="Date"
               disabled
               labelAlign='center'
@@ -760,7 +760,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={borderlessDate}
-              onChange={(newVal) => setBorderlessDate(newVal)}
+              onChange={({ value }) => setBorderlessDate(value)}
               label="Date"
               labelAlign='center'
               borderless
@@ -777,7 +777,7 @@ export function AvakioDatePickerExample() {
             />,
             <AvakioDatePicker
               value={copyButtonDate}
-              onChange={(newVal) => setCopyButtonDate(newVal)}
+              onChange={({ value }) => setCopyButtonDate(value)}
               labelAlign='center'
               label="Date"
               enableValueCopyButton
@@ -836,9 +836,9 @@ export function AvakioDatePickerExample() {
                       className={getPropValue('className', '') || undefined}
                       ref={datePickerRef}                    
                       value={playgroundValue}
-                      onChange={(newVal) => {
-                        setPlaygroundValue(newVal);
-                        if (getPropValue('logOnChange', true)) addLog('onChange', `value: ${newVal || '(empty)'}`);
+                      onChange={({ value }) => {
+                        setPlaygroundValue(value);
+                        if (getPropValue('logOnChange', true)) addLog('onChange', `value: ${value || '(empty)'}`);
                       }}
                       // Appearance props
                       label={getPropValue('label', '')}

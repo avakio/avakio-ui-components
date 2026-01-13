@@ -31,13 +31,14 @@ function MyComponent() {
 
   return (
     <AvakioRadio
+      id="branch-radio"
       value={value}
       options={[
         { id: 'master', value: 'Master' },
         { id: 'develop', value: 'Develop' },
         { id: 'feature', value: 'Feature' },
       ]}
-      onChange={(val) => setValue(val)}
+      onChange={({ value: v }) => setValue(v)}
       label="Branch"
       labelWidth={80}
     />
@@ -82,7 +83,7 @@ function MyComponent() {
 | `css` | `React.CSSProperties` | - | Inline styles |
 | `width` | `number \| string` | - | Component width |
 | `height` | `number \| string` | - | Component height |
-| `onChange` | `(value: string \| number) => void` | - | Called when selection changes |
+| `onChange` | `({ id, value }) => void` | - | Called when selection changes. Receives `{ id, value }` object |
 | `onClick` | `(e, option) => void` | - | Called when an option is clicked |
 | `onFocus` | `(e) => void` | - | Called when focused |
 | `onBlur` | `(e) => void` | - | Called when blurred |

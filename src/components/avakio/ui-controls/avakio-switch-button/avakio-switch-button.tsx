@@ -1,4 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect } from 'react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-switch-button.css';
 
@@ -50,8 +51,8 @@ export interface AvakioSwitchButtonProps {
   width?: number | string;
   /** Height */
   height?: number | string;
-  /** Callback when value changes */
-  onChange?: (value: boolean) => void;
+  /** Callback fired when the value changes. Receives { id, value } */
+  onChange?: (event: AvakioChangeEvent<boolean>) => void;
   /** Callback when clicked */
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /** Callback when focused */
@@ -162,7 +163,7 @@ export const AvakioSwitchButton = forwardRef<AvakioSwitchButtonRef, AvakioSwitch
         if (!isControlled) {
           setInternalValue(newValue);
         }
-        onChange?.(newValue);
+        onChange?.({ id: id || '0', value: newValue });
       },
       toggle: () => {
         const currentValue = isControlled ? normalizeValue(value) : internalValue;
@@ -170,7 +171,7 @@ export const AvakioSwitchButton = forwardRef<AvakioSwitchButtonRef, AvakioSwitch
         if (!isControlled) {
           setInternalValue(newValue);
         }
-        onChange?.(newValue);
+        onChange?.({ id: id || '0', value: newValue });
       },
       focus: () => switchRef.current?.focus(),
       blur: () => switchRef.current?.blur(),
@@ -188,7 +189,7 @@ export const AvakioSwitchButton = forwardRef<AvakioSwitchButtonRef, AvakioSwitch
       if (!isControlled) {
         setInternalValue(newValue);
       }
-      onChange?.(newValue);
+      onChange?.({ id: id || '0', value: newValue });
       onClick?.(e);
     };
 

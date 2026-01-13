@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { ChevronRight, ChevronLeft, ChevronsRight, ChevronsLeft, Search, GripVertical } from 'lucide-react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { cn } from '@/lib/utils';
 import './avakio-doublelist.css';
 
@@ -14,8 +15,8 @@ export interface AvakioDoubleListProps {
   data: AvakioDoubleListItem[];
   /** Array of selected item IDs (items in the right list) */
   value: string[];
-  /** Callback when selection changes */
-  onChange: (selectedIds: string[]) => void;
+  /** Callback fired when the value changes. Receives { id, value } where value is string[] */
+  onChange: (event: AvakioChangeEvent<string[]>) => void;
   /** Label for the left list */
   labelLeft?: string;
   /** Label for the right list */
@@ -119,10 +120,10 @@ export function AvakioDoubleList({
       return item && !item.disabled && !selectedSet.has(id);
     });
     if (validIds.length > 0) {
-      onChange([...value, ...validIds]);
+      onChange({ id, value: [...value, ...validIds] });
       setLeftSelection([]);
     }
-  }, [data, selectedSet, value, onChange]);
+  }, [data, selectedSet, value, onChange, id]);
 
   // Move items to left (deselect)
   const moveToLeft = useCallback((ids: string[]) => {
@@ -131,28 +132,28 @@ export function AvakioDoubleList({
       return item && !item.disabled;
     }));
     if (idsToRemove.size > 0) {
-      onChange(value.filter(id => !idsToRemove.has(id)));
+      onChange({ id, value: value.filter(id => !idsToRemove.has(id)) });
       setRightSelection([]);
     }
-  }, [data, value, onChange]);
+  }, [data, value, onChange, id]);
 
   // Move all to right
   const moveAllToRight = useCallback(() => {
     const newIds = leftItems
       .filter(item => !item.disabled)
       .map(item => item.id);
-    onChange([...value, ...newIds]);
+    onChange({ id, value: [...value, ...newIds] });
     setLeftSelection([]);
-  }, [leftItems, value, onChange]);
+  }, [leftItems, value, onChange, id]);
 
   // Move all to left
   const moveAllToLeft = useCallback(() => {
     const disabledIds = rightItems
       .filter(item => item.disabled)
       .map(item => item.id);
-    onChange(disabledIds);
+    onChange({ id, value: disabledIds });
     setRightSelection([]);
-  }, [rightItems, onChange]);
+  }, [rightItems, onChange, id]);
 
   // Handle item click with multi-select support
   const handleItemClick = useCallback((

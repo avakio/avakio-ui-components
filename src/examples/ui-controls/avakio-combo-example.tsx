@@ -73,7 +73,7 @@ export default function AvakioComboExample({ theme: currentTheme = 'material' }:
                 placeholder="Select or type a country..."
                 options={countries}
                 value={selectedCountry}
-                onChange={(value, option) => {
+                onChange={({ value, option }) => {
                   setSelectedCountry(value);
                   console.log("Selected:", value, option);
                 }}
@@ -103,7 +103,7 @@ export default function AvakioComboExample({ theme: currentTheme = 'material' }:
                 placeholder="Select or type a city..."
                 options={cities}
                 value={selectedCity}
-                onChange={(value) => {
+                onChange={({ value }) => {
                   setSelectedCity(value);
                   console.log("Selected city:", value);
                 }}
@@ -131,7 +131,7 @@ export default function AvakioComboExample({ theme: currentTheme = 'material' }:
                 placeholder="Select a user..."
                 options={userOptions}
                 value={selectedUser}
-                onChange={(value) => setSelectedUser(value)}
+                onChange={({ value }) => setSelectedUser(value)}
                 template={(option) => (
                   <div className="flex flex-col">
                     <span className="font-medium">{option.value}</span>

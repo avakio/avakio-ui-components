@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { ChevronDown, X } from 'lucide-react';
+import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import { AvakioControlLabel } from '../../base/avakio-control-label';
 import './avakio-richselect.css';
 
@@ -49,7 +50,8 @@ export interface AvakioRichSelectProps {
   id?: string;
   value?: string | number;
   options: AvakioRichSelectOption[] | string[];
-  onChange?: (value: string | number, option?: AvakioRichSelectOption) => void;
+  /** Callback fired when the value changes. Receives { id, value, option } */
+  onChange?: (event: AvakioChangeEvent<string | number> & { option?: AvakioRichSelectOption }) => void;
   placeholder?: string;
   /** Sets the text of the label */
   label?: string;
@@ -253,13 +255,13 @@ export const AvakioRichSelect = forwardRef<AvakioRichSelectRef, AvakioRichSelect
     setSelectedOption(option);
     setIsOpen(false);
     setHighlightedIndex(-1);
-    onChange?.(option.id, option);
+    onChange?.({ id: id || '0', value: option.id, option });
   };
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
     setSelectedOption(null);
-    onChange?.('' as any, undefined);
+    onChange?.({ id: id || '0', value: '' as any, option: undefined });
   };
 
   const handleToggle = () => {
@@ -315,9 +317,9 @@ export const AvakioRichSelect = forwardRef<AvakioRichSelectRef, AvakioRichSelect
     );
     if (option) {
       setSelectedOption(option);
-      onChange?.(option.id, option);
+      onChange?.({ id: id || '0', value: option.id, option });
     }
-  }, [normalizedOptions, onChange]);
+  }, [normalizedOptions, onChange, id]);
 
   const getText = useCallback(() => {
     return selectedOption?.value || '';

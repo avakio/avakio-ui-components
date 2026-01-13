@@ -333,18 +333,18 @@ export function AvakioToggleButtonExample() {
               <AvakioToggleButton
                 label="Toggle"
                 value={basicToggle}
-                onChange={(val) => {
-                  setBasicToggle(val);
-                  addLog('onChange', `value: ${val}`);
+                onChange={({ value }) => {
+                  setBasicToggle(value);
+                  addLog('onChange', `value: ${value}`);
                 }}
               />
               <AvakioToggleButton
                 onLabel="On"
                 offLabel="Off"
                 value={powerToggle}
-                onChange={(val) => {
-                  setPowerToggle(val);
-                  addLog('onChange', `value: ${val}`);
+                onChange={({ value }) => {
+                  setPowerToggle(value);
+                  addLog('onChange', `value: ${value}`);
                 }}
               />
             </div>,
@@ -722,9 +722,9 @@ export function AvakioToggleButtonExample() {
                         className={getPropValue('className', '') || undefined}
                         ref={toggleButtonRef}                    
                         value={playgroundValue}
-                        onChange={(newVal) => {
-                          setPlaygroundValue(newVal);
-                          if (getPropValue('logOnChange', true)) addLog('onChange', `value: ${newVal}`);
+                        onChange={({ value }) => {
+                          setPlaygroundValue(value);
+                          if (getPropValue('logOnChange', true)) addLog('onChange', `value: ${value}`);
                         }}
                         // Labels props
                         label={getPropValue('onLabel', '') || getPropValue('offLabel', '') ? undefined : getPropValue('label', 'Toggle')}

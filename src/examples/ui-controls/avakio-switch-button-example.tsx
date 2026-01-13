@@ -649,7 +649,7 @@ export function AvakioSwitchButtonExample() {
                           { id: 'md', value: 'Medium' },
                           { id: 'lg', value: 'Large' },
                         ]}
-                        onChange={(val) => setPlaygroundSize(val as string)}
+                        onChange={({ value }) => setPlaygroundSize(value as string)}
                       />
                       <AvakioCheckbox
                         label="Disabled"

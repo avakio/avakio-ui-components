@@ -473,7 +473,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             placeholder={item.placeholder}
             disabled={itemDisabled}
             readonly={itemDisabled}
-            onChange={(val) => {
+            onChange={({ value: val }) => {
               const numVal = val === "" ? 0 : Number(val);
               handleChange(item.id, val === "" ? "" : numVal);
               item.numberOnChange?.(numVal, item);
@@ -501,7 +501,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
               id={item.id}
               value={typeof item.value === "string" || typeof item.value === "number" ? item.value : undefined}
               options={richOptions}
-              onChange={(val, opt) => {
+              onChange={({ value: val, option: opt }) => {
                 item.selectOnChange?.(val, opt, item);
                 handleChange(item.id, (val as string | number) ?? "");
               }}
@@ -527,7 +527,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             id={item.id}
             name={item.id}
               checked={checked}
-              onChange={(next) => {
+              onChange={({ value: next }) => {
                 item.checkboxOnChange?.(next, item);
                 handleChange(item.id, next);
               }}
@@ -544,7 +544,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             id={item.id}
             value={typeof item.value === "string" || typeof item.value === "number" ? item.value : undefined}
             options={(item.comboOptions ?? item.options ?? []) as AvakioComboOption[] | string[]}
-            onChange={(val, opt) => {
+            onChange={({ value: val, option: opt }) => {
               item.comboOnChange?.(val, opt, item);
               handleChange(item.id, (val as string | number) ?? "");
             }}
@@ -605,7 +605,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             size={item.counterSize}
             allowInput={item.counterAllowInput}
             className={item.counterClassName}
-            onChange={(val) => {
+            onChange={({ value: val }) => {
               item.counterOnChange?.(val, item);
               handleChange(item.id, val);
             }}
@@ -628,7 +628,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             formatValue={item.sliderFormatValue}
             marks={item.sliderMarks}
             size={item.sliderSize}
-            onChange={(val) => {
+            onChange={({ value: val }) => {
               const numericVal = typeof val === "number" ? val : val[0];
               item.sliderOnChange?.(numericVal, item);
               handleChange(item.id, numericVal);
@@ -660,7 +660,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             allowSingleDay={item.daterangeAllowSingleDay}
             showTime={item.daterangeShowTime}
             className={item.daterangeClassName}
-            onChange={(range) => {
+            onChange={({ value: range }) => {
               item.daterangeOnChange?.(range, item);
               handleChange(item.id, range);
             }}
@@ -672,7 +672,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             id={item.id}
             value={typeof item.value === "string" || typeof item.value === "number" ? item.value : undefined}
             data={item.gridsuggestData ?? (item.options as unknown as AvakioGridSuggestOption[] | undefined) ?? []}
-            onChange={(val, opt) => {
+            onChange={({ value: val, option: opt }) => {
               item.gridsuggestOnChange?.(val, opt, item);
               handleChange(item.id, (val as string | number) ?? "");
             }}
@@ -699,7 +699,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
           <AvakioMultiCombo
             options={item.multicomboOptions ?? []}
             value={Array.isArray(item.multicomboValue ?? item.value) ? (item.multicomboValue ?? (item.value as string[])) : []}
-            onChange={(vals) => {
+            onChange={({ value: vals }) => {
               item.multicomboOnChange?.(vals, item);
               handleChange(item.id, vals);
             }}
@@ -753,7 +753,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             placeholder={item.placeholder}
             disabled={itemDisabled}
             readonly={itemDisabled}
-            onChange={(val) => {
+            onChange={({ value: val }) => {
               handleChange(item.id, val);
               item.textareaOnChange?.(val, item);
             }}
@@ -776,7 +776,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             placeholder={item.placeholder}
             disabled={itemDisabled}
             readonly={itemDisabled}
-            onChange={(val) => {
+            onChange={({ value: val }) => {
               handleChange(item.id, val);
               item.textOnChange?.(val, item);
             }}
