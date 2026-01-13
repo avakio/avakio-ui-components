@@ -4,7 +4,7 @@ import { AvakioTemplate } from '../../components/avakio/views/avakio-template/av
 import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
-import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
+import { AvakioProperty, AvakioPropertyItem, AvakioPropertyRef } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { AvakioDataTable, AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
 import { addEventLog } from '../../services/event-log-service';
@@ -194,6 +194,7 @@ export function AvakioMultiComboExample() {
 
   // Ref example
   const multiComboRef = useRef<AvakioMultiComboRef>(null);
+  const propertyRef = useRef<AvakioPropertyRef>(null);
   const [eventLog, setEventLog] = useState<string[]>([]);
 
   // Scroll to section when tab is clicked
@@ -1260,6 +1261,7 @@ export function AvakioMultiComboExample() {
                       ]}
                     />,
                     <AvakioProperty
+                      ref={propertyRef}
                       id='Property-playground-props'
                       className='avakio-fill-container'
                       items={playgroundProps}
@@ -1269,6 +1271,15 @@ export function AvakioMultiComboExample() {
                       autoHeight
                       overflowY='auto'
                     />,
+                    <AvakioButton
+                      size="sm"
+                      label="Get Item Count"
+                      align="right"
+                      onClick={() => {
+                        const count = propertyRef.current?.getItemCount();
+                        addLog('Item Count', `Num of Items: ${count}`);
+                      }}
+                    />
                   ]}
                 />,
               ]}

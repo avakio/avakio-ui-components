@@ -1,42 +1,19 @@
 import React, { forwardRef, useImperativeHandle, CSSProperties } from 'react';
-import { AvakioControlLabel } from '../../base/avakio-control-label';
+import { AvakioControlLabel, AvakioControlLabelProps } from '../../base/avakio-control-label';
 import { 
   AvakioBaseProps, 
   AvakioBaseRef, 
   useAvakioBase, 
-  computeBaseStyles,
-  formatSpacing,
-  formatSize
+  computeBaseStyles
 } from '../../base/avakio-base-props';
-import './avakio-label.css';
 
-export interface AvakioLabelProps extends AvakioBaseProps {
+export interface AvakioLabelProps extends 
+  AvakioBaseProps, 
+  Omit<AvakioControlLabelProps, 'children' | 'classPrefix' | 'wrapperClassName' | 'wrapperStyle' | 'labelStyle' | 'size'> {
   /** The text content of the label */
   text?: string;
   /** Custom HTML content (overrides text if provided) */
   html?: string;
-  /** Theme variant */
-  theme?: 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset';
-  /** Custom CSS styles */
-  css?: CSSProperties;
-  /** Whether to auto-adjust width based on content */
-  autowidth?: boolean;
-  /** Font size */
-  fontSize?: number | string;
-  /** Font weight */
-  fontWeight?: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
-  /** Text color */
-  color?: string;
-  /** Background color */
-  backgroundColor?: string;
-  /** Border */
-  border?: string;
-  /** Border radius */
-  borderRadius?: string | number;
-  /** Form label displayed above the component */
-  labelForm?: string;
-  /** Sets a label under the control */
-  bottomLabel?: string;
 }
 
 export interface AvakioLabelRef extends AvakioBaseRef<string> {
@@ -50,26 +27,23 @@ export interface AvakioLabelRef extends AvakioBaseRef<string> {
 export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
   (props, ref) => {
     const {
-      id,
-      testId,
       text = '',
       html,
-      theme = 'material',
       className = '',
-      css = {},
-      autowidth = false,
-      fontSize,
-      fontWeight,
-      color,
-      backgroundColor,
-      border,
-      borderRadius,
-      // ControlLabel props
+      style,
+      // AvakioControlLabel props
       label,
       labelForm,
+      labelPosition,
+      labelAlign,
+      labelWidth,
       bottomLabel,
+      required,
+      invalid,
+      invalidMessage,
       // Event handlers
       onItemClick,
+      ...baseProps
     } = props;
 
     // Use AvakioBase hook for state management and ref methods
@@ -77,26 +51,23 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       rootRef,
       isDisabled,
       isHidden,
+      config,
       methods,
-      getRefMethods,
       eventHandlers,
     } = useAvakioBase({
-      id,
-      initialValue: text,
-      disabled: props.disabled,
-      hidden: props.hidden,
-      required: props.required,
-      invalid: props.invalid,
-      invalidMessage: props.invalidMessage,
+      disabled: baseProps.disabled,
+      hidden: baseProps.hidden,
       onItemClick,
-      onBlur: props.onBlur,
-      onFocus: props.onFocus,
-      onKeyPress: props.onKeyPress,
-      onAfterRender: props.onAfterRender,
-      onBeforeRender: props.onBeforeRender,
-      onViewShow: props.onViewShow,
-      getTextValue: (v) => v || '',
+      onBlur: baseProps.onBlur,
+      onFocus: baseProps.onFocus,
+      onKeyPress: baseProps.onKeyPress,
+      onAfterRender: baseProps.onAfterRender,
+      onBeforeRender: baseProps.onBeforeRender,
+      onViewShow: baseProps.onViewShow,
     });
+
+    // Merge config from define() with baseProps
+    const mergedProps = { ...baseProps, ...config };
 
     // Track current text and html state
     const [currentText, setCurrentText] = React.useState(text);
@@ -113,41 +84,31 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
 
     // Expose ref methods with additional label-specific methods
     useImperativeHandle(ref, () => ({
-      ...getRefMethods(),
+      ...methods,
       setText: (value: string) => {
         setCurrentText(value);
         setCurrentHtml(undefined);
-        methods.setValue(value);
       },
       setHTML: (htmlContent: string) => {
         setCurrentHtml(htmlContent);
       },
+      getValue: () => currentText,
+      setValue: (value: string) => {
+        setCurrentText(value);
+        setCurrentHtml(undefined);
+      },
+      getElement: () => rootRef.current,
+      validate: () => true,
     }));
 
-    // Build CSS classes
-    const classes = [
-      'avakio-label',
-      `avakio-label-theme-${theme}`,
-      `avakio-label-align-${props.align || 'left'}`,
-      isDisabled && 'avakio-label-disabled',
-      autowidth && 'avakio-label-autowidth',
-      className,
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-    // Build inline styles using base styles + label-specific styles
-    const baseStyles = computeBaseStyles(props);
+    // Build inline styles using base styles
+    const baseStyles = computeBaseStyles({ ...mergedProps, hidden: isHidden });
     const inlineStyles: CSSProperties = {
       ...baseStyles,
-      ...(css && typeof css === 'object' && !Array.isArray(css) ? css : {}),
-      width: autowidth ? 'auto' : baseStyles.width,
-      fontSize,
-      fontWeight,
-      color,
-      backgroundColor,
-      border,
-      borderRadius,
+      ...style,
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: baseProps.align === 'center' ? 'center' : baseProps.align === 'right' ? 'flex-end' : 'flex-start',
     };
 
     // Handle click
@@ -157,51 +118,41 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       }
     };
 
-    // Build label content
-    const labelContent = (
-      <div
-        ref={rootRef}
-        id={id}
-        data-testid={testId}
-        className={classes}
-        style={inlineStyles}
-        title={props.tooltip}
-        onClick={handleClick}
-        onBlur={eventHandlers.onBlur}
-        onFocus={eventHandlers.onFocus}
-        onKeyPress={eventHandlers.onKeyPress}
-        tabIndex={onItemClick && !isDisabled ? 0 : undefined}
+    // Use AvakioControlLabel wrapper for consistent label/validation rendering
+    return (
+      <AvakioControlLabel
+        label={label}
+        labelAlign={labelAlign}
+        labelWidth={labelWidth}
+        labelPosition={labelPosition}
+        labelForm={labelForm}
+        bottomLabel={bottomLabel}
+        required={required}
+        invalid={invalid}
+        invalidMessage={invalidMessage}
+        classPrefix="avakio-label"
       >
-        {currentHtml ? (
-          <div dangerouslySetInnerHTML={{ __html: currentHtml }} />
-        ) : (
-          <span>{currentText}</span>
-        )}
-      </div>
-    );
-
-    // If we have a control label, wrap with AvakioControlLabel
-    if (label || labelForm || bottomLabel || props.required || props.invalid) {
-      return (
-        <AvakioControlLabel
-          label={label}
-          labelAlign={props.labelAlign}
-          labelWidth={props.labelWidth}
-          labelPosition={props.labelPosition}
-          labelForm={labelForm}
-          bottomLabel={bottomLabel}
-          //bottomPadding={props.bottomPadding}
-          required={props.required}
-          invalid={props.invalid}
-          invalidMessage={props.invalidMessage}
-          classPrefix="avakio-label"
+        <div
+          ref={rootRef}
+          id={mergedProps.id}
+          data-testid={mergedProps.testId}
+          className={className}
+          style={inlineStyles}
+          title={mergedProps.tooltip}
+          onClick={handleClick}
+          onBlur={eventHandlers.onBlur}
+          onFocus={eventHandlers.onFocus}
+          onKeyPress={eventHandlers.onKeyPress}
+          tabIndex={onItemClick && !isDisabled ? 0 : undefined}
         >
-          {labelContent}
-        </AvakioControlLabel>
-      );
-    }
-
-    return labelContent;
+          {currentHtml ? (
+            <div dangerouslySetInnerHTML={{ __html: currentHtml }} />
+          ) : (
+            <span>{currentText}</span>
+          )}
+        </div>
+      </AvakioControlLabel>
+    );
   }
 );
 

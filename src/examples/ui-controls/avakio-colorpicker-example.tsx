@@ -7,7 +7,7 @@ import { AvakioDataTable } from '../../components/avakio/data-presentation/avaki
 import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
-import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
+import { AvakioProperty, AvakioPropertyItem, AvakioPropertyRef } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
 import { formatSizingValue } from '../../lib/utils';
 import { 
@@ -115,6 +115,7 @@ export function AvakioColorPickerExample() {
   ]);
 
   // Event log state
+  const propertyRef = useRef<AvakioPropertyRef>(null);
   const [eventLog, setEventLog] = useState<string[]>([]);
 
   // Helper to get prop value from playground props
@@ -713,7 +714,6 @@ export function AvakioColorPickerExample() {
                             size="sm"
                             label='Set Red'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='150px'
                             buttonWidth='120px'
                             onClick={() => {
@@ -725,7 +725,6 @@ export function AvakioColorPickerExample() {
                             size="sm"
                             label='Set Blue'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='150px'
                             buttonWidth='120px'
                             onClick={() => {
@@ -737,7 +736,6 @@ export function AvakioColorPickerExample() {
                             size="sm"
                             label='Set Green'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='150px'
                             buttonWidth='120px'
                             onClick={() => {
@@ -749,7 +747,6 @@ export function AvakioColorPickerExample() {
                             size="sm"
                             label='Random Color'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='150px'
                             buttonWidth='120px'
                             onClick={() => {
@@ -835,6 +832,7 @@ export function AvakioColorPickerExample() {
                       ]}
                     />,
                     <AvakioProperty
+                      ref={propertyRef}
                       id='Property-playground-props'
                       className='avakio-fill-container'
                       items={playgroundProps}
@@ -844,6 +842,15 @@ export function AvakioColorPickerExample() {
                       autoHeight
                       overflowY='auto'
                     />,
+                    <AvakioButton
+                      size="sm"
+                      label="Get Item Count"
+                      align="right"
+                      onClick={() => {
+                        const count = propertyRef.current?.getItemCount();
+                        addLog('Item Count', `Num of Items: ${count}`);
+                      }}
+                    />
                   ]}
                 />,
               ]}

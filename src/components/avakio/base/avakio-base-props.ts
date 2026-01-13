@@ -44,24 +44,6 @@ export interface AvakioBaseProps {
   /** The width of the input area, or a button's text value area */
   inputWidth?: number | string;
   
-  /** Specifies whether the control is valid/invalid after validation */
-  invalid?: boolean;
-  
-  /** Sets the text of a validation message */
-  invalidMessage?: string;
-  
-  /** Sets the text of the label */
-  label?: string;
-  
-  /** The alignment of a label inside its container */
-  labelAlign?: 'left' | 'right' | 'center';
-  
-  /** Positions a label in relation to the control */
-  labelPosition?: 'left' | 'top' | 'right' | 'bottom';
-  
-  /** The width of the label */
-  labelWidth?: number | string;
-  
   /** Sets the minimal height for the view */
   minHeight?: number | string;
   
@@ -85,9 +67,6 @@ export interface AvakioBaseProps {
   
   /** Configures readonly mode for the input */
   readonly?: boolean;
-  
-  /** Marks field as required */
-  required?: boolean;
   
   /** Custom inline styles */
   style?: React.CSSProperties;
@@ -168,11 +147,7 @@ export const AVAKIO_BASE_DEFAULTS = {
   height: 38,
   hidden: false,
   inputAlign: 'left' as const,
-  labelAlign: 'left' as const,
-  labelPosition: 'left' as const,
-  labelWidth: 80,
   readonly: false,
-  required: false,
 } as const;
 
 /**
@@ -269,11 +244,12 @@ export const computeBaseStyles = (props: AvakioBaseProps): React.CSSProperties =
 };
 
 /**
- * Compute label styles from props
+ * Compute label styles from explicit parameters
  * Returns both textAlign (for non-flex) and justifyContent (for flex) to support all label layouts
+ * @deprecated Use AvakioControlLabel component instead
  */
-export const computeLabelStyles = (props: AvakioBaseProps): React.CSSProperties => {
-  const { labelWidth, labelAlign } = props;
+export const computeLabelStyles = (params: { labelWidth?: number | string; labelAlign?: 'left' | 'center' | 'right' }): React.CSSProperties => {
+  const { labelWidth, labelAlign } = params;
   
   // Map text-align values to justify-content values for flex containers
   const justifyMap: Record<string, string> = {

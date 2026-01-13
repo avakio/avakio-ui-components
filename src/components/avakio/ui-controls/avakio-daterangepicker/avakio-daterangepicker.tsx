@@ -332,9 +332,8 @@ export const AvakioDateRangePicker = forwardRef<AvakioBaseRef<AvakioDateRange>, 
     }),
   };
 
-  // Label styles - keep label width fixed
+  // Label styles - keep label width fixed (not used directly, passed to AvakioControlLabel)
   const labelStyle: React.CSSProperties = {
-    ...computeLabelStyles({ labelWidth, labelAlign }),
     ...(compWidth !== 'auto' && { flexShrink: 0 }), // Don't shrink label
   };
 

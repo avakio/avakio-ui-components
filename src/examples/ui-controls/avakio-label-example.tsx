@@ -7,7 +7,7 @@ import { AvakioDataTable } from '../../components/avakio/data-presentation/avaki
 import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
-import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
+import { AvakioProperty, AvakioPropertyItem, AvakioPropertyRef } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
 import { formatSizingValue } from '../../lib/utils';
 import { 
@@ -43,79 +43,62 @@ export function AvakioLabelExample() {
     { id: 'className', label: 'Class Name', type: 'text', value: '', group: 'Identity', placeholder: 'Additional CSS class' },
     
     // Content Group
-    { id: 'label', label: 'Label Text', type: 'text', value: 'Sample Label Text', group: 'Content', placeholder: 'Enter label text' },
+    { id: 'text', label: 'Text', type: 'text', value: 'Sample Label Text', group: 'Content', placeholder: 'Label text content' },
     { id: 'html', label: 'HTML Content', type: 'text', value: '', group: 'Content', placeholder: 'e.g. <strong>Bold</strong> text' },
     { id: 'tooltip', label: 'Tooltip', type: 'text', value: '', group: 'Content', placeholder: 'Tooltip text' },
     
+    // ControlLabel Props
+    { id: 'label', label: 'Label', type: 'text', value: '', group: 'ControlLabel', placeholder: 'Styled label text' },
+    { id: 'labelForm', label: 'Label Form', type: 'text', value: '', group: 'ControlLabel', placeholder: 'Form label above component' },
+    { id: 'labelPosition', label: 'Label Position', type: 'select', value: 'left', group: 'ControlLabel', selectOptions: [
+      { id: 'left', value: 'Left' },
+      { id: 'top', value: 'Top' },
+      { id: 'right', value: 'Right' },
+      { id: 'bottom', value: 'Bottom' },
+    ]},
+    { id: 'labelAlign', label: 'Label Align', type: 'select', value: 'left', group: 'ControlLabel', selectOptions: [
+      { id: 'left', value: 'Left' },
+      { id: 'center', value: 'Center' },
+      { id: 'right', value: 'Right' },
+    ]},
+    { id: 'labelWidth', label: 'Label Width', type: 'text', value: '100', group: 'ControlLabel', placeholder: 'e.g. 100 or 100px' },
+    { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'ControlLabel', placeholder: 'Help text below component' },
+    { id: 'required', label: 'Required', type: 'checkbox', value: false, group: 'ControlLabel', checkboxLabel: 'Show required asterisk' },
+    { id: 'invalid', label: 'Invalid', type: 'checkbox', value: false, group: 'ControlLabel', checkboxLabel: 'Mark as invalid' },
+    { id: 'invalidMessage', label: 'Invalid Message', type: 'text', value: '', group: 'ControlLabel', placeholder: 'Validation error message' },
+    
     // Appearance Group
-    {
-      id: 'theme',
-      label: 'Theme',
-      type: 'select',
-      value: 'material',
-      group: 'Appearance',
-      selectOptions: [
-        { id: 'material', value: 'Material' },
-        { id: 'flat', value: 'Flat' },
-        { id: 'compact', value: 'Compact' },
-        { id: 'dark', value: 'Dark' },
-        { id: 'ocean', value: 'Ocean' },
-        { id: 'sunset', value: 'Sunset' },
-      ],
-    },
-    {
-      id: 'align',
-      label: 'Align',
-      type: 'select',
-      value: 'left',
-      group: 'Appearance',
-      selectOptions: [
-        { id: 'left', value: 'Left' },
-        { id: 'center', value: 'Center' },
-        { id: 'right', value: 'Right' },
-      ],
-    },
-    { id: 'fontSize', label: 'Font Size', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. 14 or 1.2em' },
-    {
-      id: 'fontWeight',
-      label: 'Font Weight',
-      type: 'select',
-      value: 'normal',
-      group: 'Appearance',
-      selectOptions: [
-        { id: 'normal', value: 'Normal' },
-        { id: 'bold', value: 'Bold' },
-        { id: '100', value: '100' },
-        { id: '200', value: '200' },
-        { id: '300', value: '300' },
-        { id: '400', value: '400' },
-        { id: '500', value: '500' },
-        { id: '600', value: '600' },
-        { id: '700', value: '700' },
-        { id: '800', value: '800' },
-        { id: '900', value: '900' },
-      ],
-    },
-    { id: 'color', label: 'Text Color', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. #1976d2' },
-    { id: 'backgroundColor', label: 'Background Color', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. #f5f5f5' },
-    { id: 'border', label: 'Border', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. 1px solid #ccc' },
-    { id: 'borderRadius', label: 'Border Radius', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. 4 or 4px' },
+    { id: 'align', label: 'Align', type: 'select', value: 'left', group: 'Appearance', selectOptions: [
+      { id: 'left', value: 'Left' },
+      { id: 'center', value: 'Center' },
+      { id: 'right', value: 'Right' },
+    ]},
+    { id: 'borderless', label: 'Borderless', type: 'checkbox', value: false, group: 'Appearance', checkboxLabel: 'Remove border' },
+    { id: 'style', label: 'Style (JSON)', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. {"color":"red"}' },
     
     // Sizing Group
     { id: 'width', label: 'Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 300 or 100%' },
     { id: 'height', label: 'Height', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 38' },
     { id: 'minWidth', label: 'Min Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 200' },
+    { id: 'maxWidth', label: 'Max Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 500' },
     { id: 'minHeight', label: 'Min Height', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 30' },
+    { id: 'maxHeight', label: 'Max Height', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 100' },
     { id: 'margin', label: 'Margin', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 8 or 8,16,8,16' },
     { id: 'padding', label: 'Padding', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 8 or 8,16,8,16' },
+    { id: 'bottomPadding', label: 'Bottom Padding', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 10' },
     
     // State Group
-    { id: 'autowidth', label: 'Auto Width', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Auto-adjust width based on content' },
     { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Disable the component' },
     { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Hide the component' },
     
     // Events Group (toggles to enable event logging)
-    { id: 'logOnClick', label: 'Log onClick', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onClick events' },
+    { id: 'logOnClick', label: 'Log onItemClick', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onItemClick events' },
+    { id: 'logOnBlur', label: 'Log onBlur', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBlur events' },
+    { id: 'logOnFocus', label: 'Log onFocus', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onFocus events' },
+    { id: 'logOnKeyPress', label: 'Log onKeyPress', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onKeyPress events' },
+    { id: 'logOnAfterRender', label: 'Log onAfterRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterRender events', disabled: true, description: 'Disabled: causes infinite render loop' },
+    { id: 'logOnBeforeRender', label: 'Log onBeforeRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBeforeRender events', disabled: true, description: 'Disabled: causes infinite render loop' },
+    { id: 'logOnViewShow', label: 'Log onViewShow', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewShow events' },
   ]);
 
   // Helper to get prop value from playground props
@@ -125,14 +108,14 @@ export function AvakioLabelExample() {
     return prop.value as T;
   };
 
-  // Handle property changes
+  // Handle property changes (update state only, no logging)
   const handlePlaygroundPropsChange = (items: AvakioPropertyItem[], changed: AvakioPropertyItem) => {
     setPlaygroundProps(items);
-    addLog('Playground prop changed', `${changed.label}: ${changed.value}`);
   };
 
   // Ref example
   const labelRef = useRef<AvakioLabelRef>(null);
+  const propertyRef = useRef<AvakioPropertyRef>(null);
   const [eventLog, setEventLog] = useState<string[]>([]);
 
   // Scroll to section when tab is clicked
@@ -154,6 +137,19 @@ export function AvakioLabelExample() {
     addEventLog('Label', action, details);
   };
 
+  // Add textOnBlur handlers to text fields after addLog is defined
+  React.useEffect(() => {
+    setPlaygroundProps(prev => prev.map(item => {
+      if (item.type === 'text' && ['componentId', 'testId', 'className', 'text', 'html', 'tooltip', 'label', 'labelForm', 'labelWidth', 'bottomLabel', 'invalidMessage', 'style', 'width', 'height', 'minWidth', 'maxWidth', 'minHeight', 'maxHeight', 'margin', 'padding', 'bottomPadding'].includes(item.id)) {
+        return {
+          ...item,
+          textOnBlur: (value: string, itm: AvakioPropertyItem) => addLog('Playground prop changed', `${itm.label}: ${value}`)
+        };
+      }
+      return item;
+    }));
+  }, []);
+
   // Props documentation data
   interface PropDoc {
     id: number;
@@ -166,66 +162,83 @@ export function AvakioLabelExample() {
 
   const propsData: PropDoc[] = [
     // Component-Specific Props
-    { id: 1, name: 'label', type: 'string', defaultValue: "''", description: 'The text content of the label', from: 'Label' },
-    { id: 2, name: 'html', type: 'string', defaultValue: 'undefined', description: 'Custom HTML content (overrides label if provided)', from: 'Label' },
-    { id: 3, name: 'autowidth', type: 'boolean', defaultValue: 'false', description: 'Whether to auto-adjust width based on content', from: 'Label' },
-    { id: 4, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: "'material'", description: 'Theme variant for styling', from: 'Label' },
+    { id: 1, name: 'text', type: 'string', defaultValue: "''", description: 'The text content of the label', from: 'Label' },
+    { id: 2, name: 'html', type: 'string', defaultValue: 'undefined', description: 'Custom HTML content (overrides text if provided)', from: 'Label' },
     
-    // Identity Props
-    { id: 5, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Unique identifier for the label', from: 'Base' },
-    { id: 6, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test identifier for testing', from: 'Base' },
-    { id: 7, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
+    // ControlLabel Props
+    { id: 3, name: 'labelForm', type: 'string', defaultValue: 'undefined', description: 'Plain text form label displayed above the component', from: 'ControlLabel' },
+    { id: 4, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Help text displayed below the component', from: 'ControlLabel' },
+    { id: 5, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Styled label text (with background color)', from: 'ControlLabel' },
+    { id: 6, name: 'labelPosition', type: "'left' | 'top' | 'right' | 'bottom'", defaultValue: "'left'", description: 'Position of the styled label', from: 'ControlLabel' },
+    { id: 7, name: 'labelAlign', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Alignment of the label text', from: 'ControlLabel' },
+    { id: 8, name: 'labelWidth', type: 'number | string', defaultValue: '100', description: 'Width of the label', from: 'ControlLabel' },
+    { id: 9, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Marks the field as required (shows asterisk)', from: 'ControlLabel' },
+    { id: 10, name: 'invalid', type: 'boolean', defaultValue: 'false', description: 'Marks the component as invalid', from: 'ControlLabel' },
+    { id: 11, name: 'invalidMessage', type: 'string', defaultValue: 'undefined', description: 'Sets the text of a validation message', from: 'ControlLabel' },
+    { id: 12, name: 'bottomPadding', type: 'number | string', defaultValue: 'undefined', description: 'Padding at the bottom of the component', from: 'Base' },
     
-    // Appearance Props
-    { id: 8, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Alignment of the label text', from: 'Label' },
-    { id: 9, name: 'fontSize', type: 'number | string', defaultValue: 'undefined', description: 'Font size for the label text', from: 'Label' },
-    { id: 10, name: 'fontWeight', type: "'normal' | 'bold' | '100'-'900'", defaultValue: 'undefined', description: 'Font weight for the label text', from: 'Label' },
-    { id: 11, name: 'color', type: 'string', defaultValue: 'undefined', description: 'Text color of the label', from: 'Label' },
-    { id: 12, name: 'backgroundColor', type: 'string', defaultValue: 'undefined', description: 'Background color of the label', from: 'Label' },
-    { id: 13, name: 'border', type: 'string', defaultValue: 'undefined', description: 'Border style (e.g., "1px solid #ccc")', from: 'Label' },
-    { id: 14, name: 'borderRadius', type: 'string | number', defaultValue: 'undefined', description: 'Border radius for rounded corners', from: 'Label' },
-    { id: 15, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text shown on hover', from: 'Base' },
+    // Base Props - Appearance
+    { id: 13, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Alignment of the label content', from: 'Base' },
+    { id: 14, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text shown on hover', from: 'Base' },
     
-    // Sizing Props
-    { id: 16, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the label', from: 'Base' },
-    { id: 17, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the label', from: 'Base' },
-    { id: 18, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width of the label', from: 'Base' },
-    { id: 19, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height of the label', from: 'Base' },
-    { id: 20, name: 'margin', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the label', from: 'Base' },
-    { id: 21, name: 'padding', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding inside the label', from: 'Base' },
+    // Base Props - Sizing
+    { id: 15, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the component', from: 'Base' },
+    { id: 16, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the component', from: 'Base' },
+    { id: 17, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width of the component', from: 'Base' },
+    { id: 18, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width of the component', from: 'Base' },
+    { id: 19, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height of the component', from: 'Base' },
+    { id: 20, name: 'maxHeight', type: 'number | string', defaultValue: 'undefined', description: 'Maximum height of the component', from: 'Base' },
+    { id: 21, name: 'margin', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the component', from: 'Base' },
+    { id: 22, name: 'padding', type: 'number | string | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding inside the component', from: 'Base' },
     
-    // State Props
-    { id: 22, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the label is in disabled state', from: 'Base' },
-    { id: 23, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the label is hidden', from: 'Base' },
+    // Base Props - State
+    { id: 23, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the component is disabled', from: 'Base' },
+    { id: 24, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
+    { id: 25, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Removes the border from the component', from: 'Base' },
     
-    // Style Props
-    { id: 24, name: 'css', type: 'CSSProperties', defaultValue: '{}', description: 'Custom CSS styles object', from: 'Base' },
-    { id: 25, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles for the root element', from: 'Base' },
+    // Base Props - Identity
+    { id: 26, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
+    { id: 27, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 28, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
+    { id: 29, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles for the root element', from: 'Base' },
   ];
 
   const eventsData: PropDoc[] = [
-    { id: 1, name: 'onClick', type: '(e: React.MouseEvent<HTMLDivElement>) => void', defaultValue: 'undefined', description: 'Fires when the label is clicked', from: 'Base' },
+    { id: 1, name: 'onItemClick', type: '(event: MouseEvent) => void', defaultValue: 'undefined', description: 'Fires after the control has been clicked', from: 'Base' },
+    { id: 2, name: 'onBlur', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when focus is moved out of the view', from: 'Base' },
+    { id: 3, name: 'onFocus', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when a view gets focus', from: 'Base' },
+    { id: 4, name: 'onKeyPress', type: '(event: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Occurs when keyboard key is pressed for the control in focus', from: 'Base' },
+    { id: 5, name: 'onAfterRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately after the component has been rendered', from: 'Base' },
+    { id: 6, name: 'onBeforeRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately before the component has been rendered', from: 'Base' },
+    { id: 7, name: 'onViewShow', type: '() => void', defaultValue: 'undefined', description: 'Fires when any hidden view is shown', from: 'Base' },
   ];
 
   const refMethodsData: PropDoc[] = [
-    { id: 1, name: 'getValue()', type: '() => string', defaultValue: '-', description: 'Get the label text content', from: 'Label' },
-    { id: 2, name: 'setValue(value)', type: '(value: string) => void', defaultValue: '-', description: 'Set the label text content', from: 'Label' },
-    { id: 3, name: 'setHTML(html)', type: '(html: string) => void', defaultValue: '-', description: 'Set HTML content for the label', from: 'Label' },
-    { id: 4, name: 'getNode()', type: '() => HTMLDivElement | null', defaultValue: '-', description: 'Get the DOM element', from: 'Base' },
-    { id: 5, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hide the label', from: 'Base' },
-    { id: 6, name: 'show()', type: '() => void', defaultValue: '-', description: 'Show the label', from: 'Base' },
-    { id: 7, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Check if label is visible', from: 'Base' },
-    { id: 8, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disable the label', from: 'Base' },
-    { id: 9, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enable the label', from: 'Base' },
-    { id: 10, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Check if label is enabled', from: 'Base' },
+    { id: 1, name: 'getValue()', type: '() => string | undefined', defaultValue: '-', description: 'Returns the current text value', from: 'Base' },
+    { id: 2, name: 'setValue(value)', type: '(value: string) => void', defaultValue: '-', description: 'Sets a new text value', from: 'Base' },
+    { id: 3, name: 'getText()', type: '() => string', defaultValue: '-', description: 'Gets actual text value from the control', from: 'Base' },
+    { id: 4, name: 'setText(text)', type: '(text: string) => void', defaultValue: '-', description: 'Sets the label text content (clears HTML)', from: 'Label' },
+    { id: 5, name: 'setHTML(html)', type: '(html: string) => void', defaultValue: '-', description: 'Sets HTML content for the label', from: 'Label' },
+    { id: 6, name: 'focus()', type: '() => void', defaultValue: '-', description: 'Sets focus to the control', from: 'Base' },
+    { id: 7, name: 'blur()', type: '() => void', defaultValue: '-', description: 'Removes focus from the control', from: 'Base' },
+    { id: 8, name: 'validate()', type: '() => boolean | string', defaultValue: '-', description: 'Validates the component (always returns true for labels)', from: 'Base' },
+    { id: 9, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the component is enabled', from: 'Base' },
+    { id: 10, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enables the component that was disabled', from: 'Base' },
+    { id: 11, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disables the component (makes it dimmed)', from: 'Base' },
+    { id: 12, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the component is visible', from: 'Base' },
+    { id: 13, name: 'show()', type: '() => void', defaultValue: '-', description: 'Makes the component visible', from: 'Base' },
+    { id: 14, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hides the component', from: 'Base' },
+    { id: 15, name: 'getElement()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the root DOM element of the component', from: 'Base' },
+    { id: 16, name: 'getParentView()', type: '() => string | null', defaultValue: '-', description: 'Returns the ID of the parent Avakio container, or its classname if no ID is set', from: 'Base' },
+    { id: 17, name: 'define(config, value?)', type: '(config: Partial<Props> | string, value?: unknown) => void', defaultValue: '-', description: 'Redefines a single configuration property or multiple properties', from: 'Base' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [
     { id: 'name', header: 'Property', width: 180 },
-    { id: 'type', header: 'Type', width: 300 },
+    { id: 'type', header: 'Type', width: 320 },
     { id: 'defaultValue', header: 'Default', width: 100 },
-    { id: 'description', header: 'Description', width: 350 },
     { id: 'from', header: 'From', width: 100, filterType: 'combo' },
+    { id: 'description', header: 'Description', width: 320 },
   ];
 
   return (
@@ -236,7 +249,7 @@ export function AvakioLabelExample() {
         <AvakioViewHeader
           label="UI Controls"
           title="Label"
-          subTitle="A versatile label component for displaying static text with theming, alignment, and HTML content support."
+          subTitle="A lightweight label component for displaying static text and HTML content with full Base component features."
           isSticky={false}
         />
 
@@ -269,7 +282,7 @@ export function AvakioLabelExample() {
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="The Label component displays static text with various styling options."
+          content="The Label component is a lightweight wrapper for displaying static text or HTML content. It inherits all Base component functionality including sizing, alignment, state management, and event handling."
         />
         
         {/* Simple Labels */}
@@ -287,24 +300,19 @@ export function AvakioLabelExample() {
           rows={[
             <AvakioLabel
               label="Simple label text"
-              theme="material"
             />,
             <AvakioLabel
               label="Label with custom width"
               width={300}
-              theme="material"
               margin={[8, 0, 0, 0]}
             />,
             <AvakioLabel
               label="Auto-width label"
-              autowidth
-              theme="material"
               margin={[8, 0, 0, 0]}
             />,
             <AvakioLabel
               label="Label with tooltip"
               tooltip="This is a helpful tooltip"
-              theme="material"
               margin={[8, 0, 0, 0]}
             />,
           ]}
@@ -321,7 +329,7 @@ export function AvakioLabelExample() {
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="Use the html prop to render HTML content inside the label."
+          content="Use the html prop to render HTML content with inline styles for advanced formatting."
         />
         <AvakioLayout
           type="clean"
@@ -331,21 +339,17 @@ export function AvakioLabelExample() {
           rows={[
             <AvakioLabel
               html="<strong>Bold</strong> and <em>italic</em> text"
-              theme="material"
             />,
             <AvakioLabel
               html="<span style='color: #f44336;'>●</span> Red bullet point"
-              theme="material"
               margin={[8, 0, 0, 0]}
             />,
             <AvakioLabel
               html="<span style='font-size: 20px;'>📌</span> Label with emoji"
-              theme="material"
               margin={[8, 0, 0, 0]}
             />,
             <AvakioLabel
               html="Status: <span style='color: #4caf50; font-weight: bold;'>Active</span>"
-              theme="material"
               margin={[8, 0, 0, 0]}
             />,
           ]}
@@ -366,7 +370,7 @@ export function AvakioLabelExample() {
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="Customize the Label with various options like themes, alignment, and styling."
+          content="Customize the Label using Base component properties like alignment, sizing, spacing, and state. Use the style prop for custom styling."
         />
 
         {/* Text Alignment */}
@@ -386,79 +390,28 @@ export function AvakioLabelExample() {
               label="Left aligned (default)"
               align="left"
               width={400}
-              theme="flat"
               margin={[8, 0, 0, 0]}
-              backgroundColor="#f5f5f5"
-              padding={8}
             />,
             <AvakioLabel
               label="Center aligned"
               align="center"
               width={400}
-              theme="flat"
               margin={[8, 0, 0, 0]}
-              backgroundColor="#f5f5f5"
-              padding={8}
             />,
             <AvakioLabel
               label="Right aligned"
               align="right"
               width={400}
-              theme="flat"
-              margin={[8, 0, 0, 0]}
-              backgroundColor="#f5f5f5"
-              padding={8}
-            />,
-          ]}
-        />
-
-        {/* Themes */}
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
-          rows={[
-            <AvakioTemplate
-              key="theme-title"
-              type="clean"
-              borderType="clean"
-              content={<strong>Theme Variants</strong>}
-            />,
-            <AvakioLabel
-              label="Material Theme"
-              theme="material"
-              margin={[8, 0, 0, 0]}
-            />,
-            <AvakioLabel
-              label="Flat Theme"
-              theme="flat"
-              margin={[8, 0, 0, 0]}
-            />,
-            <AvakioLabel
-              label="Compact Theme"
-              theme="compact"
-              margin={[8, 0, 0, 0]}
-            />,
-            <AvakioLabel
-              label="Dark Theme"
-              theme="dark"
-              margin={[8, 0, 0, 0]}
-            />,
-            <AvakioLabel
-              label="Ocean Theme"
-              theme="ocean"
-              margin={[8, 0, 0, 0]}
-            />,
-            <AvakioLabel
-              label="Sunset Theme"
-              theme="sunset"
               margin={[8, 0, 0, 0]}
             />,
           ]}
         />
 
-        {/* Custom Styling */}
+        {/* Theme Variants section removed - theme prop is deprecated */}
+
+        {/* Custom Styling section removed - fontSize, fontWeight, color, backgroundColor, border, borderRadius props are deprecated */}
+
+        {/* Custom Styling with style prop */}
         <AvakioLayout
           type="clean"
           borderless={false}
@@ -471,33 +424,36 @@ export function AvakioLabelExample() {
               borderType="clean"
               content={<strong>Custom Styling</strong>}
             />,
+            <AvakioTemplate
+              key="styling-desc"
+              type="clean"
+              borderType="clean"
+              margin={[0, 0, 8, 0]}
+              content="Use the style prop to apply custom CSS styling."
+            />,
             <AvakioLabel
-              label="Custom font size (20px)"
-              fontSize={20}
+              text="Custom font size"
+              style={{ fontSize: '20px' }}
               margin={[8, 0, 0, 0]}
             />,
             <AvakioLabel
-              label="Bold text"
-              fontWeight="bold"
+              text="Bold text"
+              style={{ fontWeight: 'bold' }}
               margin={[8, 0, 0, 0]}
             />,
             <AvakioLabel
-              label="Custom color"
-              color="#1976d2"
+              text="Custom color"
+              style={{ color: '#1976d2' }}
               margin={[8, 0, 0, 0]}
             />,
             <AvakioLabel
-              label="With background"
-              backgroundColor="#e3f2fd"
-              padding={12}
-              borderRadius={8}
+              text="With background"
+              style={{ backgroundColor: '#e3f2fd', padding: '12px', borderRadius: '8px' }}
               margin={[8, 0, 0, 0]}
             />,
             <AvakioLabel
-              label="With border"
-              border="2px solid #1976d2"
-              padding={12}
-              borderRadius={4}
+              text="With border"
+              style={{ border: '2px solid #1976d2', padding: '12px' }}
               margin={[8, 0, 0, 0]}
             />,
           ]}
@@ -527,7 +483,6 @@ export function AvakioLabelExample() {
             <AvakioLabel
               label="Disabled label"
               disabled
-              theme="material"
             />,
           ]}
         />
@@ -581,28 +536,63 @@ export function AvakioLabelExample() {
                       testId={getPropValue('testId', '') || undefined}
                       className={getPropValue('className', '') || undefined}
                       ref={labelRef}
-                      label={getPropValue('html', '') ? undefined : getPropValue('label', 'Sample Label Text')}
+                      text={getPropValue('html', '') ? undefined : getPropValue('text', 'Sample Label Text')}
                       html={getPropValue('html', '') || undefined}
                       tooltip={getPropValue('tooltip', '') || undefined}
-                      theme={getPropValue('theme', 'material') as 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'}
+                      // ControlLabel props
+                      label={getPropValue('label', '') || undefined}
+                      labelForm={getPropValue('labelForm', '') || undefined}
+                      labelPosition={getPropValue('labelPosition', 'left') as 'left' | 'top' | 'right' | 'bottom'}
+                      labelAlign={getPropValue('labelAlign', 'left') as 'left' | 'center' | 'right'}
+                      labelWidth={formatSizingValue(getPropValue('labelWidth', '100'))}
+                      bottomLabel={getPropValue('bottomLabel', '') || undefined}
+                      required={getPropValue('required', false)}
+                      invalid={getPropValue('invalid', false)}
+                      invalidMessage={getPropValue('invalidMessage', '') || undefined}
+                      // Appearance
                       align={getPropValue('align', 'left') as 'left' | 'center' | 'right'}
-                      fontSize={getPropValue('fontSize', '') || undefined}
-                      fontWeight={getPropValue('fontWeight', 'normal') as 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'}
-                      color={getPropValue('color', '') || undefined}
-                      backgroundColor={getPropValue('backgroundColor', '') || undefined}
-                      border={getPropValue('border', '') || undefined}
-                      borderRadius={getPropValue('borderRadius', '') || undefined}
+                      borderless={getPropValue('borderless', false)}
+                      style={getPropValue('style', '') ? (() => {
+                        try {
+                          return JSON.parse(getPropValue('style', ''));
+                        } catch {
+                          return undefined;
+                        }
+                      })() : undefined}
+                      // Sizing
                       width={formatSizingValue(getPropValue('width', ''))}
                       height={formatSizingValue(getPropValue('height', ''))}
                       minWidth={formatSizingValue(getPropValue('minWidth', ''))}
+                      maxWidth={formatSizingValue(getPropValue('maxWidth', ''))}
                       minHeight={formatSizingValue(getPropValue('minHeight', ''))}
+                      maxHeight={formatSizingValue(getPropValue('maxHeight', ''))}
                       margin={getPropValue('margin', '') ? getPropValue('margin', '').includes(',') ? getPropValue('margin', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('margin', '')) : undefined}
                       padding={getPropValue('padding', '') ? getPropValue('padding', '').includes(',') ? getPropValue('padding', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('padding', '')) : undefined}
-                      autowidth={getPropValue('autowidth', false)}
+                      bottomPadding={getPropValue('bottomPadding', '') ? Number(getPropValue('bottomPadding', '')) : undefined}
+                      // State
                       disabled={getPropValue('disabled', false)}
                       hidden={getPropValue('hidden', false)}
-                      onClick={(e) => {
-                        if (getPropValue('logOnClick', true)) addLog('onClick', 'label clicked');
+                      // Events
+                      onItemClick={() => {
+                        if (getPropValue('logOnClick', true)) addLog('onItemClick', 'label clicked');
+                      }}
+                      onBlur={(e) => {
+                        if (getPropValue('logOnBlur', false)) addLog('onBlur', 'focus lost');
+                      }}
+                      onFocus={(e) => {
+                        if (getPropValue('logOnFocus', false)) addLog('onFocus', 'focus gained');
+                      }}
+                      onKeyPress={(e) => {
+                        if (getPropValue('logOnKeyPress', false)) addLog('onKeyPress', `key: ${e.key}`);
+                      }}
+                      onAfterRender={() => {
+                        // Disabled: would cause infinite loop
+                      }}
+                      onBeforeRender={() => {
+                        // Disabled: would cause infinite loop
+                      }}
+                      onViewShow={() => {
+                        if (getPropValue('logOnViewShow', false)) addLog('onViewShow', 'view shown');
                       }}
                     />,
                     <AvakioTemplate
@@ -630,7 +620,6 @@ export function AvakioLabelExample() {
                             size="sm"
                             label='getValue()'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             onClick={() => {
@@ -642,7 +631,6 @@ export function AvakioLabelExample() {
                             size="sm"
                             label='setValue()'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             onClick={() => {
@@ -652,9 +640,30 @@ export function AvakioLabelExample() {
                           />
                           <AvakioButton
                             size="sm"
+                            label='getText()'
+                            margin={[0, 10, 10, 0]}
+                            width='200px'
+                            buttonWidth='150px'
+                            onClick={() => {
+                              const text = labelRef.current?.getText();
+                              addLog('getText()', `returned: ${text || '(empty)'}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label='setText()'
+                            margin={[0, 10, 10, 0]}
+                            width='200px'
+                            buttonWidth='150px'
+                            onClick={() => {
+                              labelRef.current?.setText('Updated via setText()');
+                              addLog('setText()', 'set to "Updated via setText()"');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
                             label='setHTML()'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             onClick={() => {
@@ -664,21 +673,63 @@ export function AvakioLabelExample() {
                           />
                           <AvakioButton
                             size="sm"
-                            label='getNode()'
+                            label='validate()'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             onClick={() => {
-                              const node = labelRef.current?.getNode();
-                              addLog('getNode()', `returned: ${node ? node.tagName : 'null'}`);
+                              const result = labelRef.current?.validate();
+                              addLog('validate()', `returned: ${result}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label='getParentView()'
+                            margin={[0, 10, 10, 0]}
+                            width='200px'
+                            buttonWidth='150px'
+                            onClick={() => {
+                              const parent = labelRef.current?.getParentView();
+                              addLog('getParentView()', `returned: ${parent || 'null'}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label='getElement()'
+                            margin={[0, 10, 10, 0]}
+                            width='200px'
+                            buttonWidth='150px'
+                            onClick={() => {
+                              const node = labelRef.current?.getElement();
+                              addLog('getElement()', `returned: ${node ? node.tagName : 'null'}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label='focus()'
+                            margin={[0, 10, 10, 0]}
+                            width='200px'
+                            buttonWidth='150px'
+                            onClick={() => {
+                              labelRef.current?.focus();
+                              addLog('focus()', 'called via ref');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label='blur()'
+                            margin={[0, 10, 10, 0]}
+                            width='200px'
+                            buttonWidth='150px'
+                            onClick={() => {
+                              labelRef.current?.blur();
+                              addLog('blur()', 'called via ref');
                             }}
                           />
                           <AvakioButton
                             size="sm"
                             label='show()'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             onClick={() => {
@@ -690,7 +741,6 @@ export function AvakioLabelExample() {
                             size="sm"
                             label='hide()'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             onClick={() => {
@@ -702,7 +752,6 @@ export function AvakioLabelExample() {
                             size="sm"
                             label='isVisible()'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             onClick={() => {
@@ -714,7 +763,6 @@ export function AvakioLabelExample() {
                             size="sm"
                             label='enable()'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             onClick={() => {
@@ -726,7 +774,6 @@ export function AvakioLabelExample() {
                             size="sm"
                             label='disable()'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             onClick={() => {
@@ -738,12 +785,22 @@ export function AvakioLabelExample() {
                             size="sm"
                             label='isEnabled()'
                             margin={[0, 10, 10, 0]}
-                            labelAlign='center'
                             width='200px'
                             buttonWidth='150px'
                             onClick={() => {
                               const enabled = labelRef.current?.isEnabled();
                               addLog('isEnabled()', `returned: ${enabled}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label='define()'
+                            margin={[0, 10, 10, 0]}
+                            width='200px'
+                            buttonWidth='150px'
+                            onClick={() => {
+                              labelRef.current?.define('text', 'Updated via define()');
+                              addLog('define()', 'set text to "Updated via define()"');
                             }}
                           />
                         </>
@@ -779,6 +836,7 @@ export function AvakioLabelExample() {
                           width='100%'
                           align="right"
                           content={
+                            <>
                             <AvakioButton
                               id='Button-reset-playground'
                               size="sm"
@@ -796,14 +854,7 @@ export function AvakioLabelExample() {
                                   { id: 'html', label: 'HTML Content', type: 'text', value: '', group: 'Content', placeholder: 'e.g. <strong>Bold</strong> text' },
                                   { id: 'tooltip', label: 'Tooltip', type: 'text', value: '', group: 'Content', placeholder: 'Tooltip text' },
                                   // Appearance Group
-                                  { id: 'theme', label: 'Theme', type: 'select', value: 'material', group: 'Appearance', selectOptions: [{ id: 'material', value: 'Material' }, { id: 'flat', value: 'Flat' }, { id: 'compact', value: 'Compact' }, { id: 'dark', value: 'Dark' }, { id: 'ocean', value: 'Ocean' }, { id: 'sunset', value: 'Sunset' }] },
                                   { id: 'align', label: 'Align', type: 'select', value: 'left', group: 'Appearance', selectOptions: [{ id: 'left', value: 'Left' }, { id: 'center', value: 'Center' }, { id: 'right', value: 'Right' }] },
-                                  { id: 'fontSize', label: 'Font Size', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. 14 or 1.2em' },
-                                  { id: 'fontWeight', label: 'Font Weight', type: 'select', value: 'normal', group: 'Appearance', selectOptions: [{ id: 'normal', value: 'Normal' }, { id: 'bold', value: 'Bold' }, { id: '100', value: '100' }, { id: '200', value: '200' }, { id: '300', value: '300' }, { id: '400', value: '400' }, { id: '500', value: '500' }, { id: '600', value: '600' }, { id: '700', value: '700' }, { id: '800', value: '800' }, { id: '900', value: '900' }] },
-                                  { id: 'color', label: 'Text Color', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. #1976d2' },
-                                  { id: 'backgroundColor', label: 'Background Color', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. #f5f5f5' },
-                                  { id: 'border', label: 'Border', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. 1px solid #ccc' },
-                                  { id: 'borderRadius', label: 'Border Radius', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. 4 or 4px' },
                                   // Sizing Group
                                   { id: 'width', label: 'Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 300 or 100%' },
                                   { id: 'height', label: 'Height', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 38' },
@@ -812,7 +863,6 @@ export function AvakioLabelExample() {
                                   { id: 'margin', label: 'Margin', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 8 or 8,16,8,16' },
                                   { id: 'padding', label: 'Padding', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 8 or 8,16,8,16' },
                                   // State Group
-                                  { id: 'autowidth', label: 'Auto Width', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Auto-adjust width based on content' },
                                   { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Disable the component' },
                                   { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Hide the component' },
                                   // Events Group
@@ -821,12 +871,14 @@ export function AvakioLabelExample() {
                                 setPlaygroundValue('Sample Label Text');
                                 addLog('Reset', 'playground configuration reset to defaults');
                               }}
-                            />
+                            />                            
+                            </>
                           }
                         />,
                       ]}
                     />,
                     <AvakioProperty
+                      ref={propertyRef}
                       id='Property-playground-props'
                       className='avakio-fill-container'
                       items={playgroundProps}
@@ -836,6 +888,16 @@ export function AvakioLabelExample() {
                       autoHeight
                       overflowY='auto'
                     />,
+                    <AvakioButton
+                      size="sm"
+                      padding={[10,10,10,10]}
+                      label="Get Item Count"
+                      align="right"
+                      onClick={() => {
+                        const count = propertyRef.current?.getItemCount();
+                        addLog('PropertyItem Count', `Num of Items: ${count}`);
+                      }}
+                    />
                   ]}
                 />,
               ]}
@@ -873,10 +935,11 @@ export function AvakioLabelExample() {
               key="props-table"
               id="label-props-table"
               data={propsData}
+              filterable
+              sortable
               columns={propsColumns}
               select={false}
-              height={700}
-              showRowNum={true}
+              showRowNum
             />,
           ]}
         />
@@ -898,10 +961,11 @@ export function AvakioLabelExample() {
               key="events-table"
               id="label-events-table"
               data={eventsData}
+              filterable
+              sortable
               columns={propsColumns}
               select={false}
-              height={100}
-              showRowNum={true}
+              showRowNum
             />,
           ]}
         />
@@ -923,10 +987,11 @@ export function AvakioLabelExample() {
               key="methods-table"
               id="label-methods-table"
               data={refMethodsData}
+              filterable
+              sortable
               columns={propsColumns}
               select={false}
-              height={320}
-              showRowNum={true}
+              showRowNum
             />,
           ]}
         />

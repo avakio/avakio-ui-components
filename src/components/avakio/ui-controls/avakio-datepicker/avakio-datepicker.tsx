@@ -34,6 +34,24 @@ export interface AvakioDatePickerProps extends AvakioControlledProps<string> {
   labelForm?: string;
   /** Total width of the component (default: 'auto') */
   compWidth?: number | string;
+  
+  // AvakioControlLabel props
+  /** Sets the text of the label (styled with background color) */
+  label?: string;
+  /** Positions a label in relation to the control */
+  labelPosition?: 'left' | 'top' | 'right' | 'bottom';
+  /** The alignment of a label inside its container */
+  labelAlign?: 'left' | 'center' | 'right';
+  /** The width of the label */
+  labelWidth?: number | string;
+  /** Sets a label under the control */
+  bottomLabel?: string;
+  /** Marks field as required (shows asterisk) */
+  required?: boolean;
+  /** Marks the component as invalid */
+  invalid?: boolean;
+  /** Sets the text of a validation message */
+  invalidMessage?: string;
 }
 
 /**
@@ -675,9 +693,8 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
     }),
   };
 
-  // Label styles - keep label width fixed
+  // Label styles - keep label width fixed (not used directly, passed to AvakioControlLabel)
   const labelStyle: React.CSSProperties = {
-    ...computeLabelStyles({ labelWidth, labelAlign }),
     ...(compWidth !== 'auto' && { flexShrink: 0 }), // Don't shrink label
   };
 

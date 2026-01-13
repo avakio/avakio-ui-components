@@ -1,44 +1,38 @@
-import React, { forwardRef, useState, useEffect, useRef, useImperativeHandle, ChangeEvent, KeyboardEvent, FocusEvent } from 'react';
+import React, { forwardRef, useState, useEffect, useImperativeHandle, ChangeEvent, KeyboardEvent, FocusEvent } from 'react';
 import { X, Eye, EyeOff, Copy } from 'lucide-react';
-import { AvakioChangeEvent } from '../../base/avakio-base-props';
+import { AvakioChangeEvent, AvakioBaseRef, useAvakioBase, AvakioControlledProps } from '../../base/avakio-base-props';
 import { AvakioControlLabel } from '../../base/avakio-control-label/avakio-control-label';
 import './avakio-text.css';
 
-export interface AvakioTextProps {
-  /** The value of the text input */
-  value?: string;
+export interface AvakioTextProps extends AvakioControlledProps<string> {
   /** The label text */
   label?: string;
+  /** Form label text (plain text above the component) */
+  labelForm?: string;
   /** The placeholder text */
   placeholder?: string;
   /** The name attribute */
   name?: string;
   /** The type of input (text, password, email, url, number, tel) */
   type?: 'text' | 'password' | 'email' | 'url' | 'number' | 'tel' | 'search';
-  /** Whether the input is disabled */
-  disabled?: boolean;
-  /** Whether the input is readonly */
-  readonly?: boolean;
-  /** Whether the input is required */
-  required?: boolean;
   /** The theme (material, flat, compact, dark, ocean, sunset) */
   theme?: string;
-  /** Custom CSS class */
-  className?: string;
-  /** Width of the component */
-  width?: string | number;
-  /** Height of the component */
-  height?: string | number;
-  /** Label width */
-  labelWidth?: number;
   /** Label position (left or top) */
   labelPosition?: 'left' | 'top';
   /** Label alignment (left or right) */
   labelAlign?: 'left' | 'right';
+  /** The width of the label */
+  labelWidth?: number | string;
   /** Input alignment (left, center, right) */
   inputAlign?: 'left' | 'center' | 'right';
   /** Bottom label text */
   bottomLabel?: string;
+  /** Marks field as required (shows asterisk) */
+  required?: boolean;
+  /** Marks the component as invalid */
+  invalid?: boolean;
+  /** Sets the text of a validation message */
+  invalidMessage?: string;
   /** Shows clear button when input has value */
   clear?: boolean;
   /** Enables copy button to copy the input value to clipboard */
@@ -49,14 +43,6 @@ export interface AvakioTextProps {
   icon?: React.ReactNode;
   /** Icon position (left or right) */
   iconPosition?: 'left' | 'right';
-  /** Validation rules */
-  validate?: (value: string) => boolean | string;
-  /** Validation event (change, blur, submit) */
-  validateEvent?: 'change' | 'blur' | 'submit';
-  /** Invalid state */
-  invalid?: boolean;
-  /** Invalid message */
-  invalidMessage?: string;
   /** Maximum length */
   maxLength?: number;
   /** Pattern for HTML5 validation */
@@ -87,83 +73,63 @@ export interface AvakioTextProps {
   onKeyDown?: (event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   /** onClick callback for the entire component */
   onClick?: () => void;
-  /** Padding (number for all sides, string for CSS, or [top, right, bottom, left]) */
-  padding?: string | number | [number, number, number, number];
-  /** Margin (number for all sides, string for CSS, or [top, right, bottom, left]) */
-  margin?: string | number | [number, number, number, number];
-  /** Minimum width */
-  minWidth?: string | number;
-  /** Minimum height */
-  minHeight?: string | number;
   /** Width of the text input/textarea (e.g., '100%', '200px') */
   textWidth?: string | number;
-  /** Whether the component is borderless */
-  borderless?: boolean;
-  /** Whether the component is hidden */
-  hidden?: boolean;
-  /** Component ID */
-  id?: string;
-  /** Maximum height */
-  maxHeight?: number | string;
-  /** Maximum width */
-  maxWidth?: number | string;
-  /** Custom inline styles for the root element */
-  style?: React.CSSProperties;
+  /** Bottom padding */
+  bottomPadding?: number | string;
 }
 
-export interface AvakioTextRef {
-  /** Get the current value */
-  getValue: () => string;
-  /** Set a new value */
-  setValue: (value: string) => void;
-  /** Focus the input */
-  focus: () => void;
-  /** Blur the input */
-  blur: () => void;
-  /** Validate the input */
-  validate: () => boolean;
-  /** Get the input element */
-  getInputNode: () => HTMLInputElement | HTMLTextAreaElement | null;
+export interface AvakioTextRef extends AvakioBaseRef<string> {
   /** Clear the input */
   clear: () => void;
-  /** Check if input is enabled */
-  isEnabled: () => boolean;
-  /** Disable the input */
-  disable: () => void;
-  /** Enable the input */
-  enable: () => void;
 }
 
 export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
-  (
-    {
+  (props, ref) => {
+    const {
+      // Base props handled by useAvakioBase
       id,
       value = '',
       label,
       placeholder,
-      name,
-      type = 'text',
       disabled = false,
       readonly = false,
       required = false,
-      theme = 'material',
+      invalid = false,
+      invalidMessage,
+      validate,
+      onChange,
+      onBlur,
+      onFocus,
       className = '',
       width,
       height,
       labelWidth = 100,
       labelPosition = 'left',
       labelAlign = 'left',
-      inputAlign = 'left',
       bottomLabel,
+      padding,
+      margin,
+      minWidth,
+      maxWidth,
+      minHeight,
+      maxHeight,
+      borderless = false,
+      hidden = false,
+      style,
+      testId,
+      
+      // Text-specific props
+      labelForm,
+      name,
+      type = 'text',
+      theme = 'material',
+      inputAlign = 'left',
       clear = false,
       enableValueCopyButton = false,
       enablePlaceHolderCopyButton = false,
       icon,
       iconPosition = 'left',
-      validate,
-      validateEvent = 'blur',
-      invalid = false,
-      invalidMessage,
       maxLength,
       pattern,
       min,
@@ -172,115 +138,89 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       autoComplete,
       multiline = false,
       rows = 4,
-      onChange,
-      onBlur,
-      onFocus,
       onEnter,
       onKeyPress,
       onKeyDown,
       onClick,
-      padding,
-      margin,
       textWidth,
-      style,
-    },
-    ref
-  ) => {
-    const [currentValue, setCurrentValue] = useState<string>(value);
-    const [isInvalid, setIsInvalid] = useState(invalid);
-    const [validationMessage, setValidationMessage] = useState(invalidMessage || '');
+      bottomPadding,
+    } = props;
+
+    // Use the base hook for common functionality
+    const base = useAvakioBase<string>({
+      id,
+      initialValue: value,
+      onChange,
+      validate: (val: string) => {
+        // HTML5 validation for email
+        if (type === 'email' && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+          return 'Please enter a valid email address';
+        }
+
+        // HTML5 validation for url
+        if (type === 'url' && val && !/^https?:\/\/.+/.test(val)) {
+          return 'Please enter a valid URL';
+        }
+
+        // HTML5 validation for number
+        if (type === 'number' && val) {
+          const num = parseFloat(val);
+          if (isNaN(num)) {
+            return 'Please enter a valid number';
+          }
+          if (min !== undefined && num < min) {
+            return `Value must be at least ${min}`;
+          }
+          if (max !== undefined && num > max) {
+            return `Value must be at most ${max}`;
+          }
+        }
+
+        // Pattern validation
+        if (pattern && val && !new RegExp(pattern).test(val)) {
+          return invalidMessage || 'Invalid format';
+        }
+
+        // Max length validation
+        if (maxLength && val.length > maxLength) {
+          return `Maximum length is ${maxLength} characters`;
+        }
+
+        // Custom validation
+        if (validate) {
+          return validate(val);
+        }
+
+        return true;
+      },
+      disabled,
+      hidden,
+      required,
+      invalid,
+      invalidMessage,
+      getTextValue: (v) => v || '',
+      onBlur,
+      onFocus,
+    });
+
     const [isFocused, setIsFocused] = useState(false);
-    const [isDisabled, setIsDisabled] = useState(disabled);
     const [showPassword, setShowPassword] = useState(false);
-    const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+    const [validateEvent] = useState<'change' | 'blur' | 'submit'>('blur');
 
+    // Sync value from props
     useEffect(() => {
-      setCurrentValue(value);
+      if (value !== base.value) {
+        base.setValueState(value);
+      }
     }, [value]);
-
-    useEffect(() => {
-      setIsInvalid(invalid);
-    }, [invalid]);
-
-    useEffect(() => {
-      setIsDisabled(disabled);
-    }, [disabled]);
-
-    const validateInput = (val: string): boolean => {
-      if (validate) {
-        const result = validate(val);
-        if (typeof result === 'string') {
-          setIsInvalid(true);
-          setValidationMessage(result);
-          return false;
-        } else if (result === false) {
-          setIsInvalid(true);
-          setValidationMessage(invalidMessage || 'Invalid value');
-          return false;
-        }
-      }
-
-      // HTML5 validation
-      if (required && !val.trim()) {
-        setIsInvalid(true);
-        setValidationMessage('This field is required');
-        return false;
-      }
-
-      if (type === 'email' && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
-        setIsInvalid(true);
-        setValidationMessage('Please enter a valid email address');
-        return false;
-      }
-
-      if (type === 'url' && val && !/^https?:\/\/.+/.test(val)) {
-        setIsInvalid(true);
-        setValidationMessage('Please enter a valid URL');
-        return false;
-      }
-
-      if (type === 'number' && val) {
-        const num = parseFloat(val);
-        if (isNaN(num)) {
-          setIsInvalid(true);
-          setValidationMessage('Please enter a valid number');
-          return false;
-        }
-        if (min !== undefined && num < min) {
-          setIsInvalid(true);
-          setValidationMessage(`Value must be at least ${min}`);
-          return false;
-        }
-        if (max !== undefined && num > max) {
-          setIsInvalid(true);
-          setValidationMessage(`Value must be at most ${max}`);
-          return false;
-        }
-      }
-
-      if (pattern && val && !new RegExp(pattern).test(val)) {
-        setIsInvalid(true);
-        setValidationMessage(invalidMessage || 'Invalid format');
-        return false;
-      }
-
-      if (maxLength && val.length > maxLength) {
-        setIsInvalid(true);
-        setValidationMessage(`Maximum length is ${maxLength} characters`);
-        return false;
-      }
-
-      setIsInvalid(false);
-      setValidationMessage('');
-      return true;
-    };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const newValue = e.target.value;
-      setCurrentValue(newValue);
+      base.setValueState(newValue);
 
+      // Validate on change if validateEvent is 'change'
       if (validateEvent === 'change') {
-        validateInput(newValue);
+        base.methods.validate();
       }
 
       if (onChange) {
@@ -291,8 +231,9 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
     const handleBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setIsFocused(false);
 
+      // Validate on blur if validateEvent is 'blur'
       if (validateEvent === 'blur') {
-        validateInput(currentValue);
+        base.methods.validate();
       }
 
       if (onBlur) {
@@ -310,7 +251,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
 
     const handleKeyPress = (e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !multiline && onEnter) {
-        onEnter(currentValue);
+        onEnter(base.value || '');
       }
 
       if (onKeyPress) {
@@ -320,7 +261,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !multiline && onEnter) {
-        onEnter(currentValue);
+        onEnter(base.value || '');
       }
 
       if (onKeyDown) {
@@ -329,13 +270,12 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
     };
 
     const handleClear = () => {
-      setCurrentValue('');
-      setIsInvalid(false);
-      setValidationMessage('');
+      base.setValueState('');
+      base.setIsInvalid(false);
       if (onChange) {
         onChange({ id: id || '0', value: '', event: {} as ChangeEvent<HTMLInputElement | HTMLTextAreaElement> });
       }
-      inputRef.current?.focus();
+      base.inputRef.current?.focus();
     };
 
     const togglePasswordVisibility = () => {
@@ -343,8 +283,8 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
     };
 
     const handleCopyToClipboard = () => {
-      if (currentValue) {
-        navigator.clipboard.writeText(currentValue).then(() => {
+      if (base.value) {
+        navigator.clipboard.writeText(base.value).then(() => {
           // Optional: You could add a toast notification here
         }).catch((err) => {
           console.error('Failed to copy text: ', err);
@@ -362,28 +302,11 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       }
     };
 
+    // Expose ref methods (combining base methods + component-specific methods)
     useImperativeHandle(ref, () => ({
-      getValue: () => currentValue,
-      setValue: (val: string) => {
-        setCurrentValue(val);
-        if (validateEvent === 'change') {
-          validateInput(val);
-        }
-      },
-      focus: () => inputRef.current?.focus(),
-      blur: () => inputRef.current?.blur(),
-      validate: () => validateInput(currentValue),
-      getInputNode: () => inputRef.current,
+      ...base.getRefMethods(),
       clear: handleClear,
-      isEnabled: () => !isDisabled,
-      disable: () => setIsDisabled(true),
-      enable: () => setIsDisabled(false),
     }));
-
-    const labelStyle: React.CSSProperties = {
-      width: labelPosition === 'left' ? labelWidth : undefined,
-      textAlign: labelAlign,
-    };
 
     const inputType = type === 'password' && showPassword ? 'text' : type;
 
@@ -408,8 +331,13 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
     const containerStyle: React.CSSProperties = {
       width: typeof width === 'number' ? `${width}px` : width,
       height: typeof height === 'number' ? `${height}px` : height,
+      minWidth: typeof minWidth === 'number' ? `${minWidth}px` : minWidth,
+      maxWidth: typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth,
+      minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight,
+      maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
       ...(paddingStyle && { padding: paddingStyle }),
       ...(marginStyle && { margin: marginStyle }),
+      display: base.isHidden ? 'none' : undefined,
       ...style,
     };
 
@@ -417,16 +345,17 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       'avakio-text',
       `avakio-text-theme-${theme}`,
       labelPosition === 'top' ? 'avakio-text-label-top' : 'avakio-text-label-left',
-      isInvalid ? 'avakio-text-invalid' : '',
-      isDisabled ? 'avakio-text-disabled' : '',
+      base.isInvalid ? 'avakio-text-invalid' : '',
+      base.isDisabled ? 'avakio-text-disabled' : '',
       isFocused ? 'avakio-text-focused' : '',
       readonly ? 'avakio-text-readonly' : '',
+      borderless ? 'avakio-text-borderless' : '',
       className,
     ]
       .filter(Boolean)
       .join(' ');
 
-    const hasActionButton = (clear && currentValue) || type === 'password' || (enableValueCopyButton && currentValue) || (enablePlaceHolderCopyButton && placeholder);
+    const hasActionButton = (clear && base.value) || type === 'password' || (enableValueCopyButton && base.value) || (enablePlaceHolderCopyButton && placeholder);
     
     const inputClasses = [
       'avakio-text-input',
@@ -443,16 +372,18 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       : {};
 
     return (
-      <div className={containerClasses} style={containerStyle} onClick={onClick}>
+      <div ref={base.rootRef} className={containerClasses} style={containerStyle} onClick={onClick} data-testid={testId}>
         <AvakioControlLabel
           label={label}
+          labelForm={labelForm}
           labelPosition={labelPosition}
           labelAlign={labelAlign}
           labelWidth={labelWidth}
           bottomLabel={bottomLabel}
+          bottomPadding={bottomPadding}
           required={required}
-          invalid={isInvalid}
-          invalidMessage={validationMessage}
+          invalid={base.isInvalid}
+          invalidMessage={base.invalidMessage}
           classPrefix="avakio-text"
         >
         <div className="avakio-text-content">
@@ -462,12 +393,12 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
             )}
             {multiline ? (
               <textarea
-                ref={inputRef as React.RefObject<HTMLTextAreaElement>}
+                ref={base.inputRef as React.RefObject<HTMLTextAreaElement>}
                 className={inputClasses}
-                value={currentValue}
+                value={base.value || ''}
                 placeholder={placeholder}
                 name={name}
-                disabled={isDisabled}
+                disabled={base.isDisabled}
                 readOnly={readonly}
                 required={required}
                 maxLength={maxLength}
@@ -480,13 +411,13 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
               />
             ) : (
               <input
-                ref={inputRef as React.RefObject<HTMLInputElement>}
+                ref={base.inputRef as React.RefObject<HTMLInputElement>}
                 type={inputType}
                 className={inputClasses}
-                value={currentValue}
+                value={base.value || ''}
                 placeholder={placeholder}
                 name={name}
-                disabled={isDisabled}
+                disabled={base.isDisabled}
                 readOnly={readonly}
                 required={required}
                 maxLength={maxLength}
@@ -510,29 +441,29 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
                 type="button"
                 className="avakio-text-action"
                 onClick={togglePasswordVisibility}
-                disabled={isDisabled}
+                disabled={base.isDisabled}
                 tabIndex={-1}
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             )}
-            {clear && currentValue && type !== 'password' && (
+            {clear && base.value && type !== 'password' && (
               <button
                 type="button"
                 className="avakio-text-action avakio-text-clear"
                 onClick={handleClear}
-                disabled={isDisabled || readonly}
+                disabled={base.isDisabled || readonly}
                 tabIndex={-1}
               >
                 <X size={16} />
               </button>
             )}
-            {enableValueCopyButton && currentValue && type !== 'password' && (
+            {enableValueCopyButton && base.value && type !== 'password' && (
               <button
                 type="button"
                 className="avakio-text-action avakio-text-copy"
                 onClick={handleCopyToClipboard}
-                disabled={isDisabled}
+                disabled={base.isDisabled}
                 tabIndex={-1}
                 title="Copy value to clipboard"
               >
@@ -544,7 +475,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
                 type="button"
                 className="avakio-text-action avakio-text-copy"
                 onClick={handleCopyPlaceholder}
-                disabled={isDisabled}
+                disabled={base.isDisabled}
                 tabIndex={-1}
                 title="Copy placeholder to clipboard"
               >

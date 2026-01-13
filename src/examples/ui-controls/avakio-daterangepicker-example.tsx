@@ -736,7 +736,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                           size="sm"
                           label='Focus()'
                           margin={[0,10,10,0]}
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           onClick={() => {
@@ -745,7 +744,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                           }}
                         />
                         <AvakioButton
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           size="sm"
@@ -758,7 +756,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         />
                         <AvakioButton
                           size="sm"
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           label='getValue()'
@@ -771,7 +768,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         <AvakioButton
                           size="sm"
                           label='setValue(range)'
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           margin={[0,10,10,0]}
@@ -787,7 +783,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         />
                         <AvakioButton
                           size="sm"
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           label='getText()'
@@ -799,7 +794,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         />
                         <AvakioButton
                           size="sm"
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           label='enable()'
@@ -811,7 +805,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         />
                         <AvakioButton
                           size="sm"
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           label='disable()'
@@ -823,7 +816,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         />
                         <AvakioButton
                           size="sm"
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           label='isEnabled()'
@@ -835,7 +827,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         />
                         <AvakioButton
                           size="sm"
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           label='show()'
@@ -847,7 +838,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         />
                         <AvakioButton
                           size="sm"
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           label='hide()'
@@ -859,7 +849,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         />
                         <AvakioButton
                           size="sm"
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           label='isVisible()'
@@ -871,7 +860,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         />
                         <AvakioButton
                           size="sm"
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           label='getElement()'
@@ -883,7 +871,6 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
                         />
                         <AvakioButton
                           size="sm"
-                          labelAlign='center'
                           width='200px'
                           buttonWidth='150px'
                           label='getParentView()'

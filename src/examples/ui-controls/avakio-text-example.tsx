@@ -1,905 +1,1208 @@
 import React, { useState, useRef } from 'react';
 import { AvakioText, AvakioTextRef } from '../../components/avakio/ui-controls/avakio-text/avakio-text';
 import { AvakioTemplate } from '../../components/avakio/views/avakio-template/avakio-template';
-import { Button } from '@/components/ui/button';
-import { Mail, User, Lock, Search, Phone, DollarSign, Calendar, Link as LinkIcon, Type, Shield, Settings, CheckCircle, PenTool, Palette } from 'lucide-react';
-import '../../components/avakio/ui-controls/avakio-text/avakio-text.css';
+import { AvakioLayout } from '../../components/avakio/layouts/avakio-layout/avakio-layout';
+import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
+import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
+import { AvakioProperty, AvakioPropertyItem, AvakioPropertyRef } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
+import { AvakioDataTable, AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
+import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
+import { addEventLog } from '../../services/event-log-service';
+import { formatSizingValue } from '../../lib/utils';
+import { Type, Settings2, Play, Book, Mail, User, Lock, Search } from 'lucide-react';
+
+// Tab options for navigation
+const TAB_OPTIONS = [
+  { id: 'basic', label: 'Basic Usage', icon: <Type size={14} /> },
+  { id: 'options', label: 'Options', icon: <Settings2 size={14} /> },
+  { id: 'playground', label: 'Interactive Playground', icon: <Play size={14} /> },
+  { id: 'docs', label: 'Documentation', icon: <Book size={14} /> },
+];
 
 export function AvakioTextExample() {
-  // Interactive Props Playground State
-  const [playgroundTheme, setPlaygroundTheme] = useState<string>('material');
-  const [playgroundLabel, setPlaygroundLabel] = useState<string>('Input Label');
-  const [playgroundPlaceholder, setPlaygroundPlaceholder] = useState<string>('Enter text...');
-  const [playgroundType, setPlaygroundType] = useState<string>('text');
-  const [playgroundWidth, setPlaygroundWidth] = useState<string>('100%');
-  const [playgroundLabelPosition, setPlaygroundLabelPosition] = useState<string>('top');
-  const [playgroundInputAlign, setPlaygroundInputAlign] = useState<string>('left');
-  const [playgroundDisabled, setPlaygroundDisabled] = useState(false);
-  const [playgroundReadonly, setPlaygroundReadonly] = useState(false);
-  const [playgroundRequired, setPlaygroundRequired] = useState(false);
-  const [playgroundClear, setPlaygroundClear] = useState(false);
-  const [playgroundEnableValueCopyButton, setPlaygroundEnableValueCopyButton] = useState(false);
-  const [playgroundEnablePlaceHolderCopyButton, setPlaygroundEnablePlaceHolderCopyButton] = useState(false);
-  const [playgroundBottomLabel, setPlaygroundBottomLabel] = useState<string>('');
+  const [activeSection, setActiveSection] = useState<string | number | null>('basic');
   
-  // Applied Props State
-  const [appliedProps, setAppliedProps] = useState({
-    theme: 'material',
-    label: 'Input Label',
-    placeholder: 'Enter text...',
-    type: 'text',
-    width: '100%',
-    labelPosition: 'top',
-    inputAlign: 'left',
-    disabled: false,
-    readonly: false,
-    required: false,
-    clear: false,
-    enableValueCopyButton: false,
-    enablePlaceHolderCopyButton: false,
-    bottomLabel: '',
-  });
+  // Section refs for scroll navigation
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   
-  const handleApplyProps = () => {
-    setAppliedProps({
-      theme: playgroundTheme,
-      label: playgroundLabel,
-      placeholder: playgroundPlaceholder,
-      type: playgroundType,
-      width: playgroundWidth,
-      labelPosition: playgroundLabelPosition,
-      inputAlign: playgroundInputAlign,
-      disabled: playgroundDisabled,
-      readonly: playgroundReadonly,
-      required: playgroundRequired,
-      clear: playgroundClear,
-      enableValueCopyButton: playgroundEnableValueCopyButton,
-      enablePlaceHolderCopyButton: playgroundEnablePlaceHolderCopyButton,
-      bottomLabel: playgroundBottomLabel,
-    });
-  };
+  // Demo state values
+  const [basicName, setBasicName] = useState<string>('');
+  const [basicEmail, setBasicEmail] = useState<string>('');
+  const [basicPassword, setBasicPassword] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>('');
   
-  // Basic inputs state
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('john@example.com');
-  const [password, setPassword] = useState('');
+  // Options section state
+  const [labelLeftValue, setLabelLeftValue] = useState<string>('');
+  const [labelTopValue, setLabelTopValue] = useState<string>('');
+  const [labelRightValue, setLabelRightValue] = useState<string>('');
+  const [labelBottomValue, setLabelBottomValue] = useState<string>('');
+  const [requiredValue, setRequiredValue] = useState<string>('');
+  const [invalidValue, setInvalidValue] = useState<string>('');
+  const [disabledValue, setDisabledValue] = useState<string>('Disabled text');
+  const [readonlyValue, setReadonlyValue] = useState<string>('Readonly text');
+  const [multilineValue, setMultilineValue] = useState<string>('');
   
-  // Validation example state
-  const [username, setUsername] = useState('');
-  const [age, setAge] = useState('');
-  const [website, setWebsite] = useState('');
-  
-  // Interactive example state
-  const [searchTerm, setSearchTerm] = useState('');
+  // Playground state
+  const [playgroundValue, setPlaygroundValue] = useState<string>('Sample text');
   const textRef = useRef<AvakioTextRef>(null);
-  const [refValue, setRefValue] = useState('');
+  const propertyRef = useRef<AvakioPropertyRef>(null);
   
-  // Form example state
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    emailAddress: '',
-    phoneNumber: '',
-    address: '',
-    city: '',
-    zipCode: '',
-  });
-  
-  
+  // Event log
+  const [eventLog, setEventLog] = useState<string[]>([]);
 
-  const handleGetValue = () => {
-    const value = textRef.current?.getValue();
-    setRefValue(value || '');
-    alert(`Current value: ${value}`);
+  // Playground property items
+  const [playgroundProps, setPlaygroundProps] = useState<AvakioPropertyItem[]>([
+    // Identity Group
+    { id: 'componentId', label: 'ID', type: 'text', value: 'playground-text', group: 'Identity', placeholder: 'Component ID' },
+    { id: 'testId', label: 'Test ID', type: 'text', value: '', group: 'Identity', placeholder: 'Test ID for testing' },
+    { id: 'className', label: 'Class Name', type: 'text', value: '', group: 'Identity', placeholder: 'Additional CSS class' },
+    
+    // Appearance Group
+    { id: 'label', label: 'Label', type: 'text', value: 'Text Input', group: 'Appearance', placeholder: 'Enter label text' },
+    { id: 'labelForm', label: 'Label Form', type: 'text', value: '', group: 'Appearance', placeholder: 'Form label above component' },
+    { id: 'placeholder', label: 'Placeholder', type: 'text', value: 'Enter text...', group: 'Appearance', placeholder: 'Enter placeholder' },
+    { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'Appearance', placeholder: 'Help text below component' },
+    { id: 'invalidMessage', label: 'Invalid Message', type: 'text', value: '', group: 'Appearance', placeholder: 'Error message' },
+    { id: 'type', label: 'Type', type: 'select', value: 'text', group: 'Appearance', options: [
+      { label: 'Text', value: 'text' },
+      { label: 'Password', value: 'password' },
+      { label: 'Email', value: 'email' },
+      { label: 'URL', value: 'url' },
+      { label: 'Number', value: 'number' },
+      { label: 'Tel', value: 'tel' },
+      { label: 'Search', value: 'search' },
+    ]},
+    { id: 'labelPosition', label: 'Label Position', type: 'select', value: 'left', group: 'Appearance', options: [
+      { label: 'Left', value: 'left' },
+      { label: 'Top', value: 'top' },
+    ]},
+    { id: 'labelAlign', label: 'Label Align', type: 'select', value: 'left', group: 'Appearance', options: [
+      { label: 'Left', value: 'left' },
+      { label: 'Right', value: 'right' },
+    ]},
+    { id: 'inputAlign', label: 'Input Align', type: 'select', value: 'left', group: 'Appearance', options: [
+      { label: 'Left', value: 'left' },
+      { label: 'Center', value: 'center' },
+      { label: 'Right', value: 'right' },
+    ]},
+    { id: 'labelWidth', label: 'Label Width', type: 'text', value: '100', group: 'Appearance', placeholder: 'e.g. 100 or 100px' },
+    
+    // Features Group
+    { id: 'clear', label: 'Clear Button', type: 'checkbox', value: false, group: 'Features' },
+    { id: 'enableValueCopyButton', label: 'Value Copy Button', type: 'checkbox', value: false, group: 'Features' },
+    { id: 'enablePlaceHolderCopyButton', label: 'Placeholder Copy Button', type: 'checkbox', value: false, group: 'Features' },
+    { id: 'multiline', label: 'Multiline (Textarea)', type: 'checkbox', value: false, group: 'Features' },
+    { id: 'rows', label: 'Rows (multiline)', type: 'number', value: 4, group: 'Features' },
+    { id: 'maxLength', label: 'Max Length', type: 'number', value: '', group: 'Features' },
+    
+    // Sizing Group
+    { id: 'width', label: 'Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 100% or 300px' },
+    { id: 'height', label: 'Height', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. auto or 40px' },
+    { id: 'textWidth', label: 'Text Width', type: 'text', value: '', group: 'Sizing', placeholder: 'Width of input field' },
+    { id: 'minWidth', label: 'Min Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 200px' },
+    { id: 'maxWidth', label: 'Max Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 500px' },
+    { id: 'minHeight', label: 'Min Height', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 32px' },
+    { id: 'margin', label: 'Margin', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 10 or 10,20,10,20' },
+    { id: 'padding', label: 'Padding', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 10 or 10,20,10,20' },
+    
+    // State Group
+    { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State' },
+    { id: 'readonly', label: 'Readonly', type: 'checkbox', value: false, group: 'State' },
+    { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State' },
+    { id: 'borderless', label: 'Borderless', type: 'checkbox', value: false, group: 'State' },
+    
+    // Validation Group
+    { id: 'required', label: 'Required', type: 'checkbox', value: false, group: 'Validation' },
+    { id: 'invalid', label: 'Invalid', type: 'checkbox', value: false, group: 'Validation' },
+    
+    // Other
+    { id: 'logOnChange', label: 'Log onChange Events', type: 'checkbox', value: true, group: 'Other' },
+  ]);
+
+  // Helper to get prop value
+  const getPropValue = (id: string, defaultValue: any = '') => {
+    const prop = playgroundProps.find(p => p.id === id);
+    return prop?.value !== undefined ? prop.value : defaultValue;
   };
 
-  const handleSetValue = () => {
-    textRef.current?.setValue('Value set via ref!');
+  // Handle playground property changes
+  const handlePlaygroundPropsChange = (items: AvakioPropertyItem[]) => {
+    const changed = items.find((item, idx) => item.value !== playgroundProps[idx]?.value);
+    setPlaygroundProps(items);
+    if (changed) {
+      addLog('Playground prop changed', `${changed.label}: ${changed.value}`);
+    }
   };
 
-  const handleFocus = () => {
-    textRef.current?.focus();
+  // Handle tab change
+  const handleTabChange = ({ value }: { value: string | number | null }) => {
+    setActiveSection(value);
+    if (value && sectionRefs.current[value as string]) {
+      const element = sectionRefs.current[value as string];
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
   };
 
-  const handleClear = () => {
-    textRef.current?.clear();
+  // Add to local event log and global event log
+  const addLog = (action: string, details: string = '') => {
+    setEventLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()} - ${action}${details ? ': ' + details : ''}`]);
+    addEventLog('Text', action, details);
   };
 
-  const handleValidate = () => {
-    const isValid = textRef.current?.validate();
-    alert(isValid ? 'Valid!' : 'Invalid!');
-  };
+  // Props documentation data
+  interface PropDoc {
+    id: number;
+    name: string;
+    type: string;
+    defaultValue: string;
+    description: string;
+    from: string;
+  }
 
-  const handleFormSubmit = () => {
-    console.log('Form submitted:', formData);
-    alert('Form data logged to console');
-  };
+  const propsData: PropDoc[] = [
+    // Component-Specific Props
+    { id: 1, name: 'value', type: 'string', defaultValue: "''", description: 'Current value of the text input', from: 'Base' },
+    { id: 2, name: 'placeholder', type: 'string', defaultValue: 'undefined', description: 'Placeholder text', from: 'Base' },
+    { id: 3, name: 'type', type: "'text' | 'password' | 'email' | 'url' | 'number' | 'tel' | 'search'", defaultValue: "'text'", description: 'Input type', from: 'Text' },
+    { id: 4, name: 'name', type: 'string', defaultValue: 'undefined', description: 'Name attribute for form submission', from: 'Text' },
+    { id: 5, name: 'clear', type: 'boolean', defaultValue: 'false', description: 'Shows clear button when input has value', from: 'Text' },
+    { id: 6, name: 'enableValueCopyButton', type: 'boolean', defaultValue: 'false', description: 'Enables copy button to copy value to clipboard', from: 'Text' },
+    { id: 7, name: 'enablePlaceHolderCopyButton', type: 'boolean', defaultValue: 'false', description: 'Enables copy button to copy placeholder to clipboard', from: 'Text' },
+    { id: 8, name: 'icon', type: 'React.ReactNode', defaultValue: 'undefined', description: 'Icon to show in the input', from: 'Text' },
+    { id: 9, name: 'iconPosition', type: "'left' | 'right'", defaultValue: "'left'", description: 'Position of the icon', from: 'Text' },
+    { id: 10, name: 'multiline', type: 'boolean', defaultValue: 'false', description: 'Enable multiline mode (renders textarea)', from: 'Text' },
+    { id: 11, name: 'rows', type: 'number', defaultValue: '4', description: 'Number of visible rows (multiline only)', from: 'Text' },
+    { id: 12, name: 'textWidth', type: 'string | number', defaultValue: 'undefined', description: 'Width of the text input/textarea', from: 'Text' },
+    { id: 13, name: 'inputAlign', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Text alignment inside the input', from: 'Base' },
+    
+    // Label Props
+    { id: 14, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed beside the input', from: 'ControlLabel' },
+    { id: 15, name: 'labelForm', type: 'string', defaultValue: 'undefined', description: 'Plain text form label displayed above the component', from: 'ControlLabel' },
+    { id: 16, name: 'labelPosition', type: "'left' | 'top'", defaultValue: "'left'", description: 'Position of the label', from: 'ControlLabel' },
+    { id: 17, name: 'labelAlign', type: "'left' | 'right' | 'center'", defaultValue: "'left'", description: 'Alignment of the label text', from: 'ControlLabel' },
+    { id: 18, name: 'labelWidth', type: 'number | string', defaultValue: '100', description: 'Width of the label', from: 'ControlLabel' },
+    { id: 19, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Help text displayed below the component', from: 'ControlLabel' },
+    { id: 20, name: 'bottomPadding', type: 'number | string', defaultValue: 'undefined', description: 'Padding at the bottom of the component', from: 'Base' },
+    
+    // State Props
+    { id: 21, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the component is disabled', from: 'Base' },
+    { id: 22, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Whether the component is read-only', from: 'Base' },
+    { id: 23, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
+    { id: 24, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Removes the border from the component', from: 'Base' },
+    
+    // Validation Props
+    { id: 25, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Marks the field as required (shows asterisk)', from: 'ControlLabel' },
+    { id: 26, name: 'invalid', type: 'boolean', defaultValue: 'false', description: 'Marks the component as invalid', from: 'ControlLabel' },
+    { id: 27, name: 'invalidMessage', type: 'string', defaultValue: 'undefined', description: 'Sets the text of a validation message', from: 'ControlLabel' },
+    { id: 28, name: 'validate', type: '(value: string) => boolean | string', defaultValue: 'undefined', description: 'Custom validation function', from: 'Base' },
+    { id: 29, name: 'maxLength', type: 'number', defaultValue: 'undefined', description: 'Maximum character length', from: 'Text' },
+    { id: 30, name: 'pattern', type: 'string', defaultValue: 'undefined', description: 'Pattern for HTML5 validation', from: 'Text' },
+    { id: 31, name: 'min', type: 'number', defaultValue: 'undefined', description: 'Minimum value (for number type)', from: 'Text' },
+    { id: 32, name: 'max', type: 'number', defaultValue: 'undefined', description: 'Maximum value (for number type)', from: 'Text' },
+    { id: 33, name: 'step', type: 'number', defaultValue: 'undefined', description: 'Step value (for number type)', from: 'Text' },
+    { id: 34, name: 'autoComplete', type: 'string', defaultValue: 'undefined', description: 'Autocomplete attribute', from: 'Text' },
+    
+    // Sizing Props
+    { id: 35, name: 'width', type: 'string | number', defaultValue: 'undefined', description: 'Width of the component', from: 'Base' },
+    { id: 36, name: 'height', type: 'string | number', defaultValue: 'undefined', description: 'Height of the component', from: 'Base' },
+    { id: 37, name: 'minWidth', type: 'string | number', defaultValue: 'undefined', description: 'Minimum width of the component', from: 'Base' },
+    { id: 38, name: 'maxWidth', type: 'string | number', defaultValue: 'undefined', description: 'Maximum width of the component', from: 'Base' },
+    { id: 39, name: 'minHeight', type: 'string | number', defaultValue: 'undefined', description: 'Minimum height of the component', from: 'Base' },
+    { id: 40, name: 'maxHeight', type: 'string | number', defaultValue: 'undefined', description: 'Maximum height of the component', from: 'Base' },
+    { id: 41, name: 'margin', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the component', from: 'Base' },
+    { id: 42, name: 'padding', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding inside the component', from: 'Base' },
+    
+    // Identity Props
+    { id: 43, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
+    { id: 44, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 45, name: 'className', type: 'string', defaultValue: "''", description: 'Additional CSS class name', from: 'Base' },
+    { id: 46, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles', from: 'Base' },
+    { id: 47, name: 'theme', type: 'string', defaultValue: "'material'", description: 'Theme variant (material, flat, compact, dark, ocean, sunset)', from: 'Text' },
+  ];
 
-  const handleFormReset = () => {
-    setFormData({
-      firstName: '',
-      lastName: '',
-      emailAddress: '',
-      phoneNumber: '',
-      address: '',
-      city: '',
-      zipCode: '',
-    });
-  };
+  const eventsData: PropDoc[] = [
+    { id: 1, name: 'onChange', type: '(event: AvakioChangeEvent<string> & { event: ChangeEvent }) => void', defaultValue: 'undefined', description: 'Fires when the value changes', from: 'Base' },
+    { id: 2, name: 'onBlur', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when the input loses focus', from: 'Base' },
+    { id: 3, name: 'onFocus', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when the input receives focus', from: 'Base' },
+    { id: 4, name: 'onEnter', type: '(value: string) => void', defaultValue: 'undefined', description: 'Fires when Enter key is pressed (not in multiline)', from: 'Text' },
+    { id: 5, name: 'onKeyPress', type: '(event: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Fires when a key is pressed', from: 'Base' },
+    { id: 6, name: 'onKeyDown', type: '(event: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Fires when a key is pressed down', from: 'Text' },
+    { id: 7, name: 'onClick', type: '() => void', defaultValue: 'undefined', description: 'Fires when the component is clicked', from: 'Text' },
+    { id: 8, name: 'onItemClick', type: '(event: MouseEvent) => void', defaultValue: 'undefined', description: 'Fires after the control has been clicked', from: 'Base' },
+    { id: 9, name: 'onAfterRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately after the component has been rendered', from: 'Base' },
+    { id: 10, name: 'onBeforeRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately before the component has been rendered', from: 'Base' },
+    { id: 11, name: 'onViewShow', type: '() => void', defaultValue: 'undefined', description: 'Fires when any hidden view is shown', from: 'Base' },
+  ];
+
+  const refMethodsData: PropDoc[] = [
+    { id: 1, name: 'getValue()', type: '() => string | undefined', defaultValue: '-', description: 'Returns the current value', from: 'Base' },
+    { id: 2, name: 'setValue(value)', type: '(value: string) => void', defaultValue: '-', description: 'Sets a new value', from: 'Base' },
+    { id: 3, name: 'getText()', type: '() => string', defaultValue: '-', description: 'Gets actual text value from the control input', from: 'Base' },
+    { id: 4, name: 'focus()', type: '() => void', defaultValue: '-', description: 'Sets focus to the control', from: 'Base' },
+    { id: 5, name: 'blur()', type: '() => void', defaultValue: '-', description: 'Removes focus from the control', from: 'Base' },
+    { id: 6, name: 'validate()', type: '() => boolean | string', defaultValue: '-', description: 'Validates the input. Returns true if valid, false or error message if invalid', from: 'Base' },
+    { id: 7, name: 'isEnabled()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the component is enabled', from: 'Base' },
+    { id: 8, name: 'enable()', type: '() => void', defaultValue: '-', description: 'Enables the component that was disabled', from: 'Base' },
+    { id: 9, name: 'disable()', type: '() => void', defaultValue: '-', description: 'Disables the component (makes it dimmed and unclickable)', from: 'Base' },
+    { id: 10, name: 'isVisible()', type: '() => boolean', defaultValue: '-', description: 'Checks whether the component is visible', from: 'Base' },
+    { id: 11, name: 'show()', type: '() => void', defaultValue: '-', description: 'Makes the component visible', from: 'Base' },
+    { id: 12, name: 'hide()', type: '() => void', defaultValue: '-', description: 'Hides the component', from: 'Base' },
+    { id: 13, name: 'getElement()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the root DOM element of the component', from: 'Base' },
+    { id: 14, name: 'getParentView()', type: '() => string | null', defaultValue: '-', description: 'Returns the ID of the parent Avakio container, or its classname if no ID is set', from: 'Base' },
+    { id: 15, name: 'define(config, value?)', type: '(config: Partial<Props> | string, value?: unknown) => void', defaultValue: '-', description: 'Redefines a single configuration property or multiple properties', from: 'Base' },
+    { id: 16, name: 'getInputNode()', type: '() => HTMLInputElement | HTMLTextAreaElement | null', defaultValue: '-', description: 'Returns the input DOM node', from: 'Text' },
+    { id: 17, name: 'clear()', type: '() => void', defaultValue: '-', description: 'Clears the input value', from: 'Text' },
+  ];
+
+  const propsColumns: AvakioColumn<PropDoc>[] = [
+    { id: 'name', header: 'Property', width: 180 },
+    { id: 'type', header: 'Type', width: 320 },
+    { id: 'defaultValue', header: 'Default', width: 100 },
+    { id: 'from', header: 'From', width: 100, filterType: 'combo' },
+    { id: 'description', header: 'Description', width: 320 },
+  ];
 
   return (
-    <div className="avakio-template-demo-container">
-      <AvakioTemplate
-        id="text-example-header"
-        type="header"
-        borderType="clean"
-        content={
-    <div>
-      <p style={{ margin: 0, fontSize: '14px', fontWeight: 500, letterSpacing: '0.5px', 
-        textTransform: 'uppercase', opacity: 0.9 }}>UI Controls</p>
-      <p style={{ 
-        margin: 0, 
-        fontWeight: 600,
-        fontSize: '24px',        
-        lineHeight: '2x',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif'
-      }}>Edit onboarding workflow</p>
+    <div className="avakio-text-demo-container">
+      {/* Sticky Header + Tab Navigation */}
+      <div className="avakio-example-sticky-header">
+        {/* Header */}
+        <AvakioViewHeader
+          label="UI Controls"
+          title="Text Input"
+          subTitle="A versatile text input component with support for different input types, validation, icons, and various states."
+          isSticky={false}
+        />
 
-      <p style={{ 
-        margin: 0, 
-        fontSize: '14px', 
-        fontWeight: 400,        
-        letterSpacing: '0.01em',
-        lineHeight: '1.5',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-        WebkitFontSmoothing: 'antialiased'
-      }}>
-        General Onboarding [US].
-      </p>
-    </div>
-        }
-      />
+        {/* Tab Navigation */}
+        <div className="avakio-example-tabbar-container">
+          <AvakioTabBar
+            id="text-demo-tabs"
+            value={activeSection}
+            options={TAB_OPTIONS}
+            onChange={handleTabChange}
+            align="left"
+            padding={[6, 16, 16, 16]}
+            size="sm"
+            scrollable
+          />
+        </div>
+      </div>
 
-         
-
-      {/* Basic Inputs Section */}
-      <section className="avakio-template-demo-section">
+      {/* Basic Usage Section */}
+      <section 
+        ref={(el) => { sectionRefs.current['basic'] = el; }}
+        className="avakio-text-demo-section"
+      >
         <AvakioTemplate
           type="section"
           borderType="clean"
-          content={
-            <div>
-              <h3 style={{ margin: '0 0 4px 0' }}>
-                <Type size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Basic Text Inputs
-              </h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>Standard text inputs with labels, placeholders, and icons.</p>
-            </div>
-          }
+          content="Basic Usage"
         />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-          <Button onClick={() => console.log('Inputs:', { name, email, password })} size="sm">
-            Log Values
-          </Button>
-          <Button variant="outline" onClick={() => { setName(''); setEmail(''); setPassword(''); }} size="sm">
-            Clear All
-          </Button>
-        </div>
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[0, 0, 0, 16]}
+          content="Basic text inputs with labels, placeholders, and icons."
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioText
+              key="basic-name"
+              value={basicName}
+              onChange={({ value }) => {
+                setBasicName(value);
+                addLog('onChange (name)', `value: ${value || '(empty)'}`);
+              }}
+              label="Name"
+              labelWidth={120}
+              placeholder="Enter your name"
+              icon={<User size={16} />}
+              iconPosition="left"
+            />,
+            <AvakioTemplate
+              key="basic-name-display"
+              type="clean"
+              borderType="clean"
+              padding={[10,0,10,0]}
+              content={<>Value: <strong>{basicName || 'None'}</strong></>}
+            />,
+          ]}
+        />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-          <AvakioText
-            label="Name"
-            placeholder="Enter your name"
-            value={name}
-            onChange={({ value }) => setName(value)}
-            icon={<User size={16} />}
-            iconPosition="left"
-          />
-          <AvakioText
-            label="Email"
-            placeholder="Enter your email"
-            type="email"
-            value={email}
-            onChange={({ value }) => setEmail(value)}
-            icon={<Mail size={16} />}
-            iconPosition="left"
-          />
-          <AvakioText
-            label="Password"
-            placeholder="Enter password"
-            type="password"
-            value={password}
-            onChange={({ value }) => setPassword(value)}
-          />
-        </div>
+        {/* Email Input */}
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[16, 0, 0, 16]}
+          content={<strong>Email Input with Validation</strong>}
+        />
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[0, 0, 0, 16]}
+          content="Set type='email' for built-in email validation."
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioText
+              key="basic-email"
+              value={basicEmail}
+              onChange={({ value }) => {
+                setBasicEmail(value);
+                addLog('onChange (email)', `value: ${value || '(empty)'}`);
+              }}
+              type="email"
+              label="Email"
+              labelWidth={120}
+              placeholder="your.email@example.com"
+              icon={<Mail size={16} />}
+              iconPosition="left"
+            />,
+            <AvakioTemplate
+              key="basic-email-display"
+              type="clean"
+              borderType="clean"
+              padding={[10,0,10,0]}
+              content={<>Value: <strong>{basicEmail || 'None'}</strong></>}
+            />,
+          ]}
+        />
+
+        {/* Password Input */}
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[16, 0, 0, 16]}
+          content={<strong>Password Input with Toggle</strong>}
+        />
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[0, 0, 0, 16]}
+          content="Set type='password' to enable password input with show/hide toggle."
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioText
+              key="basic-password"
+              value={basicPassword}
+              onChange={({ value }) => {
+                setBasicPassword(value);
+                addLog('onChange (password)', `value: ${value ? '********' : '(empty)'}`);
+              }}
+              type="password"
+              label="Password"
+              labelWidth={120}
+              placeholder="Enter password"
+              icon={<Lock size={16} />}
+              iconPosition="left"
+            />,
+            <AvakioTemplate
+              key="basic-password-display"
+              type="clean"
+              borderType="clean"
+              padding={[10,0,10,0]}
+              content={<>Length: <strong>{basicPassword.length} characters</strong></>}
+            />,
+          ]}
+        />
+
+        {/* Search Input */}
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[16, 0, 0, 16]}
+          content={<strong>Search Input with Clear Button</strong>}
+        />
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[0, 0, 0, 16]}
+          content="Use the clear prop to show a clear button when input has value."
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioText
+              key="basic-search"
+              value={searchValue}
+              onChange={({ value }) => {
+                setSearchValue(value);
+                addLog('onChange (search)', `value: ${value || '(empty)'}`);
+              }}
+              type="search"
+              label="Search"
+              labelWidth={120}
+              placeholder="Type to search..."
+              icon={<Search size={16} />}
+              iconPosition="left"
+              clear
+            />,
+            <AvakioTemplate
+              key="basic-search-display"
+              type="clean"
+              borderType="clean"
+              padding={[10,0,10,0]}
+              content={<>Search term: <strong>{searchValue || 'None'}</strong></>}
+            />,
+          ]}
+        />
       </section>
 
-      {/* Input Types Section */}
-      <section className="avakio-template-demo-section">
+      {/* Options Section */}
+      <section 
+        ref={(el) => { sectionRefs.current['options'] = el; }}
+        className="avakio-text-demo-section"
+      >
         <AvakioTemplate
           type="section"
           borderType="clean"
-          content={
-            <div>
-              <h3 style={{ margin: '0 0 4px 0' }}>
-                <Settings size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Input Types
-              </h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>Different input types with HTML5 validation.</p>
-            </div>
-          }
+          content="Options"
+        />
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[0, 0, 0, 16]}
+          content="Customize the Text component with various options like label positions, validation states, and multiline mode."
         />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-          <AvakioText
-            label="Search"
-            type="search"
-            placeholder="Search..."
-            clear={true}
-            value={searchTerm}
-            onChange={({ value }) => setSearchTerm(value)}
-            icon={<Search size={16} />}
-          />
-          <AvakioText
-            label="Phone"
-            type="tel"
-            placeholder="+1 (555) 123-4567"
-            icon={<Phone size={16} />}
-          />
-          <AvakioText
-            label="Number"
-            type="number"
-            placeholder="Enter amount"
-            min={0}
-            max={1000}
-            step={10}
-            icon={<DollarSign size={16} />}
-          />
-          <AvakioText
-            label="URL"
-            type="url"
-            placeholder="https://example.com"
-            icon={<LinkIcon size={16} />}
-          />
-        </div>
+        {/* Label Positions */}
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioTemplate
+              key="label-positions-title"
+              type="clean"
+              borderType="clean"
+              content={<strong>Label Positions</strong>}
+            />,
+            <AvakioTemplate
+              key="label-pos-left"
+              type="clean"
+              borderType="clean"
+              padding={[8, 0, 8, 0]}
+              content='labelPosition="left" (default)'
+            />,
+            <AvakioText
+              key="label-left"
+              value={labelLeftValue}
+              onChange={({ value }) => setLabelLeftValue(value)}
+              label="Left Label"
+              labelPosition="left"
+              labelWidth={120}
+              placeholder="Enter text..."
+            />,
+            <AvakioTemplate
+              key="label-pos-top"
+              type="clean"
+              borderType="clean"
+              padding={[16, 0, 8, 0]}
+              content='labelPosition="top"'
+            />,
+            <AvakioText
+              key="label-top"
+              value={labelTopValue}
+              onChange={({ value }) => setLabelTopValue(value)}
+              label="Top Label"
+              labelPosition="top"
+              labelWidth={120}
+              placeholder="Enter text..."
+            />,
+          ]}
+        />
+
+        {/* Validation States */}
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioTemplate
+              key="validation-title"
+              type="clean"
+              borderType="clean"
+              content={<strong>Validation States</strong>}
+            />,
+            <AvakioTemplate
+              key="required-label"
+              type="clean"
+              borderType="clean"
+              margin={[8, 0, 8, 0]}
+              style={{ fontSize: '12px'}}
+              content='required=true'
+            />,
+            <AvakioText
+              key="required-input"
+              value={requiredValue}
+              onChange={({ value }) => setRequiredValue(value)}
+              label="Required Field"
+              labelWidth={120}
+              required
+              placeholder="This field is required"
+            />,
+            <AvakioTemplate
+              key="error-label"
+              type="clean"
+              borderType="clean"
+              margin={[16, 0, 8, 0]}
+              style={{ fontSize: '12px'}}
+              content='invalid=true invalidMessage="Error message"'
+            />,
+            <AvakioText
+              key="invalid-input"
+              value={invalidValue}
+              onChange={({ value }) => setInvalidValue(value)}
+              label="With Error"
+              labelWidth={120}
+              invalid
+              invalidMessage="This field has an error"
+              placeholder="Enter text..."
+            />,
+          ]}
+        />
+
+        {/* Other States */}
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioTemplate
+              key="other-title"
+              type="clean"
+              borderType="clean"
+              content={<strong>Other States</strong>}
+            />,
+            <AvakioTemplate
+              key="disabled-label"
+              type="clean"
+              borderType="clean"
+              margin={[8, 0, 8, 0]}
+              style={{ fontSize: '12px'}}
+              content='disabled=true'
+            />,
+            <AvakioText
+              key="disabled-input"
+              value={disabledValue}
+              onChange={({ value }) => setDisabledValue(value)}
+              label="Disabled"
+              labelWidth={120}
+              disabled
+            />,
+            <AvakioTemplate
+              key="readonly-label"
+              type="clean"
+              borderType="clean"
+              margin={[16, 0, 8, 0]}
+              style={{ fontSize: '12px'}}
+              content='readonly=true'
+            />,
+            <AvakioText
+              key="readonly-input"
+              value={readonlyValue}
+              onChange={({ value }) => setReadonlyValue(value)}
+              label="Read Only"
+              labelWidth={120}
+              readonly
+            />,
+          ]}
+        />
+
+        {/* Multiline */}
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          rows={[
+            <AvakioTemplate
+              key="multiline-title"
+              type="clean"
+              borderType="clean"
+              content={<strong>Multiline (Textarea)</strong>}
+            />,
+            <AvakioTemplate
+              key="multiline-desc"
+              type="clean"
+              borderType="clean"
+              padding={[8, 0, 8, 0]}
+              content='Set multiline=true to render a textarea. Use rows to control height.'
+            />,
+            <AvakioText
+              key="multiline-input"
+              value={multilineValue}
+              onChange={({ value }) => setMultilineValue(value)}
+              label="Description"
+              labelWidth={120}
+              labelPosition="top"
+              placeholder="Enter a description..."
+              multiline
+              rows={4}
+            />,
+          ]}
+        />
       </section>
 
-      {/* Validation Section */}
-      <section className="avakio-template-demo-section">
+      {/* Interactive Playground Section */}
+      <section 
+        ref={(el) => { sectionRefs.current['playground'] = el; }}
+        className="avakio-text-demo-section"
+      >
         <AvakioTemplate
           type="section"
           borderType="clean"
-          content={
-            <div>
-              <h3 style={{ margin: '0 0 4px 0' }}>
-                <Shield size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Validation
-              </h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>Custom validation rules with real-time feedback.</p>
-            </div>
-          }
+          content="Interactive Playground"
         />
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-          <AvakioText
-            label="Username"
-            placeholder="Enter username"
-            value={username}
-            onChange={({ value }) => setUsername(value)}
-            validate={(value) => {
-              if (!value) return 'Username is required';
-              if (value.length < 3) return 'Username must be at least 3 characters';
-              if (!/^[a-zA-Z0-9_]+$/.test(value)) return 'Only letters, numbers, and underscores allowed';
-              return true;
-            }}
-            validateEvent="change"
-            bottomLabel="Min 3 characters, alphanumeric only"
-          />
-          <AvakioText
-            label="Age"
-            type="number"
-            placeholder="Enter your age"
-            value={age}
-            onChange={({ value }) => setAge(value)}
-            min={18}
-            max={120}
-            validate={(value) => {
-              const num = parseInt(value);
-              if (isNaN(num)) return 'Please enter a valid number';
-              if (num < 18) return 'You must be at least 18 years old';
-              if (num > 120) return 'Please enter a valid age';
-              return true;
-            }}
-            validateEvent="blur"
-            bottomLabel="Must be between 18 and 120"
-          />
-          <AvakioText
-            label="Website"
-            type="url"
-            placeholder="https://yoursite.com"
-            value={website}
-            onChange={({ value }) => setWebsite(value)}
-            required
-            bottomLabel="Required field"
-          />
-        </div>
+        <AvakioTemplate
+          type="clean"
+          borderType="clean"
+          padding={[0, 0, 0, 16]}
+          content="Experiment with different Text configurations in real-time. Change any property below to see the effect on the preview."
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          height={650}
+          rows={[
+            <AvakioLayout
+              key="playground-layout"
+              type="clean"
+              borderless={true}
+              responsive
+              autoResize
+              gap={16}
+              height='100%'
+              cols={[
+                // Column 1 - Preview
+                <AvakioLayout
+                  key="preview-col"
+                  type="clean"
+                  borderless={true}
+                  height='100%'
+                  rows={[
+                    <AvakioTemplate
+                      key="preview-header"
+                      type="clean"
+                      borderType="clean"
+                      padding={[0,0,10,0]}
+                      content={<span><strong>Preview</strong></span>}
+                    />,
+                    <AvakioText
+                      key="preview-input"
+                      ref={textRef}
+                      id={getPropValue('componentId', 'playground-text')}
+                      testId={getPropValue('testId', '') || undefined}
+                      className={getPropValue('className', '') || undefined}
+                      value={playgroundValue}
+                      onChange={({ value }) => {
+                        setPlaygroundValue(value);
+                        if (getPropValue('logOnChange', true)) addLog('onChange', `value: ${value || '(empty)'}`);
+                      }}
+                      // Appearance props
+                      label={getPropValue('label', '')}
+                      labelForm={getPropValue('labelForm', '') || undefined}
+                      placeholder={getPropValue('placeholder', '')}
+                      bottomLabel={getPropValue('bottomLabel', '') || undefined}
+                      invalidMessage={getPropValue('invalid', false) ? getPropValue('invalidMessage', '') : undefined}
+                      type={getPropValue('type', 'text') as any}
+                      labelPosition={getPropValue('labelPosition', 'left') as 'left' | 'top'}
+                      labelAlign={getPropValue('labelAlign', 'left') as 'left' | 'right'}
+                      labelWidth={Number(getPropValue('labelWidth', '100'))}
+                      inputAlign={getPropValue('inputAlign', 'left') as 'left' | 'center' | 'right'}
+                      // Features props
+                      clear={getPropValue('clear', false)}
+                      enableValueCopyButton={getPropValue('enableValueCopyButton', false)}
+                      enablePlaceHolderCopyButton={getPropValue('enablePlaceHolderCopyButton', false)}
+                      multiline={getPropValue('multiline', false)}
+                      rows={Number(getPropValue('rows', 4))}
+                      maxLength={getPropValue('maxLength', '') ? Number(getPropValue('maxLength', '')) : undefined}
+                      // Sizing props
+                      width={formatSizingValue(getPropValue('width', ''))}
+                      height={formatSizingValue(getPropValue('height', ''))}
+                      textWidth={formatSizingValue(getPropValue('textWidth', ''))}
+                      minWidth={formatSizingValue(getPropValue('minWidth', ''))}
+                      minHeight={formatSizingValue(getPropValue('minHeight', ''))}
+                      maxWidth={formatSizingValue(getPropValue('maxWidth', ''))}
+                      // State props
+                      disabled={getPropValue('disabled', false)}
+                      readonly={getPropValue('readonly', false)}
+                      hidden={getPropValue('hidden', false)}
+                      borderless={getPropValue('borderless', false)}
+                      // Validation props
+                      required={getPropValue('required', false)}
+                      invalid={getPropValue('invalid', false)}
+                      // Margin & Padding
+                      margin={getPropValue('margin', '') ? getPropValue('margin', '').includes(',') ? getPropValue('margin', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('margin', '')) : undefined}
+                      padding={getPropValue('padding', '') ? getPropValue('padding', '').includes(',') ? getPropValue('padding', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('padding', '')) : undefined}
+                    />,
+                    <AvakioTemplate
+                      key="preview-value"
+                      type="clean"
+                      borderType="clean"
+                      padding={[10,0,10,0]}
+                      content={<span>Value: <strong>{playgroundValue || '(empty)'}</strong></span>}
+                    />,
+                    <AvakioTemplate
+                      key="ref-methods-title"
+                      type="clean"
+                      padding={[10,0,10,0]}
+                      borderType="clean"
+                      content={<strong>Ref Methods</strong>}
+                    />,
+                    // Ref Methods
+                    <AvakioTemplate
+                      key="ref-methods-buttons"
+                      type="clean"
+                      padding={[10,0,10,0]}
+                      borderType="clean"
+                      scroll="xy"
+                      flexWrap={true}
+                      content={<>
+                        <AvakioButton
+                          size="sm"
+                          label='getValue()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            const val = textRef.current?.getValue();
+                            addLog('getValue()', `returned: ${val || '(empty)'}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='setValue("Test")'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            textRef.current?.setValue('Test value');
+                            setPlaygroundValue('Test value');
+                            addLog('setValue()', 'set to "Test value"');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='focus()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            textRef.current?.focus();
+                            addLog('focus()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='blur()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            textRef.current?.blur();
+                            addLog('blur()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='clear()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            textRef.current?.clear();
+                            setPlaygroundValue('');
+                            addLog('clear()', 'cleared input');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='validate()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            const isValid = textRef.current?.validate();
+                            addLog('validate()', `returned: ${isValid}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='isEnabled()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            const enabled = textRef.current?.isEnabled();
+                            addLog('isEnabled()', `returned: ${enabled}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='enable()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            textRef.current?.enable();
+                            addLog('enable()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='disable()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            textRef.current?.disable();
+                            addLog('disable()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='getInputNode()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            const node = textRef.current?.getInputNode();
+                            addLog('getInputNode()', `returned: ${node ? node.tagName : 'null'}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='getText()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            const text = textRef.current?.getText();
+                            addLog('getText()', `returned: ${text || '(empty)'}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='isVisible()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            const visible = textRef.current?.isVisible();
+                            addLog('isVisible()', `returned: ${visible}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='show()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            textRef.current?.show();
+                            addLog('show()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='hide()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            textRef.current?.hide();
+                            addLog('hide()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='getElement()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            const el = textRef.current?.getElement();
+                            addLog('getElement()', `returned: ${el ? el.className : 'null'}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='getParentView()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='150px'
+                          buttonWidth='140px'
+                          onClick={() => {
+                            const parent = textRef.current?.getParentView();
+                            addLog('getParentView()', `returned: ${parent || 'null'}`);
+                          }}
+                        />
+                      </>}
+                    />
+                  ]}
+                />,
+                // Column 2 - Configuration
+                <AvakioLayout
+                  key="config-col"
+                  id='Layout-row-Column2'
+                  type="clean"
+                  borderless={true}
+                  height='100%'
+                  rows={[
+                    <AvakioLayout
+                      key="config-header"
+                      id='Layout-row1-col-Column2'
+                      type="clean"
+                      borderless={true}
+                      height='50px'
+                      width='100%'
+                      cols={[
+                        <AvakioTemplate
+                          key="config-title"
+                          id='Template-config-header'
+                          type="clean"
+                          borderType="clean"
+                          content={<strong>Configuration</strong>}
+                        />,
+                        <AvakioTemplate
+                          key="config-reset"
+                          id='Template-config-header-button'
+                          type="clean"
+                          borderType="clean"
+                          width='100%'
+                          align="right"
+                          content={
+                            <AvakioButton
+                              id='Button-reset-playground'
+                              size="sm"
+                              label="Reset"
+                              align="right"
+                              onClick={() => {
+                                setPlaygroundProps([
+                                  { id: 'componentId', label: 'ID', type: 'text', value: 'playground-text', group: 'Identity', placeholder: 'Component ID' },
+                                  { id: 'testId', label: 'Test ID', type: 'text', value: '', group: 'Identity', placeholder: 'Test ID for testing' },
+                                  { id: 'className', label: 'Class Name', type: 'text', value: '', group: 'Identity', placeholder: 'Additional CSS class' },
+                                  { id: 'label', label: 'Label', type: 'text', value: 'Text Input', group: 'Appearance', placeholder: 'Enter label text' },
+                                  { id: 'labelForm', label: 'Label Form', type: 'text', value: '', group: 'Appearance', placeholder: 'Form label above component' },
+                                  { id: 'placeholder', label: 'Placeholder', type: 'text', value: 'Enter text...', group: 'Appearance', placeholder: 'Enter placeholder' },
+                                  { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'Appearance', placeholder: 'Help text below component' },
+                                  { id: 'invalidMessage', label: 'Invalid Message', type: 'text', value: '', group: 'Appearance', placeholder: 'Error message' },
+                                  { id: 'type', label: 'Type', type: 'select', value: 'text', group: 'Appearance', options: [
+                                    { label: 'Text', value: 'text' },
+                                    { label: 'Password', value: 'password' },
+                                    { label: 'Email', value: 'email' },
+                                    { label: 'URL', value: 'url' },
+                                    { label: 'Number', value: 'number' },
+                                    { label: 'Tel', value: 'tel' },
+                                    { label: 'Search', value: 'search' },
+                                  ]},
+                                  { id: 'labelPosition', label: 'Label Position', type: 'select', value: 'left', group: 'Appearance', options: [
+                                    { label: 'Left', value: 'left' },
+                                    { label: 'Top', value: 'top' },
+                                  ]},
+                                  { id: 'labelAlign', label: 'Label Align', type: 'select', value: 'left', group: 'Appearance', options: [
+                                    { label: 'Left', value: 'left' },
+                                    { label: 'Right', value: 'right' },
+                                  ]},
+                                  { id: 'inputAlign', label: 'Input Align', type: 'select', value: 'left', group: 'Appearance', options: [
+                                    { label: 'Left', value: 'left' },
+                                    { label: 'Center', value: 'center' },
+                                    { label: 'Right', value: 'right' },
+                                  ]},
+                                  { id: 'labelWidth', label: 'Label Width', type: 'text', value: '100', group: 'Appearance', placeholder: 'e.g. 100 or 100px' },
+                                  { id: 'clear', label: 'Clear Button', type: 'checkbox', value: false, group: 'Features' },
+                                  { id: 'enableValueCopyButton', label: 'Value Copy Button', type: 'checkbox', value: false, group: 'Features' },
+                                  { id: 'enablePlaceHolderCopyButton', label: 'Placeholder Copy Button', type: 'checkbox', value: false, group: 'Features' },
+                                  { id: 'multiline', label: 'Multiline (Textarea)', type: 'checkbox', value: false, group: 'Features' },
+                                  { id: 'rows', label: 'Rows (multiline)', type: 'number', value: 4, group: 'Features' },
+                                  { id: 'maxLength', label: 'Max Length', type: 'number', value: '', group: 'Features' },
+                                  { id: 'width', label: 'Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 100% or 300px' },
+                                  { id: 'height', label: 'Height', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. auto or 40px' },
+                                  { id: 'textWidth', label: 'Text Width', type: 'text', value: '', group: 'Sizing', placeholder: 'Width of input field' },
+                                  { id: 'minWidth', label: 'Min Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 200px' },
+                                  { id: 'maxWidth', label: 'Max Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 500px' },
+                                  { id: 'minHeight', label: 'Min Height', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 32px' },
+                                  { id: 'margin', label: 'Margin', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 10 or 10,20,10,20' },
+                                  { id: 'padding', label: 'Padding', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 10 or 10,20,10,20' },
+                                  { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State' },
+                                  { id: 'readonly', label: 'Readonly', type: 'checkbox', value: false, group: 'State' },
+                                  { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State' },
+                                  { id: 'borderless', label: 'Borderless', type: 'checkbox', value: false, group: 'State' },
+                                  { id: 'required', label: 'Required', type: 'checkbox', value: false, group: 'Validation' },
+                                  { id: 'invalid', label: 'Invalid', type: 'checkbox', value: false, group: 'Validation' },
+                                  { id: 'logOnChange', label: 'Log onChange Events', type: 'checkbox', value: true, group: 'Other' },
+                                ]);
+                                addLog('Playground reset', 'All properties reset to defaults');
+                              }}
+                            />
+                          }
+                        />,
+                      ]}
+                    />,
+                    <AvakioProperty
+                      key="config-props"
+                      ref={propertyRef}
+                      id='Property-playground-props'
+                      className='avakio-fill-container'
+                      items={playgroundProps}
+                      onChange={handlePlaygroundPropsChange}
+                      size='compact'
+                      showBorders
+                      autoHeight
+                      overflowY='auto'
+                    />,
+                    <AvakioButton
+                      size="sm"
+                      label="Get Item Count"
+                      align="right"
+                      onClick={() => {
+                        const count = propertyRef.current?.getItemCount();
+                        addLog('Item Count', `Num of Items: ${count}`);
+                      }}
+                    />
+                  ]}
+                />,
+              ]}
+            />,
+          ]}
+        />
       </section>
 
-      {/* Interactive/Ref Methods Section */}
-      <section className="avakio-template-demo-section">
+      {/* Documentation Section */}
+      <section 
+        ref={(el) => { sectionRefs.current['docs'] = el; }}
+        className="avakio-text-demo-section"
+        data-section="docs"
+      >
         <AvakioTemplate
           type="section"
           borderType="clean"
-          content={
-            <div>
-              <h3 style={{ margin: '0 0 4px 0' }}>
-                <Settings size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Ref Methods (Programmatic Control)
-              </h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>Control the input programmatically using ref methods.</p>
-            </div>
-          }
+          content="Documentation"
         />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-          <Button onClick={handleGetValue} size="sm">
-            Get Value
-          </Button>
-          <Button onClick={handleSetValue} size="sm">
-            Set Value
-          </Button>
-          <Button onClick={handleFocus} size="sm">
-            Focus
-          </Button>
-          <Button onClick={handleClear} size="sm">
-            Clear
-          </Button>
-          <Button onClick={handleValidate} size="sm">
-            Validate
-          </Button>
-          <Button variant="outline" onClick={() => textRef.current?.disable()} size="sm">
-            Disable
-          </Button>
-          <Button variant="outline" onClick={() => textRef.current?.enable()} size="sm">
-            Enable
-          </Button>
-        </div>
 
-        <AvakioText
-          ref={textRef}
-          label="Controlled Input"
-          placeholder="Use buttons above to control this input"
-          validate={(value) => value.length >= 5 || 'Must be at least 5 characters'}
-          bottomLabel="Try the buttons above to interact with this input"
-        />
-        {refValue && (
-          <div style={{ marginTop: '10px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
-            Last retrieved value: <strong>{refValue}</strong>
-          </div>
-        )}
-      </section>
-
-      {/* Label Positions Section */}
-      <section className="avakio-template-demo-section">
+        {/* Props Table */}
         <AvakioTemplate
-          type="section"
+          type="clean"
           borderType="clean"
-          content={
-            <div>
-              <h3 style={{ margin: '0 0 4px 0' }}>
-                <PenTool size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Label Positions & Alignment
-              </h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>Configure label position and text alignment.</p>
-            </div>
-          }
+          padding={[16, 0, 0, 16]}
+          content={<strong>Props</strong>}
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={0}
+          rows={[
+            <AvakioDataTable<PropDoc>
+              key="props-table"
+              id="text-props-table"
+              data={propsData}
+              filterable
+              sortable
+              columns={propsColumns}
+              select={false}
+              showRowNum
+            />,
+          ]}
         />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-          <AvakioText
-            label="Left Label"
-            labelPosition="left"
-            placeholder="Label on the left"
-          />
-          <AvakioText
-            label="Top Label"
-            labelPosition="top"
-            placeholder="Label on top"
-          />
-          <AvakioText
-            label="Right Aligned"
-            labelAlign="right"
-            inputAlign="right"
-            placeholder="Right aligned"
-          />
-          <AvakioText
-            label="Center Input"
-            inputAlign="center"
-            placeholder="Centered text"
-          />
-        </div>
-      </section>
-
-      {/* Form Example Section */}
-      <section className="avakio-template-demo-section">
+        {/* Events Table */}
         <AvakioTemplate
-          type="section"
+          type="clean"
           borderType="clean"
-          content={
-            <div>
-              <h3 style={{ margin: '0 0 4px 0' }}>
-                <Mail size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Complete Form Example
-              </h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>A complete form with multiple input fields.</p>
-            </div>
-          }
+          padding={[24, 0, 0, 16]}
+          content={<strong>Events</strong>}
         />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-          <Button onClick={handleFormSubmit} size="sm">
-            Submit Form
-          </Button>
-          <Button variant="outline" onClick={handleFormReset} size="sm">
-            Reset Form
-          </Button>
-        </div>
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={0}
+          rows={[
+            <AvakioDataTable<PropDoc>
+              key="events-table"
+              id="text-events-table"
+              data={eventsData}
+              columns={propsColumns}
+              filterable
+              sortable
+              select={false}
+              showRowNum
+            />,
+          ]}
+        />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-          <AvakioText
-            label="First Name"
-            placeholder="Enter first name"
-            value={formData.firstName}
-            onChange={({ value }) => setFormData({ ...formData, firstName: value })}
-            required
-          />
-          <AvakioText
-            label="Last Name"
-            placeholder="Enter last name"
-            value={formData.lastName}
-            onChange={({ value }) => setFormData({ ...formData, lastName: value })}
-            required
-          />
-          <AvakioText
-            label="Email"
-            type="email"
-            placeholder="email@example.com"
-            value={formData.emailAddress}
-            onChange={({ value }) => setFormData({ ...formData, emailAddress: value })}
-            required
-            icon={<Mail size={16} />}
-          />
-          <AvakioText
-            label="Phone"
-            type="tel"
-            placeholder="+1 (555) 123-4567"
-            value={formData.phoneNumber}
-            onChange={({ value }) => setFormData({ ...formData, phoneNumber: value })}
-            icon={<Phone size={16} />}
-          />
-          <AvakioText
-            label="Address"
-            placeholder="Street address"
-            value={formData.address}
-            onChange={({ value }) => setFormData({ ...formData, address: value })}
-            labelPosition="top"
-          />
-          <AvakioText
-            label="City"
-            placeholder="City"
-            value={formData.city}
-            onChange={({ value }) => setFormData({ ...formData, city: value })}
-          />
-          <AvakioText
-            label="ZIP Code"
-            placeholder="12345"
-            value={formData.zipCode}
-            onChange={({ value }) => setFormData({ ...formData, zipCode: value })}
-            pattern="[0-9]{5}"
-            maxLength={5}
-          />
-        </div>
-      </section>
-
-      {/* Theme Showcase Section */}
-      <section className="avakio-template-demo-section">
+        {/* Ref Methods Table */}
         <AvakioTemplate
-          type="section"
+          type="clean"
           borderType="clean"
-          content={
-            <div>
-              <h3 style={{ margin: '0 0 4px 0' }}>
-                <Palette size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Theme Showcase
-              </h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>All available themes with the same input.</p>
-            </div>
-          }
+          padding={[24, 0, 0, 16]}
+          content={<strong>Ref Methods</strong>}
         />
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-          <AvakioText
-            label="Material"
-            theme="material"
-            value="Material theme"
-            icon={<Calendar size={16} />}
-          />
-          <AvakioText
-            label="Flat"
-            theme="flat"
-            value="Flat theme"
-            icon={<Calendar size={16} />}
-          />
-          <AvakioText
-            label="Compact"
-            theme="compact"
-            value="Compact theme"
-            icon={<Calendar size={16} />}
-          />
-          <AvakioText
-            label="Dark"
-            theme="dark"
-            value="Dark theme"
-            icon={<Calendar size={16} />}
-          />
-          <AvakioText
-            label="Ocean"
-            theme="ocean"
-            value="Ocean theme"
-            icon={<Calendar size={16} />}
-          />
-          <AvakioText
-            label="Sunset"
-            theme="sunset"
-            value="Sunset theme"
-            icon={<Calendar size={16} />}
-          />
-        </div>
-      </section>
-
-      {/* States Section */}
-      <section className="avakio-template-demo-section">
-        <AvakioTemplate
-          type="section"
-          borderType="clean"
-          content={
-            <div>
-              <h3 style={{ margin: '0 0 4px 0' }}>
-                <CheckCircle size={20} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                Input States
-              </h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>Different states: normal, disabled, readonly, invalid, required.</p>
-            </div>
-          }
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={0}
+          rows={[
+            <AvakioDataTable<PropDoc>
+              key="methods-table"
+              id="text-methods-table"
+              data={refMethodsData}
+              columns={propsColumns}
+              filterable
+              sortable
+              select={false}
+              showRowNum
+            />,
+          ]}
         />
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-          <AvakioText
-            label="Normal"
-            placeholder="Normal state"
-          />
-          <AvakioText
-            label="Disabled"
-            placeholder="Disabled state"
-            disabled
-            value="Cannot edit"
-          />
-          <AvakioText
-            label="Readonly"
-            placeholder="Readonly state"
-            readonly
-            value="Cannot edit but can copy"
-          />
-          <AvakioText
-            label="Invalid"
-            placeholder="Invalid state"
-            invalid
-            invalidMessage="This field has an error"
-            value="Invalid value"
-          />
-          <AvakioText
-            label="Required"
-            placeholder="Required field"
-            required
-            bottomLabel="This field is required"
-          />
-          <AvakioText
-            label="With Clear"
-            placeholder="Type something"
-            clear
-            value="Clear me!"
-          />
-        </div>
-      </section>
-
-      {/* Interactive Props Playground */}
-      <section className="avakio-template-demo-section">
-        <AvakioTemplate
-          type="section"
-          borderType="clean"
-          content={
-            <div>
-              <h3 style={{ margin: '0 0 4px 0' }}>Interactive Props Playground</h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>Experiment with different props in real-time</p>
-            </div>
-          }
-        />
-        
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: '1fr 1fr', 
-          gap: '20px',
-          marginBottom: '20px'
-        }}>
-          {/* Controls Column */}
-          <div style={{ 
-            backgroundColor: '#f8f9fa', 
-            padding: '20px', 
-            borderRadius: '8px'
-          }}>
-            <h4 style={{ marginTop: 0 }}>Props Configuration</h4>
-            
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 500 }}>Theme</label>
-              <select 
-                value={playgroundTheme}
-                onChange={(e) => setPlaygroundTheme(e.target.value)}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
-              >
-                <option value="material">Material</option>
-                <option value="flat">Flat</option>
-                <option value="compact">Compact</option>
-                <option value="dark">Dark</option>
-                <option value="ocean">Ocean</option>
-                <option value="sunset">Sunset</option>
-              </select>
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 500 }}>Label</label>
-              <input 
-                type="text"
-                value={playgroundLabel}
-                onChange={(e) => setPlaygroundLabel(e.target.value)}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
-              />
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 500 }}>Placeholder</label>
-              <input 
-                type="text"
-                value={playgroundPlaceholder}
-                onChange={(e) => setPlaygroundPlaceholder(e.target.value)}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
-              />
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 500 }}>Type</label>
-              <select 
-                value={playgroundType}
-                onChange={(e) => setPlaygroundType(e.target.value)}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
-              >
-                <option value="text">Text</option>
-                <option value="password">Password</option>
-                <option value="email">Email</option>
-                <option value="url">URL</option>
-                <option value="number">Number</option>
-                <option value="tel">Tel</option>
-                <option value="search">Search</option>
-              </select>
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 500 }}>Width</label>
-              <input 
-                type="text"
-                value={playgroundWidth}
-                onChange={(e) => setPlaygroundWidth(e.target.value)}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
-                placeholder="e.g., 100%, 300px"
-              />
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 500 }}>Label Position</label>
-              <select 
-                value={playgroundLabelPosition}
-                onChange={(e) => setPlaygroundLabelPosition(e.target.value)}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
-              >
-                <option value="top">Top</option>
-                <option value="left">Left</option>
-              </select>
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 500 }}>Input Align</label>
-              <select 
-                value={playgroundInputAlign}
-                onChange={(e) => setPlaygroundInputAlign(e.target.value)}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
-              >
-                <option value="left">Left</option>
-                <option value="center">Center</option>
-                <option value="right">Right</option>
-              </select>
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: 500 }}>Bottom Label</label>
-              <input 
-                type="text"
-                value={playgroundBottomLabel}
-                onChange={(e) => setPlaygroundBottomLabel(e.target.value)}
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ddd' }}
-                placeholder="Help text..."
-              />
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <input 
-                  type="checkbox"
-                  checked={playgroundDisabled}
-                  onChange={(e) => setPlaygroundDisabled(e.target.checked)}
-                />
-                <span style={{ fontWeight: 500 }}>Disabled</span>
-              </label>
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <input 
-                  type="checkbox"
-                  checked={playgroundReadonly}
-                  onChange={(e) => setPlaygroundReadonly(e.target.checked)}
-                />
-                <span style={{ fontWeight: 500 }}>Readonly</span>
-              </label>
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <input 
-                  type="checkbox"
-                  checked={playgroundRequired}
-                  onChange={(e) => setPlaygroundRequired(e.target.checked)}
-                />
-                <span style={{ fontWeight: 500 }}>Required</span>
-              </label>
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <input 
-                  type="checkbox"
-                  checked={playgroundClear}
-                  onChange={(e) => setPlaygroundClear(e.target.checked)}
-                />
-                <span style={{ fontWeight: 500 }}>Clear Button</span>
-              </label>
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <input 
-                  type="checkbox"
-                  checked={playgroundEnableValueCopyButton}
-                  onChange={(e) => setPlaygroundEnableValueCopyButton(e.target.checked)}
-                />
-                <span style={{ fontWeight: 500 }}>Copy Button</span>
-              </label>
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <input 
-                  type="checkbox"
-                  checked={playgroundEnablePlaceHolderCopyButton}
-                  onChange={(e) => setPlaygroundEnablePlaceHolderCopyButton(e.target.checked)}
-                />
-                <span style={{ fontWeight: 500 }}>Placeholder Copy Button</span>
-              </label>
-            </div>
-
-            <Button onClick={handleApplyProps} style={{ width: '100%' }}>
-              Apply Props
-            </Button>
-          </div>
-
-          {/* Preview Column */}
-          <div>
-            <h4 style={{ marginTop: 0 }}>Live Preview</h4>
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '20px', 
-              borderRadius: '8px', 
-              border: '1px solid #e0e0e0',
-              minHeight: '200px'
-            }}>
-              <AvakioText
-                theme={appliedProps.theme}
-                label={appliedProps.label}
-                placeholder={appliedProps.placeholder}
-                type={appliedProps.type as any}
-                width={appliedProps.width}
-                labelPosition={appliedProps.labelPosition as any}
-                inputAlign={appliedProps.inputAlign as any}
-                disabled={appliedProps.disabled}
-                readonly={appliedProps.readonly}
-                required={appliedProps.required}
-                clear={appliedProps.clear}
-                enableValueCopyButton={appliedProps.enableValueCopyButton}
-                enablePlaceHolderCopyButton={appliedProps.enablePlaceHolderCopyButton}
-                bottomLabel={appliedProps.bottomLabel}
-              />
-            </div>
-
-            <div style={{ 
-              marginTop: '20px', 
-              backgroundColor: '#f8f9fa', 
-              padding: '15px', 
-              borderRadius: '8px',
-              fontFamily: 'monospace',
-              fontSize: '12px',
-              overflowX: 'auto'
-            }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>Generated Code:</div>
-              <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
-{`<AvakioText
-  theme="${appliedProps.theme}"
-  label="${appliedProps.label}"
-  placeholder="${appliedProps.placeholder}"
-  type="${appliedProps.type}"
-  width="${appliedProps.width}"
-  labelPosition="${appliedProps.labelPosition}"
-  inputAlign="${appliedProps.inputAlign}"${appliedProps.disabled ? '\n  disabled' : ''}${appliedProps.readonly ? '\n  readonly' : ''}${appliedProps.required ? '\n  required' : ''}${appliedProps.clear ? '\n  clear' : ''}${appliedProps.enableValueCopyButton ? '\n  enableValueCopyButton' : ''}${appliedProps.enablePlaceHolderCopyButton ? '\n  enablePlaceHolderCopyButton' : ''}${appliedProps.bottomLabel ? `\n  bottomLabel="${appliedProps.bottomLabel}"` : ''}
-/>`}
-              </pre>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* API Reference Section */}
-      <section className="avakio-template-demo-section">
-        <AvakioTemplate
-          type="section"
-          borderType="clean"
-          content={
-            <div>
-              <h3 style={{ margin: '0 0 4px 0' }}>API Reference</h3>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.7 }}>Key features and documentation links.</p>
-            </div>
-          }
-        />
-        <div style={{ 
-          backgroundColor: '#f8f9fa', 
-          padding: '20px', 
-          borderRadius: '8px'
-        }}>
-          <h3 style={{ marginTop: 0 }}>Key Features</h3>
-          <ul style={{ lineHeight: '1.8' }}>
-            <li><strong>Multiple Input Types:</strong> text, password, email, url, number, tel, search</li>
-            <li><strong>Label Configuration:</strong> Position (left/top), alignment, width</li>
-            <li><strong>Validation:</strong> HTML5 validation + custom validation functions</li>
-            <li><strong>Icons:</strong> Left or right positioned icons with lucide-react</li>
-            <li><strong>Clear Button:</strong> Optional clear button for easy value removal</li>
-            <li><strong>Copy Button:</strong> Optional copy button to copy input value to clipboard</li>
-            <li><strong>Placeholder Copy Button:</strong> Optional copy button to copy placeholder text to clipboard</li>
-            <li><strong>Password Toggle:</strong> Eye icon to show/hide password</li>
-            <li><strong>Themes:</strong> material, flat, compact, dark, ocean, sunset</li>
-            <li><strong>States:</strong> Normal, disabled, readonly, invalid, focused</li>
-            <li><strong>Bottom Label:</strong> Additional help text below input</li>
-            <li><strong>Ref Methods:</strong> getValue, setValue, focus, blur, validate, clear, disable, enable</li>
-          </ul>
-          
-        </div>
       </section>
     </div>
   );
 }
+
+export default AvakioTextExample;
 
 
 

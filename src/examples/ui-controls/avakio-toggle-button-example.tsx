@@ -7,7 +7,7 @@ import { AvakioDataTable } from '../../components/avakio/data-presentation/avaki
 import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
-import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
+import { AvakioProperty, AvakioPropertyItem, AvakioPropertyRef } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
 import { formatSizingValue } from '../../lib/utils';
 import { 
@@ -179,6 +179,7 @@ export function AvakioToggleButtonExample() {
 
   // Ref example
   const toggleButtonRef = useRef<AvakioToggleButtonRef>(null);
+  const propertyRef = useRef<AvakioPropertyRef>(null);
   const [eventLog, setEventLog] = useState<string[]>([]);
 
   // Scroll to section when tab is clicked
@@ -999,6 +1000,7 @@ export function AvakioToggleButtonExample() {
                       ]}
                     />,
                     <AvakioProperty
+                      ref={propertyRef}
                       id='Property-playground-props'
                       className='avakio-fill-container'
                       items={playgroundProps}                  
@@ -1007,6 +1009,15 @@ export function AvakioToggleButtonExample() {
                       showBorders
                       autoHeight
                       overflowY='auto'
+                    />,
+                    <AvakioButton
+                      size="sm"
+                      label="Get Item Count"
+                      align="right"
+                      onClick={() => {
+                        const count = propertyRef.current?.getItemCount();
+                        addLog('Item Count', `Num of Items: ${count}`);
+                      }}
                     />,
                   ]}
                 />,

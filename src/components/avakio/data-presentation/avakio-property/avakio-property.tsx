@@ -232,7 +232,10 @@ export interface AvakioPropertyProps extends AvakioBaseProps {
 }
 
 /** Ref type for AvakioProperty component */
-export type AvakioPropertyRef = AvakioBaseRef<AvakioPropertyItem[]>;
+export type AvakioPropertyRef = AvakioBaseRef<AvakioPropertyItem[]> & {
+  /** Returns the number of property items */
+  getItemCount: () => number;
+};
 
 export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>(
   function AvakioProperty(props, ref) {
@@ -411,6 +414,8 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
     getValue: () => rows,
     setValue: (newItems: AvakioPropertyItem[]) => setRows(newItems),
     getText: () => JSON.stringify(rows),
+    /** Returns the number of property items */
+    getItemCount: () => rows.length,
   }), [rows, getRefMethods]);
 
   // Compute styles from base props
@@ -847,7 +852,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
                 {showLabel !== false && (
                   <div className={`av-prop-label${item.labelAlign ? ` av-prop-label-${item.labelAlign}` : ''}`}>
                     <label htmlFor={item.id}>{item.label}</label>
-                    {item.description && <div className="av-prop-desc">{item.description}</div>}
+                    {item.description && item.type !== 'checkbox' && <div className="av-prop-desc">{item.description}</div>}
                   </div>
                 )}
                 <div className="av-prop-control">{renderControl(item)}</div>

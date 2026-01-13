@@ -1160,7 +1160,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="getData()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1172,7 +1171,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="getSelectedRows()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1184,7 +1182,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="getSelectedColumns()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1196,7 +1193,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="selectRows([0,2])"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1208,7 +1204,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="clearSelection()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1220,7 +1215,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="scrollToRow(5)"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1232,7 +1226,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="getSortState()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1244,7 +1237,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="setSortState()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1256,7 +1248,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="getFilterValues()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1268,7 +1259,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="setFilterValues()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1280,7 +1270,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="clearFilters()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1292,7 +1281,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="hideColumn(email)"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1304,7 +1292,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="showColumn(email)"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1316,7 +1303,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="refresh()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1328,7 +1314,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="disable()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1340,7 +1325,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="enable()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1352,7 +1336,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="show()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1364,7 +1347,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="hide()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1376,7 +1358,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="isVisible()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1388,7 +1369,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="isEnabled()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1400,7 +1380,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="getElement()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1412,7 +1391,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="getParentView()"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
@@ -1424,7 +1402,6 @@ export function AvakioDataTableExample() {
                             size="sm"
                             label="setData([...])"
                             margin={[0, 10, 10, 0]}
-                            labelAlign="center"
                             width="150px"
                             buttonWidth="140px"
                             onClick={() => {
