@@ -41,9 +41,23 @@
   min-width: 0;
   background: var(--drp-surface);
   border: 1px solid var(--drp-border);
-  border-radius: 0 var(--drp-radius) var(--drp-radius) 0;
+  border-radius: var(--drp-radius);
   cursor: pointer;
   transition: border-color 0.2s ease;
+}
+
+/* Label position adjustments for border-radius */
+.avakio-drp[data-label-position="left"] .avakio-drp-input-group {
+  border-radius: 0 var(--drp-radius) var(--drp-radius) 0; /* label on left */
+}
+
+.avakio-drp[data-label-position="right"] .avakio-drp-input-group {
+  border-radius: var(--drp-radius) 0 0 var(--drp-radius); /* label on right */
+}
+
+.avakio-drp[data-label-position="top"] .avakio-drp-input-group,
+.avakio-drp[data-label-position="bottom"] .avakio-drp-input-group {
+  border-radius: var(--drp-radius); /* label on top or bottom */
 }
 
 .avakio-drp-input-group:hover {
@@ -103,10 +117,24 @@
   min-width: 0;
   background: var(--drp-surface);
   border: 1px solid var(--drp-border);
-  border-radius: 0 var(--drp-radius) var(--drp-radius) 0;
+  border-radius: var(--drp-radius);
   cursor: pointer;
   transition: border-color 0.2s ease;
   height: 26px;
+}
+
+/* Compact mode label position adjustments */
+.avakio-drp-compact[data-label-position="left"] .avakio-drp-input-group-compact {
+  border-radius: 0 var(--drp-radius) var(--drp-radius) 0; /* label on left */
+}
+
+.avakio-drp-compact[data-label-position="right"] .avakio-drp-input-group-compact {
+  border-radius: var(--drp-radius) 0 0 var(--drp-radius); /* label on right */
+}
+
+.avakio-drp-compact[data-label-position="top"] .avakio-drp-input-group-compact,
+.avakio-drp-compact[data-label-position="bottom"] .avakio-drp-input-group-compact {
+  border-radius: var(--drp-radius); /* label on top or bottom */
 }
 
 .avakio-drp-compact .avakio-drp-input-compact {
@@ -179,7 +207,7 @@
 .avakio-drp-trigger-value { font-weight: 700; color: var(--drp-text); }
 
 .avakio-drp-popover {
-  width: min(760px, 92vw);
+  width: min(650px, 92vw);
   background: var(--drp-surface);
   border: 1px solid var(--drp-border);
   border-radius: var(--drp-radius);
@@ -187,9 +215,11 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding: 16px;
 }
 
-.avakio-drp-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.avakio-drp-panel { display: flex; flex-direction: column; gap: 12px; }
+.avakio-drp-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
 .avakio-drp-col { display: flex; flex-direction: column; gap: 8px; }
 .avakio-drp-col-header { font-size: 13px; font-weight: 700; color: var(--drp-muted); text-transform: uppercase; letter-spacing: 0.04em; }
 

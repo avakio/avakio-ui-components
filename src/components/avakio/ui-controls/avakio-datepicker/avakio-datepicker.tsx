@@ -593,7 +593,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
   const handleCancel = () => {
     // Revert to the value when popover was opened
     if (valueOnOpen !== value) {
-      onChange(valueOnOpen || '');
+      //onChange(valueOnOpen || '');
     }
     setOpen(false);
   };
@@ -828,6 +828,7 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
             </PopoverTrigger>
             <PopoverContent
               className="avakio-dp-popover"
+              side="bottom"
               align="start"
               data-admin-theme={themeAttr || undefined}
             >
@@ -930,7 +931,8 @@ export const AvakioDatePicker = forwardRef<AvakioBaseRef<string>, AvakioDatePick
           </PopoverTrigger>
           <PopoverContent
             className="avakio-dp-popover"
-            align="end"
+            side="bottom"
+            align="start"
             data-admin-theme={themeAttr || undefined}
           >
             <AvakioDatePickerCalendar 

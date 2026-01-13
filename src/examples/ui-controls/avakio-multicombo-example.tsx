@@ -197,7 +197,7 @@ export function AvakioMultiComboExample() {
   const [eventLog, setEventLog] = useState<string[]>([]);
 
   // Scroll to section when tab is clicked
-  const handleTabChange = (value: string | number | null) => {
+  const handleTabChange = ({ value }: { value: string | number | null }) => {
     setActiveSection(value);
     if (value && sectionRefs.current[value as string]) {
       const element = sectionRefs.current[value as string];
@@ -1264,7 +1264,7 @@ export function AvakioMultiComboExample() {
                       className='avakio-fill-container'
                       items={playgroundProps}
                       onChange={handlePlaygroundPropsChange}
-                      dense
+                      size='compact'
                       showBorders
                       autoHeight
                       overflowY='auto'

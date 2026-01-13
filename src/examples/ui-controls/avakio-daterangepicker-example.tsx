@@ -8,6 +8,7 @@ import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view
 import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { AvakioDataTable } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
+import { AvakioButton } from '../../components/avakio/ui-controls/avakio-button/avakio-button';
 import { addEventLog } from '../../services/event-log-service';
 import { 
   CalendarRange, 
@@ -190,7 +191,7 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
   };
 
   // Scroll to section when tab is clicked
-  const handleTabChange = (value: string | number | null) => {
+  const handleTabChange = ({ value }: { value: string | number | null }) => {
     setActiveSection(value);
     if (value && sectionRefs.current[value as string]) {
       const element = sectionRefs.current[value as string];
@@ -505,23 +506,34 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
               onChange={({ value }) => setLabelLeftRange(value)}
               label="Left Label"
               labelPosition="left"
-              labelWidth={80}
+              labelWidth={100}
+              padding={[10,10,10,10]}
             />,
             <AvakioDateRangePicker
               key="label-top"
+              padding={[10,10,10,10]}
               value={labelTopRange}
               onChange={({ value }) => setLabelTopRange(value)}
               label="Top Label"
               labelPosition="top"
-              labelWidth={80}
+              labelWidth={100}
             />,
+          ]}
+        />
+        <AvakioLayout
+          type="clean"
+          borderless={false}
+          margin={12}
+          padding={16}
+          cols={[
             <AvakioDateRangePicker
               key="label-right"
               value={labelRightRange}
               onChange={({ value }) => setLabelRightRange(value)}
               label="Right Label"
               labelPosition="right"
-              labelWidth={80}
+              padding={[10,10,10,10]}
+              labelWidth={100}
             />,
             <AvakioDateRangePicker
               key="label-bottom"
@@ -529,7 +541,8 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
               onChange={({ value }) => setLabelBottomRange(value)}
               label="Bottom Label"
               labelPosition="bottom"
-              labelWidth={80}
+              labelWidth={100}
+              padding={[10,10,10,10]}
             />,
           ]}
         />
@@ -558,7 +571,8 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
               value={requiredRange}
               onChange={({ value }) => setRequiredRange(value)}
               label="Required"
-              labelWidth={80}
+              labelWidth={100}
+              padding={[10,10,10,10]}
               required
               clearable
             />,
@@ -567,7 +581,8 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
               value={invalidRange}
               onChange={({ value }) => setInvalidRange(value)}
               label="Invalid"
-              labelWidth={80}
+              labelWidth={100}
+              padding={[10,10,10,10]} 
               invalid
               invalidMessage="Please select a valid date range"
               clearable
@@ -593,7 +608,8 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
               value={disabledRange}
               onChange={({ value }) => setDisabledRange(value)}
               label="Disabled"
-              labelWidth={80}
+              labelWidth={100}
+              padding={[10,10,10,10]}
               disabled
             />,
             <AvakioDateRangePicker
@@ -601,7 +617,8 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
               value={borderlessRange}
               onChange={({ value }) => setBorderlessRange(value)}
               label="Borderless"
-              labelWidth={80}
+              labelWidth={100}
+              padding={[10,10,10,10]}
               borderless
             />,
           ]}
@@ -622,97 +639,288 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="Experiment with different props and see live changes. Configure the component using the property panel below."
+          content="Experiment with different DateRangePicker configurations in real-time. Change any property below to see the effect on the preview."
         />
-
-        {/* Live Preview */}
         <AvakioLayout
           type="clean"
           borderless={false}
           margin={12}
           padding={16}
+          height={650}
           rows={[
-            <div key="preview-label" style={{ marginBottom: '8px', fontWeight: 600 }}>Live Preview:</div>,
-            <AvakioDateRangePicker
-              key="playground-drp"
-              ref={dateRangePickerRef}
-              id={getPropValue('componentId', 'playground-daterangepicker')}
-              testId={getPropValue('testId', '')}
-              className={getPropValue('className', '')}
-              value={playgroundValue}
-              onChange={({ value }) => {
-                setPlaygroundValue(value);
-                if (getPropValue('logOnChange', true)) {
-                  addLog('onChange', formatDisplay(value, getPropValue('showTime', false)));
-                }
-              }}
-              onFocus={(e) => {
-                if (getPropValue('logOnFocus', true)) {
-                  addLog('onFocus', 'Input focused');
-                }
-              }}
-              onBlur={(e) => {
-                if (getPropValue('logOnBlur', true)) {
-                  addLog('onBlur', 'Input blurred');
-                }
-              }}
-              label={getPropValue('label', 'Date Range')}
-              labelForm={getPropValue('labelForm', '')}
-              labelPosition={getPropValue('labelPosition', 'left') as 'left' | 'top' | 'right' | 'bottom'}
-              labelAlign={getPropValue('labelAlign', 'left') as 'left' | 'center' | 'right'}
-              labelWidth={getPropValue('labelWidth', 100)}
-              placeholder={getPropValue('placeholder', 'Select date range...')}
-              bottomLabel={getPropValue('bottomLabel', '')}
-              bottomPadding={getPropValue('bottomPadding', 0)}
-              tooltip={getPropValue('tooltip', '')}
-              size={getPropValue('size', 'default') as 'default' | 'compact'}
-              showTime={getPropValue('showTime', false)}
-              allowSingleDay={getPropValue('allowSingleDay', true)}
-              clearable={getPropValue('clearable', true)}
-              disabled={getPropValue('disabled', false)}
-              readonly={getPropValue('readonly', false)}
-              hidden={getPropValue('hidden', false)}
-              borderless={getPropValue('borderless', false)}
-              required={getPropValue('required', false)}
-              invalid={getPropValue('invalid', false)}
-              invalidMessage={getPropValue('invalidMessage', 'This field is required')}
-              presets={presets}
-            />,
-          ]}
-        />
-
-        {/* Property Panel */}
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          rows={[
-            <AvakioProperty
-              key="playground-props"
-              items={playgroundProps}
-              onChange={handlePlaygroundPropsChange}
-              labelWidth={120}
-              groupToggle
-              height={400}
-            />,
-          ]}
-        />
-
-        {/* Event Log */}
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
-          rows={[
-            <div key="log-header" style={{ fontWeight: 600, marginBottom: '8px' }}>Event Log:</div>,
-            <div key="log-content" className="avakio-drp-event-log">
-              {eventLog.length === 0 ? (
-                <div style={{ color: '#999', fontStyle: 'italic' }}>Interact with the component to see events...</div>
-              ) : (
-                eventLog.map((log, i) => <div key={i}>{log}</div>)
-              )}
-            </div>,
+            <AvakioLayout
+              type="clean"
+              borderless={true}
+              responsive
+              autoResize
+              gap={16}
+              height='100%'
+              cols={[
+                // Column 1 - Preview
+                <AvakioLayout
+                  type="clean"
+                  borderless={true}
+                  height='100%'
+                  rows={[
+                    <AvakioTemplate
+                      type="clean"
+                      borderType="clean"
+                      padding={[0,0,10,0]}
+                      content={<span><strong>Preview</strong></span>}
+                    />,
+                    <AvakioDateRangePicker
+                      key="playground-drp"
+                      ref={dateRangePickerRef}
+                      id={getPropValue('componentId', 'playground-daterangepicker')}
+                      testId={getPropValue('testId', '')}
+                      className={getPropValue('className', '')}
+                      value={playgroundValue}
+                      onChange={({ value }) => {
+                        setPlaygroundValue(value);
+                        if (getPropValue('logOnChange', true)) {
+                          addLog('onChange', formatDisplay(value, getPropValue('showTime', false)));
+                        }
+                      }}
+                      onFocus={(e) => {
+                        if (getPropValue('logOnFocus', true)) {
+                          addLog('onFocus', 'Input focused');
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (getPropValue('logOnBlur', true)) {
+                          addLog('onBlur', 'Input blurred');
+                        }
+                      }}
+                      label={getPropValue('label', 'Date Range')}
+                      labelForm={getPropValue('labelForm', '')}
+                      labelPosition={getPropValue('labelPosition', 'left') as 'left' | 'top' | 'right' | 'bottom'}
+                      labelAlign={getPropValue('labelAlign', 'left') as 'left' | 'center' | 'right'}
+                      labelWidth={getPropValue('labelWidth', 100)}
+                      placeholder={getPropValue('placeholder', 'Select date range...')}
+                      bottomLabel={getPropValue('bottomLabel', '')}
+                      bottomPadding={getPropValue('bottomPadding', 0)}
+                      tooltip={getPropValue('tooltip', '')}
+                      size={getPropValue('size', 'default') as 'default' | 'compact'}
+                      showTime={getPropValue('showTime', false)}
+                      allowSingleDay={getPropValue('allowSingleDay', true)}
+                      clearable={getPropValue('clearable', true)}
+                      disabled={getPropValue('disabled', false)}
+                      readonly={getPropValue('readonly', false)}
+                      hidden={getPropValue('hidden', false)}
+                      borderless={getPropValue('borderless', false)}
+                      required={getPropValue('required', false)}
+                      invalid={getPropValue('invalid', false)}
+                      invalidMessage={getPropValue('invalidMessage', 'This field is required')}
+                      presets={presets}
+                    />,
+                    <AvakioTemplate
+                      type="clean"
+                      borderType="clean"
+                      padding={[10,0,10,0]}
+                      content={<span>Selected: <strong>{formatDisplay(playgroundValue, getPropValue('showTime', false))}</strong></span>}
+                    />,
+                    <AvakioTemplate
+                      type="clean"
+                      borderType="clean"
+                      padding={[10,0,10,0]}
+                      content={<strong>Ref Methods</strong>}
+                    />,
+                    <AvakioTemplate
+                      type="clean"
+                      padding={[10,0,10,0]}
+                      borderType="clean"
+                      scroll="xy"
+                      flexWrap={true}
+                      content={<>
+                        <AvakioButton
+                          size="sm"
+                          label='Focus()'
+                          margin={[0,10,10,0]}
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          onClick={() => {
+                            dateRangePickerRef.current?.focus();
+                            addLog('focus()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          size="sm"
+                          label='Blur()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            dateRangePickerRef.current?.blur();
+                            addLog('blur()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          label='getValue()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            const val = playgroundValue;
+                            addLog('getValue()', `start: ${val.start}, end: ${val.end}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label='setValue(range)'
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            const newRange = {
+                              start: new Date().toISOString(),
+                              end: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+                            };
+                            dateRangePickerRef.current?.setValue(newRange);
+                            setPlaygroundValue(newRange);
+                            addLog('setValue()', 'set to current date + 7 days');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          label='getText()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            const text = formatDisplay(playgroundValue, getPropValue('showTime', false));
+                            addLog('getText()', `returned: ${text}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          label='enable()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            dateRangePickerRef.current?.enable();
+                            addLog('enable()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          label='disable()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            dateRangePickerRef.current?.disable();
+                            addLog('disable()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          label='isEnabled()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            const enabled = dateRangePickerRef.current?.isEnabled();
+                            addLog('isEnabled()', `returned: ${enabled}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          label='show()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            dateRangePickerRef.current?.show();
+                            addLog('show()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          label='hide()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            dateRangePickerRef.current?.hide();
+                            addLog('hide()', 'called via ref');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          label='isVisible()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            const visible = dateRangePickerRef.current?.isVisible();
+                            addLog('isVisible()', `returned: ${visible}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          label='getElement()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            const el = dateRangePickerRef.current?.getElement();
+                            addLog('getElement()', `returned: ${el ? el.tagName : 'null'}`);
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          labelAlign='center'
+                          width='200px'
+                          buttonWidth='150px'
+                          label='getParentView()'
+                          margin={[0,10,10,0]}
+                          onClick={() => {
+                            const parent = dateRangePickerRef.current?.getParentView();
+                            addLog('getParentView()', `returned: ${parent || 'null'}`);
+                          }}
+                        />
+                      </>}
+                    />,
+                  ]}
+                />,
+                // Column 2 - Configuration
+                <AvakioLayout
+                  type="clean"
+                  borderless={true}
+                  height='100%'
+                  rows={[
+                    <AvakioTemplate
+                      type="clean"
+                      borderType="clean"
+                      padding={[0,0,10,0]}
+                      content={<strong>Configuration</strong>}
+                    />,
+                    <AvakioProperty
+                      key="playground-props"
+                      items={playgroundProps}
+                      onChange={handlePlaygroundPropsChange}
+                      size='compact'
+                      labelWidth={120}
+                      height='calc(100% - 40px)'
+                    />,
+                  ]}
+                />,
+              ]}
+            />
           ]}
         />
       </section>
@@ -744,10 +952,9 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
               key="props-table"
               data={propsData}
               columns={propsColumns}
-              height={400}
-              striped
               filterable
               sortable
+              showRowNum
             />,
           ]}
         />
@@ -768,8 +975,7 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
               key="events-table"
               data={eventsData}
               columns={propsColumns}
-              height={200}
-              striped
+              showRowNum
             />,
           ]}
         />

@@ -235,14 +235,21 @@ export const AvakioDateRangePicker = forwardRef<AvakioBaseRef<AvakioDateRange>, 
   }, [isControlled, value]);
 
   const range = useMemo(
-    () => normalize(isControlled ? value! : internalRange, allowSingleDay),
-    [isControlled, value, internalRange, allowSingleDay]
+    () => normalize(internalRange, allowSingleDay),
+    [internalRange, allowSingleDay]
   );
 
   const applyRange = (next: AvakioDateRange) => {
     const normalized = normalize(next, allowSingleDay);
-    if (!isControlled) setInternalRange(normalized);
+    console.log('DateRangePicker - Start:', normalized.start);
+    console.log('DateRangePicker - End:', normalized.end);
+    setInternalRange(normalized);
+  };
+
+  const handleClose = () => {
+    const normalized = normalize(internalRange, allowSingleDay);
     onChange?.({ id: id || '0', value: normalized });
+    setOpen(false);
   };
 
   const presetItems: PresetRange[] = presets || [
@@ -363,6 +370,7 @@ export const AvakioDateRangePicker = forwardRef<AvakioBaseRef<AvakioDateRange>, 
           className
         )}
         data-admin-theme={themeAttr || undefined}
+        data-label-position={labelPosition}
         style={computedStyle}
         title={tooltip}
         onClick={eventHandlers.onClick}
@@ -420,38 +428,26 @@ export const AvakioDateRangePicker = forwardRef<AvakioBaseRef<AvakioDateRange>, 
               data-admin-theme={themeAttr || undefined}
             >
               <div className="avakio-drp-panel">
-                <div className="avakio-drp-col">
-                  <div className="avakio-drp-col-header">From</div>
-                  <div data-admin-theme={themeAttr || undefined}>
-                    <AvakioDatePicker value={range?.start || ""} onChange={({ value }) => handleStart(value)} showTime={showTime} inline />
+                <div className="avakio-drp-content">
+                  <div className="avakio-drp-col">
+                    <div className="avakio-drp-col-header">From</div>
+                    <div data-admin-theme={themeAttr || undefined}>
+                      <AvakioDatePicker value={range?.start || ""} onChange={({ value }) => handleStart(value)} showTime={showTime} inline />
+                    </div>
                   </div>
-                </div>
-                <div className="avakio-drp-col">
-                  <div className="avakio-drp-col-header">To</div>
-                  <div data-admin-theme={themeAttr || undefined}>
-                    <AvakioDatePicker value={range?.end || ""} onChange={({ value }) => handleEnd(value)} showTime={showTime} inline />
+                  <div className="avakio-drp-col">
+                    <div className="avakio-drp-col-header">To</div>
+                    <div data-admin-theme={themeAttr || undefined}>
+                      <AvakioDatePicker value={range?.end || ""} onChange={({ value }) => handleEnd(value)} showTime={showTime} inline />
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div className="avakio-drp-presets">
-                {presetItems.map((p) => (
-                  <button
-                    key={p.label}
-                    type="button"
-                    className="avakio-drp-preset"
-                    onClick={() => applyRange(p.range())}
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-
               <div className="avakio-drp-footer">
-                <button type="button" className="avakio-drp-action" onClick={() => applyRange({ start: null, end: null })}>
+                <button type="button" className="avakio-drp-action" onClick={() => { applyRange({ start: null, end: null }); handleClose(); }}>
                   Clear
                 </button>
-                <button type="button" className="avakio-drp-action" onClick={() => setOpen(false)}>
+                <button type="button" className="avakio-drp-action" onClick={handleClose}>
                   Close
                 </button>
               </div>
@@ -477,6 +473,7 @@ export const AvakioDateRangePicker = forwardRef<AvakioBaseRef<AvakioDateRange>, 
         className
       )}
       data-admin-theme={themeAttr || undefined}
+      data-label-position={labelPosition}
       style={computedStyle}
       title={tooltip}
       onClick={eventHandlers.onClick}
@@ -529,42 +526,31 @@ export const AvakioDateRangePicker = forwardRef<AvakioBaseRef<AvakioDateRange>, 
           </PopoverTrigger>
           <PopoverContent
             className="avakio-drp-popover"
-            align="end"
+            side="bottom"
+            align="start"
             data-admin-theme={themeAttr || undefined}
           >
             <div className="avakio-drp-panel">
-              <div className="avakio-drp-col">
-                <div className="avakio-drp-col-header">From</div>
-                <div data-admin-theme={themeAttr || undefined}>
-                  <AvakioDatePicker value={range?.start || ""} onChange={({ value }) => handleStart(value)} showTime={showTime} inline />
+              <div className="avakio-drp-content">
+                <div className="avakio-drp-col">
+                  <div className="avakio-drp-col-header">From</div>
+                  <div data-admin-theme={themeAttr || undefined}>
+                    <AvakioDatePicker value={range?.start || ""} onChange={({ value }) => handleStart(value)} showTime={showTime} inline />
+                  </div>
                 </div>
-              </div>
-              <div className="avakio-drp-col">
-                <div className="avakio-drp-col-header">To</div>
-                <div data-admin-theme={themeAttr || undefined}>
-                  <AvakioDatePicker value={range?.end || ""} onChange={({ value }) => handleEnd(value)} showTime={showTime} inline />
+                <div className="avakio-drp-col">
+                  <div className="avakio-drp-col-header">To</div>
+                  <div data-admin-theme={themeAttr || undefined}>
+                    <AvakioDatePicker value={range?.end || ""} onChange={({ value }) => handleEnd(value)} showTime={showTime} inline />
+                  </div>
                 </div>
               </div>
             </div>
-
-            <div className="avakio-drp-presets">
-              {presetItems.map((p) => (
-                <button
-                  key={p.label}
-                  type="button"
-                  className="avakio-drp-preset"
-                  onClick={() => applyRange(p.range())}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-
             <div className="avakio-drp-footer">
-              <button type="button" className="avakio-drp-action" onClick={() => applyRange({ start: null, end: null })}>
+              <button type="button" className="avakio-drp-action" onClick={() => { applyRange({ start: null, end: null }); handleClose(); }}>
                 Clear
               </button>
-              <button type="button" className="avakio-drp-action" onClick={() => setOpen(false)}>
+              <button type="button" className="avakio-drp-action" onClick={handleClose}>
                 Close
               </button>
             </div>

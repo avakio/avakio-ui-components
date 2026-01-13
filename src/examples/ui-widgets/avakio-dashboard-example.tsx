@@ -78,7 +78,7 @@ export function AvakioDashboardExample() {
   const [widgets, setWidgets] = useState<AvakioDashboardWidget[]>(initialWidgets);
   const savedLayoutRef = useRef<{ layout: ReturnType<AvakioDashboardRef['serialize']> } | null>(null);
 
-  const handleTabChange = (value: string | number | null) => {
+  const handleTabChange = ({ value }: { value: string | number | null }) => {
     setActiveSection(value);
     if (value && sectionRefs.current[value as string]) {
       sectionRefs.current[value as string]?.scrollIntoView({ behavior: 'smooth', block: 'start' });

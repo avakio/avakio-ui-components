@@ -131,7 +131,7 @@ export function AvakioColorPickerExample() {
   };
 
   // Scroll to section when tab is clicked
-  const handleTabChange = (value: string | number | null) => {
+  const handleTabChange = ({ value }: { value: string | number | null }) => {
     setActiveSection(value);
     if (value && sectionRefs.current[value as string]) {
       const element = sectionRefs.current[value as string];
@@ -839,7 +839,7 @@ export function AvakioColorPickerExample() {
                       className='avakio-fill-container'
                       items={playgroundProps}
                       onChange={handlePlaygroundPropsChange}
-                      dense
+                      size='compact'
                       showBorders
                       autoHeight
                       overflowY='auto'
@@ -883,7 +883,6 @@ export function AvakioColorPickerExample() {
               data={propsData}
               columns={propsColumns}
               select={false}
-              height={600}
               showRowNum={true}
             />,
           ]}
@@ -908,7 +907,6 @@ export function AvakioColorPickerExample() {
               data={presetPropsData}
               columns={propsColumns}
               select={false}
-              height={150}
               showRowNum={true}
             />,
           ]}

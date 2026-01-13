@@ -171,7 +171,7 @@ export function AvakioAbsoluteLayoutExample() {
   const [cellCounter, setCellCounter] = useState(2);
 
   // Scroll to section when tab is clicked
-  const handleTabChange = (value: string | number | null) => {
+  const handleTabChange = ({ value }: { value: string | number | null }) => {
     setActiveSection(value);
     if (value && sectionRefs.current[value as string]) {
       const element = sectionRefs.current[value as string];

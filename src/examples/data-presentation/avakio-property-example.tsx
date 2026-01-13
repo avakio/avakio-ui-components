@@ -31,8 +31,8 @@ export function AvakioPropertyExample() {
   // Section refs for scroll navigation
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   
-  // Ref for the property component
-  const propertyRef = useRef<AvakioPropertyRef>(null);
+  // Ref for the playground property
+  const playgroundPropertyRef = useRef<AvakioPropertyRef>(null);
   
   // Event log state
   const [eventLog, setEventLog] = useState<string[]>([]);
@@ -94,13 +94,6 @@ export function AvakioPropertyExample() {
     { id: 'progress', label: 'Progress', type: 'slider', value: 75, sliderMin: 0, sliderMax: 100, sliderShowValue: true, group: 'Numeric' },
     { id: 'color', label: 'Color', type: 'colorpicker', value: '#3b82f6', group: 'Pickers' },
     { id: 'startDate', label: 'Start Date', type: 'date', value: new Date().toISOString().split('T')[0], group: 'Pickers' },
-  ]);
-
-  // Ref Methods demo items
-  const [refMethodsItems, setRefMethodsItems] = useState<AvakioPropertyItem[]>([
-    { id: 'item1', label: 'Property 1', type: 'text', value: 'Value 1', group: 'Group A' },
-    { id: 'item2', label: 'Property 2', type: 'number', value: 42, group: 'Group A' },
-    { id: 'item3', label: 'Property 3', type: 'checkbox', value: true, checkboxLabel: 'Enabled', group: 'Group B' },
   ]);
 
   // Playground state
@@ -167,7 +160,7 @@ export function AvakioPropertyExample() {
   };
 
   // Scroll to section when tab is clicked
-  const handleTabChange = (value: string | number | null) => {
+  const handleTabChange = ({ value }: { value: string | number | null }) => {
     setActiveSection(value);
     if (value && sectionRefs.current[value as string]) {
       const element = sectionRefs.current[value as string];
@@ -420,107 +413,6 @@ export function AvakioPropertyExample() {
             />,
           ]}
         />
-
-        {/* Ref Methods Demo */}
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[24, 0, 0, 16]}
-          content={<strong>Ref Methods</strong>}
-        />
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[0, 0, 0, 16]}
-          content="Use ref methods to programmatically control the Property component."
-        />
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
-          rows={[
-            <AvakioProperty
-              ref={propertyRef}
-              items={refMethodsItems}
-              onChange={(items) => setRefMethodsItems(items)}
-              showBorders
-            />,
-            <AvakioTemplate
-              type="clean"
-              borderType="clean"
-              padding={[16, 0, 0, 0]}
-              flexWrap
-              content={
-                <>
-                  <AvakioButton
-                    size="sm"
-                    label="getValue()"
-                    margin={[0, 8, 8, 0]}
-                    onClick={() => {
-                      const val = propertyRef.current?.getValue();
-                      addLog('getValue()', `${val?.length} items`);
-                    }}
-                  />
-                  <AvakioButton
-                    size="sm"
-                    label="disable()"
-                    margin={[0, 8, 8, 0]}
-                    onClick={() => {
-                      propertyRef.current?.disable();
-                      addLog('disable()', 'called');
-                    }}
-                  />
-                  <AvakioButton
-                    size="sm"
-                    label="enable()"
-                    margin={[0, 8, 8, 0]}
-                    onClick={() => {
-                      propertyRef.current?.enable();
-                      addLog('enable()', 'called');
-                    }}
-                  />
-                  <AvakioButton
-                    size="sm"
-                    label="hide()"
-                    margin={[0, 8, 8, 0]}
-                    onClick={() => {
-                      propertyRef.current?.hide();
-                      addLog('hide()', 'called');
-                    }}
-                  />
-                  <AvakioButton
-                    size="sm"
-                    label="show()"
-                    margin={[0, 8, 8, 0]}
-                    onClick={() => {
-                      propertyRef.current?.show();
-                      addLog('show()', 'called');
-                    }}
-                  />
-                  <AvakioButton
-                    size="sm"
-                    label="isEnabled()"
-                    margin={[0, 8, 8, 0]}
-                    onClick={() => {
-                      const enabled = propertyRef.current?.isEnabled();
-                      addLog('isEnabled()', `${enabled}`);
-                    }}
-                  />
-                  <AvakioButton
-                    size="sm"
-                    label="isVisible()"
-                    margin={[0, 8, 8, 0]}
-                    onClick={() => {
-                      const visible = propertyRef.current?.isVisible();
-                      addLog('isVisible()', `${visible}`);
-                    }}
-                  />
-                </>
-              }
-            />,
-          ]}
-        />
       </section>
 
       {/* Interactive Playground Section */}
@@ -565,6 +457,7 @@ export function AvakioPropertyExample() {
                       content={<strong>Preview</strong>}
                     />,
                     <AvakioProperty
+                      ref={playgroundPropertyRef}
                       items={playgroundItems}
                       onChange={handlePlaygroundItemsChange}
                       size={getPropValue('size', 'default') as 'default' | 'compact'}
@@ -579,6 +472,207 @@ export function AvakioPropertyExample() {
                       height={formatSizingValue(getPropValue('height', ''))}
                       minHeight={formatSizingValue(getPropValue('minHeight', ''))}
                       maxHeight={formatSizingValue(getPropValue('maxHeight', ''))}
+                    />,
+                    <AvakioTemplate
+                      type="clean"
+                      borderType="clean"
+                      padding={[16, 0, 10, 0]}
+                      content={<strong>Ref Methods</strong>}
+                    />,
+                    <AvakioTemplate
+                      type="clean"
+                      borderType="clean"
+                      padding={[0, 0, 0, 0]}
+                      scroll="xy"
+                      flexWrap={true}
+                      content={
+                        <>
+                          <AvakioButton
+                            size="sm"
+                            label="getValue()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const val = playgroundPropertyRef.current?.getValue();
+                              addLog('getValue()', `${val?.length} items`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="disable()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundPropertyRef.current?.disable();
+                              addLog('disable()', 'called');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="enable()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundPropertyRef.current?.enable();
+                              addLog('enable()', 'called');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="hide()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundPropertyRef.current?.hide();
+                              addLog('hide()', 'called');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="show()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundPropertyRef.current?.show();
+                              addLog('show()', 'called');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="isEnabled()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const enabled = playgroundPropertyRef.current?.isEnabled();
+                              addLog('isEnabled()', `${enabled}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="isVisible()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const visible = playgroundPropertyRef.current?.isVisible();
+                              addLog('isVisible()', `${visible}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="blur()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundPropertyRef.current?.blur();
+                              addLog('blur()', 'called');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="focus()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundPropertyRef.current?.focus();
+                              addLog('focus()', 'called');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="setValue([...])"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const newItems = [
+                                { id: 'name', label: 'Name', value: 'Updated Name', type: 'text' as const },
+                                { id: 'age', label: 'Age', value: 99, type: 'number' as const },
+                              ];
+                              playgroundPropertyRef.current?.setValue(newItems);
+                              addLog('setValue()', 'Updated with new items');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="getText()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const text = playgroundPropertyRef.current?.getText();
+                              addLog('getText()', text || 'empty');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="getParentView()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const parent = playgroundPropertyRef.current?.getParentView();
+                              addLog('getParentView()', parent || 'null');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="getElement()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const el = playgroundPropertyRef.current?.getElement();
+                              addLog('getElement()', `${el?.tagName || 'null'}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="validate()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const result = playgroundPropertyRef.current?.validate();
+                              addLog('validate()', `${result}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="define({...})"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundPropertyRef.current?.define({ disabled: false });
+                              addLog('define()', 'Updated config');
+                            }}
+                          />
+                        </>
+                      }
                     />,
                   ]}
                 />,
@@ -702,7 +796,6 @@ export function AvakioPropertyExample() {
               columns={propsColumns}
               select={false}
               showRowNum
-              height={500}
             />,
           ]}
         />
@@ -729,7 +822,6 @@ export function AvakioPropertyExample() {
               columns={propsColumns}
               select={false}
               showRowNum
-              height={500}
             />,
           ]}
         />
@@ -756,7 +848,6 @@ export function AvakioPropertyExample() {
               sortable
               select={false}
               showRowNum
-              height={320}
             />,
           ]}
         />
@@ -783,7 +874,6 @@ export function AvakioPropertyExample() {
               sortable
               select={false}
               showRowNum
-              height={350}
             />,
           ]}
         />

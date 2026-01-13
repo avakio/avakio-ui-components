@@ -198,7 +198,7 @@ export function AvakioDatePickerExample() {
   const [eventLog, setEventLog] = useState<string[]>([]);
 
   // Scroll to section when tab is clicked
-  const handleTabChange = (value: string | number | null) => {
+  const handleTabChange = ({ value }: { value: string | number | null }) => {
     setActiveSection(value);
     if (value && sectionRefs.current[value as string]) {
       const element = sectionRefs.current[value as string];
@@ -844,8 +844,8 @@ export function AvakioDatePickerExample() {
                       label={getPropValue('label', '')}
                       labelForm={getPropValue('labelForm', '') || undefined}
                       placeholder={getPropValue('placeholder', '')}
-                      bottomLabel={getPropValue('bottomLabel', '')}
-                      bottomPadding={formatSizingValue(getPropValue('bottomPadding', ''))}
+                      //bottomLabel={getPropValue('bottomLabel', '')}
+                      //bottomPadding={formatSizingValue(getPropValue('bottomPadding', ''))}
                       tooltip={getPropValue('tooltip', '')}
                       size={getPropValue('size', 'default') as 'default' | 'compact'}
                       labelPosition={getPropValue('labelPosition', 'left') as 'left' | 'top' | 'right' | 'bottom'}
@@ -1085,7 +1085,7 @@ export function AvakioDatePickerExample() {
                             margin={[0,10,10,0]}
                             onClick={() => {
                               const parent = datePickerRef.current?.getParentView();
-                              addLog('getParentView()', `returned: ${parent ? parent.tagName : 'null'}`);
+                              //addLog('getParentView()', `returned: ${parent ? parent.tagName : 'null'}`);
                             }}
                           />                                                      
                           <AvakioButton 
@@ -1233,7 +1233,7 @@ export function AvakioDatePickerExample() {
                       className='avakio-fill-container'
                       items={playgroundProps}                  
                       onChange={handlePlaygroundPropsChange}
-                      dense
+                      size='compact'
                       showBorders
                       autoHeight
                       overflowY='auto'
@@ -1280,7 +1280,6 @@ export function AvakioDatePickerExample() {
               columns={propsColumns}
               select={false}
               showRowNum
-              height={700}
             />,
           ]}
         />
@@ -1307,7 +1306,6 @@ export function AvakioDatePickerExample() {
               sortable
               select={false}
               showRowNum
-              height={320}
             />,
           ]}
         />
@@ -1334,7 +1332,6 @@ export function AvakioDatePickerExample() {
               sortable
               select={false}
               showRowNum
-              height={420}
             />,
           ]}
         />

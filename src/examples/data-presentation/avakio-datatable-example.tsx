@@ -353,7 +353,7 @@ export function AvakioDataTableExample() {
   }, [addLog]);
 
   // Scroll to section when tab is clicked
-  const handleTabChange = (value: string | number | null) => {
+  const handleTabChange = ({ value }: { value: string | number | null }) => {
     setActiveSection(value);
     if (value && sectionRefs.current[value as string]) {
       const element = sectionRefs.current[value as string];
@@ -1348,6 +1348,94 @@ export function AvakioDataTableExample() {
                               addLog('enable()', 'Table enabled');
                             }}
                           />
+                          <AvakioButton
+                            size="sm"
+                            label="show()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.show();
+                              addLog('show()', 'Table shown');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="hide()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              playgroundTableRef.current?.hide();
+                              addLog('hide()', 'Table hidden');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="isVisible()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const visible = playgroundTableRef.current?.isVisible();
+                              addLog('isVisible()', `${visible}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="isEnabled()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const enabled = playgroundTableRef.current?.isEnabled();
+                              addLog('isEnabled()', `${enabled}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="getElement()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const el = playgroundTableRef.current?.getElement();
+                              addLog('getElement()', `${el?.tagName}`);
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="getParentView()"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const parent = playgroundTableRef.current?.getParentView();
+                              addLog('getParentView()', parent || 'null');
+                            }}
+                          />
+                          <AvakioButton
+                            size="sm"
+                            label="setData([...])"
+                            margin={[0, 10, 10, 0]}
+                            labelAlign="center"
+                            width="150px"
+                            buttonWidth="140px"
+                            onClick={() => {
+                              const newData = sampleData.map((row: Person, i: number) => ({
+                                ...row,
+                                name: `${row.name} (${i + 1})`
+                              }));
+                              playgroundTableRef.current?.setData(newData);
+                              addLog('setData()', 'Updated data with counter');
+                            }}
+                          />
                         </>
                       }
                     />,
@@ -1451,7 +1539,7 @@ export function AvakioDataTableExample() {
                       className="avakio-fill-container"
                       items={playgroundProps}
                       onChange={handlePlaygroundPropsChange}
-                      dense
+                      size='compact'
                       showBorders
                       autoHeight
                       overflowY="auto"
@@ -1623,39 +1711,7 @@ export function AvakioDataTableExample() {
               showRowNum={true}
             />,
           ]}
-        />
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[8, 0, 0, 16]}
-          content={
-            <code style={{ fontSize: '13px', background: '#f1f5f9', padding: '8px 12px', borderRadius: '4px', display: 'block' }}>
-              {`type AvakioSpan = [rowId: string | number, columnId: string, colspan: number, rowspan: number, value?: any, cssClass?: string]`}
-            </code>
-          }
-        />
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[16, 0, 0, 16]}
-          content={
-            <div>
-              <strong>Example:</strong>
-              <pre style={{ fontSize: '12px', background: '#f1f5f9', padding: '12px', borderRadius: '4px', marginTop: '8px', overflow: 'auto' }}>
-{`const spans: AvakioSpan[] = [
-  // Country column spans multiple rows
-  [1, 'country', 1, 3],           // Row 1, "country" column, colspan=1, rowspan=3
-  
-  // Highlight row spanning all columns
-  [4, 'country', 4, 1, 'Highest Rating', 'highlight'],  // Full row span with custom value and CSS class
-  
-  // Single cell highlight
-  [3, 'rating', 1, 1, null, 'highlight'],  // Apply highlight class to rating cell
-];`}
-              </pre>
-            </div>
-          }
-        />
+        />            
       </section>
     </div>
   );

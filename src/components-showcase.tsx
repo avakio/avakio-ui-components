@@ -854,7 +854,7 @@ function ComponentsShowcasePage() {
                       onClick={toggleLogSidebar}
                       variant={isLogSidebarOpen ? 'primary' : 'outline'}
                       size="sm"
-                      title={isLogSidebarOpen ? 'Hide Event Logs' : 'Show Event Logs'}
+                      //title={isLogSidebarOpen ? 'Hide Event Logs' : 'Show Event Logs'}
                     >
                       <ScrollText size={16} />
                       <span style={{ marginLeft: '6px' }}>Logs</span>

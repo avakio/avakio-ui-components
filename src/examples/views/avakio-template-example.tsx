@@ -46,7 +46,7 @@ export function AvakioTemplateExample() {
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
   // Scroll to section when tab is clicked
-  const handleTabChange = (value: string | number | null) => {
+  const handleTabChange = ({ value }: { value: string | number | null }) => {
     setActiveSection(value);
     if (value && sectionRefs.current[value as string]) {
       const element = sectionRefs.current[value as string];
@@ -585,6 +585,9 @@ export function AvakioTemplateExample() {
 }
 
 function PlaygroundSection({ theme }: { theme: string }) {
+  // Ref for the playground template
+  const playgroundTemplateRef = useRef<AvakioTemplateRef>(null);
+  
   // State for all props
   const [templateTheme, setTemplateTheme] = useState<AvakioTemplateTheme>('material');
   const [borderType, setBorderType] = useState<AvakioTemplateBorderType>('material');
@@ -789,6 +792,7 @@ function PlaygroundSection({ theme }: { theme: string }) {
                     padding={200}
                     content={
                       <AvakioTemplate
+                        ref={playgroundTemplateRef}
                         id='test-123'
                         borderType={borderType}
                         type={templateType}
@@ -805,6 +809,164 @@ function PlaygroundSection({ theme }: { theme: string }) {
                       />
                     }                                
                   />,          
+                  
+                  // Ref Methods
+                  <AvakioTemplate
+                    type="clean"
+                    borderType="clean"
+                    padding={[16, 0, 10, 0]}
+                    content={<strong>Ref Methods</strong>}
+                  />,
+                  <AvakioTemplate
+                    type="clean"
+                    borderType="clean"
+                    padding={[0, 0, 0, 0]}
+                    scroll="xy"
+                    flexWrap={true}
+                    content={
+                      <>
+                        <AvakioButton
+                          size="sm"
+                          label="setValues({...})"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            playgroundTemplateRef.current?.setValues({
+                              title: 'Sample Title',
+                              description: 'Sample Description',
+                              count: 42
+                            });
+                            alert('Values set: { title, description, count }');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label="getValues()"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            const values = playgroundTemplateRef.current?.getValues();
+                            alert(JSON.stringify(values, null, 2));
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label="setHTML(...)"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            playgroundTemplateRef.current?.setHTML('<h3 style="color: #f57c00;">Content replaced!</h3><p>This was set using setHTML().</p>');
+                            alert('HTML content updated');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label="getHTML()"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            const html = playgroundTemplateRef.current?.getHTML();
+                            alert(html || 'No HTML content');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label="refresh()"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            playgroundTemplateRef.current?.refresh();
+                            alert('Template refreshed');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label="parse({...})"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            playgroundTemplateRef.current?.parse({
+                              title: 'Parsed Title',
+                              value: 100
+                            });
+                            alert('Data parsed and applied');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label="show()"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            playgroundTemplateRef.current?.show();
+                            alert('Template shown');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label="hide()"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            playgroundTemplateRef.current?.hide();
+                            alert('Template hidden');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label="enable()"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            playgroundTemplateRef.current?.enable();
+                            alert('Template enabled');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label="disable()"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            playgroundTemplateRef.current?.disable();
+                            alert('Template disabled');
+                          }}
+                        />
+                        <AvakioButton
+                          size="sm"
+                          label="getNode()"
+                          margin={[0, 10, 10, 0]}
+                          labelAlign="center"
+                          width="150px"
+                          buttonWidth="140px"
+                          onClick={() => {
+                            const node = playgroundTemplateRef.current?.getNode();
+                            alert(`Node: ${node?.tagName || 'null'}`);
+                          }}
+                        />
+                      </>
+                    }
+                  />,
                   
                   /* Props Display */
                   <AvakioTemplate
