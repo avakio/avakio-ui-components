@@ -49,6 +49,7 @@ export interface AvakioPropertyItem {
   value?: string | number | boolean | string[] | AvakioDateRange | null;
   placeholder?: string;
   description?: string;
+  tooltip?: string;
   group?: string;
   labelAlign?: 'left' | 'center' | 'right';
   options?: AvakioPropertyOption[];
@@ -477,7 +478,6 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             }
             placeholder={item.placeholder}
             disabled={itemDisabled}
-            readonly={itemDisabled}
             onChange={({ value: val }) => {
               const numVal = val === "" ? 0 : Number(val);
               handleChange(item.id, val === "" ? "" : numVal);
@@ -757,7 +757,6 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             value={(item.value as string | undefined) ?? ""}
             placeholder={item.placeholder}
             disabled={itemDisabled}
-            readonly={itemDisabled}
             onChange={({ value: val }) => {
               handleChange(item.id, val);
               item.textareaOnChange?.(val, item);
@@ -780,7 +779,6 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
             value={(item.value as string | undefined) ?? ""}
             placeholder={item.placeholder}
             disabled={itemDisabled}
-            readonly={itemDisabled}
             onChange={({ value: val }) => {
               handleChange(item.id, val);
               item.textOnChange?.(val, item);
@@ -848,7 +846,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
           <React.Fragment key={group}>
             {group !== "__ungrouped" && <div className="av-prop-group">{group}</div>}
             {rowsInGroup.map((item) => (
-              <div key={item.id} className="av-prop-row">
+              <div key={item.id} className="av-prop-row" title={item.tooltip}>
                 {showLabel !== false && (
                   <div className={`av-prop-label${item.labelAlign ? ` av-prop-label-${item.labelAlign}` : ''}`}>
                     <label htmlFor={item.id}>{item.label}</label>

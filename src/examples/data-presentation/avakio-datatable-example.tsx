@@ -338,11 +338,23 @@ export function AvakioDataTableExample() {
     addEventLog('DataTable', action, details);
   }, []);
 
-  // Handle property changes
+  // Handle property changes (update state only, no logging)
   const handlePlaygroundPropsChange = (items: AvakioPropertyItem[], changed: AvakioPropertyItem) => {
     setPlaygroundProps(items);
-    addLog('Playground prop changed', `${changed.label}: ${changed.value}`);
   };
+
+  // Add textOnBlur handlers to text fields after addLog is defined
+  React.useEffect(() => {
+    setPlaygroundProps(prev => prev.map(item => {
+      if (item.type === 'text') {
+        return {
+          ...item,
+          textOnBlur: (value: string, itm: AvakioPropertyItem) => addLog('Playground prop changed', `${itm.label}: ${value}`)
+        };
+      }
+      return item;
+    }));
+  }, [addLog]);
 
   // Handle cell change for editable table
   const handleCellChange = useCallback((rowIndex: number, columnId: string, newValue: any, oldValue: any) => {

@@ -174,10 +174,9 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
     return prop.value as T;
   };
 
-  // Handle property changes
+  // Handle property changes (update state only, no logging)
   const handlePlaygroundPropsChange = (items: AvakioPropertyItem[], changed: AvakioPropertyItem) => {
     setPlaygroundProps(items);
-    addLog('Playground prop changed', `${changed.label}: ${changed.value}`);
   };
 
   // Ref example
@@ -189,6 +188,19 @@ export function AvakioDateRangePickerExample({ theme = 'material' }: { theme?: s
     setEventLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()} - ${action}${details ? ': ' + details : ''}`]);
     addEventLog('DateRangePicker', action, details);
   };
+
+  // Add textOnBlur handlers to text fields after addLog is defined
+  React.useEffect(() => {
+    setPlaygroundProps(prev => prev.map(item => {
+      if (item.type === 'text') {
+        return {
+          ...item,
+          textOnBlur: (value: string, itm: AvakioPropertyItem) => addLog('Playground prop changed', `${itm.label}: ${value}`)
+        };
+      }
+      return item;
+    }));
+  }, []);
 
   // Scroll to section when tab is clicked
   const handleTabChange = ({ value }: { value: string | number | null }) => {

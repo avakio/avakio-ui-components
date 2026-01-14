@@ -16,6 +16,8 @@
   gap: 12px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   color: var(--tabbar-text);
+  width: 100%; /* Ensure tabbar respects container width */
+  max-width: 100%; /* Prevent expansion beyond container */
 }
 
 .avakio-tabbar-label {
@@ -39,6 +41,7 @@
   display: flex;
   align-items: stretch;
   min-width: 0; /* Allow wrapper to shrink */
+  max-width: 100%; /* Constrain wrapper to parent width */
   overflow: hidden; /* Prevent any overflow from showing */
 }
 
@@ -84,21 +87,22 @@
   border: 1px solid var(--tabbar-border);
   border-radius: 10px;
   padding: 6px;
-  overflow: scroll;
+  overflow-x: scroll;
   overflow-y: hidden;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE/Edge */
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-  flex: 1;
+  flex: 1 1 0%;
   min-width: 0; /* Allow flex item to shrink below content size */
+  max-width: 100%; /* Prevent expansion beyond container */
 }
 
 /* Hide scrollbar in webkit/blink browsers (Chrome, Safari, Edge) */
 .avakio-tabbar-track::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-  background: transparent;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 
 /* Adjust border radius when scroll buttons are present */
@@ -143,6 +147,7 @@
   white-space: nowrap;
   user-select: none;
   outline: none;
+  flex-shrink: 0; /* Prevent tabs from shrinking */
 }
 
 .avakio-tabbar-tab:focus-visible {

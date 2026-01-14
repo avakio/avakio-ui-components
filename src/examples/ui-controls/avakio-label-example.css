@@ -18,11 +18,22 @@
   z-index: 200;
   background: var(--avakio-bg-primary, #ffffff);
   border-bottom: 1px solid var(--avakio-border, #e5e7eb);
+  overflow: hidden;
 }
 
-.avakio-label-tabbar-container {
+.avakio-example-tabbar-container {
   padding: 0 16px 12px;
   background: inherit;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .avakio-example-tabbar-container {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 /* Demo sections */

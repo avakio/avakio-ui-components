@@ -1,10 +1,11 @@
 /* AvakioViewHeader Component Styles */
+/* Note: Base styles like width, height, minWidth, maxWidth, minHeight, maxHeight, */
+/* borderless, disabled, hidden are now handled by AvakioBaseProps */
 
 .avakio-view-header {
   padding: 24px;
   border-radius: 0;
   transition: all 0.3s ease;
-  width: 100%;
   box-sizing: border-box;
 }
 

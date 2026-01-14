@@ -42,6 +42,19 @@ export function AvakioPropertyExample() {
     setEventLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()} - ${action}${details ? ': ' + details : ''}`]);
     addEventLog('Property', action, details);
   };
+
+  // Add textOnBlur handlers to text fields after addLog is defined
+  React.useEffect(() => {
+    setPlaygroundProps(prev => prev.map(item => {
+      if (item.type === 'text') {
+        return {
+          ...item,
+          textOnBlur: (value: string, itm: AvakioPropertyItem) => addLog('Playground prop changed', `${itm.label}: ${value}`)
+        };
+      }
+      return item;
+    }));
+  }, []);
   
   // Basic Usage demo items
   const [basicItems, setBasicItems] = useState<AvakioPropertyItem[]>([
@@ -145,10 +158,9 @@ export function AvakioPropertyExample() {
     return prop.value as T;
   };
 
-  // Handle property changes
+  // Handle property changes (update state only, no logging)
   const handlePlaygroundPropsChange = (items: AvakioPropertyItem[], changed: AvakioPropertyItem) => {
     setPlaygroundProps(items);
-    addLog('Config changed', `${changed.label}: ${changed.value}`);
   };
 
   // Handle playground items change

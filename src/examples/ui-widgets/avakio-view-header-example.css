@@ -1,0 +1,21 @@
+.avakio-view-header-demo-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.avakio-view-header-demo-section {
+  margin-bottom: 24px;
+}
+
+.avakio-view-header-demo-section[data-section="playground"] {
+  min-height: 600px;
+}
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .avakio-example-tabbar-container {
+    display: flex;
+    justify-content: center;
+  }
+}

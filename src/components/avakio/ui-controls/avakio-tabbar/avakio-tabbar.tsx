@@ -139,21 +139,37 @@ export function AvakioTabBar({
 
   // Update scroll buttons on mount, resize, and when options change
   useEffect(() => {
-    checkScrollButtons();
+    // Initial check with multiple delays to ensure layout is complete
+    const timeoutIds = [
+      setTimeout(() => checkScrollButtons(), 0),
+      setTimeout(() => checkScrollButtons(), 50),
+      setTimeout(() => checkScrollButtons(), 150),
+    ];
     
     const track = trackRef.current;
     if (track) {
       track.addEventListener('scroll', checkScrollButtons);
       
       // Use ResizeObserver to detect size changes
-      const resizeObserver = new ResizeObserver(checkScrollButtons);
+      const resizeObserver = new ResizeObserver(() => {
+        checkScrollButtons();
+      });
       resizeObserver.observe(track);
       
+      // Also observe parent container size changes
+      const parent = track.parentElement;
+      if (parent) {
+        resizeObserver.observe(parent);
+      }
+      
       return () => {
+        timeoutIds.forEach(id => clearTimeout(id));
         track.removeEventListener('scroll', checkScrollButtons);
         resizeObserver.disconnect();
       };
     }
+    
+    return () => timeoutIds.forEach(id => clearTimeout(id));
   }, [checkScrollButtons, visibleOptions]);
 
   // Scroll handlers

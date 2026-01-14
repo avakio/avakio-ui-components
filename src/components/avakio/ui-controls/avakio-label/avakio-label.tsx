@@ -8,7 +8,7 @@ import {
 } from '../../base/avakio-base-props';
 
 export interface AvakioLabelProps extends 
-  AvakioBaseProps, 
+  Omit<AvakioBaseProps, 'borderless' | 'disabled'>, 
   Omit<AvakioControlLabelProps, 'children' | 'classPrefix' | 'wrapperClassName' | 'wrapperStyle' | 'labelStyle' | 'size'> {
   /** The text content of the label */
   text?: string;
@@ -55,15 +55,11 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       methods,
       eventHandlers,
     } = useAvakioBase({
-      disabled: baseProps.disabled,
       hidden: baseProps.hidden,
       onItemClick,
       onBlur: baseProps.onBlur,
       onFocus: baseProps.onFocus,
       onKeyPress: baseProps.onKeyPress,
-      onAfterRender: baseProps.onAfterRender,
-      onBeforeRender: baseProps.onBeforeRender,
-      onViewShow: baseProps.onViewShow,
     });
 
     // Merge config from define() with baseProps
@@ -97,6 +93,31 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
         setCurrentText(value);
         setCurrentHtml(undefined);
       },
+      getText: () => {
+        if (currentHtml) return currentHtml;
+        return currentText;
+      },
+      define: (configOrKey: Partial<AvakioBaseProps> | string, value?: unknown) => {
+        if (typeof configOrKey === 'string') {
+          if (configOrKey === 'text') {
+            setCurrentText(String(value));
+            setCurrentHtml(undefined);
+          } else if (configOrKey === 'html') {
+            setCurrentHtml(String(value));
+          } else {
+            methods.define(configOrKey, value);
+          }
+        } else {
+          if ('text' in configOrKey) {
+            setCurrentText(String(configOrKey.text));
+            setCurrentHtml(undefined);
+          }
+          if ('html' in configOrKey) {
+            setCurrentHtml(String(configOrKey.html));
+          }
+          methods.define(configOrKey, value);
+        }
+      },
       getElement: () => rootRef.current,
       validate: () => true,
     }));
@@ -118,6 +139,8 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       }
     };
 
+    // Only render if not hidden
+    if (isHidden) return null;
     // Use AvakioControlLabel wrapper for consistent label/validation rendering
     return (
       <AvakioControlLabel

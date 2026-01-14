@@ -826,10 +826,8 @@ function ComponentsShowcasePage() {
                 <div className="header-title-text" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>            
                   <AvakioLabel
                     id="WebAppMainLayoutHeaderTitleLabel"
-                    label="Avakio UI Components Showcase"
-                    theme={theme as any}
-                    fontSize={24}
-                    fontWeight="bold"
+                    text="Avakio UI Components Showcase"
+                    style={{ fontSize: "24px", fontWeight: "bold" }}
                   />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

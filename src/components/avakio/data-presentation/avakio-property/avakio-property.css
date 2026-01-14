@@ -462,6 +462,11 @@
   .av-prop-label {
     font-size: 14px;
   }
+
+  /* Remove right vertical border in mobile */
+  .avakio-property.size-compact .av-prop-label {
+    border-right: none;
+  }
 }
 
 /* Container query support for when component has explicit width */
