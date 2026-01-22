@@ -4,7 +4,7 @@
 
 .avakio-label {
   --label-surface: var(--avakio-bg-primary, var(--background, #fff));
-  --label-border: var(--avakio-border-primary, var(--border, #ddd));
+  --label-border: var(--avakio-border-primary, var(--border, #ff0000));
   --label-border-focus: var(--avakio-border-focus, #3b82f6);
   --label-bg-focus: var(--avakio-bg-selected, #e0f2fe);
   --label-text: var(--avakio-text-primary, var(--foreground, #333));
@@ -19,6 +19,7 @@
   line-height: 1.5;
   color: var(--label-text);
   background-color: transparent;
+  border: 3px solid var(--label-border);
   border-radius: var(--label-radius);
   transition: all 0.2s ease;
   cursor: default;
@@ -58,6 +59,14 @@
 .avakio-label-disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  color: var(--label-muted, var(--avakio-text-secondary, #888));
+}
+
+/* Borderless state */
+.avakio-label-borderless {
+  border: none;
+  padding: 0;
+  background-color: transparent;
 }
 
 /* Clickable labels */

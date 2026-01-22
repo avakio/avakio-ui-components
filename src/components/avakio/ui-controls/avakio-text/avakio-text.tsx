@@ -163,6 +163,24 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       }
     }, [value]);
 
+    // ResizeObserver to detect size changes
+    useEffect(() => {
+      if (!rootRef.current) return;
+
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const { width, height } = entry.contentRect;
+          eventHandlers.onResize?.(width, height);
+        }
+      });
+
+      resizeObserver.observe(rootRef.current);
+
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }, []); // Empty deps - only set up once on mount
+
     // Validation function
     const validateValue = (val: string): boolean | string => {
       // HTML5 validation for email
@@ -383,6 +401,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
                 onBlur={handleBlur as any}
                 onFocus={handleFocus as any}
                 onClick={eventHandlers.onItemClick}
+                onScroll={eventHandlers.onScroll}
                 onKeyPress={handleKeyPress as any}
                 onKeyDown={handleKeyDown as any}
               />
@@ -407,6 +426,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
                 onBlur={handleBlur as any}
                 onFocus={handleFocus as any}
                 onClick={eventHandlers.onItemClick}
+                onScroll={eventHandlers.onScroll}
                 onKeyPress={handleKeyPress as any}
                 onKeyDown={handleKeyDown as any}
               />

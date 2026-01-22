@@ -88,12 +88,8 @@ export function AvakioLabelExample() {
     
     // State Group
     { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Hide the component' },
-    
-    // Events Group (toggles to enable event logging)
-    { id: 'logOnClick', label: 'Log onItemClick', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onItemClick events' },
-    { id: 'logOnBlur', label: 'Log onBlur', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBlur events' },
-    { id: 'logOnFocus', label: 'Log onFocus', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onFocus events' },
-    { id: 'logOnKeyPress', label: 'Log onKeyPress', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onKeyPress events' },
+    { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Disable the component' },
+    { id: 'borderless', label: 'Borderless', type: 'checkbox', value: true, group: 'State', checkboxLabel: 'Hide component borders' },
   ]);
 
   // Helper to get prop value from playground props
@@ -188,19 +184,18 @@ export function AvakioLabelExample() {
     
     // Base Props - State
     { id: 23, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
+    { id: 24, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Disables the component (reduces opacity and changes text to muted color)', from: 'Base' },
+    { id: 25, name: 'borderless', type: 'boolean', defaultValue: 'true', description: 'Hides the component border and padding', from: 'Base' },
     
     // Base Props - Identity
-    { id: 24, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
-    { id: 25, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
-    { id: 26, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
-    { id: 27, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles for the root element', from: 'Base' },
+    { id: 26, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
+    { id: 27, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 28, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
+    { id: 29, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles for the root element', from: 'Base' },
   ];
 
   const eventsData: PropDoc[] = [
-    { id: 1, name: 'onItemClick', type: '(event: MouseEvent) => void', defaultValue: 'undefined', description: 'Fires after the control has been clicked', from: 'Base' },
-    { id: 2, name: 'onBlur', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when focus is moved out of the view', from: 'Base' },
-    { id: 3, name: 'onFocus', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when a view gets focus', from: 'Base' },
-    { id: 4, name: 'onKeyPress', type: '(event: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Occurs when keyboard key is pressed for the control in focus', from: 'Base' },
+    // Label is a purely presentational component with no interactive events
   ];
 
   const refMethodsData: PropDoc[] = [
@@ -239,7 +234,7 @@ export function AvakioLabelExample() {
         <AvakioViewHeader
           label="UI Controls"
           title="Label"
-          subTitle="A lightweight label component for displaying static text and HTML content with full Base component features."
+          subTitle="A purely presentational component for displaying static text and HTML content with full Base component features (sizing, alignment, state management) but no interactive events."
           isSticky={false}
         />
 
@@ -272,7 +267,7 @@ export function AvakioLabelExample() {
           type="clean"
           borderType="clean"
           padding={[0, 0, 0, 16]}
-          content="The Label component is a lightweight wrapper for displaying static text or HTML content. It inherits all Base component functionality including sizing, alignment, state management, and event handling."
+          content="The Label component is a lightweight presentational component for displaying static text or HTML content. It inherits Base component functionality including sizing, alignment, and state management, but does not support interactive events."
         />
         
         {/* Simple Labels */}
@@ -445,7 +440,7 @@ export function AvakioLabelExample() {
             />,
             <AvakioLabel
               text="With border"
-              style={{ border: '2px solid #1976d2', padding: '12px' }}
+              style={{ border: '1px solid #1976d2', padding: '6px' }}
               margin={[8, 0, 0, 0]}
             />,
           ]}
@@ -543,6 +538,7 @@ export function AvakioLabelExample() {
                         padding={10}
                         borderless={false}                        
                         height='100%'
+                        style={{ overflow: 'auto' }}
                         rows={[
                           <AvakioLabel
                             id={getPropValue('componentId', 'playground-label')}
@@ -583,19 +579,8 @@ export function AvakioLabelExample() {
                             bottomPadding={getPropValue('bottomPadding', '') ? Number(getPropValue('bottomPadding', '')) : undefined}
                             // State
                             hidden={getPropValue('hidden', false)}
-                            // Events
-                            onItemClick={() => {
-                              if (getPropValue('logOnClick', true)) addLog('onItemClick', 'label clicked');
-                            }}
-                            onBlur={(e) => {
-                              if (getPropValue('logOnBlur', false)) addLog('onBlur', 'focus lost');
-                            }}
-                            onFocus={(e) => {
-                              if (getPropValue('logOnFocus', false)) addLog('onFocus', 'focus gained');
-                            }}
-                            onKeyPress={(e) => {
-                              if (getPropValue('logOnKeyPress', false)) addLog('onKeyPress', `key: ${e.key}`);
-                            }}
+                            disabled={getPropValue('disabled', false)}
+                            borderless={getPropValue('borderless', false)}
                           />
                         ]}
                       />,
@@ -902,11 +887,8 @@ export function AvakioLabelExample() {
                                   { id: 'bottomPadding', label: 'Bottom Padding', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 10' },
                                   // State Group
                                   { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Hide the component' },
-                                  // Events Group
-                                  { id: 'logOnClick', label: 'Log onItemClick', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onItemClick events' },
-                                  { id: 'logOnBlur', label: 'Log onBlur', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBlur events' },
-                                  { id: 'logOnFocus', label: 'Log onFocus', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onFocus events' },
-                                  { id: 'logOnKeyPress', label: 'Log onKeyPress', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onKeyPress events' },
+                                  { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Disable the component' },
+                                  { id: 'borderless', label: 'Borderless', type: 'checkbox', value: true, group: 'State', checkboxLabel: 'Hide component borders' },
                                 ]);
                                 setPlaygroundValue('Sample Label Text');
                                 addLog('Reset', 'playground configuration reset to defaults');
@@ -968,23 +950,11 @@ export function AvakioLabelExample() {
           padding={[24, 0, 0, 16]}
           content={<strong>Events</strong>}
         />
-        <AvakioLayout
+        <AvakioTemplate
           type="clean"
-          borderless={false}
-          margin={12}
-          padding={0}
-          rows={[
-            <AvakioDataTable<PropDoc>
-              key="events-table"
-              id="label-events-table"
-              data={eventsData}
-              filterable
-              sortable
-              columns={propsColumns}
-              select={false}
-              showRowNum
-            />,
-          ]}
+          borderType="clean"
+          padding={[8, 0, 0, 16]}
+          content="Label is a purely presentational component and does not support interactive events."
         />
 
         {/* Ref Methods Table */}

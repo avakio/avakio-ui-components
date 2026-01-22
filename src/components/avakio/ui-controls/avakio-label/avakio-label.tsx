@@ -8,7 +8,7 @@ import {
 } from '../../base/avakio-base-props';
 
 export interface AvakioLabelProps extends 
-  Omit<AvakioBaseProps, 'borderless' | 'disabled'>, 
+  AvakioBaseProps, 
   Omit<AvakioControlLabelProps, 'children' | 'classPrefix' | 'wrapperClassName' | 'wrapperStyle' | 'labelStyle' | 'size'> {
   /** The text content of the label */
   text?: string;
@@ -31,6 +31,7 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       html,
       className = '',
       style,
+      borderless = true,
       // AvakioControlLabel props
       label,
       labelForm,
@@ -41,8 +42,6 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       required,
       invalid,
       invalidMessage,
-      // Event handlers
-      onItemClick,
       ...baseProps
     } = props;
 
@@ -53,13 +52,9 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       isHidden,
       config,
       methods,
-      eventHandlers,
     } = useAvakioBase({
       hidden: baseProps.hidden,
-      onItemClick,
-      onBlur: baseProps.onBlur,
-      onFocus: baseProps.onFocus,
-      onKeyPress: baseProps.onKeyPress,
+      disabled: baseProps.disabled,
     });
 
     // Merge config from define() with baseProps
@@ -130,51 +125,54 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: baseProps.align === 'center' ? 'center' : baseProps.align === 'right' ? 'flex-end' : 'flex-start',
+      // Apply border directly when not borderless (uses theme color)
+      ...(borderless ? {} : { border: '1px solid var(--label-border, var(--avakio-border-primary, #ccc))' }),
+      // Apply disabled color and opacity
+      ...(isDisabled ? { color: 'var(--label-muted, var(--avakio-text-secondary, #888))', opacity: 0.5 } : {}),
     };
 
-    // Handle click
-    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!isDisabled) {
-        eventHandlers.onClick?.(e);
-      }
-    };
+    // Build CSS classes
+    const labelClasses = [
+      'avakio-label',
+      isDisabled ? 'avakio-label-disabled' : '',
+      borderless ? 'avakio-label-borderless' : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     // Only render if not hidden
     if (isHidden) return null;
     // Use AvakioControlLabel wrapper for consistent label/validation rendering
     return (
-      <AvakioControlLabel
-        label={label}
-        labelAlign={labelAlign}
-        labelWidth={labelWidth}
-        labelPosition={labelPosition}
-        labelForm={labelForm}
-        bottomLabel={bottomLabel}
-        required={required}
-        invalid={invalid}
-        invalidMessage={invalidMessage}
-        classPrefix="avakio-label"
-      >
-        <div
-          ref={rootRef}
-          id={mergedProps.id}
-          data-testid={mergedProps.testId}
-          className={className}
-          style={inlineStyles}
-          title={mergedProps.tooltip}
-          onClick={handleClick}
-          onBlur={eventHandlers.onBlur}
-          onFocus={eventHandlers.onFocus}
-          onKeyPress={eventHandlers.onKeyPress}
-          tabIndex={onItemClick && !isDisabled ? 0 : undefined}
+      <div title={mergedProps.tooltip || undefined} style={{ display: 'contents' }}>
+        <AvakioControlLabel
+          label={label}
+          labelAlign={labelAlign}
+          labelWidth={labelWidth}
+          labelPosition={labelPosition}
+          labelForm={labelForm}
+          bottomLabel={bottomLabel}
+          required={required}
+          invalid={invalid}
+          invalidMessage={invalidMessage}
+          classPrefix="avakio-label"
         >
-          {currentHtml ? (
-            <div dangerouslySetInnerHTML={{ __html: currentHtml }} />
-          ) : (
-            <span>{currentText}</span>
-          )}
-        </div>
-      </AvakioControlLabel>
+          <div
+            ref={rootRef}
+            id={mergedProps.id}
+            data-testid={mergedProps.testId}
+            className={labelClasses}
+            style={inlineStyles}
+          >
+            {currentHtml ? (
+              <div dangerouslySetInnerHTML={{ __html: currentHtml }} />
+            ) : (
+              <span>{currentText}</span>
+            )}
+          </div>
+        </AvakioControlLabel>
+      </div>
     );
   }
 );

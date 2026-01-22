@@ -130,6 +130,17 @@ textarea.avakio-text-input {
   box-sizing: border-box;
 }
 
+/* Restore top/bottom borders for textarea with top/bottom labels, but keep adjusted radius */
+.avakio-control-label-wrapper-top:has(.avakio-control-label-label) textarea.avakio-text-input {
+  border-top: 1px solid var(--avakio-border-primary);
+  border-radius: 0 0 var(--avakio-radius, 4px) var(--avakio-radius, 4px);
+}
+
+.avakio-control-label-wrapper-bottom:has(.avakio-control-label-label) textarea.avakio-text-input {
+  border-bottom: 1px solid var(--avakio-border-primary);
+  border-radius: var(--avakio-radius, 4px) var(--avakio-radius, 4px) 0 0;
+}
+
 .avakio-text-input-align-left {
   text-align: left;
 }
