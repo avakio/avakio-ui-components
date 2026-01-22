@@ -44,6 +44,7 @@ export function AvakioTextExample() {
   
   // Playground state
   const [playgroundValue, setPlaygroundValue] = useState<string>('Sample text');
+  const [isComponentMounted, setIsComponentMounted] = useState<boolean>(true);
   const textRef = useRef<AvakioTextRef>(null);
   const propertyRef = useRef<AvakioPropertyRef>(null);
   
@@ -91,7 +92,7 @@ export function AvakioTextExample() {
       { id: 'tel', value: 'Tel' },
       { id: 'search', value: 'Search' },
     ]},
-    { id: 'inputAlign', label: 'Input Align', type: 'select', value: 'left', group: 'Input', selectOptions: [
+    { id: 'textAlign', label: 'Text Align', type: 'select', value: 'left', group: 'Input', selectOptions: [
       { id: 'left', value: 'Left' },
       { id: 'center', value: 'Center' },
       { id: 'right', value: 'Right' },
@@ -130,7 +131,16 @@ export function AvakioTextExample() {
     { id: 'logOnChange', label: 'Log onChange', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onChange events' },
     { id: 'logOnBlur', label: 'Log onBlur', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBlur events' },
     { id: 'logOnFocus', label: 'Log onFocus', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onFocus events' },
+    { id: 'logOnEnter', label: 'Log onEnter', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onEnter events' },
     { id: 'logOnKeyPress', label: 'Log onKeyPress', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onKeyPress events' },
+    { id: 'logOnKeyDown', label: 'Log onKeyDown', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onKeyDown events' },
+    { id: 'logOnClick', label: 'Log onClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onClick events' },
+    { id: 'logOnItemClick', label: 'Log onItemClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onItemClick events' },
+    { id: 'logOnViewShow', label: 'Log onViewShow', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewShow events' },
+    { id: 'logOnAfterRender', label: 'Log onAfterRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterRender events' },
+    { id: 'logOnBeforeRender', label: 'Log onBeforeRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBeforeRender events' },
+    { id: 'logOnAfterScroll', label: 'Log onAfterScroll', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterScroll events' },
+    { id: 'logOnViewResize', label: 'Log onViewResize', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewResize events' },
   ]);
 
   // Helper to get prop value from playground props
@@ -186,7 +196,7 @@ export function AvakioTextExample() {
     { id: 10, name: 'multiline', type: 'boolean', defaultValue: 'false', description: 'Enable multiline mode (renders textarea)', from: 'Text' },
     { id: 11, name: 'rows', type: 'number', defaultValue: '4', description: 'Number of visible rows (multiline only)', from: 'Text' },
     { id: 12, name: 'textWidth', type: 'string | number', defaultValue: 'undefined', description: 'Width of the text input/textarea', from: 'Text' },
-    { id: 13, name: 'inputAlign', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Text alignment inside the input', from: 'Base' },
+    { id: 13, name: 'textAlign', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Text alignment inside the input', from: 'Text' },
     
     // Label Props
     { id: 14, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed beside the input', from: 'ControlLabel' },
@@ -240,11 +250,13 @@ export function AvakioTextExample() {
     { id: 4, name: 'onEnter', type: '(value: string) => void', defaultValue: 'undefined', description: 'Fires when Enter key is pressed (not in multiline)', from: 'Text' },
     { id: 5, name: 'onKeyPress', type: '(event: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Fires when a key is pressed', from: 'Base' },
     { id: 6, name: 'onKeyDown', type: '(event: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Fires when a key is pressed down', from: 'Text' },
-    { id: 7, name: 'onClick', type: '() => void', defaultValue: 'undefined', description: 'Fires when the component is clicked', from: 'Text' },
+    { id: 7, name: 'onClick', type: '() => void', defaultValue: 'undefined', description: 'Fires when the component is clicked', from: 'Base' },
     { id: 8, name: 'onItemClick', type: '(event: MouseEvent) => void', defaultValue: 'undefined', description: 'Fires after the control has been clicked', from: 'Base' },
     { id: 9, name: 'onAfterRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately after the component has been rendered', from: 'Base' },
     { id: 10, name: 'onBeforeRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately before the component has been rendered', from: 'Base' },
     { id: 11, name: 'onViewShow', type: '() => void', defaultValue: 'undefined', description: 'Fires when any hidden view is shown', from: 'Base' },
+    { id: 12, name: 'onAfterScroll', type: '(scrollTop: number, scrollLeft: number) => void', defaultValue: 'undefined', description: 'Occurs when the view has been scrolled', from: 'Base' },
+    { id: 13, name: 'onViewResize', type: '(width: number, height: number) => void', defaultValue: 'undefined', description: 'Fires when the size of a view has been changed by resizer', from: 'Base' },
   ];
 
   const refMethodsData: PropDoc[] = [
@@ -263,8 +275,7 @@ export function AvakioTextExample() {
     { id: 13, name: 'getElement()', type: '() => HTMLElement | null', defaultValue: '-', description: 'Returns the root DOM element of the component', from: 'Base' },
     { id: 14, name: 'getParentView()', type: '() => string | null', defaultValue: '-', description: 'Returns the ID of the parent Avakio container, or its classname if no ID is set', from: 'Base' },
     { id: 15, name: 'define(config, value?)', type: '(config: Partial<Props> | string, value?: unknown) => void', defaultValue: '-', description: 'Redefines a single configuration property or multiple properties', from: 'Base' },
-    { id: 16, name: 'getInputNode()', type: '() => HTMLInputElement | HTMLTextAreaElement | null', defaultValue: '-', description: 'Returns the input DOM node', from: 'Text' },
-    { id: 17, name: 'clear()', type: '() => void', defaultValue: '-', description: 'Clears the input value', from: 'Text' },
+    { id: 16, name: 'clear()', type: '() => void', defaultValue: '-', description: 'Clears the input value', from: 'Text' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [
@@ -769,6 +780,7 @@ export function AvakioTextExample() {
                         borderless={false}                        
                         height='100%'
                         rows={[
+                          isComponentMounted ? (
                           <AvakioText
                             id={getPropValue('componentId', 'playground-text')}
                             testId={getPropValue('testId', '') || undefined}
@@ -794,7 +806,7 @@ export function AvakioTextExample() {
                             invalidMessage={getPropValue('invalidMessage', '') || undefined}
                             // Input Properties
                             type={getPropValue('type', 'text') as any}
-                            inputAlign={getPropValue('inputAlign', 'left') as 'left' | 'center' | 'right'}
+                            textAlign={getPropValue('textAlign', 'left') as 'left' | 'center' | 'right'}
                             maxLength={getPropValue('maxLength', '') ? Number(getPropValue('maxLength', '')) : undefined}
                             multiline={getPropValue('multiline', false)}
                             rows={Number(getPropValue('rows', 4))}
@@ -833,10 +845,43 @@ export function AvakioTextExample() {
                             onFocus={(e) => {
                               if (getPropValue('logOnFocus', false)) addLog('onFocus', 'focus gained');
                             }}
+                            onEnter={(value) => {
+                              if (getPropValue('logOnEnter', false)) addLog('onEnter', `value: ${value || '(empty)'}`);
+                            }}
                             onKeyPress={(e) => {
                               if (getPropValue('logOnKeyPress', false)) addLog('onKeyPress', `key: ${e.key}`);
                             }}
+                            onKeyDown={(e) => {
+                              if (getPropValue('logOnKeyDown', false)) addLog('onKeyDown', `key: ${e.key}`);
+                            }}
+                            onClick={() => {
+                              if (getPropValue('logOnClick', false)) addLog('onClick', 'component clicked');
+                            }}
+                            onItemClick={(e) => {
+                              if (getPropValue('logOnItemClick', false)) addLog('onItemClick', 'item clicked');
+                            }}
+                            onViewShow={() => {
+                              console.log('onViewShow fired!', getPropValue('logOnViewShow', false));
+                              if (getPropValue('logOnViewShow', false)) addLog('onViewShow', 'view shown');
+                            }}
+                            onAfterRender={() => {
+                              if (getPropValue('logOnAfterRender', false)) addLog('onAfterRender', 'component rendered');
+                            }}
+                            onBeforeRender={() => {
+                              if (getPropValue('logOnBeforeRender', false)) addLog('onBeforeRender', 'about to render');
+                            }}
+                            onAfterScroll={(scrollTop, scrollLeft) => {
+                              if (getPropValue('logOnAfterScroll', false)) addLog('onAfterScroll', `scrollTop: ${scrollTop}, scrollLeft: ${scrollLeft}`);
+                            }}
+                            onViewResize={(width, height) => {
+                              if (getPropValue('logOnViewResize', false)) addLog('onViewResize', `width: ${width}, height: ${height}`);
+                            }}
                           />
+                          ) : (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
+                              Component destroyed. Click "Recreate Component" to restore it.
+                            </div>
+                          )
                         ]}
                       />,                     
                       <AvakioTemplate
@@ -1027,6 +1072,28 @@ export function AvakioTextExample() {
                                     addLog('getParentView()', `returned: ${parent || 'null'}`);
                                   }}
                                 />
+                                <AvakioButton
+                                  size="sm"
+                                  label='define("disabled")'
+                                  margin={[0,10,10,0]}
+                                  width='200px'
+                                  buttonWidth='150px'
+                                  onClick={() => {
+                                    textRef.current?.define('disabled', true);
+                                    addLog('define()', 'set disabled to true');
+                                  }}
+                                />
+                                <AvakioButton
+                                  size="sm"
+                                  label={isComponentMounted ? 'Destroy Component' : 'Recreate Component'}
+                                  margin={[0,10,10,0]}
+                                  width='200px'
+                                  buttonWidth='150px'
+                                  onClick={() => {
+                                    setIsComponentMounted(!isComponentMounted);
+                                    addLog(isComponentMounted ? 'Destroy' : 'Recreate', isComponentMounted ? 'component unmounted' : 'component mounted');
+                                  }}
+                                />
                               </>
                             }
                           />
@@ -1112,7 +1179,7 @@ export function AvakioTextExample() {
                                     { id: 'tel', value: 'Tel' },
                                     { id: 'search', value: 'Search' },
                                   ]},
-                                  { id: 'inputAlign', label: 'Input Align', type: 'select', value: 'left', group: 'Input', selectOptions: [
+                                  { id: 'textAlign', label: 'Text Align', type: 'select', value: 'left', group: 'Input', selectOptions: [
                                     { id: 'left', value: 'Left' },
                                     { id: 'center', value: 'Center' },
                                     { id: 'right', value: 'Right' },
@@ -1146,7 +1213,16 @@ export function AvakioTextExample() {
                                   { id: 'logOnChange', label: 'Log onChange', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onChange events' },
                                   { id: 'logOnBlur', label: 'Log onBlur', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBlur events' },
                                   { id: 'logOnFocus', label: 'Log onFocus', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onFocus events' },
+                                  { id: 'logOnEnter', label: 'Log onEnter', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onEnter events' },
                                   { id: 'logOnKeyPress', label: 'Log onKeyPress', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onKeyPress events' },
+                                  { id: 'logOnKeyDown', label: 'Log onKeyDown', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onKeyDown events' },
+                                  { id: 'logOnClick', label: 'Log onClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onClick events' },
+                                  { id: 'logOnItemClick', label: 'Log onItemClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onItemClick events' },
+                                  { id: 'logOnViewShow', label: 'Log onViewShow', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewShow events' },
+                                  { id: 'logOnAfterRender', label: 'Log onAfterRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterRender events' },
+                                  { id: 'logOnBeforeRender', label: 'Log onBeforeRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBeforeRender events' },
+                                  { id: 'logOnAfterScroll', label: 'Log onAfterScroll', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterScroll events' },
+                                  { id: 'logOnViewResize', label: 'Log onViewResize', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewResize events' },
                                 ]);
                                 setPlaygroundValue('Sample text');
                                 addLog('Reset', 'playground configuration reset to defaults');

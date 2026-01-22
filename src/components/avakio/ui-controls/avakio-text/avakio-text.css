@@ -60,7 +60,7 @@
   width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--avakio-border-primary);
-  border-radius: 4px;
+  border-radius: var(--avakio-radius, 4px);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -71,6 +71,31 @@
   transition: all 0.2s ease;
   outline: none;
   box-sizing: border-box;
+}
+
+/* Adjust border radius and borders ONLY when adjacent to styled label (not plain labelForm) */
+/* Label on LEFT - no left border, radius 0 on left side */
+.avakio-control-label-wrapper-left:has(.avakio-control-label-label) .avakio-text-input {
+  border-radius: 0 var(--avakio-radius, 4px) var(--avakio-radius, 4px) 0;
+  border-left: none;
+}
+
+/* Label on RIGHT - no right border, radius 0 on right side */
+.avakio-control-label-wrapper-right:has(.avakio-control-label-label) .avakio-text-input {
+  border-radius: var(--avakio-radius, 4px) 0 0 var(--avakio-radius, 4px);
+  border-right: none;
+}
+
+/* Label on TOP - no top border, radius 0 on top side */
+.avakio-control-label-wrapper-top:has(.avakio-control-label-label) .avakio-text-input {
+  border-radius: 0 0 var(--avakio-radius, 4px) var(--avakio-radius, 4px);
+  border-top: none;
+}
+
+/* Label on BOTTOM - no bottom border, radius 0 on bottom side */
+.avakio-control-label-wrapper-bottom:has(.avakio-control-label-label) .avakio-text-input {
+  border-radius: var(--avakio-radius, 4px) var(--avakio-radius, 4px) 0 0;
+  border-bottom: none;
 }
 
 .avakio-text-input:hover:not(:disabled) {

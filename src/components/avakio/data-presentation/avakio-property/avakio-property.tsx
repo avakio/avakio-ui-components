@@ -518,7 +518,8 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
               maxHeight={item.selectMaxHeight}
               yCount={item.selectYCount}
               required={item.selectRequired ?? item.required}
-              error={item.selectError}
+              invalid={!!item.selectError}
+              invalidMessage={item.selectError}
               className={item.selectClassName}
               clearable={item.selectClearable}
             />
@@ -849,7 +850,11 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
               <div key={item.id} className="av-prop-row" title={item.tooltip}>
                 {showLabel !== false && (
                   <div className={`av-prop-label${item.labelAlign ? ` av-prop-label-${item.labelAlign}` : ''}`}>
-                    <label htmlFor={item.id}>{item.label}</label>
+                    {item.type === 'checkbox' ? (
+                      <span>{item.label}</span>
+                    ) : (
+                      <label htmlFor={item.id}>{item.label}</label>
+                    )}
                     {item.description && item.type !== 'checkbox' && <div className="av-prop-desc">{item.description}</div>}
                   </div>
                 )}

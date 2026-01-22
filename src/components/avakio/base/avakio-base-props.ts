@@ -97,6 +97,9 @@ export interface AvakioBaseProps {
   /** Fires after the control has been clicked */
   onItemClick?: (event: React.MouseEvent) => void;
   
+  /** Fires when the component is clicked */
+  onClick?: () => void;
+  
   /** Fires when any hidden view is shown */
   onViewShow?: () => void;
   
@@ -213,8 +216,6 @@ export const computeBaseStyles = (props: AvakioBaseProps): React.CSSProperties =
     bottomPadding,
     height,
     hidden,
-    inputHeight,
-    inputWidth,
     margin,
     minHeight,
     minWidth,
@@ -377,6 +378,8 @@ export interface UseAvakioBaseOptions<T = string> {
   onFocus?: (event: React.FocusEvent) => void;
   /** Fires after the control has been clicked */
   onItemClick?: (event: React.MouseEvent) => void;
+  /** Fires when the component is clicked */
+  onClick?: () => void;
   /** Fires when any hidden view is shown */
   onViewShow?: () => void;
   /** Fires when the size of a view has been changed by resizer */
@@ -423,6 +426,7 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
     onBlur,
     onFocus,
     onItemClick,
+    onClick,
     onViewShow,
     onViewResize,
     onKeyPress,
@@ -480,21 +484,42 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
   }, [value, invalid]);
 
   // Lifecycle events
-  React.useEffect(() => {
-    onBeforeRender?.();
-    // After render (using layout effect timing)
-    return () => {};
+  const hasCalledBeforeRenderRef = React.useRef<boolean>(false);
+  const hasCalledAfterRenderRef = React.useRef<boolean>(false);
+  
+  React.useLayoutEffect(() => {
+    // Call onBeforeRender first, then onAfterRender to ensure correct order
+    if (!hasCalledBeforeRenderRef.current) {
+      hasCalledBeforeRenderRef.current = true;
+      onBeforeRender?.();
+    }
+    if (!hasCalledAfterRenderRef.current) {
+      hasCalledAfterRenderRef.current = true;
+      onAfterRender?.();
+    }
   }, []);
 
-  React.useLayoutEffect(() => {
-    onAfterRender?.();
-  });
-
   // Show event - fire when visibility changes from hidden to visible
+  const prevHiddenRef = React.useRef<boolean>(isHidden);
+  const isFirstRenderRef = React.useRef<boolean>(true);
+  
   React.useEffect(() => {
-    if (!isHidden) {
+    // Skip firing the event on first render, but still update the ref
+    if (isFirstRenderRef.current) {
+      isFirstRenderRef.current = false;
+      prevHiddenRef.current = isHidden;
+      return;
+    }
+    
+    const wasHidden = prevHiddenRef.current;
+    const isNowVisible = !isHidden;
+    
+    // Only fire if transitioning from hidden to visible
+    if (wasHidden && isNowVisible) {
       onViewShow?.();
     }
+    
+    prevHiddenRef.current = isHidden;
   }, [isHidden, onViewShow]);
 
   // Methods
@@ -631,6 +656,10 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
     onItemClick?.(event);
   }, [onItemClick]);
 
+  const handleClickSimple = useCallback(() => {
+    onClick?.();
+  }, [onClick]);
+
   const handleKeyPress = useCallback((event: React.KeyboardEvent) => {
     onKeyPress?.(event);
   }, [onKeyPress]);
@@ -709,7 +738,8 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
     eventHandlers: {
       onBlur: handleBlur,
       onFocus: handleFocus,
-      onClick: handleClick,
+      onClick: handleClickSimple,
+      onItemClick: handleClick,
       onKeyPress: handleKeyPress,
       onScroll: handleScroll,
       onResize: handleResize,
