@@ -13,6 +13,10 @@
   font-weight: 500;
   color: var(--avakio-text-primary, #333);
   margin-bottom: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* When labelPosition is left, labelForm appears inline in the wrapper */
@@ -22,7 +26,10 @@
   align-self: center;
   margin-bottom: 0;
   margin-right: 8px;
-  flex-shrink: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* When labelPosition is right, labelForm appears inline after control */
@@ -32,7 +39,10 @@
   align-self: center;
   margin-bottom: 0;
   margin-left: 8px;
-  flex-shrink: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* When labelPosition is top, labelForm appears above */
@@ -100,7 +110,9 @@
   box-sizing: border-box;
   line-height: 1.2;
   gap: 4px;
-  flex-shrink: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Label on the LEFT - rounded left corners, no right border */

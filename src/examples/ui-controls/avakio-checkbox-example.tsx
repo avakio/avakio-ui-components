@@ -161,38 +161,59 @@ export function AvakioCheckboxExample() {
     // Component-Specific Props
     { id: 1, name: 'checked', type: 'boolean', defaultValue: 'undefined', description: 'Controlled checked state of the checkbox', from: 'Checkbox' },
     { id: 2, name: 'defaultChecked', type: 'boolean', defaultValue: 'false', description: 'Initial checked state for uncontrolled mode', from: 'Checkbox' },
-    { id: 3, name: 'indeterminate', type: 'boolean', defaultValue: 'false', description: 'Shows indeterminate state (partially checked)', from: 'Checkbox' },
-    { id: 4, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed next to the checkbox', from: 'ControlLabel' },
-    { id: 5, name: 'description', type: 'string', defaultValue: 'undefined', description: 'Additional description text below the label', from: 'Checkbox' },
-    { id: 6, name: 'size', type: "'sm' | 'md'", defaultValue: "'md'", description: 'Size variant of the checkbox', from: 'Checkbox' },
-    { id: 7, name: 'error', type: 'string', defaultValue: 'undefined', description: 'Error message to display below the checkbox', from: 'Checkbox' },
-    { id: 8, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Marks the checkbox as required (shows asterisk)', from: 'Checkbox' },
-    { id: 9, name: 'onChange', type: '(checked: boolean) => void', defaultValue: 'undefined', description: 'Callback fired when checked state changes', from: 'Checkbox' },
+    { id: 3, name: 'indeterminate', type: 'boolean', defaultValue: 'false', description: 'Shows indeterminate state (partially checked), useful for "select all" scenarios', from: 'Checkbox' },
+    { id: 4, name: 'name', type: 'string', defaultValue: 'undefined', description: 'Name attribute for form submission', from: 'Checkbox' },
+    { id: 5, name: 'value', type: 'string | number | readonly string[]', defaultValue: 'undefined', description: 'Value attribute for form submission', from: 'Checkbox' },
     
-    // Identity Props
-    { id: 10, name: 'id', type: 'string', defaultValue: 'undefined', description: 'HTML id attribute for the input element', from: 'Base' },
-    { id: 11, name: 'name', type: 'string', defaultValue: 'undefined', description: 'HTML name attribute for form submission', from: 'Checkbox' },
-    { id: 12, name: 'value', type: 'string | number | readonly string[]', defaultValue: 'undefined', description: 'Value attribute for form submission', from: 'Checkbox' },
-    { id: 13, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
-    { id: 14, name: 'className', type: 'string', defaultValue: 'undefined', description: 'Additional CSS class name', from: 'Base' },
+    // Label Props
+    { id: 6, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed next to the checkbox', from: 'ControlLabel' },
+    { id: 7, name: 'description', type: 'string', defaultValue: 'undefined', description: 'Additional descriptive text displayed below the label for extra context', from: 'Checkbox' },
+    { id: 8, name: 'labelPosition', type: "'left' | 'top' | 'right' | 'bottom'", defaultValue: "'left'", description: 'Position of the label relative to the checkbox', from: 'ControlLabel' },
+    { id: 9, name: 'labelAlign', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Alignment of the label text', from: 'ControlLabel' },
+    { id: 10, name: 'labelWidth', type: 'number | string', defaultValue: 'undefined', description: 'Width of the label', from: 'ControlLabel' },
+    { id: 11, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Help text displayed below the component', from: 'ControlLabel' },
+    
+    // Appearance
+    { id: 12, name: 'size', type: "'sm' | 'md'", defaultValue: "'md'", description: 'Size variant of the checkbox (sm: 16px, md: 20px)', from: 'Checkbox' },
+    { id: 13, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text shown on hover', from: 'Base' },
+    
+    // Validation Props
+    { id: 14, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Marks the checkbox as required (shows asterisk next to label)', from: 'ControlLabel' },
+    { id: 15, name: 'invalid', type: 'boolean', defaultValue: 'false', description: 'Marks the component as invalid (applies error styling)', from: 'ControlLabel' },
+    { id: 16, name: 'invalidMessage', type: 'string', defaultValue: 'undefined', description: 'Validation error message displayed below the component', from: 'ControlLabel' },
+    { id: 17, name: 'error', type: 'string', defaultValue: 'undefined', description: 'Error message to display below the checkbox', from: 'Checkbox' },
     
     // State Props
-    { id: 15, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the checkbox is disabled', from: 'Base' },
-    { id: 16, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
-    { id: 17, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Whether the component is borderless', from: 'Base' },
+    { id: 18, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the checkbox is disabled (prevents interaction)', from: 'Base' },
+    { id: 19, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Whether the checkbox is read-only (shows value but prevents changes)', from: 'Base' },
+    { id: 20, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
+    { id: 21, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Removes the border from the component', from: 'Base' },
     
     // Sizing Props
-    { id: 18, name: 'padding', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding around the component', from: 'Base' },
-    { id: 19, name: 'margin', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the component', from: 'Base' },
-    { id: 20, name: 'minWidth', type: 'string | number', defaultValue: 'undefined', description: 'Minimum width of the component', from: 'Base' },
-    { id: 21, name: 'minHeight', type: 'string | number', defaultValue: 'undefined', description: 'Minimum height of the component', from: 'Base' },
-    { id: 22, name: 'maxWidth', type: 'string | number', defaultValue: 'undefined', description: 'Maximum width of the component', from: 'Base' },
-    { id: 23, name: 'maxHeight', type: 'string | number', defaultValue: 'undefined', description: 'Maximum height of the component', from: 'Base' },
-    { id: 24, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles', from: 'Base' },
+    { id: 22, name: 'width', type: 'string | number', defaultValue: 'undefined', description: 'Width of the component', from: 'Base' },
+    { id: 23, name: 'height', type: 'string | number', defaultValue: 'undefined', description: 'Height of the component', from: 'Base' },
+    { id: 24, name: 'minWidth', type: 'string | number', defaultValue: 'undefined', description: 'Minimum width of the component', from: 'Base' },
+    { id: 25, name: 'maxWidth', type: 'string | number', defaultValue: 'undefined', description: 'Maximum width of the component', from: 'Base' },
+    { id: 26, name: 'minHeight', type: 'string | number', defaultValue: 'undefined', description: 'Minimum height of the component', from: 'Base' },
+    { id: 27, name: 'maxHeight', type: 'string | number', defaultValue: 'undefined', description: 'Maximum height of the component', from: 'Base' },
+    { id: 28, name: 'margin', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the component', from: 'Base' },
+    { id: 29, name: 'padding', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding inside the component', from: 'Base' },
+    { id: 30, name: 'bottomPadding', type: 'number | string', defaultValue: 'undefined', description: 'Padding at the bottom of the component', from: 'Base' },
+    
+    // Identity Props
+    { id: 31, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID (applied to the wrapper element)', from: 'Base' },
+    { id: 32, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 33, name: 'className', type: 'string', defaultValue: "''", description: 'Additional CSS class name', from: 'Base' },
+    { id: 34, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles', from: 'Base' },
   ];
 
   const eventsData: PropDoc[] = [
-    { id: 1, name: 'onChange', type: '(checked: boolean) => void', defaultValue: 'undefined', description: 'Fires when the checked state changes', from: 'Checkbox' },
+    { id: 1, name: 'onChange', type: '(event: { checked: boolean; value?: string | number }) => void', defaultValue: 'undefined', description: 'Fires when the checked state changes (user interaction or programmatic)', from: 'Checkbox' },
+    { id: 2, name: 'onBlur', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when the checkbox loses focus', from: 'Base' },
+    { id: 3, name: 'onFocus', type: '(event: FocusEvent) => void', defaultValue: 'undefined', description: 'Fires when the checkbox receives focus', from: 'Base' },
+    { id: 4, name: 'onClick', type: '(event: MouseEvent) => void', defaultValue: 'undefined', description: 'Fires when the checkbox is clicked', from: 'Base' },
+    { id: 5, name: 'onKeyDown', type: '(event: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Fires when a key is pressed while checkbox is focused', from: 'Base' },
+    { id: 6, name: 'onKeyPress', type: '(event: KeyboardEvent) => void', defaultValue: 'undefined', description: 'Fires when a key is pressed and released while checkbox is focused', from: 'Base' },
   ];
 
   const propsColumns: AvakioColumn<PropDoc>[] = [

@@ -26,11 +26,12 @@
   user-select: none;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  white-space: nowrap;
 }
 
 .avakio-label span,
 .avakio-label div {
-  display: inline-block;
+  display: inline;
 }
 
 /* Auto-width */
@@ -67,6 +68,20 @@
   border: none;
   padding: 0;
   background-color: transparent;
+}
+
+/* Text overflow with ellipsis - only applied when label is in a constrained container */
+.avakio-label-constrained {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.avakio-label-constrained span,
+.avakio-label-constrained div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 /* Clickable labels */

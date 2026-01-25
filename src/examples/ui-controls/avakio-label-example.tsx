@@ -289,7 +289,7 @@ export function AvakioLabelExample() {
             <AvakioLabel
               padding={'20px'}
               label="Label with custom width"
-              labelWidth="500px"
+              labelWidth="auto"
             />,
             <AvakioLabel
               text="Auto-width label"
@@ -298,7 +298,7 @@ export function AvakioLabelExample() {
             <AvakioLabel
               label="Label with tooltip"
               tooltip="This is a helpful tooltip"
-              labelWidth={'200px'}
+              labelWidth="auto"
               margin={[8, 0, 0, 0]}
             />,
           ]}
