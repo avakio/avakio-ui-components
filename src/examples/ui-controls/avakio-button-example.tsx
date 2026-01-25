@@ -7,7 +7,7 @@ import { AvakioDataTable } from '../../components/avakio/data-presentation/avaki
 import type { AvakioColumn } from '../../components/avakio/data-presentation/avakio-datatable/AvakioDataTable';
 import { AvakioTabBar } from '../../components/avakio/ui-controls/avakio-tabbar/avakio-tabbar';
 import { AvakioViewHeader } from '../../components/avakio/ui-widgets/avakio-view-header/avakio-view-header';
-import { AvakioProperty, AvakioPropertyItem } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
+import { AvakioProperty, AvakioPropertyItem, AvakioPropertyRef } from '../../components/avakio/data-presentation/avakio-property/avakio-property';
 import { addEventLog } from '../../services/event-log-service';
 import { formatSizingValue } from '../../lib/utils';
 import { 
@@ -50,6 +50,7 @@ export function AvakioButtonExample() {
   // Playground state
   const [playgroundClickCount, setPlaygroundClickCount] = useState(0);
   const [isComponentMounted, setIsComponentMounted] = useState<boolean>(true);
+  const propertyRef = useRef<AvakioPropertyRef>(null);
   
   // Playground property items for AvakioProperty
   const [playgroundProps, setPlaygroundProps] = useState<AvakioPropertyItem[]>([
@@ -63,6 +64,9 @@ export function AvakioButtonExample() {
     { id: 'tooltip', label: 'Tooltip', type: 'text', value: '', group: 'Content', placeholder: 'Tooltip text' },
     { id: 'hotkey', label: 'Hotkey', type: 'text', value: '', group: 'Content', placeholder: 'e.g. ctrl+s' },
     { id: 'badge', label: 'Badge', type: 'text', value: '', group: 'Content', placeholder: 'e.g. 5 or New' },
+    { id: 'image', label: 'Image URL', type: 'text', value: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMSA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDMgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjMDA3QUNDIi8+Cjwvc3ZnPgo=', group: 'Content', placeholder: 'Image URL to display' },
+    { id: 'popup', label: 'Popup', type: 'text', value: '', group: 'Content', placeholder: 'Popup menu ID' },
+    { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'Content', placeholder: 'Bottom help text' },
     
     // Appearance Group
     {
@@ -102,6 +106,7 @@ export function AvakioButtonExample() {
         { id: 'icon', value: 'Icon Only' },
         { id: 'iconButton', value: 'Icon Button' },
         { id: 'iconTop', value: 'Icon Top' },
+        { id: 'iconBottom', value: 'Icon Bottom' },
       ],
     },
     {
@@ -121,6 +126,21 @@ export function AvakioButtonExample() {
     { id: 'block', label: 'Block', type: 'checkbox', value: false, group: 'Layout', checkboxLabel: 'Full width' },
     { id: 'autowidth', label: 'Auto Width', type: 'checkbox', value: false, group: 'Layout', checkboxLabel: 'Fit content' },
     { id: 'borderless', label: 'Borderless', type: 'checkbox', value: false, group: 'Layout', checkboxLabel: 'Remove borders' },
+    { id: 'buttonWidth', label: 'Button Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 200 or 100%' },
+    { id: 'buttonHeight', label: 'Button Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 40 or auto' },
+    {
+      id: 'textAlign',
+      label: 'Button Text Align',
+      type: 'select',
+      value: '',
+      group: 'Layout',
+      selectOptions: [
+        { id: '', value: 'Default' },
+        { id: 'left', value: 'Left' },
+        { id: 'center', value: 'Center' },
+        { id: 'right', value: 'Right' },
+      ],
+    },
     { id: 'width', label: 'Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 200px or 100%' },
     { id: 'height', label: 'Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 50px' },
     { id: 'minWidth', label: 'Min Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 100px' },
@@ -129,6 +149,23 @@ export function AvakioButtonExample() {
     { id: 'maxHeight', label: 'Max Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 100px' },
     { id: 'margin', label: 'Margin', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 10 or 10px' },
     { id: 'padding', label: 'Padding', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 12 or 12px' },
+    { id: 'style', label: 'Custom Style', type: 'text', value: '', group: 'Layout', placeholder: 'CSS object as JSON' },
+    
+    // Form Integration Group
+    { id: 'name', label: 'Name', type: 'text', value: '', group: 'Form', placeholder: 'Form field name' },
+    { id: 'value', label: 'Value', type: 'text', value: '', group: 'Form', placeholder: 'Form field value' },
+    {
+      id: 'type',
+      label: 'Button Type',
+      type: 'select',
+      value: 'button',
+      group: 'Form',
+      selectOptions: [
+        { id: 'button', value: 'Button' },
+        { id: 'submit', value: 'Submit' },
+        { id: 'reset', value: 'Reset' },
+      ],
+    },
     
     // Icons Group
     { id: 'showIcon', label: 'Show Icon', type: 'checkbox', value: true, group: 'Icons', checkboxLabel: 'Display left icon' },
@@ -147,6 +184,7 @@ export function AvakioButtonExample() {
     { id: 'logOnBlur', label: 'Log onBlur', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onBlur events' },
     { id: 'logOnKeyDown', label: 'Log onKeyDown', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyDown events' },
     { id: 'logOnKeyUp', label: 'Log onKeyUp', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyUp events' },
+    { id: 'logOnKeyPress', label: 'Log onKeyPress', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyPress events' },
     { id: 'logOnItemClick', label: 'Log onItemClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onItemClick events' },
     { id: 'logOnAfterRender', label: 'Log onAfterRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterRender events' },
     { id: 'logOnBeforeRender', label: 'Log onBeforeRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBeforeRender events' },
@@ -215,7 +253,7 @@ export function AvakioButtonExample() {
     { id: 4, name: 'image', type: 'string', defaultValue: 'undefined', description: 'Image URL to display (replaces icon)', from: 'Button' },
     { id: 5, name: 'variant', type: "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'", defaultValue: "'primary'", description: 'Visual style variant', from: 'Button' },
     { id: 6, name: 'size', type: "'sm' | 'md' | 'lg'", defaultValue: "'md'", description: 'Button size', from: 'Button' },
-    { id: 7, name: 'buttonType', type: "'default' | 'icon' | 'iconButton' | 'iconTop'", defaultValue: "'default'", description: 'Layout type - icon for icon-only, iconTop for vertical layout', from: 'Button' },
+    { id: 7, name: 'buttonType', type: "'default' | 'icon' | 'iconButton' | 'iconTop' | 'iconBottom'", defaultValue: "'default'", description: 'Layout type - icon for icon-only, iconTop for icon above label, iconBottom for icon below label', from: 'Button' },
     { id: 8, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'center'", description: 'Horizontal alignment of the button within its container (sets text-align on wrapper)', from: 'Button' },
     { id: 9, name: 'buttonWidth', type: 'number | string', defaultValue: 'undefined', description: 'Width of the button element (e.g., 200 or "100%")', from: 'Button' },
     { id: 10, name: 'buttonHeight', type: 'number | string', defaultValue: 'undefined', description: 'Height of the button element (e.g., 40 or "auto")', from: 'Button' },
@@ -227,7 +265,7 @@ export function AvakioButtonExample() {
     { id: 16, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text shown on hover', from: 'Button' },
     { id: 17, name: 'hotkey', type: 'string', defaultValue: 'undefined', description: 'Keyboard shortcut (e.g., "ctrl+s", "delete")', from: 'Button' },
     { id: 18, name: 'popup', type: 'string | ReactNode', defaultValue: 'undefined', description: 'Popup menu ID or component reference', from: 'Button' },
-    { id: 19, name: 'theme', type: "'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset'", defaultValue: 'undefined', description: 'Theme variant for styling', from: 'Button' },
+    { id: 19, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Bottom label text displayed below the button', from: 'Button' },
     
     // Form Integration
     { id: 20, name: 'name', type: 'string', defaultValue: 'undefined', description: 'Form field name attribute', from: 'Button' },
@@ -246,7 +284,7 @@ export function AvakioButtonExample() {
     // AvakioBaseProps - Layout
     { id: 28, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Removes borders and shadows', from: 'Base' },
     { id: 29, name: 'width', type: 'number | string', defaultValue: 'undefined', description: 'Width of the container wrapper', from: 'Base' },
-    { id: 30, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Height of the container wrapper', from: 'Base' },
+    { id: 30, name: 'height', type: 'number | string', defaultValue: 'undefined', description: 'Width of the container wrapper', from: 'Base' },
     { id: 31, name: 'minWidth', type: 'number | string', defaultValue: 'undefined', description: 'Minimum width constraint', from: 'Base' },
     { id: 32, name: 'minHeight', type: 'number | string', defaultValue: 'undefined', description: 'Minimum height constraint', from: 'Base' },
     { id: 33, name: 'maxWidth', type: 'number | string', defaultValue: 'undefined', description: 'Maximum width constraint', from: 'Base' },
@@ -360,229 +398,65 @@ export function AvakioButtonExample() {
           padding={[0, 0, 0, 16]}
           content="Choose from primary, secondary, outline, ghost, or danger variants."
         />
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
+        <AvakioLayout type="clean" borderless={false} margin={12} padding={16}
           rows={[
-            <AvakioLayout
-              key="variants-row"
-              type="clean"
-              borderless={true}
+            <AvakioLayout key="variants-row" type="clean" borderless={true} flexWrap={true}
               cols={[
-                <AvakioButton 
-                  variant="primary" 
-                  icon={<Check size={16} />}
-                  onClick={() => {
-                    setClickCount(c => c + 1);
-                    addLog('onClick', 'Primary button clicked');
-                  }}
-                >
-                  Primary
-                </AvakioButton>,
-                <AvakioButton 
-                  variant="secondary" 
-                  icon={<Settings size={16} />}
-                  onClick={() => {
-                    setClickCount(c => c + 1);
-                    addLog('onClick', 'Secondary button clicked');
-                  }}
-                >
-                  Secondary
-                </AvakioButton>,
-                <AvakioButton 
-                  variant="outline"
-                  icon={<ArrowRight size={16} />}
-                  onClick={() => {
-                    setClickCount(c => c + 1);
-                    addLog('onClick', 'Outline button clicked');
-                  }}
-                >
-                  Outline
-                </AvakioButton>,
-                <AvakioButton 
-                  variant="ghost"
-                  icon={<Home size={16} />}
-                  onClick={() => {
-                    setClickCount(c => c + 1);
-                    addLog('onClick', 'Ghost button clicked');
-                  }}
-                >
-                  Ghost
-                </AvakioButton>,
-                <AvakioButton 
-                  variant="danger" 
-                  icon={<Trash2 size={16} />}
-                  onClick={() => {
-                    setClickCount(c => c + 1);
-                    addLog('onClick', 'Danger button clicked');
-                  }}
-                >
-                  Delete
-                </AvakioButton>,
+                <AvakioButton variant="primary" icon={<Check size={16} />} onClick={() => {setClickCount(c => c + 1); addLog('onClick', 'Primary button clicked');}} label='Primary'  />,
+                <AvakioButton variant="secondary" icon={<Settings size={16} />} onClick={() => { setClickCount(c => c + 1); addLog('onClick', 'Secondary button clicked');}} label='Secondary' />,                
+                <AvakioButton variant="outline" icon={<ArrowRight size={16} />} onClick={() => {setClickCount(c => c + 1);addLog('onClick', 'Outline button clicked');}} label='Outline' />,                
+                <AvakioButton variant="ghost" icon={<Home size={16} />} onClick={() => {setClickCount(c => c + 1);addLog('onClick', 'Ghost button clicked');}} label='Ghost'/>,
+                <AvakioButton variant="danger" icon={<Trash2 size={16} />} onClick={() => {setClickCount(c => c + 1);addLog('onClick', 'Danger button clicked');}} label='Delete' />                
               ]}
             />,
-            <AvakioTemplate
-              key="click-counter"
-              type="clean"
-              borderType="clean"
-              padding={[16, 0, 0, 0]}
-              content={<>Total clicks: <strong>{clickCount}</strong></>}
-            />,
+            <AvakioTemplate key="click-counter" type="clean" borderType="clean" padding={[16, 0, 0, 0]} content={<>Total clicks: <strong>{clickCount}</strong></>} />,
           ]}
         />
 
         {/* Button Sizes */}
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[16, 0, 0, 16]}
-          content={<strong>Button Sizes</strong>}
-        />
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[0, 0, 0, 16]}
-          content="Available in small, medium (default), and large sizes."
-        />
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
+        <AvakioTemplate type="clean" borderType="clean" padding={[16, 0, 0, 16]} content={<strong>Button Sizes</strong>}/>
+        <AvakioTemplate type="clean" borderType="clean" padding={[0, 0, 0, 16]} content="Available in small, medium (default), and large sizes." />
+        <AvakioLayout type="clean" borderless={false} margin={12} padding={16}
           rows={[
-            <AvakioLayout
-              key="sizes-row"
-              type="clean"
-              borderless={true}
+            <AvakioLayout key="sizes-row" type="clean" borderless={true} flexWrap={true}
               cols={[
-                <AvakioButton 
-                  size="sm" 
-                  icon={<Plus size={14} />}
-                  onClick={() => addLog('onClick', 'Small button clicked')}
-                >
-                  Small
-                </AvakioButton>,
-                <AvakioButton 
-                  size="md" 
-                  icon={<Plus size={16} />}
-                  onClick={() => addLog('onClick', 'Medium button clicked')}
-                >
-                  Medium
-                </AvakioButton>,
-                <AvakioButton 
-                  size="lg" 
-                  icon={<Plus size={18} />}
-                  onClick={() => addLog('onClick', 'Large button clicked')}
-                >
-                  Large
-                </AvakioButton>,
+                <AvakioButton size="sm" padding={[8, 8, 8, 8]} icon={<Plus size={14} />} onClick={() => addLog('onClick', 'Small button clicked')} label='Small' />,               
+                <AvakioButton size="md" padding={[8, 8, 8, 8]} icon={<Plus size={16} />} onClick={() => addLog('onClick', 'Medium button clicked')} label='Medium' />,                
+                <AvakioButton size="lg" padding={[8, 8, 8, 8]} icon={<Plus size={18} />} onClick={() => addLog('onClick', 'Large button clicked')} label='Large' />                
               ]}
             />,
           ]}
         />
 
         {/* Icon Buttons */}
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[16, 0, 0, 16]}
-          content={<strong>Icon Buttons</strong>}
-        />
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[0, 0, 0, 16]}
-          content="Create icon-only buttons or buttons with icons on left/right sides."
-        />
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
+        <AvakioTemplate type="clean" borderType="clean" padding={[16, 0, 0, 16]} content={<strong>Icon Buttons</strong>} />
+        <AvakioTemplate type="clean" borderType="clean" padding={[0, 0, 0, 16]} content="Create icon-only buttons or buttons with icons on left/right sides."/>
+        <AvakioLayout type="clean" borderless={false} margin={12} padding={16}
           rows={[
-            <AvakioLayout
-              key="icon-buttons-row"
-              type="clean"
-              borderless={true}
+            <AvakioLayout key="icon-buttons-row" type="clean" borderless={true} flexWrap={true}
               cols={[
-                <AvakioButton 
-                  buttonType="icon" 
-                  icon={<Heart size={20} />} 
-                  tooltip="Like this item"
-                  onClick={() => addLog('onClick', 'Like button clicked')}
+                <AvakioButton buttonType="icon" padding={[8, 8, 8, 8]} icon={<Heart size={20} />} tooltip="Like this item" onClick={() => addLog('onClick', 'Like button clicked')}/>,
+                <AvakioButton buttonType="iconButton" padding={[8, 8, 8, 8]} icon={<Star size={20} />} tooltip="Add to favorites" onClick={() => addLog('onClick', 'Favorite button clicked')}/>,
+                <AvakioButton padding={[8, 8, 8, 8]} icon={<Download size={16} />} onClick={() => addLog('onClick', 'Download button clicked')} label='Download'/>,
+                <AvakioButton iconRight={<ArrowRight size={16} />} padding={[8, 8, 8, 8]} onClick={() => addLog('onClick', 'Continue button clicked')} label="Continue"
                 />,
-                <AvakioButton 
-                  buttonType="iconButton" 
-                  icon={<Star size={20} />} 
-                  tooltip="Add to favorites"
-                  onClick={() => addLog('onClick', 'Favorite button clicked')}
-                />,
-                <AvakioButton 
-                  icon={<Download size={16} />}
-                  onClick={() => addLog('onClick', 'Download button clicked')}
-                >
-                  Download
-                </AvakioButton>,
-                <AvakioButton 
-                  iconRight={<ArrowRight size={16} />}
-                  onClick={() => addLog('onClick', 'Continue button clicked')}
-                >
-                  Continue
-                </AvakioButton>,
               ]}
             />,
           ]}
         />
 
         {/* Button States */}
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[16, 0, 0, 16]}
-          content={<strong>Button States</strong>}
-        />
-        <AvakioTemplate
-          type="clean"
-          borderType="clean"
-          padding={[0, 0, 0, 16]}
-          content="Buttons can be disabled or show loading states."
-        />
-        <AvakioLayout
-          type="clean"
-          borderless={false}
-          margin={12}
-          padding={16}
+        <AvakioTemplate type="clean" borderType="clean" padding={[16, 0, 0, 16]} content={<strong>Button States</strong>} />
+        <AvakioTemplate type="clean" borderType="clean" padding={[0, 0, 0, 16]} content="Buttons can be disabled or show loading states."/>
+        <AvakioLayout type="clean" borderless={false} margin={12} padding={16}
           rows={[
-            <AvakioLayout
-              key="states-row"
-              type="clean"
-              borderless={true}
+            <AvakioLayout key="states-row" type="clean" borderless={true} flexWrap={true}
               cols={[
-                <AvakioButton 
-                  variant="primary"
-                  onClick={() => addLog('onClick', 'Normal button clicked')}
-                >
-                  Normal
-                </AvakioButton>,
-                <AvakioButton 
-                  variant="primary" 
-                  disabled
-                  onClick={() => addLog('onClick', 'Disabled button clicked (should not fire)')}
-                >
-                  Disabled
-                </AvakioButton>,
-                <AvakioButton 
-                  variant="primary" 
-                  loading 
-                  icon={<Loader2 size={16} />}
-                  onClick={() => addLog('onClick', 'Loading button clicked (should not fire)')}
-                >
-                  Loading
-                </AvakioButton>,
+                <AvakioButton padding={[8, 8, 8, 8]} variant="primary" onClick={() => addLog('onClick', 'Normal button clicked')} label='Normal' />,                
+                <AvakioButton padding={[8, 8, 8, 8]} variant="primary" disabled onClick={() => addLog('onClick', 'Disabled button clicked (should not fire)')} label='Disabled' />,
+                <AvakioButton padding={[8, 8, 8, 8]} variant="primary" loading onClick={() => addLog('onClick', 'Loading button clicked (should not fire)')} label='Loading' />
               ]}
-            />,
+            />
           ]}
         />
       </section>
@@ -628,23 +502,13 @@ export function AvakioButtonExample() {
               key="types"
               type="clean"
               borderless={true}
+              flexWrap={true}
               cols={[
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
-                  <AvakioButton buttonType="default" icon={<Settings size={16} />}>Default</AvakioButton>
-                  <small style={{ fontSize: '11px', opacity: 0.6 }}>default</small>
-                </div>,
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
-                  <AvakioButton buttonType="icon" icon={<Heart size={20} />} tooltip="Like" />
-                  <small style={{ fontSize: '11px', opacity: 0.6 }}>icon</small>
-                </div>,
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
-                  <AvakioButton buttonType="iconButton" icon={<Star size={20} />} tooltip="Favorite" />
-                  <small style={{ fontSize: '11px', opacity: 0.6 }}>iconButton</small>
-                </div>,
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
-                  <AvakioButton buttonType="iconTop" icon={<Mail size={24} />}>Messages</AvakioButton>
-                  <small style={{ fontSize: '11px', opacity: 0.6 }}>iconTop</small>
-                </div>,
+                <AvakioButton padding={[8, 8, 8, 8]} buttonType="default" icon={<Settings size={16} />} label="Default" />,                
+                <AvakioButton padding={[8, 8, 8, 8]} buttonType="icon" icon={<Heart size={20} />} tooltip="Like" bottomLabel='icon' />,                                
+                <AvakioButton padding={[8, 8, 8, 8]} buttonType="iconButton" icon={<Star size={20} />} tooltip="Favorite" bottomLabel='iconButton'/>,                                  
+                <AvakioButton padding={[8, 8, 8, 8]} buttonType="iconTop" icon={<Mail size={24} />} bottomLabel='iconTop' label='Emails'/>,                                                
+                <AvakioButton padding={[8, 8, 8, 8]} buttonType="iconBottom" icon={<Bell size={24} />} bottomLabel='iconBottom' label='Notifications'/>,                  
               ]}
             />,
           ]}
@@ -674,11 +538,12 @@ export function AvakioButtonExample() {
               key="badges"
               type="clean"
               borderless={true}
+              flexWrap={true}
               cols={[
-                <AvakioButton variant="primary" badge={3} icon={<Bell size={16} />}>Inbox</AvakioButton>,
-                <AvakioButton variant="secondary" badge="New" iconRight={<ArrowRight size={16} />}>Updates</AvakioButton>,
-                <AvakioButton variant="outline" badge={12}>Notifications</AvakioButton>,
-                <AvakioButton badge="99+" buttonType="icon" icon={<Bell size={20} />} tooltip="Many notifications" />,
+                <AvakioButton padding={[8, 8, 8, 8]} variant="primary" badge={3} icon={<Bell size={16} />}>Inbox</AvakioButton>,
+                <AvakioButton padding={[8, 8, 8, 8]} variant="secondary" badge="New" iconRight={<ArrowRight size={16} />}>Updates</AvakioButton>,
+                <AvakioButton padding={[8, 8, 8, 8]} variant="outline" badge={12}>Notifications</AvakioButton>,
+                <AvakioButton padding={[8, 8, 8, 8]} badge="99+" buttonType="icon" icon={<Bell size={20} />} tooltip="Many notifications" />,
               ]}
             />,
           ]}
@@ -708,32 +573,11 @@ export function AvakioButtonExample() {
               key="tooltips"
               type="clean"
               borderless={true}
+              flexWrap={true}
               cols={[
-                <AvakioButton tooltip="Save your work" icon={<Download size={16} />}>Save</AvakioButton>,
-                <AvakioButton 
-                  tooltip="Quick save with Ctrl+S"
-                  hotkey="ctrl+s"
-                  variant="primary"
-                  icon={<Download size={16} />}
-                  onClick={() => {
-                    setHotkeyCount(c => c + 1);
-                    addLog('hotkey triggered', 'Ctrl+S pressed');
-                  }}
-                >
-                  Save (Ctrl+S)
-                </AvakioButton>,
-                <AvakioButton 
-                  tooltip="Delete item" 
-                  hotkey="delete" 
-                  variant="danger" 
-                  icon={<Trash2 size={16} />}
-                  onClick={() => {
-                    setHotkeyCount(c => c + 1);
-                    addLog('hotkey triggered', 'Delete key pressed');
-                  }}
-                >
-                  Delete
-                </AvakioButton>,
+                <AvakioButton padding={[8, 8, 8, 8]} tooltip="Save your work" icon={<Download size={16} />}>Save</AvakioButton>,
+                <AvakioButton padding={[8, 8, 8, 8]} tooltip="Quick save with Ctrl+S" hotkey="ctrl+s" variant="primary" icon={<Download size={16} />} onClick={() => {setHotkeyCount(c => c + 1);addLog('hotkey triggered', 'Ctrl+S pressed');}} label='Save'/>,                  
+                <AvakioButton padding={[8, 8, 8, 8]} tooltip="Delete item" hotkey="delete" variant="danger" icon={<Trash2 size={16} />} onClick={() => {setHotkeyCount(c => c + 1);addLog('hotkey triggered', 'Delete key pressed');}} label='Delete'/>                 
               ]}
             />,
             <AvakioTemplate
@@ -752,6 +596,7 @@ export function AvakioButtonExample() {
           borderless={false}
           margin={12}
           padding={16}
+          flexWrap={true}
           rows={[
             <AvakioTemplate
               key="layout-title"
@@ -766,17 +611,17 @@ export function AvakioButtonExample() {
               padding={[8, 0, 8, 0]}
               content="Control button width and text alignment."
             />,
-            <AvakioButton align="left" block icon={<ArrowRight size={16} />}>Left Aligned</AvakioButton>,
-            <AvakioButton align="center" block padding={[8, 0, 0, 0]}>Center Aligned</AvakioButton>,
-            <AvakioButton align="right" block iconRight={<ArrowRight size={16} />} padding={[8, 0, 0, 0]}>Right Aligned</AvakioButton>,
+            <AvakioButton padding={[8, 8, 8, 8]} align="left" block icon={<ArrowRight size={16} />} label='Left Aligned'/>,
+            <AvakioButton padding={[8, 8, 8, 8]} align="center" block label='Center Aligned'/>,
+            <AvakioButton padding={[8, 8, 8, 8]} align="right" block iconRight={<ArrowRight size={16} />} label='Right Aligned'/>,
             <AvakioLayout
               key="auto-width"
               type="clean"
               borderless={true}
               padding={[8, 0, 0, 0]}
               cols={[
-                <AvakioButton autowidth>Auto Width</AvakioButton>,
-                <AvakioButton autowidth icon={<Plus size={16} />}>Fits Content</AvakioButton>,
+                <AvakioButton padding={[8, 8, 8, 8]} autowidth>Auto Width</AvakioButton>,
+                <AvakioButton  padding={[8, 8, 8, 8]}autowidth icon={<Plus size={16} />}>Fits Content</AvakioButton>,
               ]}
             />,
           ]}
@@ -814,402 +659,458 @@ export function AvakioButtonExample() {
               height='50px'
               width='100%'
               cols={[
-                <AvakioTemplate
+                //Row 1, Col 1: Preview Header
+                <AvakioLayout
                   id='pg-mainLayout-row1-col1'
                   type="clean"
-                  borderType="clean"
-                  width='50%'
-                  padding={[0, 0, 10, 0]}
-                  content={<span><strong>Preview</strong></span>}
-                />,
+                  borderless={true}                  
+                  rows={[
+                    <AvakioTemplate                      
+                      type="clean"
+                      borderType="clean"
+                      width='50%'
+                      padding={[0, 0, 10, 0]}
+                      content={<span><strong>Preview</strong></span>}
+                    />
+                  ]}
+                />,   
+                //Row 1, Col 2: Configuration Header
                 <AvakioLayout
                   id='pg-mainLayout-row1-col2'
-                  key="config-header"
                   type="clean"
-                  borderless={true}
-                  height='50px'
-                  width='50%'
+                  borderless={true}                   
+                  flexWrap={true}                                        
                   rows={[
-                    <AvakioLayout                  
-                      key="config-header"
+                    <AvakioLayout                                        
                       type="clean"
                       borderless={true}
-                      height='50px'
-                      width='50%'
                       cols={[
                         <AvakioTemplate
-                          id='Template-config-header'
+                          id='pg-mainLayout-row1-col2-1'
                           type="clean"
+                          width='100%'
                           borderType="clean"
                           content={<strong>Configuration</strong>}
-                        />,
-                        <AvakioTemplate
-                          id='Template-config-header-button'
-                          type="clean"
-                          borderType="clean"
-                          width='100%'
-                          align="right"
-                          content={
-                            <AvakioButton
-                              id='Button-reset-playground'
-                              size="sm"
-                              label="Reset"
-                              align="right"
-                              onClick={() => {
-                                // Reset to initial values
-                                setPlaygroundProps([
-                                  // Identity Group
-                                  { id: 'componentId', label: 'ID', type: 'text', value: 'playground-button', group: 'Identity', placeholder: 'Component ID' },
-                                  { id: 'testId', label: 'Test ID', type: 'text', value: '', group: 'Identity', placeholder: 'Test ID for testing' },
-                                  { id: 'className', label: 'Class Name', type: 'text', value: '', group: 'Identity', placeholder: 'Additional CSS class' },
-                                  // Content Group
-                                  { id: 'label', label: 'Label', type: 'text', value: 'Click Me', group: 'Content', placeholder: 'Button text' },
-                                  { id: 'tooltip', label: 'Tooltip', type: 'text', value: '', group: 'Content', placeholder: 'Tooltip text' },
-                                  { id: 'hotkey', label: 'Hotkey', type: 'text', value: '', group: 'Content', placeholder: 'e.g. ctrl+s' },
-                                  { id: 'badge', label: 'Badge', type: 'text', value: '', group: 'Content', placeholder: 'e.g. 5 or New' },
-                                  // Appearance Group
-                                  { id: 'variant', label: 'Variant', type: 'select', value: 'primary', group: 'Appearance', selectOptions: [
-                                    { id: 'primary', value: 'Primary' },
-                                    { id: 'secondary', value: 'Secondary' },
-                                    { id: 'outline', value: 'Outline' },
-                                    { id: 'ghost', value: 'Ghost' },
-                                    { id: 'danger', value: 'Danger' },
-                                  ]},
-                                  { id: 'size', label: 'Size', type: 'select', value: 'md', group: 'Appearance', selectOptions: [
-                                    { id: 'sm', value: 'Small' },
-                                    { id: 'md', value: 'Medium' },
-                                    { id: 'lg', value: 'Large' },
-                                  ]},
-                                  { id: 'buttonType', label: 'Button Type', type: 'select', value: 'default', group: 'Appearance', selectOptions: [
-                                    { id: 'default', value: 'Default' },
-                                    { id: 'icon', value: 'Icon Only' },
-                                    { id: 'iconButton', value: 'Icon Button' },
-                                    { id: 'iconTop', value: 'Icon Top' },
-                                  ]},
-                                  { id: 'align', label: 'Text Align', type: 'select', value: 'center', group: 'Appearance', selectOptions: [
-                                    { id: 'left', value: 'Left' },
-                                    { id: 'center', value: 'Center' },
-                                    { id: 'right', value: 'Right' },
-                                  ]},
-                                  // Layout Group
-                                  { id: 'block', label: 'Block', type: 'checkbox', value: false, group: 'Layout', checkboxLabel: 'Full width' },
-                                  { id: 'autowidth', label: 'Auto Width', type: 'checkbox', value: false, group: 'Layout', checkboxLabel: 'Fit content' },
-                                  { id: 'borderless', label: 'Borderless', type: 'checkbox', value: false, group: 'Layout', checkboxLabel: 'Remove borders' },
-                                  { id: 'width', label: 'Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 200px or 100%' },
-                                  { id: 'height', label: 'Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 50px' },
-                                  { id: 'minWidth', label: 'Min Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 100px' },
-                                  { id: 'minHeight', label: 'Min Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 38px' },
-                                  { id: 'maxWidth', label: 'Max Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 500px' },
-                                  { id: 'maxHeight', label: 'Max Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 100px' },
-                                  { id: 'margin', label: 'Margin', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 10 or 10px' },
-                                  { id: 'padding', label: 'Padding', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 12 or 12px' },
-                                  // Icons Group
-                                  { id: 'showIcon', label: 'Show Icon', type: 'checkbox', value: true, group: 'Icons', checkboxLabel: 'Display left icon' },
-                                  { id: 'showIconRight', label: 'Show Icon Right', type: 'checkbox', value: false, group: 'Icons', checkboxLabel: 'Display right icon' },
-                                  // State Group
-                                  { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Disable the button' },
-                                  { id: 'loading', label: 'Loading', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Show loading spinner' },
-                                  { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Hide the button' },
-                                  // Events Group
-                                  { id: 'logOnClick', label: 'Log onClick', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onClick events' },
-                                  { id: 'logOnMouseEnter', label: 'Log onMouseEnter', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onMouseEnter events' },
-                                  { id: 'logOnMouseLeave', label: 'Log onMouseLeave', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onMouseLeave events' },
-                                  { id: 'logOnFocus', label: 'Log onFocus', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onFocus events' },
-                                  { id: 'logOnBlur', label: 'Log onBlur', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onBlur events' },
-                                  { id: 'logOnKeyDown', label: 'Log onKeyDown', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyDown events' },
-                                  { id: 'logOnKeyUp', label: 'Log onKeyUp', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyUp events' },
-                                  { id: 'logOnItemClick', label: 'Log onItemClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onItemClick events' },
-                                  { id: 'logOnAfterRender', label: 'Log onAfterRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterRender events' },
-                                  { id: 'logOnBeforeRender', label: 'Log onBeforeRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBeforeRender events' },
-                                  { id: 'logOnViewShow', label: 'Log onViewShow', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewShow events' },
-                                ]);
-                                setPlaygroundClickCount(0);
-                                setIsComponentMounted(true);
-                                addLog('Reset', 'playground configuration reset to defaults');
-                              }}
-                            />                            
-                          }
-                        />                      
+                        />,                                         
                       ]}
                     />,                  
                   ]}
                 />,
-                ]}
+              ]}
             />,
             //Row2
             <AvakioLayout
-                type="clean"
-                borderless={true}
-                responsive
-                autoResize
-                gap={16}
-                height='100%'
-                cols={[
-                  <AvakioLayout
-                    type="clean"
-                    borderless={true}                  
-                    height='100%'
-                    rows={[
-                      <AvakioLayout
-                        type="clean"
-                        padding={10}
-                        borderless={false}
-                        maxHeight='100px'
-                        height='100%'
-                        rows={[
-                          isComponentMounted ? (
-                          <AvakioButton
-                            id={getPropValue('componentId', 'playground-button')}
-                            testId={getPropValue('testId', '') || undefined}
-                            className={getPropValue('className', '') || undefined}
-                            ref={buttonRef}
-                            variant={getPropValue('variant', 'primary') as 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'}
-                            size={getPropValue('size', 'md') as 'sm' | 'md' | 'lg'}
-                            buttonType={getPropValue('buttonType', 'default') as 'default' | 'icon' | 'iconButton' | 'iconTop'}
-                            align={getPropValue('align', 'center') as 'left' | 'center' | 'right'}
-                            icon={getPropValue('showIcon', true) ? <Check size={16} /> : undefined}
-                            iconRight={getPropValue('showIconRight', false) ? <ArrowRight size={16} /> : undefined}
-                            block={getPropValue('block', false)}
-                            autowidth={getPropValue('autowidth', false)}
-                            disabled={getPropValue('disabled', false)}
-                            loading={getPropValue('loading', false)}
-                            hidden={getPropValue('hidden', false)}
-                            borderless={getPropValue('borderless', false)}
-                            badge={getPropValue('badge', '') || undefined}
-                            tooltip={getPropValue('tooltip', '') || undefined}
-                            hotkey={getPropValue('hotkey', '') || undefined}
-                            width={formatSizingValue(getPropValue('width', ''))}
-                            height={formatSizingValue(getPropValue('height', ''))}
-                            minWidth={formatSizingValue(getPropValue('minWidth', ''))}
-                            minHeight={formatSizingValue(getPropValue('minHeight', ''))}
-                            maxWidth={formatSizingValue(getPropValue('maxWidth', ''))}
-                            maxHeight={formatSizingValue(getPropValue('maxHeight', ''))}
-                            margin={getPropValue('margin', '') ? getPropValue('margin', '').includes(',') ? getPropValue('margin', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('margin', '')) : undefined}
-                            padding={getPropValue('padding', '') ? getPropValue('padding', '').includes(',') ? getPropValue('padding', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('padding', '')) : undefined}
-                            onClick={() => {
-                              setPlaygroundClickCount(c => c + 1);
-                              if (getPropValue('logOnClick', true)) addLog('onClick', 'playground button clicked');
-                            }}
-                            onMouseEnter={() => {
-                              if (getPropValue('logOnMouseEnter', true)) addLog('onMouseEnter', 'mouse entered button');
-                            }}
-                            onMouseLeave={() => {
-                              if (getPropValue('logOnMouseLeave', true)) addLog('onMouseLeave', 'mouse left button');
-                            }}
-                            onFocus={() => {
-                              if (getPropValue('logOnFocus', true)) addLog('onFocus', 'button received focus');
-                            }}
-                            onBlur={() => {
-                              if (getPropValue('logOnBlur', true)) addLog('onBlur', 'button lost focus');
-                            }}
-                            onKeyDown={(e) => {
-                              if (getPropValue('logOnKeyDown', true)) addLog('onKeyDown', `key pressed: ${e.key}`);
-                            }}
-                            onKeyUp={(e) => {
-                              if (getPropValue('logOnKeyUp', true)) addLog('onKeyUp', `key released: ${e.key}`);
-                            }}
-                            onItemClick={() => {
-                              if (getPropValue('logOnItemClick', false)) addLog('onItemClick', 'item clicked (AvakioBase event)');
-                            }}
-                            onAfterRender={() => {
-                              if (getPropValue('logOnAfterRender', false)) addLog('onAfterRender', 'component rendered');
-                            }}
-                            onBeforeRender={() => {
-                              if (getPropValue('logOnBeforeRender', false)) addLog('onBeforeRender', 'about to render');
-                            }}
-                            onViewShow={() => {
-                              if (getPropValue('logOnViewShow', false)) addLog('onViewShow', 'view shown');
-                            }}
-                          >
-                            {getPropValue('label', 'Click Me')}
-                          </AvakioButton>
-                          ) : (
-                            <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
-                              Component destroyed. Click "Recreate Component" to restore it.
-                            </div>
-                          )
-                        ]}
-                      />,
-                      <AvakioTemplate
-                        type="clean"
-                        padding={[10, 0, 10, 0]}
-                        borderType="clean"
-                        content={<>Click count: <strong>{playgroundClickCount}</strong></>}
-                      />,
-                      <AvakioTemplate
-                        type="clean"
-                        padding={[10, 0, 10, 0]}
-                        borderType="clean"
-                        content={<strong>Ref Methods</strong>}
-                      />,
-                      // Ref Methods
-                      <AvakioLayout
-                        type="clean"
-                        padding={10}
-                        borderless={false}                  
-                        height='100%'
-                        rows={[
-                          <AvakioTemplate
-                            type="clean"
-                            padding={[10, 0, 10, 0]}
-                            borderType="clean"
-                            scroll="xy"
-                            flexWrap={true}
-                            content={
-                              <>
-                                <AvakioButton
-                                  size="sm"
-                                  label='focus()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    buttonRef.current?.focus();
-                                    addLog('focus()', 'called via ref');
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label='blur()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    buttonRef.current?.blur();
-                                    addLog('blur()', 'called via ref');
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label='enable()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    buttonRef.current?.enable();
-                                    addLog('enable()', 'button enabled via ref');
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label='disable()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    buttonRef.current?.disable();
-                                    addLog('disable()', 'button disabled via ref');
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label='show()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    buttonRef.current?.show();
-                                    addLog('show()', 'button shown via ref');
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label='hide()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    buttonRef.current?.hide();
-                                    addLog('hide()', 'button hidden via ref');
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label='isEnabled()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    const enabled = buttonRef.current?.isEnabled();
-                                    addLog('isEnabled()', `result: ${enabled}`);
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label='isVisible()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    const visible = buttonRef.current?.isVisible();
-                                    addLog('isVisible()', `result: ${visible}`);
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label='getText()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    const text = buttonRef.current?.getText();
-                                    addLog('getText()', `result: "${text}"`);
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label='getElement()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    const el = buttonRef.current?.getElement();
-                                    addLog('getElement()', `element: ${el?.tagName}`);
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label='define()'
-                                  margin={[0, 10, 10, 0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    buttonRef.current?.define('disabled', true);
-                                    addLog('define()', 'set disabled to true');
-                                  }}
-                                />
-                                <AvakioButton
-                                  size="sm"
-                                  label={isComponentMounted ? 'Destroy Component' : 'Recreate Component'}
-                                  margin={[0,10,10,0]}
-                                  width='200px'
-                                  buttonWidth='150px'
-                                  onClick={() => {
-                                    setIsComponentMounted(!isComponentMounted);
-                                    addLog(isComponentMounted ? 'Destroy' : 'Recreate', isComponentMounted ? 'component unmounted' : 'component mounted');
-                                  }}
-                                />
-                              </>
+              type="clean"
+              borderless={true}
+              responsive
+              autoResize
+              gap={16}
+              height='100%'
+              cols={[
+                <AvakioLayout
+                  type="clean"
+                  borderless={true}                  
+                  height='100%'
+                  rows={[
+                    <AvakioLayout
+                      type="clean"
+                      padding={10}
+                      borderless={false}                        
+                      height='100%'
+                      rows={[
+                        isComponentMounted ? (
+                        <AvakioButton
+                          id={getPropValue('componentId', 'playground-button')}
+                          testId={getPropValue('testId', '') || undefined}
+                          className={getPropValue('className', '') || undefined}
+                          ref={buttonRef}
+                          variant={getPropValue('variant', 'primary') as 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'}
+                          size={getPropValue('size', 'md') as 'sm' | 'md' | 'lg'}
+                          buttonType={getPropValue('buttonType', 'default') as 'default' | 'icon' | 'iconButton' | 'iconTop' | 'iconBottom'}
+                          align={getPropValue('align', 'center') as 'left' | 'center' | 'right'}
+                          icon={getPropValue('showIcon', true) ? <Check size={16} /> : undefined}
+                          iconRight={getPropValue('showIconRight', false) ? <ArrowRight size={16} /> : undefined}
+                          image={getPropValue('image', '') || undefined}
+                          block={getPropValue('block', false)}
+                          autowidth={getPropValue('autowidth', false)}
+                          disabled={getPropValue('disabled', false)}
+                          loading={getPropValue('loading', false)}
+                          hidden={getPropValue('hidden', false)}
+                          borderless={getPropValue('borderless', false)}
+                          badge={getPropValue('badge', '') || undefined}
+                          tooltip={getPropValue('tooltip', '') || undefined}
+                          hotkey={getPropValue('hotkey', '') || undefined}
+                          popup={getPropValue('popup', '') || undefined}
+                          bottomLabel={getPropValue('bottomLabel', '') || undefined}
+                          buttonWidth={formatSizingValue(getPropValue('buttonWidth', ''))}
+                          buttonHeight={formatSizingValue(getPropValue('buttonHeight', ''))}
+                          textAlign={getPropValue('textAlign', '') as 'left' | 'center' | 'right' | undefined}
+                          name={getPropValue('name', '') || undefined}
+                          value={getPropValue('value', '') || undefined}
+                          type={getPropValue('type', 'button') as 'button' | 'submit' | 'reset'}
+                          width={formatSizingValue(getPropValue('width', ''))}
+                          height={formatSizingValue(getPropValue('height', ''))}
+                          minWidth={formatSizingValue(getPropValue('minWidth', ''))}
+                          minHeight={formatSizingValue(getPropValue('minHeight', ''))}
+                          maxWidth={formatSizingValue(getPropValue('maxWidth', ''))}
+                          maxHeight={formatSizingValue(getPropValue('maxHeight', ''))}
+                          margin={getPropValue('margin', '') ? getPropValue('margin', '').includes(',') ? getPropValue('margin', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('margin', '')) : undefined}
+                          padding={getPropValue('padding', '') ? getPropValue('padding', '').includes(',') ? getPropValue('padding', '').split(',').map(Number) as [number, number, number, number] : Number(getPropValue('padding', '')) : undefined}
+                          style={(() => {
+                            try {
+                              const styleStr = getPropValue('style', '');
+                              return styleStr ? JSON.parse(styleStr) : undefined;
+                            } catch {
+                              return undefined;
                             }
-                          />
-                        ]}
-                      />,
+                          })()}
+                          onClick={(e) => {
+                            setPlaygroundClickCount(c => c + 1);
+                            if (getPropValue('logOnClick', true)) addLog('onClick', 'playground button clicked');
+                            if (getPropValue('logOnItemClick', false)) addLog('onItemClick', 'item clicked (AvakioBase event)');
+                          }}
+                          onMouseEnter={() => {
+                            if (getPropValue('logOnMouseEnter', true)) addLog('onMouseEnter', 'mouse entered button');
+                          }}
+                          onMouseLeave={() => {
+                            if (getPropValue('logOnMouseLeave', true)) addLog('onMouseLeave', 'mouse left button');
+                          }}
+                          onFocus={() => {
+                            if (getPropValue('logOnFocus', true)) addLog('onFocus', 'button received focus');
+                          }}
+                          onBlur={() => {
+                            if (getPropValue('logOnBlur', true)) addLog('onBlur', 'button lost focus');
+                          }}
+                          onKeyDown={(e) => {
+                            if (getPropValue('logOnKeyDown', true)) addLog('onKeyDown', `key pressed: ${e.key}`);
+                          }}
+                          onKeyUp={(e) => {
+                            if (getPropValue('logOnKeyUp', true)) addLog('onKeyUp', `key released: ${e.key}`);
+                          }}
+                          onKeyPress={(e) => {
+                            if (getPropValue('logOnKeyPress', true)) addLog('onKeyPress', `key pressed: ${e.key}`);
+                          }}
+                          onAfterRender={() => {
+                            if (getPropValue('logOnAfterRender', false)) addLog('onAfterRender', 'component rendered');
+                          }}
+                          onBeforeRender={() => {
+                            if (getPropValue('logOnBeforeRender', false)) addLog('onBeforeRender', 'about to render');
+                          }}
+                          onViewShow={() => {
+                            if (getPropValue('logOnViewShow', false)) addLog('onViewShow', 'view shown');
+                          }}
+                        >
+                          {getPropValue('label', 'Click Me')}
+                        </AvakioButton>
+                        ) : (
+                          <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
+                            Component destroyed. Click "Recreate Component" to restore it.
+                          </div>
+                        )
+                      ]}
+                    />,
+                    <AvakioTemplate
+                      type="clean"
+                      padding={[10, 0, 10, 0]}
+                      borderType="clean"
+                      content={<strong>Ref Methods</strong>}
+                    />,
+                    <AvakioLayout
+                      type="clean"
+                      padding={10}
+                      borderless={false}                  
+                      height='100%'
+                      rows={[
+                        <AvakioTemplate
+                          type="clean"
+                          padding={[10, 0, 10, 0]}
+                          borderType="clean"
+                          scroll="xy"
+                          flexWrap={true}
+                          content={
+                            <>
+                              <AvakioButton
+                                size="sm"
+                                label='focus()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  buttonRef.current?.focus();
+                                  addLog('focus()', 'called via ref');
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label='blur()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  buttonRef.current?.blur();
+                                  addLog('blur()', 'called via ref');
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label='enable()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  buttonRef.current?.enable();
+                                  addLog('enable()', 'button enabled via ref');
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label='disable()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  buttonRef.current?.disable();
+                                  addLog('disable()', 'button disabled via ref');
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label='show()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  buttonRef.current?.show();
+                                  addLog('show()', 'button shown via ref');
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label='hide()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  buttonRef.current?.hide();
+                                  addLog('hide()', 'button hidden via ref');
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label='isEnabled()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  const enabled = buttonRef.current?.isEnabled();
+                                  addLog('isEnabled()', `result: ${enabled}`);
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label='isVisible()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  const visible = buttonRef.current?.isVisible();
+                                  addLog('isVisible()', `result: ${visible}`);
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label='getText()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  const text = buttonRef.current?.getText();
+                                  addLog('getText()', `result: "${text}"`);
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label='getElement()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  const el = buttonRef.current?.getElement();
+                                  addLog('getElement()', `element: ${el?.tagName}`);
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label='define()'
+                                margin={[0, 10, 10, 0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  buttonRef.current?.define('disabled', true);
+                                  addLog('define()', 'set disabled to true');
+                                }}
+                              />
+                              <AvakioButton
+                                size="sm"
+                                label={isComponentMounted ? 'Destroy Component' : 'Recreate Component'}
+                                margin={[0,10,10,0]}
+                                width='200px'
+                                buttonWidth='150px'
+                                onClick={() => {
+                                  setIsComponentMounted(!isComponentMounted);
+                                  addLog(isComponentMounted ? 'Destroy' : 'Recreate', isComponentMounted ? 'component unmounted' : 'component mounted');
+                                }}
+                              />
+                            </>
+                          }
+                        />
+                      ]}
+                    />,
+                  ]}
+                />,
+                <AvakioLayout
+                  id='Layout-row-Column2'
+                  type="clean"
+                  borderless={true}
+                  height='100%'
+                  rows={[
+                    <AvakioProperty
+                      ref={propertyRef}
+                      id='Property-playground-props'
+                      className='avakio-fill-container'
+                      items={playgroundProps}
+                      onChange={handlePlaygroundPropsChange}
+                      size='compact'
+                      showBorders
+                      autoHeight
+                      overflowY='auto'
+                    />,
+                    <AvakioTemplate
+                      type="clean"
+                      borderType="clean"
+                      padding={[10, 0, 0, 0]}
+                      align="right"  
+                      flexWrap={true}                      
+                      content={
+                      <>
+                        <AvakioButton
+                          size="sm"
+                          label="Get Item Count"
+                          margin={[10, 10, 0, 0]}
+                          onClick={() => {
+                          const count = propertyRef.current?.getItemCount();
+                          addLog('PropertyItem Count', `Num of Items: ${count}`);
+                          }}
+                        />               
+                        <AvakioButton
+                          id='Button-reset-playground'
+                          size="sm"
+                          label="Reset"
+                          margin={[10, 0, 0, 0]}
+                          onClick={() => {
+                            // Reset to initial values
+                            setPlaygroundProps([
+                              // Identity Group
+                              { id: 'componentId', label: 'ID', type: 'text', value: 'playground-button', group: 'Identity', placeholder: 'Component ID' },
+                              { id: 'testId', label: 'Test ID', type: 'text', value: '', group: 'Identity', placeholder: 'Test ID for testing' },
+                              { id: 'className', label: 'Class Name', type: 'text', value: '', group: 'Identity', placeholder: 'Additional CSS class' },
+                              // Content Group
+                              { id: 'label', label: 'Label', type: 'text', value: 'Click Me', group: 'Content', placeholder: 'Button text' },
+                              { id: 'tooltip', label: 'Tooltip', type: 'text', value: '', group: 'Content', placeholder: 'Tooltip text' },
+                              { id: 'hotkey', label: 'Hotkey', type: 'text', value: '', group: 'Content', placeholder: 'e.g. ctrl+s' },
+                              { id: 'badge', label: 'Badge', type: 'text', value: '', group: 'Content', placeholder: 'e.g. 5 or New' },
+                              { id: 'image', label: 'Image URL', type: 'text', value: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMSA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDMgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjMDA3QUNDIi8+Cjwvc3ZnPgo=', group: 'Content', placeholder: 'Image URL to display' },
+                              { id: 'popup', label: 'Popup', type: 'text', value: '', group: 'Content', placeholder: 'Popup menu ID' },
+                              { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'Content', placeholder: 'Bottom help text' },
+                              // Appearance Group
+                              { id: 'variant', label: 'Variant', type: 'select', value: 'primary', group: 'Appearance', selectOptions: [
+                                { id: 'primary', value: 'Primary' },
+                                { id: 'secondary', value: 'Secondary' },
+                                { id: 'outline', value: 'Outline' },
+                                { id: 'ghost', value: 'Ghost' },
+                                { id: 'danger', value: 'Danger' },
+                              ]},
+                              { id: 'size', label: 'Size', type: 'select', value: 'md', group: 'Appearance', selectOptions: [
+                                { id: 'sm', value: 'Small' },
+                                { id: 'md', value: 'Medium' },
+                                { id: 'lg', value: 'Large' },
+                              ]},
+                              { id: 'buttonType', label: 'Button Type', type: 'select', value: 'default', group: 'Appearance', selectOptions: [
+                                { id: 'default', value: 'Default' },
+                                { id: 'icon', value: 'Icon Only' },
+                                { id: 'iconButton', value: 'Icon Button' },
+                                { id: 'iconTop', value: 'Icon Top' },
+                                { id: 'iconBottom', value: 'Icon Bottom' },
+                              ]},
+                              { id: 'align', label: 'Text Align', type: 'select', value: 'center', group: 'Appearance', selectOptions: [
+                                { id: 'left', value: 'Left' },
+                                { id: 'center', value: 'Center' },
+                                { id: 'right', value: 'Right' },
+                              ]},
+                              // Layout Group
+                              { id: 'block', label: 'Block', type: 'checkbox', value: false, group: 'Layout', checkboxLabel: 'Full width' },
+                              { id: 'autowidth', label: 'Auto Width', type: 'checkbox', value: false, group: 'Layout', checkboxLabel: 'Fit content' },
+                              { id: 'borderless', label: 'Borderless', type: 'checkbox', value: false, group: 'Layout', checkboxLabel: 'Remove borders' },
+                              { id: 'buttonWidth', label: 'Button Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 200 or 100%' },
+                              { id: 'buttonHeight', label: 'Button Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 40 or auto' },
+                              { id: 'textAlign', label: 'Button Text Align', type: 'select', value: '', group: 'Layout', selectOptions: [
+                                { id: '', value: 'Default' },
+                                { id: 'left', value: 'Left' },
+                                { id: 'center', value: 'Center' },
+                                { id: 'right', value: 'Right' },
+                              ]},
+                              { id: 'width', label: 'Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 200px or 100%' },
+                              { id: 'height', label: 'Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 50px' },
+                              { id: 'minWidth', label: 'Min Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 100px' },
+                              { id: 'minHeight', label: 'Min Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 38px' },
+                              { id: 'maxWidth', label: 'Max Width', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 500px' },
+                              { id: 'maxHeight', label: 'Max Height', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 100px' },
+                              { id: 'margin', label: 'Margin', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 10 or 10px' },
+                              { id: 'padding', label: 'Padding', type: 'text', value: '', group: 'Layout', placeholder: 'e.g. 12 or 12px' },
+                              { id: 'style', label: 'Custom Style', type: 'text', value: '', group: 'Layout', placeholder: 'CSS object as JSON' },
+                              // Form Integration Group
+                              { id: 'name', label: 'Name', type: 'text', value: '', group: 'Form', placeholder: 'Form field name' },
+                              { id: 'value', label: 'Value', type: 'text', value: '', group: 'Form', placeholder: 'Form field value' },
+                              { id: 'type', label: 'Button Type', type: 'select', value: 'button', group: 'Form', selectOptions: [
+                                { id: 'button', value: 'Button' },
+                                { id: 'submit', value: 'Submit' },
+                                { id: 'reset', value: 'Reset' },
+                              ]},
+                              // Icons Group
+                              { id: 'showIcon', label: 'Show Icon', type: 'checkbox', value: true, group: 'Icons', checkboxLabel: 'Display left icon' },
+                              { id: 'showIconRight', label: 'Show Icon Right', type: 'checkbox', value: false, group: 'Icons', checkboxLabel: 'Display right icon' },
+                              // State Group
+                              { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Disable the button' },
+                              { id: 'loading', label: 'Loading', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Show loading spinner' },
+                              { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Hide the button' },
+                              // Events Group
+                              { id: 'logOnClick', label: 'Log onClick', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onClick events' },
+                              { id: 'logOnMouseEnter', label: 'Log onMouseEnter', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onMouseEnter events' },
+                              { id: 'logOnMouseLeave', label: 'Log onMouseLeave', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onMouseLeave events' },
+                              { id: 'logOnFocus', label: 'Log onFocus', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onFocus events' },
+                              { id: 'logOnBlur', label: 'Log onBlur', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onBlur events' },
+                              { id: 'logOnKeyDown', label: 'Log onKeyDown', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyDown events' },
+                              { id: 'logOnKeyUp', label: 'Log onKeyUp', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyUp events' },
+                              { id: 'logOnKeyPress', label: 'Log onKeyPress', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyPress events' },
+                              { id: 'logOnItemClick', label: 'Log onItemClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onItemClick events' },
+                              { id: 'logOnAfterRender', label: 'Log onAfterRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterRender events' },
+                              { id: 'logOnBeforeRender', label: 'Log onBeforeRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBeforeRender events' },
+                              { id: 'logOnViewShow', label: 'Log onViewShow', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewShow events' },
+                            ]);
+                            setPlaygroundClickCount(0);
+                            setIsComponentMounted(true);
+                            addLog('Reset', 'playground configuration reset to defaults');
+                          }}
+                        />  
+                      </>                                                
+                        }
+                      />                      
                     ]}
-                  />,
-                  <AvakioProperty
-                    id='Property-playground-props'
-                    className='avakio-fill-container'
-                    items={playgroundProps}
-                    onChange={handlePlaygroundPropsChange}
-                    size='compact'
-                    showBorders
-                    autoHeight
-                    overflowY='auto'
                   />
                 ]}
-            />        
-          ]}
-        />             
+              />
+            ]}
+          />                       
       </section>
 
       {/* Documentation Section */}

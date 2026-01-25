@@ -174,6 +174,8 @@ export const AvakioDateRangePicker = forwardRef<AvakioBaseRef<AvakioDateRange>, 
     onFocus,
     onItemClick,
     onKeyPress,
+    onAfterRender,
+    onBeforeRender,
   } = props;
 
   const isControlled = value !== undefined;
@@ -205,6 +207,8 @@ export const AvakioDateRangePicker = forwardRef<AvakioBaseRef<AvakioDateRange>, 
     onFocus,
     onItemClick,
     onKeyPress,
+    onAfterRender,
+    onBeforeRender,
   });
 
   // Combine external invalid prop with internal validation state

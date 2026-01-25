@@ -52,6 +52,7 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
       isHidden,
       config,
       methods,
+      eventHandlers,
     } = useAvakioBase({
       hidden: baseProps.hidden,
       disabled: baseProps.disabled,
@@ -170,6 +171,7 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
             data-testid={mergedProps.testId}
             className={labelClasses}
             style={inlineStyles}
+            onClick={eventHandlers.onItemClick}
           >
             {currentHtml ? (
               <div dangerouslySetInnerHTML={{ __html: currentHtml }} />

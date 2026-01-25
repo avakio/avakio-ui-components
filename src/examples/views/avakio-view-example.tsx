@@ -287,8 +287,8 @@ export function AvakioViewExample() {
               padding={30}
               hidden={!showAnimatedView}
               animate={animationType}
-              onShow={() => console.log(`View shown with ${animationType} animation`)}
-              onHide={() => console.log('View hidden')}
+              onShow={() => {}}
+              onHide={() => {}}
             >
               <div className="avakio-view-content-center">
                 <Zap size={48} />
@@ -512,8 +512,8 @@ export function AvakioViewExample() {
               key="event-focus"
               width="100%"
               padding={20}
-              onFocus={() => console.log('View focused')}
-              onBlur={() => console.log('View blurred')}
+              onFocus={() => {}}
+              onBlur={() => {}}
             >
               <div className="avakio-view-content">
                 <Eye size={32} />

@@ -226,6 +226,35 @@ export const computeBaseStyles = (props: AvakioBaseProps): React.CSSProperties =
     style,
   } = props;
 
+  // Handle padding conflict: if bottomPadding is set, decompose padding shorthand to avoid conflicts
+  const paddingStyle: Partial<React.CSSProperties> = {};
+  
+  if (bottomPadding) {
+    // When bottomPadding is set, we need to avoid shorthand padding and use specific properties
+    if (padding !== undefined) {
+      if (typeof padding === 'number') {
+        // Single number: apply to top, left, right (bottom overridden by bottomPadding)
+        paddingStyle.paddingTop = `${padding}px`;
+        paddingStyle.paddingRight = `${padding}px`;
+        paddingStyle.paddingLeft = `${padding}px`;
+      } else if (typeof padding === 'string') {
+        // String: assume it's a valid CSS value for top, left, right
+        paddingStyle.paddingTop = padding;
+        paddingStyle.paddingRight = padding;
+        paddingStyle.paddingLeft = padding;
+      } else if (Array.isArray(padding)) {
+        // Array [top, right, bottom, left]: use top, right, left (bottom overridden by bottomPadding)
+        paddingStyle.paddingTop = `${padding[0]}px`;
+        paddingStyle.paddingRight = `${padding[1]}px`;
+        paddingStyle.paddingLeft = `${padding[3]}px`;
+      }
+    }
+    paddingStyle.paddingBottom = `${bottomPadding}px`;
+  } else {
+    // No bottomPadding conflict, use shorthand
+    paddingStyle.padding = formatSpacing(padding);
+  }
+
   return {
     ...style,
     display: hidden ? 'none' : undefined,
@@ -236,8 +265,7 @@ export const computeBaseStyles = (props: AvakioBaseProps): React.CSSProperties =
     maxHeight: formatSize(maxHeight),
     maxWidth: formatSize(maxWidth),
     margin: formatSpacing(margin),
-    padding: formatSpacing(padding),
-    paddingBottom: bottomPadding ? `${bottomPadding}px` : undefined,
+    ...paddingStyle,
     textAlign: align,
     alignItems: align === 'center' ? 'center' : align === 'right' ? 'flex-end' : align === 'left' ? 'flex-start' : undefined,
     justifyContent: align === 'center' ? 'center' : align === 'right' ? 'flex-end' : align === 'left' ? 'flex-start' : undefined,

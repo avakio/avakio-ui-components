@@ -9,9 +9,8 @@ import './avakio-button.css';
 
 export type AvakioButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 export type AvakioButtonSize = 'sm' | 'md' | 'lg';
-export type AvakioButtonType = 'default' | 'icon' | 'iconButton' | 'iconTop';
+export type AvakioButtonType = 'default' | 'icon' | 'iconButton' | 'iconTop' | 'iconBottom';
 export type AvakioButtonAlign = 'left' | 'center' | 'right';
-export type AvakioButtonTheme = 'material' | 'flat' | 'compact' | 'dark' | 'ocean' | 'sunset';
 
 export interface AvakioButtonProps extends AvakioBaseProps {
   /** Button text (children override this) */
@@ -48,18 +47,18 @@ export interface AvakioButtonProps extends AvakioBaseProps {
   hotkey?: string;
   /** Popup menu ID or component */
   popup?: string | React.ReactNode;
+  /** Bottom label text displayed below the button */
+  bottomLabel?: string;
   /** Value for form submission */
   value?: string;
   /** Name for form submission */
   name?: string;
-  /** Theme variant */
-  theme?: AvakioButtonTheme;
   /** Button HTML type */
   type?: 'button' | 'submit' | 'reset';
   /** Children content (overrides label) */
   children?: React.ReactNode;
   /** onClick handler */
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event?: any) => void;
   /** onMouseEnter handler */
   onMouseEnter?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   /** onMouseLeave handler */
@@ -91,9 +90,9 @@ export const AvakioButton = forwardRef<AvakioBaseRef, AvakioButtonProps>(functio
     image,
     hotkey,
     popup,
+    bottomLabel,
     value,
     name,
-    theme,
     type = 'button',
     onClick,
     onMouseEnter,
@@ -119,7 +118,8 @@ export const AvakioButton = forwardRef<AvakioBaseRef, AvakioButtonProps>(functio
     hidden: baseProps.hidden,
     onFocus: baseProps.onFocus,
     onBlur: baseProps.onBlur,
-    onItemClick: onClick,
+    onAfterRender: baseProps.onAfterRender,
+    onBeforeRender: baseProps.onBeforeRender,
   });
 
   // Merge config from define() with baseProps
@@ -171,7 +171,7 @@ export const AvakioButton = forwardRef<AvakioBaseRef, AvakioButtonProps>(functio
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [hotkey, isDisabled]);
 
-  const buttonTypeClass = buttonType === 'icon' || buttonType === 'iconButton' ? 'icon' : buttonType === 'iconTop' ? 'icon-top' : 'default';
+  const buttonTypeClass = buttonType === 'icon' || buttonType === 'iconButton' ? 'icon' : buttonType === 'iconTop' ? 'icon-top' : buttonType === 'iconBottom' ? 'icon-bottom' : 'default';
 
   // Compute base styles from merged props (original + config from define())
   const baseStyles = computeBaseStyles({ ...mergedProps, hidden: isHidden });
@@ -193,13 +193,12 @@ export const AvakioButton = forwardRef<AvakioBaseRef, AvakioButtonProps>(functio
         }}
         id={mergedProps.id}
         data-testid={mergedProps.testId}
-        data-admin-theme={theme}
         className={[
           'avakio-button',
           `avakio-button-${variant}`,
           `avakio-button-${size}`,
           `avakio-button-type-${buttonTypeClass}`,
-          `avakio-button-align-${align}`,
+          textAlign ? `avakio-button-align-${textAlign}` : '',
           block ? 'avakio-button-block' : '',
           autowidth ? 'avakio-button-autowidth' : '',
           loading ? 'avakio-button-loading' : '',
@@ -210,7 +209,6 @@ export const AvakioButton = forwardRef<AvakioBaseRef, AvakioButtonProps>(functio
         style={{
           width: typeof buttonWidth === 'number' ? `${buttonWidth}px` : buttonWidth,
           height: typeof buttonHeight === 'number' ? `${buttonHeight}px` : buttonHeight,
-          textAlign: textAlign,
         }}
         disabled={isDisabled}
         title={mergedProps.tooltip}
@@ -228,14 +226,20 @@ export const AvakioButton = forwardRef<AvakioBaseRef, AvakioButtonProps>(functio
         <span className="avakio-button-inner">
           {loading && <span className="avakio-button-spinner" aria-hidden />}
           {image && <img src={image} alt="" className="avakio-button-image-el" />}
-          {icon && <span className="avakio-button-icon-left">{icon}</span>}
+          {buttonType !== 'iconBottom' && icon && <span className="avakio-button-icon-left">{icon}</span>}
           {(children || label) && <span className="avakio-button-label">{children ?? label}</span>}
+          {buttonType === 'iconBottom' && icon && <span className="avakio-button-icon-bottom">{icon}</span>}
           {badge !== undefined && <span className="avakio-button-badge">{badge}</span>}
           {iconRight && <span className="avakio-button-icon-right">{iconRight}</span>}
           {hotkey && <span className="avakio-button-hotkey">{hotkey}</span>}
         </span>
         {popup && typeof popup === 'string' && <div className="avakio-button-popup-ref" data-popup={popup} />}
       </button>
+      {bottomLabel && (
+        <div className="avakio-button-bottom-label">
+          {bottomLabel}
+        </div>
+      )}
     </div>
   );
 });

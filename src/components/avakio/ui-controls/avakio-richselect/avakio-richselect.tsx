@@ -90,6 +90,8 @@ export const AvakioRichSelect = forwardRef<AvakioRichSelectRef, AvakioRichSelect
     onBlur: baseProps.onBlur,
     onFocus: baseProps.onFocus,
     onKeyPress: baseProps.onKeyPress,
+    onAfterRender: baseProps.onAfterRender,
+    onBeforeRender: baseProps.onBeforeRender,
   });
 
   // Merge config from define() with baseProps
