@@ -153,7 +153,7 @@ export const AvakioSwitchButton = forwardRef<AvakioSwitchButtonRef, AvakioSwitch
 
     // Sync disabled prop
     useEffect(() => {
-      setDisabled(disabledProp);
+      setDisabled((prev) => (prev === disabledProp ? prev : disabledProp));
     }, [disabledProp]);
 
     // Expose imperative methods

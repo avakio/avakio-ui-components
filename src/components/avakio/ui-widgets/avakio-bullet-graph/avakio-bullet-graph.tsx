@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import './avakio-bullet-graph.css';
 
@@ -113,72 +113,76 @@ export function AvakioBulletGraph({
   className,
   style,
 }: AvakioBulletGraphProps) {
-  const [animatedValue, setAnimatedValue] = useState(minRange);
-  const animationRef = useRef<number | null>(null);
-  const prevValueRef = useRef(minRange);
-
   // Clamp value to range
-  const clampedValue = useMemo(() => {
-    return Math.max(minRange, Math.min(maxRange, value));
-  }, [value, minRange, maxRange]);
+  const clampedValue = Math.max(minRange, Math.min(maxRange, value));
 
-  // Animate value changes
+  // For animation, we track the displayed value separately
+  // Use lazy initializer to compute initial value only once
+  const [displayValue, setDisplayValue] = useState(() => 
+    Math.max(minRange, Math.min(maxRange, value))
+  );
+  const animationRef = useRef<number | null>(null);
+  // Initialize ref with lazy function to avoid recalculating on every render
+  const lastValueRef = useRef<number | null>(null);
+  if (lastValueRef.current === null) {
+    lastValueRef.current = Math.max(minRange, Math.min(maxRange, value));
+  }
+
+  // Simple effect that only triggers animation when value actually changes
   useEffect(() => {
-    if (!smoothFlow || flowTime === 0) {
-      setAnimatedValue(clampedValue);
-      prevValueRef.current = clampedValue;
-      return;
-    }
-
-    const startValue = prevValueRef.current;
-    const endValue = clampedValue;
+    // Calculate the new clamped value
+    const newValue = Math.max(minRange, Math.min(maxRange, value));
     
-    // Skip animation if values are the same (with small epsilon for floating point)
-    if (Math.abs(startValue - endValue) < 0.001) {
-      prevValueRef.current = endValue;
+    // Skip if nothing changed
+    if (lastValueRef.current === newValue) {
       return;
     }
     
-    const startTime = performance.now();
-    let rafId: number | null = null;
-    let isCancelled = false;
-
-    const animate = (currentTime: number) => {
-      if (isCancelled) return;
-      
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / flowTime, 1);
-      
-      // Ease out cubic
-      const easeProgress = 1 - Math.pow(1 - progress, 3);
-      const currentValue = startValue + (endValue - startValue) * easeProgress;
-      
-      setAnimatedValue(currentValue);
-
-      if (progress < 1 && !isCancelled) {
-        rafId = requestAnimationFrame(animate);
-        animationRef.current = rafId;
-      } else {
-        prevValueRef.current = endValue;
-        animationRef.current = null;
-      }
-    };
-
-    if (animationRef.current) {
+    const fromValue = lastValueRef.current;
+    lastValueRef.current = newValue;
+    
+    // Cancel existing animation
+    if (animationRef.current !== null) {
       cancelAnimationFrame(animationRef.current);
       animationRef.current = null;
     }
-    rafId = requestAnimationFrame(animate);
-    animationRef.current = rafId;
-
-    return () => {
-      isCancelled = true;
-      if (rafId) {
-        cancelAnimationFrame(rafId);
+    
+    // No animation - just set directly
+    if (!smoothFlow || flowTime === 0) {
+      setDisplayValue(newValue);
+      return;
+    }
+    
+    // Animate
+    const startTime = Date.now();
+    const diff = newValue - fromValue;
+    
+    const step = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(1, elapsed / flowTime);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      
+      setDisplayValue(fromValue + diff * eased);
+      
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(step);
+      } else {
         animationRef.current = null;
       }
     };
-  }, [clampedValue, flowTime]);
+    
+    animationRef.current = requestAnimationFrame(step);
+    
+    return () => {
+      if (animationRef.current !== null) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+    };
+  }, [value, minRange, maxRange, smoothFlow, flowTime]);
+  
+  // Use displayValue for rendering (animatedValue)
+  const animatedValue = displayValue;
 
   // Calculate percentage position
   const getPercentage = (val: number) => {

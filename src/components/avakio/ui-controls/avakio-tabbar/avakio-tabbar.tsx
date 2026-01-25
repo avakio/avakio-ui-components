@@ -112,14 +112,15 @@ export function AvakioTabBar({
     const exists = visibleOptions.some((opt) => opt.id === internalValue && !opt.disabled);
     if (!exists) {
       const fallback = visibleOptions.find((opt) => !opt.disabled)?.id ?? null;
-      setInternalValue(fallback);
+      setInternalValue((prev) => (prev === fallback ? prev : fallback));
     }
   }, [visibleOptions, internalValue, value]);
 
   // Mirror controlled value into internal state for focus management
   useEffect(() => {
     if (value !== undefined) {
-      setInternalValue(value ?? null);
+      const normalizedValue = value ?? null;
+      setInternalValue((prev) => (prev === normalizedValue ? prev : normalizedValue));
     }
   }, [value]);
 

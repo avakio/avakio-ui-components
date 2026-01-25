@@ -34,6 +34,7 @@ export function AvakioLabelExample() {
   
   // Playground state
   const [playgroundValue, setPlaygroundValue] = useState<string>('Sample Label Text');
+  const [isComponentMounted, setIsComponentMounted] = useState<boolean>(true);
   
   // Playground property items for AvakioProperty
   const [playgroundProps, setPlaygroundProps] = useState<AvakioPropertyItem[]>([
@@ -90,14 +91,28 @@ export function AvakioLabelExample() {
     { id: 'hidden', label: 'Hidden', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Hide the component' },
     { id: 'disabled', label: 'Disabled', type: 'checkbox', value: false, group: 'State', checkboxLabel: 'Disable the component' },
     { id: 'borderless', label: 'Borderless', type: 'checkbox', value: true, group: 'State', checkboxLabel: 'Hide component borders' },
+
+    // Events Group (toggles to enable event logging)
+    { id: 'logOnBeforeRender', label: 'Log onBeforeRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBeforeRender events' },
+    { id: 'logOnAfterRender', label: 'Log onAfterRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterRender events' },
+    { id: 'logOnViewShow', label: 'Log onViewShow', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewShow events' },
+    { id: 'logOnItemClick', label: 'Log onItemClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onItemClick events' },
+    { id: 'logOnViewResize', label: 'Log onViewResize', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewResize events' },
+    { id: 'logOnAfterScroll', label: 'Log onAfterScroll', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterScroll events' },
   ]);
 
   // Helper to get prop value from playground props
-  const getPropValue = <T,>(propId: string, defaultValue: T): T => {
+  const getPropValue = React.useCallback(<T,>(propId: string, defaultValue: T): T => {
     const prop = playgroundProps.find(p => p.id === propId);
     if (prop?.value === undefined || prop?.value === null || prop?.value === '') return defaultValue;
     return prop.value as T;
-  };
+  }, [playgroundProps]);
+
+  // Add to local event log and global event log (must be above all usages)
+  const addLog = React.useCallback((action: string, details: string = '') => {
+    setEventLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()} - ${action}${details ? ': ' + details : ''}`]);
+    addEventLog('Label', action, details);
+  }, []);
 
   // Handle property changes (update state only, no logging)
   const handlePlaygroundPropsChange = (items: AvakioPropertyItem[], changed: AvakioPropertyItem) => {
@@ -108,6 +123,16 @@ export function AvakioLabelExample() {
   const labelRef = useRef<AvakioLabelRef>(null);
   const propertyRef = useRef<AvakioPropertyRef>(null);
   const [eventLog, setEventLog] = useState<string[]>([]);
+
+
+
+  // Event handlers for AvakioLabel events
+  const handleBeforeRender = React.useCallback(() => {
+    if (getPropValue('logOnBeforeRender', false)) addLog('onBeforeRender');
+  }, [getPropValue, addLog]);
+  const handleAfterRender = React.useCallback(() => {
+    if (getPropValue('logOnAfterRender', false)) addLog('onAfterRender');
+  }, [getPropValue, addLog]);
 
   // Scroll to section when tab is clicked
   const handleTabChange = ({ value }: { value: string | number | null }) => {
@@ -120,13 +145,6 @@ export function AvakioLabelExample() {
     }
   };
 
-  // Add to local event log and global event log
-  const addLog = (action: string, details: string = '') => {
-    // Add to local log for display in the example
-    setEventLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()} - ${action}${details ? ': ' + details : ''}`]);
-    // Add to global event log sidebar
-    addEventLog('Label', action, details);
-  };
 
   // Add textOnBlur handlers to text fields after addLog is defined
   React.useEffect(() => {
@@ -139,7 +157,7 @@ export function AvakioLabelExample() {
       }
       return item;
     }));
-  }, []);
+  }, [addLog]);
 
   // Props documentation data
   interface PropDoc {
@@ -195,7 +213,12 @@ export function AvakioLabelExample() {
   ];
 
   const eventsData: PropDoc[] = [
-    // Label is a purely presentational component with no interactive events
+    { id: 1, name: 'onBeforeRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately before the component has been rendered', from: 'Base' },
+    { id: 2, name: 'onAfterRender', type: '() => void', defaultValue: 'undefined', description: 'Occurs immediately after the component has been rendered', from: 'Base' },
+    { id: 3, name: 'onViewShow', type: '() => void', defaultValue: 'undefined', description: 'Fires when the view becomes visible (hidden → visible transition)', from: 'Base' },
+    { id: 4, name: 'onItemClick', type: '(event: React.MouseEvent) => void', defaultValue: 'undefined', description: 'Fires after the control has been clicked', from: 'Base' },
+    { id: 5, name: 'onViewResize', type: '(width: number, height: number) => void', defaultValue: 'undefined', description: 'Fires when the component is resized', from: 'Base' },
+    { id: 6, name: 'onAfterScroll', type: '(scrollTop: number, scrollLeft: number) => void', defaultValue: 'undefined', description: 'Occurs when the view has been scrolled', from: 'Base' },
   ];
 
   const refMethodsData: PropDoc[] = [
@@ -540,6 +563,7 @@ export function AvakioLabelExample() {
                         height='100%'
                         style={{ overflow: 'auto' }}
                         rows={[
+                          isComponentMounted ? (
                           <AvakioLabel
                             id={getPropValue('componentId', 'playground-label')}
                             testId={getPropValue('testId', '') || undefined}
@@ -581,7 +605,31 @@ export function AvakioLabelExample() {
                             hidden={getPropValue('hidden', false)}
                             disabled={getPropValue('disabled', false)}
                             borderless={getPropValue('borderless', false)}
+                            // Events
+                            onBeforeRender={() => {
+                              if (getPropValue('logOnBeforeRender', false)) addLog('onBeforeRender', 'about to render');
+                            }}
+                            onAfterRender={() => {
+                              if (getPropValue('logOnAfterRender', false)) addLog('onAfterRender', 'component rendered');
+                            }}
+                            onViewShow={() => {
+                              if (getPropValue('logOnViewShow', false)) addLog('onViewShow', 'view shown');
+                            }}
+                            onItemClick={(e) => {
+                              if (getPropValue('logOnItemClick', false)) addLog('onItemClick', 'item clicked');
+                            }}
+                            onViewResize={(width, height) => {
+                              if (getPropValue('logOnViewResize', false)) addLog('onViewResize', `width: ${width}, height: ${height}`);
+                            }}
+                            onAfterScroll={(scrollTop, scrollLeft) => {
+                              if (getPropValue('logOnAfterScroll', false)) addLog('onAfterScroll', `scrollTop: ${scrollTop}, scrollLeft: ${scrollLeft}`);
+                            }}
                           />
+                          ) : (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
+                              Component destroyed. Click "Recreate Component" to restore it.
+                            </div>
+                          )
                         ]}
                       />,
                       <AvakioTemplate
@@ -792,6 +840,17 @@ export function AvakioLabelExample() {
                                     addLog('define()', 'set text to "Updated via define()"');
                                   }}
                                 />
+                                <AvakioButton
+                                  size="sm"
+                                  label={isComponentMounted ? 'Destroy Component' : 'Recreate Component'}
+                                  margin={[0, 10, 10, 0]}
+                                  width='200px'
+                                  buttonWidth='150px'
+                                  onClick={() => {
+                                    setIsComponentMounted(!isComponentMounted);
+                                    addLog(isComponentMounted ? 'Destroy' : 'Recreate', isComponentMounted ? 'component unmounted' : 'component mounted');
+                                  }}
+                                />
                               </>
                             }
                           />
@@ -950,11 +1009,23 @@ export function AvakioLabelExample() {
           padding={[24, 0, 0, 16]}
           content={<strong>Events</strong>}
         />
-        <AvakioTemplate
+        <AvakioLayout
           type="clean"
-          borderType="clean"
-          padding={[8, 0, 0, 16]}
-          content="Label is a purely presentational component and does not support interactive events."
+          borderless={false}
+          margin={12}
+          padding={0}
+          rows={[
+            <AvakioDataTable<PropDoc>
+              key="events-table"
+              id="label-events-table"
+              data={eventsData}
+              filterable
+              sortable
+              columns={propsColumns}
+              select={false}
+              showRowNum
+            />,
+          ]}
         />
 
         {/* Ref Methods Table */}

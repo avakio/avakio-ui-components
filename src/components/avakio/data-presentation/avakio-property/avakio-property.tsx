@@ -282,7 +282,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
     const [rows, setRows] = useState<AvakioPropertyItem[]>(items);
     const [autoHeightValue, setAutoHeightValue] = useState<number | null>(null);
     
-    // Use the base hook for common functionality
+    // Use the base hook for common functionality (don't use its value management)
     const {
       rootRef,
       isDisabled,
@@ -293,9 +293,7 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
       eventHandlers,
     } = useAvakioBase<AvakioPropertyItem[]>({
       initialValue: items,
-      onChange: (newVal) => {
-        if (newVal) setRows(newVal);
-      },
+      // Don't use onChange here - we manage rows state separately
       disabled,
       hidden,
       getTextValue: (v) => (v ? JSON.stringify(v) : ''),
@@ -310,17 +308,22 @@ export const AvakioProperty = forwardRef<AvakioPropertyRef, AvakioPropertyProps>
       onAfterScroll,
     });
   const [lastChanged, setLastChanged] = useState<AvakioPropertyItem | null>(null);
+  const rowsRef = useRef(rows);
+  
+  // Keep rowsRef in sync with rows state
+  rowsRef.current = rows;
 
-  useEffect(() => {
-    setRows(items);
-  }, [items]);
+  // NOTE: We do NOT sync items prop changes after mount.
+  // If you need to reset the rows, use a key prop on the component.
+  // This prevents infinite loops when items is recreated on every parent render.
 
+  // Call onChange when lastChanged is set - use ref to avoid rows in deps
   useEffect(() => {
     if (lastChanged) {
-      onChange?.(rows, lastChanged);
+      onChange?.(rowsRef.current, lastChanged);
       setLastChanged(null);
     }
-  }, [lastChanged, onChange, rows]);
+  }, [lastChanged, onChange]);
 
   // Auto-height: observe parent container and calculate available height
   useEffect(() => {

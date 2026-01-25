@@ -447,29 +447,44 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
   const [currentInvalidMessage, setCurrentInvalidMessage] = useState(invalidMessage);
   const [config, setConfig] = useState<Partial<AvakioBaseProps>>({});
 
-  // Sync with prop changes
-  React.useEffect(() => {
-    setValueState(initialValue);
-  }, [initialValue]);
+  // NOTE: We intentionally do NOT sync initialValue changes after mount.
+  // The initialValue prop is only used for the initial useState value.
+  // Components that need controlled behavior should use value/onChange pattern.
+  // This prevents infinite loops when parent passes new object/array references.
 
   React.useEffect(() => {
-    setIsDisabled(disabled);
+    setIsDisabled((currentState) => {
+      if (currentState === disabled) return currentState;
+      return disabled;
+    });
   }, [disabled]);
 
   React.useEffect(() => {
-    setIsHidden(hidden);
+    setIsHidden((currentState) => {
+      if (currentState === hidden) return currentState;
+      return hidden;
+    });
   }, [hidden]);
 
   React.useEffect(() => {
-    setIsRequired(required);
+    setIsRequired((currentState) => {
+      if (currentState === required) return currentState;
+      return required;
+    });
   }, [required]);
 
   React.useEffect(() => {
-    setIsInvalid(invalid);
+    setIsInvalid((currentState) => {
+      if (currentState === invalid) return currentState;
+      return invalid;
+    });
   }, [invalid]);
 
   React.useEffect(() => {
-    setCurrentInvalidMessage(invalidMessage);
+    setCurrentInvalidMessage((currentState) => {
+      if (currentState === invalidMessage) return currentState;
+      return invalidMessage;
+    });
   }, [invalidMessage]);
 
   // Clear invalid state when value changes (if not externally forced invalid)
@@ -478,7 +493,7 @@ export function useAvakioBase<T = string>(options: UseAvakioBaseOptions<T> = {})
       const isEmpty = value === undefined || value === null || value === '' || 
         (Array.isArray(value) && value.length === 0);
       if (!isEmpty) {
-        setIsInvalid(false);
+        setIsInvalid((prev) => (prev === false ? prev : false));
       }
     }
   }, [value, invalid]);

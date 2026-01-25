@@ -262,7 +262,7 @@ export const AvakioSegmentedButton = forwardRef<AvakioSegmentedButtonRef, Avakio
         const fallback = visibleOptions.find(
           opt => !opt.disabled && !disabledOptions.has(opt.id)
         )?.id ?? null;
-        setInternalValue(fallback);
+        setInternalValue((prev) => (prev === fallback ? prev : fallback));
       }
     }, [internalOptions, internalValue, isControlled, hiddenOptions, disabledOptions]);
 

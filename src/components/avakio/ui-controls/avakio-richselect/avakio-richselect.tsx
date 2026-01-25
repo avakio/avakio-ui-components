@@ -116,15 +116,17 @@ export const AvakioRichSelect = forwardRef<AvakioRichSelectRef, AvakioRichSelect
       const option = normalizedOptions.find(
         (opt) => opt.id === value || opt.value === value || String(opt.id) === String(value)
       );
-      if (option) {
-        setSelectedOption(option);
-      } else {
-        setSelectedOption(null);
-      }
+      // Only update if the selected option actually changed (compare by id)
+      setSelectedOption((prev) => {
+        if (option && prev?.id === option.id) return prev; // Keep same reference if id matches
+        if (!option && prev === null) return prev; // Keep null if already null
+        return option ?? null;
+      });
     } else {
-      setSelectedOption(null);
+      setSelectedOption((prev) => (prev === null ? prev : null));
     }
-  }, [value, options]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 
   // Close dropdown when clicking outside
   useEffect(() => {

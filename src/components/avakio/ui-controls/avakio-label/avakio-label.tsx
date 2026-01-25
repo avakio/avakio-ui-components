@@ -55,6 +55,12 @@ export const AvakioLabel = forwardRef<AvakioLabelRef, AvakioLabelProps>(
     } = useAvakioBase({
       hidden: baseProps.hidden,
       disabled: baseProps.disabled,
+      onBeforeRender: baseProps.onBeforeRender,
+      onAfterRender: baseProps.onAfterRender,
+      onViewShow: baseProps.onViewShow,
+      onItemClick: baseProps.onItemClick,
+      onViewResize: baseProps.onViewResize,
+      onAfterScroll: baseProps.onAfterScroll,
     });
 
     // Merge config from define() with baseProps

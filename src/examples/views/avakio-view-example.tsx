@@ -525,7 +525,7 @@ export function AvakioViewExample() {
               key="event-resize"
               width="100%"
               padding={20}
-              onResize={(w, h) => console.log(`Resized: ${w}×${h}`)}
+              onResize={(w, h) => {}}
             >
               <div className="avakio-view-content">
                 <Move size={32} />

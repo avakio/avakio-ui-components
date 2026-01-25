@@ -351,10 +351,10 @@ function AvakioDataTableInner<T extends Record<string, any>>(
   // Internal data state (for ref methods)
   const [internalData, setInternalData] = useState<T[]>(data);
   
-  // Sync internal data with prop changes
-  useEffect(() => {
-    setInternalData(data);
-  }, [data]);
+  // NOTE: We do NOT sync data prop changes after mount.
+  // The data prop is only used for initial state.
+  // If you need to update data externally, use the ref methods or a key prop.
+  // This prevents infinite loops when data array is recreated on every parent render.
   
   // Validate that data has 'id' field
   const dataError = useMemo(() => {
@@ -993,7 +993,11 @@ function AvakioDataTableInner<T extends Record<string, any>>(
       .filter((col): col is AvakioColumn<T> => col !== undefined);
   }, [columns, columnOrder]);
   
-  const visibleColumns = orderedColumns.filter(col => !col.hidden && !hiddenColumns.has(col.id));
+  // Memoize visible columns to prevent unnecessary recalculations
+  const visibleColumns = useMemo(() => 
+    orderedColumns.filter(col => !col.hidden && !hiddenColumns.has(col.id)),
+    [orderedColumns, hiddenColumns]
+  );
 
   // Split columns into frozen left, scrollable, and frozen right
   const { frozenLeftColumns, scrollableColumns, frozenRightColumns } = useMemo(() => {
@@ -1018,6 +1022,10 @@ function AvakioDataTableInner<T extends Record<string, any>>(
   const hasFrozenColumns = frozenLeftColumns.length > 0 || frozenRightColumns.length > 0;
   
   // Calculate scrollbar width for header alignment with body (when frozen columns are used)
+  // Use primitive values in deps to avoid recalculating on every render
+  const dataLength = paginatedData.length;
+  const scrollableColumnsCount = scrollableColumns.length;
+  
   useEffect(() => {
     if (hasFrozenColumns && scrollableBodyRef.current) {
       const body = scrollableBodyRef.current;
@@ -1040,7 +1048,7 @@ function AvakioDataTableInner<T extends Record<string, any>>(
       setScrollbarWidth(0);
       setHasHorizontalOverflow(false);
     }
-  }, [hasFrozenColumns, paginatedData, loading, scrollableColumns]);
+  }, [hasFrozenColumns, dataLength, loading, scrollableColumnsCount]);
 
   // Vertical scroll synchronization handler for frozen columns
   const handleVerticalScroll = useCallback((source: 'left' | 'middle' | 'right') => {

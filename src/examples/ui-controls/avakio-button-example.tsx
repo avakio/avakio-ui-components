@@ -49,6 +49,7 @@ export function AvakioButtonExample() {
   
   // Playground state
   const [playgroundClickCount, setPlaygroundClickCount] = useState(0);
+  const [isComponentMounted, setIsComponentMounted] = useState<boolean>(true);
   
   // Playground property items for AvakioProperty
   const [playgroundProps, setPlaygroundProps] = useState<AvakioPropertyItem[]>([
@@ -147,6 +148,9 @@ export function AvakioButtonExample() {
     { id: 'logOnKeyDown', label: 'Log onKeyDown', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyDown events' },
     { id: 'logOnKeyUp', label: 'Log onKeyUp', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyUp events' },
     { id: 'logOnItemClick', label: 'Log onItemClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onItemClick events' },
+    { id: 'logOnAfterRender', label: 'Log onAfterRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterRender events' },
+    { id: 'logOnBeforeRender', label: 'Log onBeforeRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBeforeRender events' },
+    { id: 'logOnViewShow', label: 'Log onViewShow', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewShow events' },
   ]);
 
   // Helper to get prop value from playground props
@@ -915,8 +919,12 @@ export function AvakioButtonExample() {
                                   { id: 'logOnKeyDown', label: 'Log onKeyDown', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyDown events' },
                                   { id: 'logOnKeyUp', label: 'Log onKeyUp', type: 'checkbox', value: true, group: 'Events', checkboxLabel: 'Log onKeyUp events' },
                                   { id: 'logOnItemClick', label: 'Log onItemClick', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onItemClick events' },
+                                  { id: 'logOnAfterRender', label: 'Log onAfterRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onAfterRender events' },
+                                  { id: 'logOnBeforeRender', label: 'Log onBeforeRender', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onBeforeRender events' },
+                                  { id: 'logOnViewShow', label: 'Log onViewShow', type: 'checkbox', value: false, group: 'Events', checkboxLabel: 'Log onViewShow events' },
                                 ]);
                                 setPlaygroundClickCount(0);
+                                setIsComponentMounted(true);
                                 addLog('Reset', 'playground configuration reset to defaults');
                               }}
                             />                            
@@ -949,6 +957,7 @@ export function AvakioButtonExample() {
                         maxHeight='100px'
                         height='100%'
                         rows={[
+                          isComponentMounted ? (
                           <AvakioButton
                             id={getPropValue('componentId', 'playground-button')}
                             testId={getPropValue('testId', '') || undefined}
@@ -1002,9 +1011,23 @@ export function AvakioButtonExample() {
                             onItemClick={() => {
                               if (getPropValue('logOnItemClick', false)) addLog('onItemClick', 'item clicked (AvakioBase event)');
                             }}
+                            onAfterRender={() => {
+                              if (getPropValue('logOnAfterRender', false)) addLog('onAfterRender', 'component rendered');
+                            }}
+                            onBeforeRender={() => {
+                              if (getPropValue('logOnBeforeRender', false)) addLog('onBeforeRender', 'about to render');
+                            }}
+                            onViewShow={() => {
+                              if (getPropValue('logOnViewShow', false)) addLog('onViewShow', 'view shown');
+                            }}
                           >
                             {getPropValue('label', 'Click Me')}
                           </AvakioButton>
+                          ) : (
+                            <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
+                              Component destroyed. Click "Recreate Component" to restore it.
+                            </div>
+                          )
                         ]}
                       />,
                       <AvakioTemplate
@@ -1153,6 +1176,17 @@ export function AvakioButtonExample() {
                                   onClick={() => {
                                     buttonRef.current?.define('disabled', true);
                                     addLog('define()', 'set disabled to true');
+                                  }}
+                                />
+                                <AvakioButton
+                                  size="sm"
+                                  label={isComponentMounted ? 'Destroy Component' : 'Recreate Component'}
+                                  margin={[0,10,10,0]}
+                                  width='200px'
+                                  buttonWidth='150px'
+                                  onClick={() => {
+                                    setIsComponentMounted(!isComponentMounted);
+                                    addLog(isComponentMounted ? 'Destroy' : 'Recreate', isComponentMounted ? 'component unmounted' : 'component mounted');
                                   }}
                                 />
                               </>

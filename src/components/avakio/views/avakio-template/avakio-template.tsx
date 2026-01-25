@@ -1,4 +1,17 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect } from 'react';
+
+function deepEqual(a: any, b: any): boolean {
+  if (a === b) return true;
+  if (typeof a !== typeof b) return false;
+  if (typeof a !== 'object' || a === null || b === null) return false;
+  const aKeys = Object.keys(a);
+  const bKeys = Object.keys(b);
+  if (aKeys.length !== bKeys.length) return false;
+  for (const key of aKeys) {
+    if (!bKeys.includes(key) || !deepEqual(a[key], b[key])) return false;
+  }
+  return true;
+}
 import { AvakioChangeEvent } from '../../base/avakio-base-props';
 import './avakio-template.css';
 
@@ -134,7 +147,7 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
   (
     {
       template,
-      data = {},
+      data,
       content,
       url,
       theme = 'material',
@@ -163,11 +176,12 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
       style,
       align = 'left',
       flexWrap = false,
+      onBeforeRender,
+      onAfterRender,
     },
     ref
   ) => {
-    const [internalData, setInternalData] = useState<Record<string, any>>(data);
-    const [internalContent, setInternalContent] = useState<React.ReactNode>(content);
+    const [internalData, setInternalData] = useState<Record<string, any>>(data ?? {});
     const [internalHtml, setInternalHtml] = useState<string>('');
     const [isHidden, setIsHidden] = useState(hidden);
     const [isDisabled, setIsDisabled] = useState(disabled);
@@ -175,18 +189,30 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
     const containerRef = useRef<HTMLDivElement>(null);
     const onLoadRef = useRef(onLoad);
 
+    // Event refs for onBeforeRender/onAfterRender
+    const onBeforeRenderRef = useRef(onBeforeRender);
+    const onAfterRenderRef = useRef(onAfterRender);
+    useEffect(() => { onBeforeRenderRef.current = onBeforeRender; }, [onBeforeRender]);
+    useEffect(() => { onAfterRenderRef.current = onAfterRender; }, [onAfterRender]);
+
     // Keep onLoad ref in sync
     useEffect(() => {
       onLoadRef.current = onLoad;
     }, [onLoad]);
 
-    // Sync hidden and disabled props
+    // Sync hidden and disabled props (only update if changed)
     useEffect(() => {
-      setIsHidden(hidden);
+      setIsHidden(prev => {
+        if (prev !== hidden) return hidden;
+        return prev;
+      });
     }, [hidden]);
 
     useEffect(() => {
-      setIsDisabled(disabled);
+      setIsDisabled(prev => {
+        if (prev !== disabled) return disabled;
+        return prev;
+      });
     }, [disabled]);
 
     // Load content from URL
@@ -202,25 +228,15 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
       }
     }, [url]);
 
-    // Update internal data when prop changes (use JSON comparison for objects)
-    const dataJsonRef = useRef<string>(JSON.stringify(data));
+    // Update internal data when prop changes (deep compare with state, only if changed)
+    // Normalize undefined to {} for comparison to prevent infinite loops
     useEffect(() => {
-      const newDataJson = JSON.stringify(data);
-      if (newDataJson !== dataJsonRef.current) {
-        dataJsonRef.current = newDataJson;
-        setInternalData(data);
+      const normalizedData = data ?? {};
+      if (!deepEqual(internalData, normalizedData)) {
+        setInternalData(normalizedData);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
-
-    // Update internal content when prop changes (only for primitive content)
-    const prevContentRef = useRef(content);
-    useEffect(() => {
-      // Only update if content is a primitive or actually different
-      if (content !== prevContentRef.current) {
-        prevContentRef.current = content;
-        setInternalContent(content);
-      }
-    }, [content]);
 
     // Process template with data
     const processTemplate = (tmpl: string, dataObj: Record<string, any>): string => {
@@ -230,34 +246,40 @@ export const AvakioTemplate = forwardRef<AvakioTemplateRef, AvakioTemplateProps>
     };
 
     // Render content based on template, content, or URL
+    // Fire onBeforeRender and onAfterRender only once on mount, matching AvakioText
+    React.useLayoutEffect(() => {
+      if (onBeforeRenderRef.current) {
+        try {
+          onBeforeRenderRef.current();
+        } catch (err) {
+          console.error('Error in onBeforeRender:', err);
+        }
+      }
+      if (onAfterRenderRef.current) {
+        try {
+          onAfterRenderRef.current();
+        } catch (err) {
+          console.error('Error in onAfterRender:', err);
+        }
+      }
+    }, []);
+
     const renderContent = () => {
+      let rendered = null;
       // If HTML was set via setHTML
       if (internalHtml) {
-        return <div dangerouslySetInnerHTML={{ __html: internalHtml }} />;
-      }
-
-      // If URL content was loaded
-      if (loadedContent) {
-        return <div dangerouslySetInnerHTML={{ __html: processTemplate(loadedContent, internalData) }} />;
-      }
-
-      // If template is a function
-      if (typeof template === 'function') {
-        return template(internalData);
-      }
-
-      // If template is a string
-      if (typeof template === 'string') {
+        rendered = <div dangerouslySetInnerHTML={{ __html: internalHtml }} />;
+      } else if (loadedContent) {
+        rendered = <div dangerouslySetInnerHTML={{ __html: processTemplate(loadedContent, internalData) }} />;
+      } else if (typeof template === 'function') {
+        rendered = template(internalData);
+      } else if (typeof template === 'string') {
         const processedHtml = processTemplate(template, internalData);
-        return <div dangerouslySetInnerHTML={{ __html: processedHtml }} />;
+        rendered = <div dangerouslySetInnerHTML={{ __html: processedHtml }} />;
+      } else if (content) {
+        rendered = content;
       }
-
-      // If direct content is provided
-      if (internalContent) {
-        return internalContent;
-      }
-
-      return null;
+      return rendered;
     };
 
     // Imperative handle for ref methods
