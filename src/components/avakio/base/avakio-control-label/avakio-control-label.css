@@ -115,6 +115,19 @@
   text-overflow: ellipsis;
 }
 
+/* Label icon */
+.avakio-control-label-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avakio-control-label-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* Label on the LEFT - rounded left corners, no right border */
 .avakio-control-label-label-left {
   border-radius: var(--avakio-radius, 4px) 0 0 var(--avakio-radius, 4px);
@@ -127,18 +140,22 @@
   border-left: none;
 }
 
-/* Label on TOP - rounded top corners, no bottom border */
+/* Label on TOP - rounded top corners, no bottom border, full width */
 .avakio-control-label-label-top {
   border-radius: var(--avakio-radius, 4px) var(--avakio-radius, 4px) 0 0;
   border-bottom: none;
   padding: 6px 12px;
+  width: 100% !important; /* Override labelWidth for vertical layout */
+  box-sizing: border-box;
 }
 
-/* Label on BOTTOM - rounded bottom corners, no top border */
+/* Label on BOTTOM - rounded bottom corners, no top border, full width */
 .avakio-control-label-label-bottom {
   border-radius: 0 0 var(--avakio-radius, 4px) var(--avakio-radius, 4px);
   border-top: none;
   padding: 6px 12px;
+  width: 100% !important; /* Override labelWidth for vertical layout */
+  box-sizing: border-box;
 }
 
 /* ===================================
@@ -162,14 +179,16 @@
   border-radius: 0 var(--avakio-radius, 4px) var(--avakio-radius, 4px) 0;
 }
 
-/* Compact label on TOP - rounded top corners */
+/* Compact label on TOP - rounded top corners, full width */
 .avakio-control-label-compact.avakio-control-label-label-top {
   border-radius: var(--avakio-radius, 4px) var(--avakio-radius, 4px) 0 0;
+  width: 100% !important;
 }
 
-/* Compact label on BOTTOM - rounded bottom corners */
+/* Compact label on BOTTOM - rounded bottom corners, full width */
 .avakio-control-label-compact.avakio-control-label-label-bottom {
   border-radius: 0 0 var(--avakio-radius, 4px) var(--avakio-radius, 4px);
+  width: 100% !important;
 }
 
 .avakio-control-label-required {

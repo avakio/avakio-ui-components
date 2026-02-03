@@ -313,9 +313,9 @@ export function AvakioProperty({
               id={item.id}
               value={typeof item.value === "string" || typeof item.value === "number" ? item.value : undefined}
               options={richOptions}
-              onChange={(val, opt) => {
-                item.selectOnChange?.(val, opt, item);
-                handleChange(item.id, (val as string | number) ?? "");
+              onChange={(event) => {
+                item.selectOnChange?.(event.value, event.option, item);
+                handleChange(item.id, (event.value as string | number) ?? "");
               }}
               placeholder={item.selectPlaceholder ?? item.placeholder}
               disabled={item.selectDisabled ?? item.disabled}

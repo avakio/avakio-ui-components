@@ -4,6 +4,8 @@ import './avakio-control-label.css';
 export interface AvakioControlLabelProps {
   /** Sets the text of the label (styled with background color) */
   label?: string;
+  /** Icon to display in the label */
+  labelIcon?: React.ReactNode;
   /** Form label displayed above the component */
   labelForm?: string;
   /** Positions a label in relation to the control */
@@ -32,6 +34,8 @@ export interface AvakioControlLabelProps {
   labelStyle?: React.CSSProperties;
   /** Size of the control ('default' | 'compact') */
   size?: 'default' | 'compact';
+  /** Whether the control is hidden */
+  hidden?: boolean;
 }
 
 /**
@@ -44,6 +48,7 @@ export interface AvakioControlLabelProps {
  */
 export function AvakioControlLabel({
   label,
+  labelIcon,
   labelForm,
   labelPosition = 'left',
   labelAlign = 'left',
@@ -58,6 +63,7 @@ export function AvakioControlLabel({
   wrapperStyle,
   labelStyle: externalLabelStyle,
   size = 'default',
+  hidden = false,
 }: AvakioControlLabelProps) {
   // Determine if position is horizontal or vertical
   const isHorizontal = labelPosition === 'left' || labelPosition === 'right';
@@ -106,6 +112,7 @@ export function AvakioControlLabel({
       className={`avakio-control-label-label avakio-control-label-label-${labelPosition} ${sizeClass} ${classPrefix}-label`}
       style={labelStyle}
     >
+      {labelIcon && <span className={`avakio-control-label-icon ${classPrefix}-label-icon`}>{labelIcon}</span>}
       {label}
       {required && <span className={`avakio-control-label-required ${classPrefix}-required`}>*</span>}
     </div>
@@ -171,7 +178,7 @@ export function AvakioControlLabel({
 
   // Always wrap in a column container to ensure bottom content renders below
   return (
-    <div className="avakio-control-label-container">
+    <div className="avakio-control-label-container" style={hidden ? { display: 'none' } : undefined}>
       {outerWrapperClass ? (
         <div className={outerWrapperClass}>{content}</div>
       ) : (

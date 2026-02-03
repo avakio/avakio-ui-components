@@ -83,6 +83,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
     const {
       value = '',
       label,
+      labelIcon,
       placeholder,
       readonly = false,
       required = false,
@@ -120,6 +121,11 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       onEnter,
       onKeyDown,
       textWidth,
+      
+      // Input sizing/alignment from base props
+      inputAlign,
+      inputWidth,
+      inputHeight,
       ...baseProps
     } = props;
 
@@ -162,6 +168,16 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
         setInternalValue(value);
       }
     }, [value]);
+
+    // Sync invalid state from props
+    useEffect(() => {
+      setIsInvalid(invalid);
+    }, [invalid]);
+
+    // Sync invalidMessage from props
+    useEffect(() => {
+      setValidationMessage(invalidMessage);
+    }, [invalidMessage]);
 
     // ResizeObserver to detect size changes
     useEffect(() => {
@@ -362,14 +378,37 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
       .filter(Boolean)
       .join(' ');
 
-    const wrapperStyle: React.CSSProperties = textWidth
-      ? { width: typeof textWidth === 'number' ? `${textWidth}px` : textWidth }
-      : {};
+    // Helper to format size values
+    const formatSizeValue = (val: string | number | undefined): string | undefined => {
+      if (val === undefined || val === '') return undefined;
+      if (typeof val === 'number') return `${val}px`;
+      if (/^\d+$/.test(val)) return `${val}px`;
+      return val;
+    };
+
+    // Content wrapper style for input alignment (alignItems for horizontal alignment in column flex)
+    const contentStyle: React.CSSProperties = {
+      ...(inputAlign ? { 
+        alignItems: inputAlign === 'right' ? 'flex-end' : inputAlign === 'left' ? 'flex-start' : 'stretch',
+      } : {}),
+    };
+
+    const wrapperStyle: React.CSSProperties = {
+      ...(textWidth ? { width: typeof textWidth === 'number' ? `${textWidth}px` : textWidth } : {}),
+      ...(inputWidth ? { width: formatSizeValue(inputWidth) } : {}),
+      // If inputAlign is set and we have a specific width, don't stretch to full width
+      ...((inputAlign && (textWidth || inputWidth)) ? { flex: 'none' } : {}),
+    };
+
+    const inputStyle: React.CSSProperties = {
+      ...(inputHeight ? { height: formatSizeValue(inputHeight) } : {}),
+    };
 
     return (
       <div ref={rootRef} className={containerClasses} style={containerStyle} onClick={eventHandlers.onClick} data-testid={mergedProps.testId}>
         <AvakioControlLabel
           label={label}
+          labelIcon={labelIcon}
           labelForm={labelForm}
           labelPosition={labelPosition}
           labelAlign={labelAlign}
@@ -380,7 +419,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
           invalidMessage={validationMessage}
           classPrefix="avakio-text"
         >
-        <div className="avakio-text-content">
+        <div className="avakio-text-content" style={contentStyle}>
           <div className="avakio-text-input-wrapper" style={wrapperStyle}>
             {icon && iconPosition === 'left' && (
               <span className="avakio-text-icon avakio-text-icon-left">{icon}</span>
@@ -389,6 +428,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
               <textarea
                 ref={inputRef as React.RefObject<HTMLTextAreaElement>}
                 className={inputClasses}
+                style={inputStyle}
                 value={internalValue || ''}
                 placeholder={placeholder}
                 name={name}
@@ -397,6 +437,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
                 required={required}
                 maxLength={maxLength}
                 rows={rows}
+                title={mergedProps.tooltip}
                 onChange={handleChange as any}
                 onBlur={handleBlur as any}
                 onFocus={handleFocus as any}
@@ -410,6 +451,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
                 ref={inputRef as React.RefObject<HTMLInputElement>}
                 type={inputType}
                 className={inputClasses}
+                style={inputStyle}
                 value={internalValue || ''}
                 placeholder={placeholder}
                 name={name}
@@ -422,6 +464,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
                 max={max}
                 step={step}
                 autoComplete={autoComplete}
+                title={mergedProps.tooltip}
                 onChange={handleChange as any}
                 onBlur={handleBlur as any}
                 onFocus={handleFocus as any}
@@ -468,7 +511,7 @@ export const AvakioText = forwardRef<AvakioTextRef, AvakioTextProps>(
                 <Copy size={16} />
               </button>
             )}
-            {enablePlaceHolderCopyButton && placeholder && type !== 'password' && !enableValueCopyButton && (
+            {enablePlaceHolderCopyButton && placeholder && type !== 'password' && !internalValue && (
               <button
                 type="button"
                 className="avakio-text-action avakio-text-copy"

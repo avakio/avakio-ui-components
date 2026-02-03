@@ -57,6 +57,7 @@ export function AvakioTextExample() {
     { id: 'componentId', label: 'ID', type: 'text', value: 'playground-text', group: 'Identity', placeholder: 'Component ID' },
     { id: 'testId', label: 'Test ID', type: 'text', value: '', group: 'Identity', placeholder: 'Test ID for testing' },
     { id: 'className', label: 'Class Name', type: 'text', value: '', group: 'Identity', placeholder: 'Additional CSS class' },
+    { id: 'name', label: 'Name', type: 'text', value: '', group: 'Identity', placeholder: 'Form field name' },
     
     // Content Group
     { id: 'placeholder', label: 'Placeholder', type: 'text', value: 'Enter text...', group: 'Content', placeholder: 'Enter placeholder' },
@@ -77,6 +78,15 @@ export function AvakioTextExample() {
       { id: 'right', value: 'Right' },
     ]},
     { id: 'labelWidth', label: 'Label Width', type: 'text', value: '100', group: 'ControlLabel', placeholder: 'e.g. 100 or 100px' },
+    { id: 'labelIcon', label: 'Label Icon', type: 'select', value: '', group: 'ControlLabel', selectOptions: [
+      { id: '', value: 'None' },
+      { id: 'user', value: 'User' },
+      { id: 'mail', value: 'Mail' },
+      { id: 'lock', value: 'Lock' },
+      { id: 'search', value: 'Search' },
+      { id: 'settings', value: 'Settings' },
+      { id: 'type', value: 'Type' },
+    ]},
     { id: 'bottomLabel', label: 'Bottom Label', type: 'text', value: '', group: 'ControlLabel', placeholder: 'Help text below component' },
     { id: 'required', label: 'Required', type: 'checkbox', value: false, group: 'ControlLabel', checkboxLabel: 'Show required asterisk' },
     { id: 'invalid', label: 'Invalid', type: 'checkbox', value: false, group: 'ControlLabel', checkboxLabel: 'Mark as invalid' },
@@ -98,8 +108,30 @@ export function AvakioTextExample() {
       { id: 'right', value: 'Right' },
     ]},
     { id: 'maxLength', label: 'Max Length', type: 'text', value: '', group: 'Input', placeholder: 'Maximum characters' },
+    { id: 'pattern', label: 'Pattern', type: 'text', value: '', group: 'Input', placeholder: 'HTML5 validation pattern' },
+    { id: 'autoComplete', label: 'Auto Complete', type: 'text', value: '', group: 'Input', placeholder: 'e.g. off, on, email' },
     { id: 'multiline', label: 'Multiline (Textarea)', type: 'checkbox', value: false, group: 'Input', checkboxLabel: 'Use textarea instead of input' },
     { id: 'rows', label: 'Rows (multiline)', type: 'text', value: '4', group: 'Input', placeholder: 'Rows for textarea' },
+    
+    // Number Input Props
+    { id: 'min', label: 'Min (number)', type: 'text', value: '', group: 'Number', placeholder: 'Minimum value' },
+    { id: 'max', label: 'Max (number)', type: 'text', value: '', group: 'Number', placeholder: 'Maximum value' },
+    { id: 'step', label: 'Step (number)', type: 'text', value: '', group: 'Number', placeholder: 'Step increment' },
+    
+    // Icon Props
+    { id: 'icon', label: 'Icon', type: 'select', value: '', group: 'Icon', selectOptions: [
+      { id: '', value: 'None' },
+      { id: 'user', value: 'User' },
+      { id: 'mail', value: 'Mail' },
+      { id: 'lock', value: 'Lock' },
+      { id: 'search', value: 'Search' },
+      { id: 'settings', value: 'Settings' },
+      { id: 'type', value: 'Type' },
+    ]},
+    { id: 'iconPosition', label: 'Icon Position', type: 'select', value: 'left', group: 'Icon', selectOptions: [
+      { id: 'left', value: 'Left' },
+      { id: 'right', value: 'Right' },
+    ]},
     
     // Features Group
     { id: 'clear', label: 'Clear Button', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show clear button' },
@@ -107,12 +139,23 @@ export function AvakioTextExample() {
     { id: 'enablePlaceHolderCopyButton', label: 'Placeholder Copy', type: 'checkbox', value: false, group: 'Features', checkboxLabel: 'Show copy placeholder button' },
     
     // Appearance Group
+    { id: 'align', label: 'Align', type: 'select', value: 'left', group: 'Appearance', selectOptions: [
+      { id: 'left', value: 'Left' },
+      { id: 'center', value: 'Center' },
+      { id: 'right', value: 'Right' },
+    ]},
+    { id: 'inputAlign', label: 'Input Align', type: 'select', value: 'left', group: 'Appearance', selectOptions: [
+      { id: 'left', value: 'Left' },
+      { id: 'right', value: 'Right' },
+    ]},
     { id: 'style', label: 'Style (JSON)', type: 'text', value: '', group: 'Appearance', placeholder: 'e.g. {"color":"red"}' },
     
     // Sizing Group
     { id: 'width', label: 'Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 300 or 100%' },
     { id: 'height', label: 'Height', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 38' },
     { id: 'textWidth', label: 'Text Width', type: 'text', value: '', group: 'Sizing', placeholder: 'Width of input field' },
+    { id: 'inputWidth', label: 'Input Width', type: 'text', value: '', group: 'Sizing', placeholder: 'Width of input area' },
+    { id: 'inputHeight', label: 'Input Height', type: 'text', value: '', group: 'Sizing', placeholder: 'Height of input area' },
     { id: 'minWidth', label: 'Min Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 200' },
     { id: 'maxWidth', label: 'Max Width', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 500' },
     { id: 'minHeight', label: 'Min Height', type: 'text', value: '', group: 'Sizing', placeholder: 'e.g. 30' },
@@ -200,47 +243,55 @@ export function AvakioTextExample() {
     
     // Label Props
     { id: 14, name: 'label', type: 'string', defaultValue: 'undefined', description: 'Label text displayed beside the input', from: 'ControlLabel' },
-    { id: 15, name: 'labelForm', type: 'string', defaultValue: 'undefined', description: 'Plain text form label displayed above the component', from: 'ControlLabel' },
-    { id: 16, name: 'labelPosition', type: "'left' | 'top'", defaultValue: "'left'", description: 'Position of the label', from: 'ControlLabel' },
-    { id: 17, name: 'labelAlign', type: "'left' | 'right' | 'center'", defaultValue: "'left'", description: 'Alignment of the label text', from: 'ControlLabel' },
-    { id: 18, name: 'labelWidth', type: 'number | string', defaultValue: '100', description: 'Width of the label', from: 'ControlLabel' },
-    { id: 19, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Help text displayed below the component', from: 'ControlLabel' },
-    { id: 20, name: 'bottomPadding', type: 'number | string', defaultValue: 'undefined', description: 'Padding at the bottom of the component', from: 'Base' },
+    { id: 15, name: 'labelIcon', type: 'React.ReactNode', defaultValue: 'undefined', description: 'Icon to display in the label', from: 'ControlLabel' },
+    { id: 16, name: 'labelForm', type: 'string', defaultValue: 'undefined', description: 'Plain text form label displayed above the component', from: 'ControlLabel' },
+    { id: 17, name: 'labelPosition', type: "'left' | 'top' | 'right' | 'bottom'", defaultValue: "'left'", description: 'Position of the label', from: 'ControlLabel' },
+    { id: 18, name: 'labelAlign', type: "'left' | 'right' | 'center'", defaultValue: "'left'", description: 'Alignment of the label text', from: 'ControlLabel' },
+    { id: 19, name: 'labelWidth', type: 'number | string', defaultValue: '100', description: 'Width of the label', from: 'ControlLabel' },
+    { id: 20, name: 'bottomLabel', type: 'string', defaultValue: 'undefined', description: 'Help text displayed below the component', from: 'ControlLabel' },
+    { id: 21, name: 'bottomPadding', type: 'number | string', defaultValue: 'undefined', description: 'Padding at the bottom of the component', from: 'Base' },
+    { id: 22, name: 'tooltip', type: 'string', defaultValue: 'undefined', description: 'Tooltip text displayed on hover', from: 'Base' },
     
     // State Props
-    { id: 21, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the component is disabled', from: 'Base' },
-    { id: 22, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Whether the component is read-only', from: 'Base' },
-    { id: 23, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
-    { id: 24, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Removes the border from the component', from: 'Base' },
+    { id: 23, name: 'disabled', type: 'boolean', defaultValue: 'false', description: 'Whether the component is disabled', from: 'Base' },
+    { id: 24, name: 'readonly', type: 'boolean', defaultValue: 'false', description: 'Whether the component is read-only', from: 'Base' },
+    { id: 25, name: 'hidden', type: 'boolean', defaultValue: 'false', description: 'Whether the component is hidden', from: 'Base' },
+    { id: 26, name: 'borderless', type: 'boolean', defaultValue: 'false', description: 'Removes the border from the component', from: 'Base' },
     
     // Validation Props
-    { id: 25, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Marks the field as required (shows asterisk)', from: 'ControlLabel' },
-    { id: 26, name: 'invalid', type: 'boolean', defaultValue: 'false', description: 'Marks the component as invalid', from: 'ControlLabel' },
-    { id: 27, name: 'invalidMessage', type: 'string', defaultValue: 'undefined', description: 'Sets the text of a validation message', from: 'ControlLabel' },
-    { id: 28, name: 'validate', type: '(value: string) => boolean | string', defaultValue: 'undefined', description: 'Custom validation function', from: 'Base' },
-    { id: 29, name: 'maxLength', type: 'number', defaultValue: 'undefined', description: 'Maximum character length', from: 'Text' },
-    { id: 30, name: 'pattern', type: 'string', defaultValue: 'undefined', description: 'Pattern for HTML5 validation', from: 'Text' },
-    { id: 31, name: 'min', type: 'number', defaultValue: 'undefined', description: 'Minimum value (for number type)', from: 'Text' },
-    { id: 32, name: 'max', type: 'number', defaultValue: 'undefined', description: 'Maximum value (for number type)', from: 'Text' },
-    { id: 33, name: 'step', type: 'number', defaultValue: 'undefined', description: 'Step value (for number type)', from: 'Text' },
-    { id: 34, name: 'autoComplete', type: 'string', defaultValue: 'undefined', description: 'Autocomplete attribute', from: 'Text' },
+    { id: 28, name: 'required', type: 'boolean', defaultValue: 'false', description: 'Marks the field as required (shows asterisk)', from: 'ControlLabel' },
+    { id: 29, name: 'invalid', type: 'boolean', defaultValue: 'false', description: 'Marks the component as invalid', from: 'ControlLabel' },
+    { id: 30, name: 'invalidMessage', type: 'string', defaultValue: 'undefined', description: 'Sets the text of a validation message', from: 'ControlLabel' },
+    { id: 31, name: 'validate', type: '(value: string) => boolean | string', defaultValue: 'undefined', description: 'Custom validation function', from: 'Text' },
+    { id: 32, name: 'maxLength', type: 'number', defaultValue: 'undefined', description: 'Maximum character length', from: 'Text' },
+    { id: 33, name: 'pattern', type: 'string', defaultValue: 'undefined', description: 'Pattern for HTML5 validation', from: 'Text' },
+    { id: 34, name: 'min', type: 'number', defaultValue: 'undefined', description: 'Minimum value (for number type)', from: 'Text' },
+    { id: 35, name: 'max', type: 'number', defaultValue: 'undefined', description: 'Maximum value (for number type)', from: 'Text' },
+    { id: 36, name: 'step', type: 'number', defaultValue: 'undefined', description: 'Step value (for number type)', from: 'Text' },
+    { id: 37, name: 'autoComplete', type: 'string', defaultValue: 'undefined', description: 'Autocomplete attribute', from: 'Text' },
+    
+    // Appearance Props
+    { id: 38, name: 'align', type: "'left' | 'center' | 'right'", defaultValue: "'left'", description: 'Alignment of the component', from: 'Base' },
     
     // Sizing Props
-    { id: 35, name: 'width', type: 'string | number', defaultValue: 'undefined', description: 'Width of the component', from: 'Base' },
-    { id: 36, name: 'height', type: 'string | number', defaultValue: 'undefined', description: 'Height of the component', from: 'Base' },
-    { id: 37, name: 'minWidth', type: 'string | number', defaultValue: 'undefined', description: 'Minimum width of the component', from: 'Base' },
-    { id: 38, name: 'maxWidth', type: 'string | number', defaultValue: 'undefined', description: 'Maximum width of the component', from: 'Base' },
-    { id: 39, name: 'minHeight', type: 'string | number', defaultValue: 'undefined', description: 'Minimum height of the component', from: 'Base' },
-    { id: 40, name: 'maxHeight', type: 'string | number', defaultValue: 'undefined', description: 'Maximum height of the component', from: 'Base' },
-    { id: 41, name: 'margin', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the component', from: 'Base' },
-    { id: 42, name: 'padding', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding inside the component', from: 'Base' },
+    { id: 39, name: 'width', type: 'string | number', defaultValue: 'undefined', description: 'Width of the component', from: 'Base' },
+    { id: 40, name: 'height', type: 'string | number', defaultValue: 'undefined', description: 'Height of the component', from: 'Base' },
+    { id: 41, name: 'inputWidth', type: 'string | number', defaultValue: 'undefined', description: 'Width of the input area', from: 'Base' },
+    { id: 42, name: 'inputHeight', type: 'string | number', defaultValue: 'undefined', description: 'Height of the input area', from: 'Base' },
+    { id: 43, name: 'inputAlign', type: "'left' | 'right'", defaultValue: "'left'", description: 'Alignment of the input inside its container', from: 'Base' },
+    { id: 44, name: 'minWidth', type: 'string | number', defaultValue: 'undefined', description: 'Minimum width of the component', from: 'Base' },
+    { id: 45, name: 'maxWidth', type: 'string | number', defaultValue: 'undefined', description: 'Maximum width of the component', from: 'Base' },
+    { id: 46, name: 'minHeight', type: 'string | number', defaultValue: 'undefined', description: 'Minimum height of the component', from: 'Base' },
+    { id: 47, name: 'maxHeight', type: 'string | number', defaultValue: 'undefined', description: 'Maximum height of the component', from: 'Base' },
+    { id: 48, name: 'margin', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Margin around the component', from: 'Base' },
+    { id: 49, name: 'padding', type: 'string | number | [number, number, number, number]', defaultValue: 'undefined', description: 'Padding inside the component', from: 'Base' },
     
     // Identity Props
-    { id: 43, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
-    { id: 44, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
-    { id: 45, name: 'className', type: 'string', defaultValue: "''", description: 'Additional CSS class name', from: 'Base' },
-    { id: 46, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles', from: 'Base' },
-    { id: 47, name: 'theme', type: 'string', defaultValue: "'material'", description: 'Theme variant (material, flat, compact, dark, ocean, sunset)', from: 'Text' },
+    { id: 50, name: 'id', type: 'string', defaultValue: 'undefined', description: 'Component ID', from: 'Base' },
+    { id: 51, name: 'testId', type: 'string', defaultValue: 'undefined', description: 'Test ID for testing purposes', from: 'Base' },
+    { id: 52, name: 'className', type: 'string', defaultValue: "''", description: 'Additional CSS class name', from: 'Base' },
+    { id: 53, name: 'style', type: 'React.CSSProperties', defaultValue: 'undefined', description: 'Custom inline styles', from: 'Base' },
+    { id: 54, name: 'theme', type: 'string', defaultValue: "'material'", description: 'Theme variant (material, flat, compact, dark, ocean, sunset)', from: 'Text' },
   ];
 
   const eventsData: PropDoc[] = [
@@ -785,6 +836,7 @@ export function AvakioTextExample() {
                             id={getPropValue('componentId', 'playground-text')}
                             testId={getPropValue('testId', '') || undefined}
                             className={getPropValue('className', '') || undefined}
+                            name={getPropValue('name', '') || undefined}
                             ref={textRef}
                             value={playgroundValue}
                             onChange={({ value }) => {
@@ -796,6 +848,18 @@ export function AvakioTextExample() {
                             tooltip={getPropValue('tooltip', '') || undefined}
                             // ControlLabel props
                             label={getPropValue('label', '')}
+                            labelIcon={(() => {
+                              const iconId = getPropValue('labelIcon', '') as string;
+                              switch (iconId) {
+                                case 'user': return <User size={16} />;
+                                case 'mail': return <Mail size={16} />;
+                                case 'lock': return <Lock size={16} />;
+                                case 'search': return <Search size={16} />;
+                                case 'settings': return <Settings2 size={16} />;
+                                case 'type': return <Type size={16} />;
+                                default: return undefined;
+                              }
+                            })()}
                             labelForm={getPropValue('labelForm', '') || undefined}
                             labelPosition={getPropValue('labelPosition', 'left') as 'left' | 'top'}
                             labelAlign={getPropValue('labelAlign', 'left') as 'left' | 'right'}
@@ -808,13 +872,35 @@ export function AvakioTextExample() {
                             type={getPropValue('type', 'text') as any}
                             textAlign={getPropValue('textAlign', 'left') as 'left' | 'center' | 'right'}
                             maxLength={getPropValue('maxLength', '') ? Number(getPropValue('maxLength', '')) : undefined}
+                            pattern={getPropValue('pattern', '') || undefined}
+                            autoComplete={getPropValue('autoComplete', '') || undefined}
                             multiline={getPropValue('multiline', false)}
                             rows={Number(getPropValue('rows', 4))}
+                            // Number Input props
+                            min={getPropValue('min', '') ? Number(getPropValue('min', '')) : undefined}
+                            max={getPropValue('max', '') ? Number(getPropValue('max', '')) : undefined}
+                            step={getPropValue('step', '') ? Number(getPropValue('step', '')) : undefined}
+                            // Icon props
+                            icon={(() => {
+                              const iconId = getPropValue('icon', '') as string;
+                              switch (iconId) {
+                                case 'user': return <User size={16} />;
+                                case 'mail': return <Mail size={16} />;
+                                case 'lock': return <Lock size={16} />;
+                                case 'search': return <Search size={16} />;
+                                case 'settings': return <Settings2 size={16} />;
+                                case 'type': return <Type size={16} />;
+                                default: return undefined;
+                              }
+                            })()}
+                            iconPosition={getPropValue('iconPosition', 'left') as 'left' | 'right'}
                             // Features
                             clear={getPropValue('clear', false)}
                             enableValueCopyButton={getPropValue('enableValueCopyButton', false)}
                             enablePlaceHolderCopyButton={getPropValue('enablePlaceHolderCopyButton', false)}
                             // Appearance
+                            align={getPropValue('align', 'left') as 'left' | 'center' | 'right'}
+                            inputAlign={getPropValue('inputAlign', 'left') as 'left' | 'right'}
                             style={getPropValue('style', '') ? (() => {
                               try {
                                 return JSON.parse(getPropValue('style', ''));
@@ -826,6 +912,8 @@ export function AvakioTextExample() {
                             width={formatSizingValue(getPropValue('width', ''))}
                             height={formatSizingValue(getPropValue('height', ''))}
                             textWidth={formatSizingValue(getPropValue('textWidth', ''))}
+                            inputWidth={formatSizingValue(getPropValue('inputWidth', ''))}
+                            inputHeight={formatSizingValue(getPropValue('inputHeight', ''))}
                             minWidth={formatSizingValue(getPropValue('minWidth', ''))}
                             maxWidth={formatSizingValue(getPropValue('maxWidth', ''))}
                             minHeight={formatSizingValue(getPropValue('minHeight', ''))}
